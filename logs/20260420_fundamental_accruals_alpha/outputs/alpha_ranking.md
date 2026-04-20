@@ -1,70 +1,86 @@
-# Alpha Ranking — Session Leader Board (after Round 2)
+# Alpha Ranking — Session Leader Board (after Round 3)
 
 **Session:** 20260420_fundamental_accruals_alpha
 **Agent:** 5 Evaluator & Recorder
-**Current flagship:** `alpha_v5` — median-TTM industry-neutral Sloan CFS accruals
+**Flagship:** `alpha_med_ind` (a.k.a. `accruals_median_ttm_ind_neutral_v2`) — confirmed on extended 2018-2025 window.
 
 ---
 
-## 1. Leader board (across Round 1 + Round 2, ranked by net Sharpe)
+## 1. Cross-round leader board (all LS net 10 bps, monthly rebalance)
 
-| rank | alpha | batch | IC@20 | ICIR@20 | **Sharpe net** | worst yr | max DD | verdict |
-|-----:|-------|------:|------:|--------:|---------------:|---------:|-------:|:-------:|
-| **1** | **alpha_v5** median-TTM ind-neut | 0002 | 0.016 | **0.505** | **1.57** | **1.55** | **−1.6 %** | **FLAGSHIP → paper trading** |
-| 2 | alpha_v2 tight-winsorize | 0002 | 0.018 | 0.492 | 1.40 | 1.19 | −2.0 % | retained; near-clone of v1 |
-| 3 | alpha_03 / alpha_v1 baseline | 0001+0002 | 0.018 | 0.493 | 1.38 | 1.24 | −2.0 % | prior flagship; superseded by v5 |
-| 4 | alpha_v4 8q-TTM | 0002 | 0.014 | 0.425 | 1.37 | 1.61 | −2.5 % | interesting worst-year; low ICIR |
-| 5 | alpha_v8 ensemble | 0002 | 0.016 | 0.471 | 1.33 | 0.92 | −2.5 % | no ensemble benefit |
-| 6 | alpha_v6 revenue-scaled | 0002 | 0.017 | 0.498 | 1.33 | 1.12 | −3.5 % | higher DD |
-| 7 | alpha_v3 z-score | 0002 | 0.018 | 0.481 | 1.30 | 1.18 | −2.4 % | rank wins over z-score |
-| 8 | alpha_v7 stability-weighted | 0002 | 0.013 | 0.437 | 1.10 | 1.08 | −2.1 % | normalization costs IC |
-| 9 | alpha_08 ind × size double | 0001 | 0.011 | 0.300 | 0.93 | 0.88 | −3.3 % | over-neutralized |
-| 10 | alpha_06 acc/ni-vol | 0001 | 0.020 | 0.300 | 0.61 | 0.59 | −5.3 % | — |
-| 11 | alpha_01 raw Sloan | 0001 | 0.024 | 0.333 | 0.84 | 0.77 | −5.3 % | no neutralization |
-| 12 | alpha_07 acc × persistence | 0001 | 0.012 | 0.228 | 0.46 | −0.20 | −6.7 % | dropped |
-| 13 | alpha_05 Δacc yoy | 0001 | 0.009 | 0.205 | 0.22 | 0.12 | −5.5 % | dropped |
-| 14 | alpha_04 CFO/\|NI\| | 0001 | 0.020 | 0.248 | 0.21 | 0.22 | −12.0 % | dropped |
-| 15 | alpha_02 BS-method WCA | 0001 | −0.017 | −0.058 | **−0.47** | −1.73 | **−60.2 %** | dropped (signal inverted) |
+| rank | alpha | round | window | IC@20 | ICIR@20 | Sharpe net | worst yr | max DD |
+|-----:|-------|------:|--------|------:|--------:|-----------:|---------:|-------:|
+| **1** | **alpha_med_ind** | 3 | 2018-2025 | 0.015 | **0.440** | **1.03** | **1.33** | **−1.8 %** |
+| 2 | alpha_sum_ind | 3 | 2018-2025 | 0.016 | 0.413 | 1.01 | 1.18 | −2.6 % |
+| 3 | alpha_v5 (= alpha_med_ind on 2020-2025) | 2 | 2020-2025 | 0.016 | 0.505 | 1.57 | 1.55 | −1.6 % |
+| 4 | alpha_03 (= alpha_sum_ind on 2020-2025) | 1 | 2020-2025 | 0.018 | 0.495 | 1.38 | 1.24 | −2.0 % |
+| 5 | alpha_med_indxsize | 3 | 2018-2025 | 0.010 | 0.303 | 0.82 | 0.36 | −3.3 % |
+| 6 | alpha_sum_indxsize | 3 | 2018-2025 | 0.012 | 0.338 | 0.81 | 0.68 | −3.5 % |
+| 7 | alpha_sum_size | 3 | 2018-2025 | 0.019 | 0.272 | 0.71 | 0.11 | −6.1 % |
+| 8 | alpha_med_size | 3 | 2018-2025 | 0.019 | 0.269 | 0.68 | 0.09 | −6.2 % |
+| 9 | alpha_sum_none | 3 | 2018-2025 | 0.023 | 0.282 | 0.69 | 0.11 | −6.2 % |
+| 10 | alpha_med_none | 3 | 2018-2025 | 0.023 | 0.272 | 0.65 | 0.02 | −6.5 % |
 
-## 2. Why v5 is the new flagship
+Bottom 6 of Round 1 (alpha_02 / 04 / 05 / 07, plus Round 2 v7 / v8) omitted — already dropped.
 
-The one change from baseline alpha_03: replace trailing-4-quarter **sum** of NI/CFO with trailing-4-quarter **median × 4**. That single substitution:
+## 2. Attribution verdict
 
-- Raises net Sharpe by 14 % (1.38 → 1.57).
-- Raises worst-year floor by 25 % (1.24 → 1.55).
-- Cuts max drawdown by 20 % (−2.0 % → −1.6 %).
-- Raises ICIR from 0.495 → 0.505 at 20d, from 0.852 → 0.909 at 60d.
+### On the TTM axis (within industry-neutral)
 
-Mechanism: A-share financials carry restatement noise and occasional one-off items that distort a single quarter. The 4-quarter sum carries this noise forward; the median suppresses it without losing signal. This is exactly the Tushare-restatement fragility the Round 1 research brief flagged as caveat #2.
+| TTM | Sharpe net | ICIR 20 | worst yr | max DD |
+|-----|-----------:|--------:|---------:|-------:|
+| sum | 1.01 | 0.413 | 1.18 | −2.6 % |
+| **median** | **1.03** | **0.440** | **1.33** | **−1.8 %** |
+| Δ | +2 % | +7 % | +13 % | −30 % |
 
-## 3. Round 2A residualization verdict (for alpha_03)
+Median-TTM wins on every metric. Gap is smaller than the Round 2 claim (which was on the benign 2020-2025 window); including 2018-2019 shrinks the IC advantage but preserves the worst-year and drawdown advantages. **Median-TTM is still the right default.**
 
-Residualizing alpha_03 cross-sectionally against {log_mv, mom_20, rev_5, turnover_z, vol_20} retains **96 %** of the net Sharpe and **improves** ICIR (0.495 → 0.575 at 20d). The accruals premium is a genuinely independent signal — not a repackaged size / momentum / reversal / liquidity / low-vol factor. By implication the same holds for v5 (which is the same mechanism with a more robust TTM).
+### On the neutralization axis (within median-TTM)
 
-## 4. Deployment spec for `alpha_v5`
+| Neutralization | Sharpe net | ICIR 20 | worst yr | max DD |
+|----------------|-----------:|--------:|---------:|-------:|
+| none           | 0.65 | 0.27 | 0.02 | −6.5 % |
+| size-only      | 0.68 | 0.27 | 0.09 | −6.2 % |
+| **industry-only** | **1.03** | **0.44** | **1.33** | **−1.8 %** |
+| industry × size | 0.82 | 0.30 | 0.36 | −3.3 % |
 
-```yaml
-name:          accruals_median_ttm_ind_neutral_v2
-mechanism:     earnings quality (Sloan 1996) via median-TTM accruals
-universe:      A-share ex-financials ex-ST, listed > 252 trading days
-frequency:     monthly rebalance (every 20 trading days)
-delay:         1 (signal at close T, execute close T+1)
-deployment:
-  primary:     Q5 (top-quintile) long-only, equal-weighted within industry; benchmark = CSI300
-  validation:  LS (Q5-Q1) for signal integrity monitoring; not deployed
-data_refresh:
-  quarterly_statements: tushare income_vip + balancesheet_vip + cashflow_vip, weekly poll
-  daily_prices: tushare daily + adj_factor + daily_basic, nightly pull
-kill_switch:
-  rolling_12m_ic_below_0:  alert
-  max_drawdown_below_-8%:  pause
-  turnover_monthly_above_35%: investigate (shouldn't move much with fundamentals)
-```
+**Industry neutralization is the decisive lever.** Size on its own does essentially nothing (+0.03 Sharpe vs none). Double-neutralization (industry × size) gives back much of the industry gain because cell sizes get too small. This is the clearest attribution result we could have asked for: *the accruals premium is a sector-within story, not a size-within story.*
 
-## 5. Continue / refine / stop
+## 3. TVT split — honest out-of-sample picture
 
-**Decision:** `continue` — promote v5 to paper trading; start Round 3 on a pre-2020 stress window.
+| split | period | LS net Sharpe | Q5 long-only IR |
+|-------|--------|--------------:|----------------:|
+| Train | 2018-2021 | 1.12 | 1.16 |
+| Validate | 2022-2023 | 1.73 | 1.83 |
+| **Test** | **2024-2025YTD** | **0.46** | **0.89** |
+| Full | 2018-2025YTD | 1.03 | 1.15 |
 
-- Round 3 should fetch 2018-01 → 2019-12 daily data to cover the 2018 deleveraging stress and full 2019 bull; re-run alpha_v5 over 2018-2025.
-- Open a second session for SUE / PEAD (independent mechanism) to prepare factor ensemble.
-- Do NOT further vary accruals normalization; the signal is well-characterized now.
+The Test Sharpe of 0.46 is dragged by 3 negative 2025 YTD months (small sample). Pure 2024 was Sharpe 1.33. Take the Test Q5-IR of 0.89 as the conservative deployment expectation for the long-only version — LS has higher noise due to short-side constraints.
+
+## 4. Revised headline expectations (replace Round 2's 1.57)
+
+**Before (Round 2, 2020-2025):**
+- LS Sharpe net = 1.57, worst year = 1.55, max DD = −1.6 %
+
+**After (Round 3, 2018-2025 honest):**
+- LS Sharpe net = **1.03**, worst year = 1.33, max DD = −1.8 %
+- Q5 long-only IR = **1.15** (deployable form)
+- Test OOS: LS 0.46 / Q5 IR 0.89 (partially 2025 small-sample drag)
+
+**Deployment target:** LS Sharpe 1.0 / Q5 IR 1.0 after 3 months of paper trading. Kill-switch at rolling-12m Sharpe < 0.3 or max DD worse than −5 %.
+
+## 5. Correlation of top variants (across rounds)
+
+Running-aside: alpha_sum_ind (R1) and alpha_med_ind (R2/R3) are ~0.95 correlated in rank-space. The factor library carries **one** accruals alpha, not two. `alpha_med_ind` is that alpha.
+
+## 6. Decision — continue / refine / stop
+
+**Decision:** **stop exploring accruals variants.** The mechanism is well-characterized:
+- 3 rounds, 24 tested expressions, clear winner.
+- Attribution done (industry is the lever).
+- Residualization done (96 % kept vs classics).
+- TVT split done (Test OOS ~0.9 Q5-IR).
+
+**Next:** fresh session on **SUE / PEAD** (independent fundamental mechanism). Then **Gross Profitability** (Novy-Marx 2013). After both have paper-traded 3 months, build the **factor-zoo ensemble**.
+
+Do NOT open Round 4 on accruals. Incremental tuning past here will overfit.

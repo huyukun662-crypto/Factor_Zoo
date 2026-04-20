@@ -1,68 +1,48 @@
 {
   "session_id": "20260420_fundamental_accruals_alpha",
-  "current_round": 2,
+  "current_round": 3,
   "current_stage": "evaluation_complete",
-  "status": "promote_alpha_v5_start_round_3",
-  "selected_mechanism": "Earnings quality via accruals (Sloan 1996, CFS-method, median-TTM)",
+  "status": "session_complete_flagship_confirmed",
+  "selected_mechanism": "Earnings quality via accruals (Sloan 1996, CFS-method, median-TTM, industry-neutral)",
   "best_alpha_id": "accruals_median_ttm_ind_neutral_v2",
-  "continue_research": true,
+  "flagship_status": "DEPLOYED_paper_trading",
+  "continue_research": false,
+  "reason_for_stop": "Mechanism fully characterized over 3 rounds / 24 expressions. Attribution done, residualization done, extended window + TVT split done. Further variants would overfit. Next research belongs in a new session (SUE/PEAD) with an independent mechanism.",
   "rounds": [
     {
       "round": 1,
-      "subround": "1.5",
-      "decision": "promote_alpha_03_start_round_2",
-      "best_expression_idx": 3,
+      "decision": "promote_alpha_03",
       "best_alpha_id": "accruals_ind_neutral_sloan_v1",
-      "headline": {
-        "ic20_mean": 0.0175,
-        "icir20": 0.495,
-        "ls_sharpe_net_10bps": 1.379,
-        "worst_year_sharpe": 1.238,
-        "max_drawdown_ls": -0.020
-      }
+      "headline_ls_net_sharpe": 1.379
     },
     {
       "round": 2,
-      "decision": "promote_alpha_v5_replace_alpha_03",
-      "best_expression_idx": "v5",
+      "decision": "promote_alpha_v5_supersede_alpha_03",
       "best_alpha_id": "accruals_median_ttm_ind_neutral_v2",
-      "headline": {
-        "ic20_mean": 0.0157,
-        "icir20": 0.505,
-        "ls_sharpe_gross": 2.267,
-        "ls_sharpe_net_10bps": 1.569,
-        "worst_year_sharpe": 1.551,
-        "no_best_year_sharpe": 1.982,
-        "pct_kept_no_best": 0.88,
-        "max_drawdown_ls": -0.016
+      "headline_ls_net_sharpe": 1.569,
+      "window": "2020-2025"
+    },
+    {
+      "round": 3,
+      "decision": "confirm_alpha_med_ind_on_extended_window",
+      "best_alpha_id": "accruals_median_ttm_ind_neutral_v2",
+      "headline_ls_net_sharpe": 1.032,
+      "window": "2018-2025",
+      "honest_expectations": {
+        "ls_net_sharpe_full": 1.032,
+        "ls_net_sharpe_test": 0.46,
+        "q5_long_only_ir_full": 1.152,
+        "q5_long_only_ir_test": 0.89,
+        "max_dd": -0.018,
+        "note": "Test period dragged by 3 points of 2025 YTD; pure 2024 LS Sharpe was 1.33."
       },
-      "delta_vs_round1": {
-        "sharpe_net_improvement_pct": 14,
-        "worst_year_improvement_pct": 25,
-        "max_dd_improvement_pct": 20
-      },
-      "audits_pass": {
-        "rule_of_8": true,
-        "one_mechanism": true,
-        "execution_delay": true,
-        "look_ahead_structural": true,
-        "look_ahead_shuffle": true,
-        "worst_year_floor": true,
-        "best_year_out": true,
-        "falsification_first_pub_lag": true,
-        "residualization_vs_classics": true
-      },
-      "residualization_result": {
-        "controls": ["log_mv", "mom_20", "rev_5", "turnover_z", "vol_20"],
-        "pct_sharpe_kept": 0.96,
-        "icir_improved": true
-      },
-      "next_round_focus": [
-        "Round 3: extend window to 2018-01 for 2018 deleveraging stress",
-        "Open SUE / PEAD session for second fundamental mechanism",
-        "Deploy alpha_v5 Q5 long-only (within industry) as CSI300-benchmarked overlay in paper trading",
-        "Track 2025 YTD as out-of-sample accumulation"
-      ]
+      "attribution_conclusion": "Industry neutralization is the decisive lever. Size-only does nothing. Double-neutralization destroys signal.",
+      "audits_pass_all": true
     }
+  ],
+  "next_sessions_queue": [
+    "20260421_fundamental_sue_pead_alpha — Bernard-Thomas 1989 PEAD, independent mechanism",
+    "20260422_fundamental_gross_profitability — Novy-Marx 2013, second quality proxy",
+    "20260423_fundamental_ensemble — combine accruals + SUE + GP into 2-3 factor ensemble after 3 months of paper-trading evidence"
   ]
 }
