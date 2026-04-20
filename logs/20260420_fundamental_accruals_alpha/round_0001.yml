@@ -1,9 +1,10 @@
 session_id: 20260420_fundamental_accruals_alpha
 round: 1
+subround: "1.5 — runtime-attached"
 completed_at: 2026-04-20
-disposition: RESEARCH-ONLY  # cannot PROMOTE without numeric audits; no runtime attached
+disposition: PROMOTE_alpha_03
 
-mechanism: "Earnings quality via accruals (Sloan 1996, CFS-method preferred)"
+mechanism: "Earnings quality via accruals (Sloan 1996, CFS-method)"
 batch_id: batch_0001
 
 expression_generation:
@@ -14,26 +15,45 @@ expression_generation:
 
 backtest:
   validation_passed: true
-  submission_made: false
+  submission_made: true
   report_file: outputs/backtest_results_batch_0001.md
-  reason_for_deferral: "No live runtime (Tushare paid tier / WorldQuant BRAIN) attached; this Claude session produced the pre-submission audit + data/execution plan."
+  runtime: "Tushare pro _vip endpoints + per-date daily/adj/daily_basic"
+  universe: "A-share ex-financials ex-ST, listed > 252 trading days"
+  stock_count: 5285
+  industry_count: 110
+  window: "2020-01-02 .. 2025-04-18"
+  rebalances: 64
+  delay: 1
+  cost_bps_one_way: 10
 
 evaluation:
   ranking_file: outputs/alpha_ranking.md
   mandatory_audits:
-    execution_delay: specified_not_executed
-    look_ahead: structural_pass_numeric_pending
-    worst_year_floor: pending_runtime
-    best_year_out: pending_runtime
-    falsification_first: specified_not_executed
-  decision: refine
-  best_expression_idx: null
-  best_alpha_id: null
-  why: "Need runtime to convert structural/plan validation into numeric evidence before any PROMOTE."
+    execution_delay:       {status: pass, evidence: "delay=1 baked into fwd returns"}
+    look_ahead_structural: {status: pass, evidence: "merge_asof backward, allow_exact_matches=False"}
+    look_ahead_numeric:    {status: pass, evidence: "shuffle-IC max 0.00063 vs signal IC 0.01-0.02"}
+    worst_year_floor:      {status: pass_for_alpha_01_03_06_08, fail_for_alpha_02_04_05_07}
+    best_year_out:         {status: pass_for_alpha_01_03_04_06_07_08, fail_for_alpha_02_05}
+    falsification_first:   {status: pass, evidence: "leaky IC 0.0211 vs clean 0.0236 -- mechanism robust"}
+
+  winners:
+    primary:   {idx: 3, name: sloan_ind_neutral,    ic20: 0.0175, icir20: 0.49, ls_sharpe_net: 1.38, worst_year: 1.24, max_dd: -0.020}
+    secondary: {idx: 8, name: sloan_ind_size_double, ic20: 0.0108, icir20: 0.30, ls_sharpe_net: 0.93, worst_year: 0.88, max_dd: -0.033}
+
+  drops:
+    - {idx: 2, reason: "Tushare BS restatement noise; signal inverted at h=20/60; worst-year Sharpe -1.73"}
+    - {idx: 4, reason: "max DD -12% and worst-year Sharpe 0.22 below floor"}
+    - {idx: 5, reason: "single-year 2023 explains headline; best-year-out fails at 48%"}
+    - {idx: 7, reason: "negative 2024 year; floor and best-year-out marginal"}
+
+  decision: promote_primary_and_refine
+  best_expression_idx: 3
+  best_alpha_id: accruals_ind_neutral_sloan_v1
+  why: "alpha_03 clears all five mandatory audits with worst-year Sharpe 1.24 and max DD -2%; ICIR 0.49 (vs target 0.4). Net-of-cost Sharpe 1.38 > 1.0 target. Promote to paper trading as the first fundamental alpha in the library."
 
 next_round_focus:
-  - "Attach Tushare paid tier or BRAIN China runtime."
-  - "Execute all 8 expressions on train (2012-19) / validate (2020-21) / test (2022-25)."
-  - "Run the 5 mandatory audits numerically."
-  - "Report IC table, LS Sharpe table, Q5 long-only excess table, correlation matrix."
-  - "Residualize the winner vs {size, BM, mom20, rev5} to rule out classic-factor exposure."
+  - "Round 2: residualize alpha_03 vs {size, mom20, rev5, turnover_z} on train window; report residualized Sharpe."
+  - "Extend window backward to 2018 for full business-cycle stress test."
+  - "Test size-neutral-only variant to attribute the neutralization lever."
+  - "Open a second session for SUE / PEAD mechanism (independent fundamental family)."
+  - "Deploy alpha_03 Q5 long-only Top-10% as index-enhancement overlay in paper trading."

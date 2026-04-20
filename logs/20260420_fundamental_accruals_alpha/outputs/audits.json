@@ -1,0 +1,109 @@
+{
+  "shuffle_test_shuffled_ic_per_alpha": {
+    "alpha_01": 0.00015314585047312594,
+    "alpha_02": 0.0006283223083381767,
+    "alpha_03": 0.00015250434396977392,
+    "alpha_04": 0.00022136981565946774,
+    "alpha_05": 0.00015789088645023103,
+    "alpha_06": -8.703309500691734e-06,
+    "alpha_07": -0.0003300937791509498,
+    "alpha_08": 0.00016607089594100938
+  },
+  "publication_lag_leakage": {
+    "alpha_01_clean": {
+      "ic_mean": 0.02362265244517181,
+      "icir": 0.33279300947808416,
+      "tstat": 11.817666732717695,
+      "n_dates": 1261
+    },
+    "alpha_01_end_date_leaky": {
+      "ic_mean": 0.021053993079012463,
+      "icir": 0.29504588074617205,
+      "tstat": 10.477244984765967,
+      "n_dates": 1261
+    },
+    "interpretation": "If leaky_IC > 1.5 * clean_IC in abs terms, the factor is brittle to publication-lag assumptions; in our strict-ann_date build they should differ only by the publication-lag month of information."
+  },
+  "worst_year_best_out": [
+    {
+      "alpha": "alpha_01",
+      "headline_sharpe": 1.1802953171135522,
+      "worst_year_sharpe": 0.7660297653368963,
+      "best_year_sharpe": 2.566638807695232,
+      "no_best_year_sharpe": 1.0176373015230207,
+      "pct_headline_kept": 0.8621887139327837,
+      "worst_year_floor_pass": true,
+      "best_year_out_pass": true
+    },
+    {
+      "alpha": "alpha_02",
+      "headline_sharpe": -0.383330338807918,
+      "worst_year_sharpe": -1.7272107494732674,
+      "best_year_sharpe": 0.2802978519169267,
+      "no_best_year_sharpe": -0.6538388858586928,
+      "pct_headline_kept": NaN,
+      "worst_year_floor_pass": false,
+      "best_year_out_pass": false
+    },
+    {
+      "alpha": "alpha_03",
+      "headline_sharpe": 1.97739846920356,
+      "worst_year_sharpe": 1.2381022485508215,
+      "best_year_sharpe": 5.079574257402231,
+      "no_best_year_sharpe": 1.674877881604109,
+      "pct_headline_kept": 0.8470108112699725,
+      "worst_year_floor_pass": true,
+      "best_year_out_pass": true
+    },
+    {
+      "alpha": "alpha_04",
+      "headline_sharpe": 0.5007088800183971,
+      "worst_year_sharpe": 0.21922107542267508,
+      "best_year_sharpe": 2.037448586638193,
+      "no_best_year_sharpe": 0.2866540746789988,
+      "pct_headline_kept": 0.5724964867179239,
+      "worst_year_floor_pass": false,
+      "best_year_out_pass": true
+    },
+    {
+      "alpha": "alpha_05",
+      "headline_sharpe": 0.6585801944108788,
+      "worst_year_sharpe": 0.11583102329792189,
+      "best_year_sharpe": 4.812869845044625,
+      "no_best_year_sharpe": 0.31451442502773047,
+      "pct_headline_kept": 0.47756435388870716,
+      "worst_year_floor_pass": false,
+      "best_year_out_pass": false
+    },
+    {
+      "alpha": "alpha_06",
+      "headline_sharpe": 0.9784090728412005,
+      "worst_year_sharpe": 0.5853445972770032,
+      "best_year_sharpe": 1.5373785909598978,
+      "no_best_year_sharpe": 0.8794665387483751,
+      "pct_headline_kept": 0.8988740631712395,
+      "worst_year_floor_pass": true,
+      "best_year_out_pass": true
+    },
+    {
+      "alpha": "alpha_07",
+      "headline_sharpe": 0.7920251960861153,
+      "worst_year_sharpe": -0.1996930033875319,
+      "best_year_sharpe": 2.1942682548136343,
+      "no_best_year_sharpe": 0.41136213716666226,
+      "pct_headline_kept": 0.5193801146724323,
+      "worst_year_floor_pass": false,
+      "best_year_out_pass": true
+    },
+    {
+      "alpha": "alpha_08",
+      "headline_sharpe": 1.500219775582405,
+      "worst_year_sharpe": 0.8801876896756458,
+      "best_year_sharpe": 2.5560144664098834,
+      "no_best_year_sharpe": 1.2556833482870173,
+      "pct_headline_kept": 0.8369995974753397,
+      "worst_year_floor_pass": true,
+      "best_year_out_pass": true
+    }
+  ]
+}
