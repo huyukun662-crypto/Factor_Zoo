@@ -1,0 +1,43 @@
+{
+  "objective": "Mine a fundamental factor family on A-share using the worldquant-5-agent-workflow, one mechanism per batch, monthly rebalance, delay=1.",
+  "mechanism_candidates": [
+    {
+      "name": "Accruals anomaly (earnings quality)",
+      "why": "High accruals = low-quality earnings = lower future returns; Sloan 1996 + A-share replications show 3-4% LS premium; data available on free Tushare tier (income/balancesheet/cashflow).",
+      "supporting_evidence": [
+        "Sloan 1996 AR",
+        "Richardson Sloan Soliman Tuna 2005 JAE",
+        "Chan Jegadeesh Lakonishok 2006 JF (international)",
+        "Ke Liu Xu 2010 (A-share)",
+        "GF Securities 2019 research report"
+      ],
+      "datasets": ["income", "balancesheet", "cashflow", "fina_indicator", "stock_basic.industry"],
+      "operators": ["ts_rank", "rank", "ts_sum", "ts_delta", "group_neutralize", "group_rank", "winsorize", "zscore", "quarterly_to_daily(ann_date based)"],
+      "caveats": [
+        "Must use ann_date (announcement), not end_date (period) for publication-lag mask.",
+        "CFS-method (NI-CFO) preferred over BS-method (DWC) for A-share restatement resilience.",
+        "Drop banks/insurers (SW L1 in {银行, 非银金融}) or force industry-neutralize.",
+        "2015 bubble year is the worst-year stress test.",
+        "Small-cap / newly-listed tilt → require listed > 252d and size filter.",
+        "Expect IC to improve with horizon → monthly rebalance is the right frequency."
+      ]
+    },
+    {
+      "name": "Gross profitability (Novy-Marx 2013)",
+      "why": "Alternative quality proxy; gross profit / assets; stronger in developed markets, mixed in A-share.",
+      "supporting_evidence": ["Novy-Marx 2013 JFE", "Fama French 2015 (5-factor)"],
+      "datasets": ["income.revenue", "income.oper_cost", "balancesheet.total_assets"],
+      "operators": ["ts_sum (TTM)", "rank", "group_neutralize"],
+      "caveats": ["Heavily industry-driven; must neutralize; IT/consumer dominate top quintile."]
+    },
+    {
+      "name": "Standardized Unexpected Earnings (SUE / PEAD)",
+      "why": "Short-horizon event-driven fundamental signal; complements accruals (which is slow-decay).",
+      "supporting_evidence": ["Bernard Thomas 1989", "Chordia Shivakumar 2006"],
+      "datasets": ["income.n_income (8-quarter history)", "ann_date"],
+      "operators": ["ts_delta (yoy)", "ts_std (seasonal vol)", "event-window filter"],
+      "caveats": ["Signal is concentrated in 10-20 day windows around announcements; quarterly rebalance suboptimal."]
+    }
+  ],
+  "recommended_focus": "Accruals anomaly. Well-documented, Tushare-accessible, orthogonal to existing price-volume book, single dominant mechanism, monthly rebalance aligned with quarterly fundamentals cadence."
+}

@@ -1,0 +1,20 @@
+{
+  "round": 3,
+  "decision": "confirm_alpha_med_ind_revise_expectations_down",
+  "best_expression_idx": "alpha_med_ind",
+  "best_alpha_id": "accruals_median_ttm_ind_neutral_v2",
+  "why": "On the extended 2018-2025 window (which includes the 2018 deleveraging stress), alpha_med_ind is still the best of 8 attribution variants and passes all mandatory audits (worst-year floor 1.33, best-year-out 92 %, shuffle 229x ratio). Industry neutralization is confirmed as the decisive lever (Sharpe +0.38 over no-neutralization). Size alone and industry x size both underperform industry-only.",
+  "revised_expected_deployment_sharpe": {
+    "ls_net_sharpe_round2_window_2020_2025": 1.57,
+    "ls_net_sharpe_round3_window_2018_2025": 1.03,
+    "honest_test_period_ls_net_sharpe": 0.46,
+    "honest_test_period_q5_long_only_ir": 0.89,
+    "interpretation": "Round 2 headline of 1.57 was optimistic due to benign 2020-2025 window. Honest full-cycle expectation is ~1.03 LS, ~1.15 Q5-IR. Paper-trading target set to 1.0 LS net Sharpe after adjustment for selection bias."
+  },
+  "next_round_focus": [
+    "Stop further accruals-family variants.",
+    "Open SUE/PEAD session for independent fundamental mechanism.",
+    "Ensemble accruals + SUE after 3 months of paper-trading evidence.",
+    "Gross profitability (Novy-Marx 2013) as third candidate mechanism."
+  ]
+}

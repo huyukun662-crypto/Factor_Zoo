@@ -1,0 +1,68 @@
+{
+  "name": "accruals_median_ttm_ind_neutral_v2",
+  "family": "fundamental.quality",
+  "mechanism": "Earnings quality via accruals (Sloan 1996, CFS-method, median-TTM, industry-neutral)",
+  "cost_bps_per_side": 5,
+  "cost_model": "turnover_aware: per_rebalance_cost = bps/1e4 * (tov_q5 + tov_q1)",
+  "window": "2018-07-11 to 2025-04-18",
+  "universe": "A-share ex-financials ex-ST listed>252d",
+  "n_stocks": 5285,
+  "n_industries": 110,
+  "rebalance": "monthly (every 20 trading days)",
+  "delay": 1,
+  "n_rebalances_full": 82,
+  "avg_turnover_q5_per_rebalance": 0.0969165429667684,
+  "avg_turnover_q1_per_rebalance": 0.09598658224518763,
+  "avg_per_rebalance_ls_cost_bps": 0.9527532403761239,
+  "ic": {
+    "ic_20d": 0.014881520759137136,
+    "icir_20d": 0.4399962215143197,
+    "tstat_20d": 17.67668049618654,
+    "ic_60d": 0.030150215945805244,
+    "icir_60d": 0.9444345546844243,
+    "tstat_60d": 37.46918377281544
+  },
+  "full_window": {
+    "ls_net_sharpe": 1.3397958523561275,
+    "ls_net_ann_return": 0.10365848663132482,
+    "ls_net_ann_vol": 0.07391947332002546,
+    "ls_max_drawdown": -0.0184551460681337,
+    "ls_hit_rate": 0.7073170731707317,
+    "q5_long_only_excess_ir": 1.129661080868711,
+    "q5_long_only_excess_ann": 0.04415623123274415,
+    "q5_long_only_max_drawdown": -0.01333748055635764
+  },
+  "tvt_split": {
+    "train_2018_2021": {
+      "ls_net_sharpe": 1.3600249915669709,
+      "ls_net_ann_ret": 0.13746524848068575,
+      "n": 43
+    },
+    "validate_2022_2023": {
+      "ls_net_sharpe": 2.448752065796365,
+      "ls_net_ann_ret": 0.08121847364481405,
+      "n": 24
+    },
+    "test_2024_2025YTD": {
+      "ls_net_sharpe": 0.9617468418566203,
+      "ls_net_ann_ret": 0.04576380982729944,
+      "q5_ex_net_ir": 0.8801104384074164,
+      "q5_ex_net_ann": 0.02424946494236968,
+      "n": 15,
+      "caveat": "dragged by 3 negative 2025 YTD obs; pure 2024 LS Sharpe ~ 1.5"
+    }
+  },
+  "audits": {
+    "rule_of_8": true,
+    "one_mechanism": true,
+    "execution_delay_pass": true,
+    "look_ahead_shuffle_pass": true,
+    "worst_year_floor_pass": true,
+    "best_year_out_pass": true,
+    "pub_lag_pass": true,
+    "residualization_pct_kept": 0.96
+  },
+  "rounds_run": 4,
+  "expressions_tested": 32,
+  "session_id": "20260420_fundamental_accruals_alpha"
+}

@@ -49,10 +49,18 @@
 | 目录 | 说明 |
 | --- | --- |
 | `worldquant-5-agent-workflow/` | WorldQuant 风格的 5-Agent 因子生成 / 评估工作流 (Knowledge → Planner → Generator → Backtest → Evaluator) |
-| `factors/` *(TBA)* | 按类别组织的因子定义与公式 |
-| `results/` *(TBA)* | 因子 IC、IR、分层回测、换手率等评估结果 (CSV / Parquet) |
+| [`factors/`](factors/) | **入库因子定义、构建代码、评估指标(每个因子一个子目录)** |
+| [`logs/`](logs/) | 因子挖掘 session 完整 artifacts(research_brief / expressions / backtest_results / 审计) |
 | `figures/` *(TBA)* | 分层净值曲线、IC 衰减图、热力图 |
 | `reports/` *(TBA)* | 每批次因子挖掘的研究报告 |
+
+## 已入库因子
+
+| 因子 | 类别 | LS Sharpe (净万5) | Q5 IR (净万5) | Max DD | 状态 |
+|------|------|------------------:|--------------:|-------:|:----:|
+| [`accruals_median_ttm_ind_neutral_v2`](factors/fundamental/accruals_median_ttm_ind_neutral_v2/) | `fundamental.quality` | **1.34** | **1.13** | −1.85% | DEPLOYED |
+
+(基于 A 股 2018-2025,5,285 只股票,82 次月度再平衡,5 bps 单边手续费,turnover-aware 成本模型)
 
 ---
 

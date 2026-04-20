@@ -1,0 +1,19 @@
+{
+  "round": 2,
+  "decision": "promote_alpha_v5_replace_alpha_03",
+  "best_expression_idx": "v5",
+  "best_alpha_id": "accruals_median_ttm_ind_neutral_v2",
+  "why": "Single-change refinement (median-TTM instead of sum-TTM) lifts net Sharpe 14 % (1.38 -> 1.57), worst-year floor 25 % (1.24 -> 1.55), cuts max DD 20 % (-2.0 % -> -1.6 %), and improves ICIR 0.495 -> 0.505 (20d) and 0.852 -> 0.909 (60d). Root cause: Tushare balance-sheet restatements introduce single-quarter outliers that the sum-TTM propagates but the median absorbs. This was predicted as caveat #2 in the Round 1 research brief and confirmed by the Round 1 alpha_02 (BS-method) failure.",
+  "audits": {
+    "shuffle_test": {"clean_ic_20d": 0.0157, "shuffled_ic_20d": 0.000238, "ratio": 66},
+    "pub_lag_leakage": {"clean_ic": 0.0157, "leaky_end_date_ic": 0.0156, "ratio": 0.99},
+    "worst_year_floor": {"value": 1.551, "gate": 0.5, "pass": true},
+    "best_year_out": {"kept_pct": 0.88, "gate": 0.5, "pass": true},
+    "residualization_on_alpha_03": {"kept_pct_sharpe": 0.96, "icir_change": "improved"}
+  },
+  "next_round_focus": [
+    "Extend panel backward to 2018-01 for full-cycle stress.",
+    "Open SUE / PEAD independent session.",
+    "Deploy v5 Q5 long-only as CSI300 overlay; track paper-trading monthly."
+  ]
+}

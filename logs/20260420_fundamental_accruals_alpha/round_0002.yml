@@ -1,0 +1,70 @@
+session_id: 20260420_fundamental_accruals_alpha
+round: 2
+completed_at: 2026-04-20
+disposition: PROMOTE_alpha_v5_replace_alpha_03
+
+mechanism: "Earnings quality via accruals (Sloan 1996, CFS-method)"
+batch_id: batch_0002
+batch_description: "8 refinement variants of alpha_03 from Round 1; all industry-neutral by default."
+
+variants:
+  v1_baseline:      {ic20: 0.0175, icir20: 0.493, ls_sharpe_net: 1.379, worst_year: 1.238, max_dd: -0.020}
+  v2_tight_win:     {ic20: 0.0175, icir20: 0.492, ls_sharpe_net: 1.399, worst_year: 1.187, max_dd: -0.020}
+  v3_zscore:        {ic20: 0.0179, icir20: 0.481, ls_sharpe_net: 1.295, worst_year: 1.179, max_dd: -0.024}
+  v4_8q_ttm:        {ic20: 0.0142, icir20: 0.425, ls_sharpe_net: 1.368, worst_year: 1.609, max_dd: -0.025}
+  v5_median_ttm:    {ic20: 0.0157, icir20: 0.505, ls_sharpe_net: 1.569, worst_year: 1.551, max_dd: -0.016}  # WINNER
+  v6_rev_scaled:    {ic20: 0.0172, icir20: 0.498, ls_sharpe_net: 1.326, worst_year: 1.115, max_dd: -0.035}
+  v7_stability:     {ic20: 0.0134, icir20: 0.437, ls_sharpe_net: 1.097, worst_year: 1.083, max_dd: -0.021}
+  v8_ensemble:      {ic20: 0.0159, icir20: 0.471, ls_sharpe_net: 1.331, worst_year: 0.921, max_dd: -0.025}
+
+winner:
+  idx: v5
+  full_name: accruals_median_ttm_ind_neutral_v2
+  construction: |
+    acc_med = (median(NI_quarterly, 4q) - median(CFO_quarterly, 4q)) * 4 / ts_mean(total_assets, 4q)
+    alpha_v5 = -group_rank( winsorize(acc_med, 0.01, 0.99) , industry )
+  headline:
+    ic_20d: 0.0157
+    icir_20d: 0.505
+    ls_sharpe_gross: 2.267
+    ls_sharpe_net_10bps: 1.569
+    worst_year_sharpe: 1.551      # 2022
+    best_year_sharpe: 4.926       # 2023
+    no_best_year_sharpe: 1.982    # 88% of headline
+    max_drawdown: -0.016
+    annual_sharpes: {"2020": 1.83, "2021": 3.40, "2022": 1.89, "2023": 4.93, "2024": 1.55}
+
+audits:
+  rule_of_8:                    pass
+  one_mechanism:                pass
+  look_ahead_structural:        pass
+  look_ahead_shuffle:           {status: pass, clean_ic: 0.0157, shuffled_ic: 0.000238, ratio: 66}
+  worst_year_floor_0_5:         pass_by_3x   # 1.55 vs 0.5 gate
+  best_year_out_50pct:          pass         # 88 % retained (gate 50 %)
+  falsification_first_pub_lag:  {status: pass, clean_ic: 0.0157, leaky_ic: 0.0156, ratio: 0.99}
+  residualization_vs_classics:  {status: pass, kept_pct: 96, controls: [log_mv, mom_20, rev_5, turnover_z, vol_20]}
+
+comparison_to_round1_winner:
+  alpha_03_r1_winner: {icir20: 0.495, sharpe_net: 1.379, worst_year: 1.238, max_dd: -0.020}
+  alpha_v5_r2_winner: {icir20: 0.505, sharpe_net: 1.569, worst_year: 1.551, max_dd: -0.016}
+  deltas:
+    icir20: +0.010
+    sharpe_net: +0.190   # +14 %
+    worst_year: +0.313   # +25 %
+    max_dd: +0.004       # -20 % (smaller)
+  interpretation: "Replace alpha_03 with alpha_v5 as the flagship fundamental factor. Single change: 4-quarter SUM of NI/CFO replaced with 4-quarter MEDIAN x 4 --- robust to single-quarter restatements and outlier earnings."
+
+drops:
+  v2_tight_win:  "Nearly identical to v1; winsorize level doesn't move the needle on this mechanism."
+  v3_zscore:     "Slightly worse than rank-based; rank is the right normalization for fundamentals."
+  v4_8q_ttm:     "Smoother but lower IC; 4q-median beats 8q-sum on both IC and stability."
+  v6_rev_scaled: "Works but higher max DD (-3.5%); avg_TA denominator wins."
+  v7_stability:  "Stability scaling costs more IC than it buys."
+  v8_ensemble:   "Averaging v1 + v7 doesn't help; v7 component drags v1 down."
+
+decision: promote_v5_and_continue
+next_round_focus:
+  - "Round 3: extend panel backward to 2018-01 for full-cycle stress including 2018 deleveraging; rerun alpha_v5 and re-check worst-year floor across 8 years."
+  - "Open independent session for SUE/PEAD to add a second fundamental mechanism (ensemble with alpha_v5 once both paper-trade 3 months)."
+  - "Deploy alpha_v5 Q5 long-only Top-10% (within industry) as CSI300-benchmarked index-enhancement overlay in paper trading."
+  - "Track 2025 YTD monthly P&L explicitly as out-of-sample accumulation."

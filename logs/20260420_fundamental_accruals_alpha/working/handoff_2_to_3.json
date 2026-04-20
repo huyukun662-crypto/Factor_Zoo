@@ -1,0 +1,34 @@
+{
+  "selected_mechanism": "Earnings quality via accruals (Sloan 1996, CFS-method preferred)",
+  "causal_chain": [
+    "High accruals today -> low future earnings persistence",
+    "Market anchors on reported NI, underreacts to accrual/cash split",
+    "20-60d forward returns correct the mispricing"
+  ],
+  "time_horizon": "20 trading days primary; 5d/60d robustness",
+  "market_regime": "A-share 2012-2025, train/validate/test = 2012-19/2020-21/2022-25, stress 2015+2018+2021",
+  "risk_premium_sources": [
+    "Behavioral underreaction to earnings quality",
+    "Earnings management reversal",
+    "Limited arbitrage (short constraints in A-share)"
+  ],
+  "constraints": {
+    "dataset_id": "a_share_fundamentals_v1",
+    "region": "CHN",
+    "universe": "all_A_ex_financials_ex_ST_listed252d",
+    "delay": 1,
+    "turnover_range": [0.05, 0.25],
+    "sharpe_target": 1.0,
+    "fitness_target": 1.0,
+    "prod_corr_max": 0.7
+  },
+  "neutralization_candidates": ["INDUSTRY", "INDUSTRY_SIZE"],
+  "mandatory_for_builder": {
+    "exact_count": 8,
+    "one_mechanism": true,
+    "publication_lag_field": "ann_date",
+    "sign_convention": "higher_raw_accruals = SHORT side; flip sign so higher_factor = higher_expected_return",
+    "winsorize": "0.01 / 0.99 cross-section daily",
+    "ttm_window": "trailing 4 quarters rolling; skip if <3 of 4 reports available"
+  }
+}

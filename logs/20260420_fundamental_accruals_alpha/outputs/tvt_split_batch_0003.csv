@@ -1,0 +1,9 @@
+alpha,split,period,n,ls_net_sharpe,ls_net_ann_ret,q5ex_ir,q5ex_ann
+alpha_sum_ind,Train,2018-2021,43,1.0898,0.1105,1.185,0.0618
+alpha_sum_ind,Validate,2022-2023,24,1.6868,0.0584,1.5852,0.0364
+alpha_sum_ind,Test,2024-2025,15,0.4679,0.0249,0.7359,0.0289
+alpha_sum_ind,FULL,2018-2025,82,1.0089,0.0791,1.1272,0.0483
+alpha_med_ind,Train,2018-2021,43,1.1245,0.1123,1.1551,0.0575
+alpha_med_ind,Validate,2022-2023,24,1.7326,0.0567,1.8303,0.0347
+alpha_med_ind,Test,2024-2025,15,0.4613,0.0217,0.8922,0.0246
+alpha_med_ind,FULL,2018-2025,82,1.0318,0.0789,1.1463,0.0448
