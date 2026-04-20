@@ -1,120 +1,97 @@
-# Final Summary — 20260420_fundamental_accruals_alpha  (Session complete, 3 rounds)
+# Final Summary — 20260420_fundamental_accruals_alpha  (Session complete, 4 rounds)
 
 **Topic:** 基本面因子挖掘 — 应计项目 / 盈余质量 (Sloan 1996)
-**Workflow:** worldquant-5-agent-workflow  (Research → Hypothesis → Builder → Backtest → Evaluator)
-**Final flagship:** `alpha_med_ind` — **median-TTM industry-neutral Sloan CFS accruals** (a.k.a. `accruals_median_ttm_ind_neutral_v2`)
-**Disposition:** **SESSION COMPLETE.** Mechanism fully characterized over 3 rounds / 24 expressions. Deploy flagship to paper trading. Stop accruals-family variants.
+**Workflow:** worldquant-5-agent-workflow
+**Final flagship:** `accruals_median_ttm_ind_neutral_v2` (= `alpha_med_ind`, = Round 4 v1_baseline)
+**Disposition:** **SESSION CLOSED.** Deploy flagship to paper trading with corrected expectations.
 
 ---
 
-## 1. TL;DR — honest expectations
+## 1. Corrected deployment headline  (Round 4 cost-model fix)
 
-| metric | value | window |
-|--------|-------|--------|
-| LS net Sharpe (10 bps) | **1.03** | 2018-2025 full |
-| LS net Sharpe | 1.57 | 2020-2025 only (benign) |
-| LS net Sharpe — Test | 0.46 | 2024-2025YTD (dragged by 3 negative 2025 pts) |
-| **Q5 long-only IR (deployable)** | **1.15** | 2018-2025 full |
-| Q5 long-only IR — Test | 0.89 | 2024-2025YTD |
-| Worst-year Sharpe | 1.33 (2022) | all years pass 0.5 gate |
-| Max drawdown | −1.8 % | full window |
-| Q5 long-only annual excess | 4.5 % | full window |
-| ICIR 20d | 0.44 | full window |
+| metric | value |
+|--------|------:|
+| Full LS net Sharpe (2018-2025) | **1.32** |
+| Full LS net ann return | 10.2 % |
+| Full Q5 long-only net IR | 1.11 |
+| Full Q5 long-only net ann excess | 4.4 % |
+| Max drawdown | −1.8 % |
+| Worst-year Sharpe (2022) | 1.33 |
+| ICIR@20d / ICIR@60d | 0.44 / 0.94 |
+| Avg turnover per rebalance (Q5 side) | 9.7 % |
+| Per-rebalance cost (LS) | ~1.9 bps |
+| **Test Sharpe (2024-2025 YTD)** | **0.95 LS / 0.87 Q5 IR** |
 
-**Deployment target:** LS Sharpe **1.0** / Q5 IR **1.0** after selection-bias adjustment. Kill-switch at rolling-12m Sharpe < 0.3.
+**Note the correction vs Round 3.** Earlier rounds applied a flat 20 bps/rebalance cost (assumed 100 % turnover). Actual turnover is ~10 %; true cost is ~1.9 bps. Round 4 uses turnover-aware cost. This alone lifts LS Sharpe from 1.03 → 1.32 with **no change to the factor**.
 
-## 2. Three-round arc
+## 2. Four-round arc
 
-| round | goal | batch | winner | headline Sharpe net |
-|------:|------|------:|--------|--------------------:|
-| 1 | discover | 8 mechanism expressions | alpha_03 (sum-TTM industry-neut) | 1.38 (2020-2025) |
-| 2 | refine | 8 variants on alpha_03 + residualization | alpha_v5 (median-TTM industry-neut) | 1.57 (2020-2025) |
-| 3 | stress + attribute | 2 × 4 factorial on extended 2018-2025 | alpha_med_ind (= alpha_v5) | **1.03 (2018-2025)** |
+| round | question | batch | winner | outcome |
+|------:|----------|------:|--------|---------|
+| 1 | Discover a fundamental mechanism | 8 expressions on accruals family | alpha_03 (sum-TTM ind-neutral) | promoted; sharpe 1.38 on 2020-2025 |
+| 2 | Refine the mechanism | 8 refinement variants + residualization | alpha_v5 (median-TTM ind-neutral) | supersedes; sharpe 1.57 on 2020-2025 |
+| 3 | Extend window & attribute | 2 × 4 factorial on 2018-2025 | alpha_med_ind (same as v5) | confirmed; sharpe 1.03 on 2018-2025 (Round 3 cost model) |
+| 4 | Deployment robustness | 8 smoothing / turnover variants | v1_baseline (same as alpha_med_ind) | kept; corrected cost gives sharpe 1.32 |
 
-The story: **the mechanism is real and stable**, but the benign 2020-2025 window oversold it. Once 2018 deleveraging is included the Sharpe drops to 1.03 — this is the number to use for allocation sizing and kill-switch calibration.
+Factor identity stayed the same from Round 2 onward. Rounds 3 and 4 sharpened the honest expectations: Round 3 stress-tested on 2018, Round 4 fixed the cost model.
 
-## 3. What each axis of the factor bought
+## 3. The single most important line in this session
 
-### TTM rollup (within industry-neutral)
+**Round 1 Librarian caveat #2 was the pivot point.** The caveat flagged "Tushare BS-method restatement noise". Round 1.5 verified it when alpha_02 (BS-method WCA) collapsed with −60 % drawdown. Round 2 v5 (median-TTM) operationalized the fix and jumped the Sharpe. Round 3 confirmed median-TTM still dominates on 2018-2025. That caveat → factor-design decision → empirical victory chain is exactly what a 5-agent pipeline is supposed to produce.
 
-| TTM | Sharpe net | worst yr | max DD |
-|-----|-----------:|---------:|-------:|
-| sum (Round 1) | 1.01 | 1.18 | −2.6 % |
-| **median (Round 2)** | **1.03** | **1.33** | **−1.8 %** |
+## 4. Mandatory audits — final state
 
-Median dominates on worst-year and drawdown; IC basically tied. The reason — restatement noise in single quarters — was predicted in Round 1 Librarian caveat #2 and confirmed in Round 1 when alpha_02 (BS-method) collapsed with −60 % drawdown. Generalization: use median-TTM for any A-share fundamental factor.
+| audit | status | round verified |
+|-------|--------|---------------:|
+| Rule of 8 | ✅ | 1, 2, 3, 4 |
+| One-mechanism | ✅ | all rounds |
+| Execution-delay structural | ✅ | 1.5 |
+| Look-ahead shuffle | ✅ 229× signal-to-noise | 3 |
+| Worst-year floor ≥ 0.5 | ✅ 1.33 | 3 |
+| Best-year-out ≥ 50 % | ✅ 92 % | 3 |
+| Falsification-first pub-lag | ✅ ratio 0.99 | 2 |
+| Residualization vs classics | ✅ 96 % kept | 2A |
+| Cost model sanity | ✅ turnover-aware (Round 4 fix) | 4 |
 
-### Neutralization (within median-TTM)
+## 5. Hard-won learnings (for the factor library)
 
-| neut | Sharpe net | worst yr |
-|------|-----------:|---------:|
-| none | 0.65 | 0.02 |
-| size | 0.68 | 0.09 |
-| **industry** | **1.03** | **1.33** |
-| industry × size | 0.82 | 0.36 |
+1. **Always use median-TTM on A-share fundamentals.** Tushare restatement noise is large.
+2. **Industry is the one neutralization that matters** for A-share quality signals. Size alone does nothing; double-neut over-slices.
+3. **Use CFS-method (NI − CFO), not BS-method.** The BS-method variant failed catastrophically.
+4. **Use ann_date, not end_date.** Publication-lag test showed both give similar IC on this factor, but the structural discipline is non-negotiable — other factors will leak.
+5. **Turnover-aware cost model matters.** Flat 20 bps/rebalance over-penalizes low-turnover fundamentals by 10× and makes the factor look 30 % worse than it is. Always measure actual turnover.
+6. **Benign windows lie.** 2020-2025 Sharpe 1.57 dropped to 1.03 (Round 3) then recovered to 1.32 (Round 4 cost fix). Always extend, always audit cost assumptions.
+7. **Smoothing has diminishing returns on already-slow signals.** `alpha_med_ind` is monthly-stable; EMA / sticky-band buy marginal turnover reduction, not meaningful alpha.
+8. **Stop when the factor is characterized.** Round 4 was the "one more round" that correctly returned "no new winner" — the signal the mechanism is saturated and the next session should attack a different mechanism.
 
-Industry-only is the decisive lever. Size alone brings almost nothing. Industry × size gives back signal because cell sizes go thin. **The accruals premium is a sector-within story, not a size-within story.**
-
-## 4. Mandatory audits (on final flagship, full 2018-2025)
-
-| audit | status | evidence |
-|-------|--------|----------|
-| Rule of 8 | ✅ | every batch had exactly 8 expressions |
-| One mechanism | ✅ | all 24 expressions on accruals family |
-| Execution-delay structural | ✅ | `delay=1`, `ann_date<trade_date`, `shift(-1-h)` |
-| Look-ahead shuffle (Round 3) | ✅ | clean IC 0.0149 vs shuffled IC 0.000065 → **229×** |
-| Worst-year floor ≥ 0.5 | ✅ | 1.33 (2022) |
-| Best-year-out ≥ 50 % | ✅ | 92 % retained |
-| Falsification-first (pub-lag, Round 2) | ✅ | leaky 0.0156 vs clean 0.0157 — ratio 0.99 |
-| Residualization vs classics (Round 2A) | ✅ | 96 % of Sharpe retained when orthogonalized vs {size, mom, rev, turnover, vol} |
-
-**All audits pass. The factor is deployment-ready.**
-
-## 5. Counter-evidence that strengthens the result
-
-- **alpha_02 (Round 1)** — BS-method WCA — failed as predicted. Shows the pipeline correctly rejects bad expressions.
-- **alpha_05 (Round 1)** — Δ-accruals — passed worst-year by 1 data point but failed best-year-out. Correctly identified as brittle and dropped.
-- **no-neutralization variants (Round 3)** — 2019 bull year crushed them. Shows worst-year floor catches what headline Sharpe misses.
-- **size-only and double-neutralization (Round 3)** — both lose to industry-only despite sounding "more careful". Shows that more-complex neutralization is not automatically better.
-
-## 6. Kept learnings for the factor library
-
-1. **Median-TTM > sum-TTM in A-share fundamentals.** Restatement noise is real; median absorbs it.
-2. **Industry neutralization is the single most important step for A-share fundamentals.** Always include it; skip size.
-3. **Tushare BS-method cannot be trusted on A-share for accruals.** Use CFS-method (NI − CFO).
-4. **Q5 long-only IR ≈ LS gross Sharpe × 0.5.** Deployment is always the long-only side; LS is signal validation.
-5. **Window matters.** A 5-year benign window can overstate Sharpe by 50 % vs a 7-year include-stress window. Always extend.
-6. **Publication-lag test is cheap insurance.** Leaky-vs-clean comparison costs 5 minutes and rules out the biggest single failure mode.
-
-## 7. Artifacts (session complete)
+## 6. File manifest (final)
 
 ```
 logs/20260420_fundamental_accruals_alpha/
 ├── inputs/objective.md
-├── working/ handoff_{1..4}.json + handoff_5_round2.json + handoff_5_round3.json
+├── working/ handoff_{1..4}.json + handoff_5_round{2,3,4}.json
 ├── outputs/
-│   ├── research_brief.md                       # Round 1
-│   ├── session_metadata.yml                    # Round 1
-│   ├── expressions_batch_0001.md               # Round 1 (8 mechanism exprs)
-│   ├── expressions_batch_0002.md               # Round 2 (8 refinement variants)
-│   ├── expressions_batch_0003.md               # Round 3 (8 attribution variants)
-│   ├── backtest_results_batch_0001.md          # Round 1.5 real numbers
-│   ├── backtest_results_batch_0002.md          # Round 2 numbers
-│   ├── backtest_results_batch_0003.md          # Round 3 numbers + TVT
-│   ├── alpha_ranking.md                        # final leader board
-│   ├── final_summary.md                        # this file
-│   ├── ic_table_batch_000{1,2,3}.csv
-│   ├── ls_summary_batch_000{1,2,3}.csv
-│   ├── ls_annual_batch_000{1,2,3}.csv
-│   ├── audit_{worst_year_best_out, residualization, v5_winner, batch_0002}.{csv,json}
-│   ├── tvt_split_batch_0003.csv
+│   ├── research_brief.md                          # R1
+│   ├── session_metadata.yml                       # R1
+│   ├── expressions_batch_{0001,0002,0003,0004}.md
+│   ├── backtest_results_batch_{0001,0002,0003,0004}.md
+│   ├── alpha_ranking.md                           # final leader-board
+│   ├── final_summary.md                           # this file
+│   ├── ic_table_batch_{0001,0002,0003}.csv
+│   ├── ls_summary_batch_{0001,0002,0003,0004}.csv
+│   ├── ls_annual_batch_{0001,0002,0003}.csv
+│   ├── tvt_split_batch_{0003,0004}.csv
+│   ├── audit_{worst_year_best_out,residualization,v5_winner,batch_0002}.{csv,json}
+│   ├── audits.json
 │   ├── correlation_matrix.csv
-│   └── audits.json
-├── scripts/ 01..09
-├── round_000{1,2,3}.yml
+│   ├── test_set_alpha_med_ind.csv
+│   ├── test_set_metrics_full.csv
+│   └── round4_winner_port_*.csv
+├── scripts/ 01..10
+├── round_000{1,2,3,4}.yml
 └── run_state.json
 ```
 
-## 8. One-sentence takeaway
+## 7. One-sentence takeaway
 
-**After three rounds and 24 tested expressions, the Factor_Zoo fundamental flagship is `accruals_median_ttm_ind_neutral_v2`: on the full 2018-2025 A-share panel (5,285 stocks) it earns LS net Sharpe 1.03, Q5 long-only excess IR 1.15, worst-year Sharpe 1.33, max drawdown −1.8 %, and passes every mandatory audit — deploy to paper trading at LS target Sharpe 1.0 and open new sessions for SUE/PEAD and gross profitability.**
+**After 4 rounds and 32 tested expressions, the Factor_Zoo fundamental flagship is `accruals_median_ttm_ind_neutral_v2`: median-TTM industry-neutral Sloan accruals on A-share, with turnover-aware-cost-model Sharpe 1.32 (LS net) and IR 1.11 (Q5 long-only), max drawdown −1.8 % over 2018-2025 and every mandatory audit passed — deploy to paper trading at target LS Sharpe 1.2 and Q5 IR 1.0 after selection-bias adjustment, then open new sessions for SUE/PEAD and gross profitability.**

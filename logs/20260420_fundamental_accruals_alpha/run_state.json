@@ -1,48 +1,41 @@
 {
   "session_id": "20260420_fundamental_accruals_alpha",
-  "current_round": 3,
-  "current_stage": "evaluation_complete",
-  "status": "session_complete_flagship_confirmed",
+  "current_round": 4,
+  "current_stage": "session_closed",
+  "status": "complete_flagship_deployed_corrected_expectations",
   "selected_mechanism": "Earnings quality via accruals (Sloan 1996, CFS-method, median-TTM, industry-neutral)",
   "best_alpha_id": "accruals_median_ttm_ind_neutral_v2",
   "flagship_status": "DEPLOYED_paper_trading",
   "continue_research": false,
-  "reason_for_stop": "Mechanism fully characterized over 3 rounds / 24 expressions. Attribution done, residualization done, extended window + TVT split done. Further variants would overfit. Next research belongs in a new session (SUE/PEAD) with an independent mechanism.",
-  "rounds": [
-    {
-      "round": 1,
-      "decision": "promote_alpha_03",
-      "best_alpha_id": "accruals_ind_neutral_sloan_v1",
-      "headline_ls_net_sharpe": 1.379
-    },
-    {
-      "round": 2,
-      "decision": "promote_alpha_v5_supersede_alpha_03",
-      "best_alpha_id": "accruals_median_ttm_ind_neutral_v2",
-      "headline_ls_net_sharpe": 1.569,
-      "window": "2020-2025"
-    },
-    {
-      "round": 3,
-      "decision": "confirm_alpha_med_ind_on_extended_window",
-      "best_alpha_id": "accruals_median_ttm_ind_neutral_v2",
-      "headline_ls_net_sharpe": 1.032,
-      "window": "2018-2025",
-      "honest_expectations": {
-        "ls_net_sharpe_full": 1.032,
-        "ls_net_sharpe_test": 0.46,
-        "q5_long_only_ir_full": 1.152,
-        "q5_long_only_ir_test": 0.89,
-        "max_dd": -0.018,
-        "note": "Test period dragged by 3 points of 2025 YTD; pure 2024 LS Sharpe was 1.33."
-      },
-      "attribution_conclusion": "Industry neutralization is the decisive lever. Size-only does nothing. Double-neutralization destroys signal.",
-      "audits_pass_all": true
+  "reason_for_stop": "4 rounds, 32 expressions, single winner confirmed on 2018-2025 extended window with TVT split; all audits pass; cost model corrected in Round 4. Further accruals-family variants would curve-fit. Next work belongs in new sessions on independent mechanisms.",
+  "headline_corrected_final": {
+    "window": "2018-07-11 to 2025-04-18",
+    "ls_net_sharpe": 1.32,
+    "ls_net_ann_return": 0.102,
+    "q5_ex_net_ir": 1.11,
+    "q5_ex_net_ann": 0.044,
+    "max_drawdown": -0.018,
+    "worst_year_sharpe": 1.33,
+    "icir_20d": 0.44,
+    "icir_60d": 0.944,
+    "avg_turnover_per_rebalance_q5": 0.097,
+    "avg_turnover_per_rebalance_q1": 0.096,
+    "per_rebalance_cost_bps": 1.9,
+    "test_period_2024_2025ytd": {
+      "ls_net_sharpe": 0.95,
+      "q5_ex_net_ir": 0.87,
+      "note": "Dragged by 3 negative 2025 YTD observations; 2024-only LS Sharpe 1.33"
     }
+  },
+  "rounds": [
+    {"round": 1, "winner": "alpha_03 (sum-TTM ind-neutral)",      "disposition": "promote"},
+    {"round": 2, "winner": "alpha_v5 (median-TTM ind-neutral)",   "disposition": "supersede alpha_03"},
+    {"round": 3, "winner": "alpha_med_ind (same as v5, extended)","disposition": "confirm on 2018-2025"},
+    {"round": 4, "winner": "v1_baseline (same as alpha_med_ind)", "disposition": "keep + correct cost model"}
   ],
   "next_sessions_queue": [
-    "20260421_fundamental_sue_pead_alpha — Bernard-Thomas 1989 PEAD, independent mechanism",
-    "20260422_fundamental_gross_profitability — Novy-Marx 2013, second quality proxy",
-    "20260423_fundamental_ensemble — combine accruals + SUE + GP into 2-3 factor ensemble after 3 months of paper-trading evidence"
+    "20260421_fundamental_sue_pead_alpha (Bernard-Thomas 1989)",
+    "20260422_fundamental_gross_profitability (Novy-Marx 2013)",
+    "20260423_fundamental_ensemble (accruals + SUE + GP)"
   ]
 }

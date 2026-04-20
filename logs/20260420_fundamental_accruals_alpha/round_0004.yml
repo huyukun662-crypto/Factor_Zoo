@@ -1,0 +1,62 @@
+session_id: 20260420_fundamental_accruals_alpha
+round: 4
+completed_at: 2026-04-20
+disposition: KEEP_alpha_med_ind_correct_cost_model
+
+mechanism: "Earnings quality via accruals (Sloan 1996, CFS-method, median-TTM, industry-neutral)"
+batch_id: batch_0004
+batch_description: "8 post-processing variants of alpha_med_ind (smoothing / turnover / regime blend). None strictly dominates baseline; but the cost model is corrected, revising Round 3 Sharpe up."
+
+cost_model_correction:
+  prior_rounds_applied: "flat 20 bps per rebalance (assumes 100 % turnover)"
+  correct_formula: "10 bps x (tov_q5 + tov_q1) per rebalance"
+  actual_turnover_avg: {q5: 0.097, q1: 0.096}
+  actual_per_rebalance_cost_bps: 1.9
+  over_penalization_factor: 10.5
+  revised_headline:
+    ls_net_sharpe: 1.32   # was 1.03 in Round 3
+    ls_net_ann_ret: 0.102  # was 0.079
+    q5_ex_net_ir: 1.11    # was 1.15 (barely changed; Q5 is one-sided)
+    max_dd: -0.018
+
+variants_evaluated:
+  v1_baseline:      {sharpe_net: 1.323, q5_ir: 1.113, tov_q5: 0.097, max_dd: -0.018}  # winner
+  v2_ema20:         {sharpe_net: 1.289, q5_ir: 1.089, tov_q5: 0.092, max_dd: -0.029}
+  v3_ema60:         {sharpe_net: 1.267, q5_ir: 1.043, tov_q5: 0.087, max_dd: -0.029, test_improvement: true}
+  v4_ema120:        {sharpe_net: 1.226, q5_ir: 1.026, tov_q5: 0.080, max_dd: -0.028}
+  v5_consensus:     {sharpe_net: 1.278, q5_ir: 1.100, tov_q5: 0.129, max_dd: -0.027}
+  v6_sticky_10pct:  {sharpe_net: 1.277, q5_ir: 1.111, tov_q5: 0.073, max_dd: -0.019, note: "lowest turnover preserved headline"}
+  v7_bimonthly:     {sharpe_net_raw: 1.435, note: "annualization artifact from step=40 vs sqrt(12); corrected ~1.02"}
+  v8_horizon_blend: {sharpe_net_raw: 2.099, note: "autocorrelation-induced low vol; rejected as artifact"}
+
+winner: v1_baseline
+runner_up: v6_sticky_10pct   # identical headline, 25 % lower turnover
+rejected:
+  - v7_bimonthly (annualization mismatch)
+  - v8_horizon_blend (vol artifact)
+
+attribution_on_test_period:
+  baseline_test_sharpe: 0.95
+  best_test_improvement: v3_ema60 with test Sharpe 1.20
+  caveat: "Test period has only 15 rebalances; v3/v6 improvements are within noise"
+
+audits:
+  rule_of_8:        pass
+  one_mechanism:    pass   # all 8 are post-transforms of the same signal
+  inherited_from_round_2_and_3:
+    execution_delay: pass
+    look_ahead:      pass
+    worst_year:      pass
+    best_year_out:   pass
+    pub_lag:         pass
+    residualization: pass
+
+decision: keep_alpha_med_ind_no_change_flagship
+flagship_status: DEPLOYED
+optional_upgrade: v6_sticky_10pct   # can replace baseline if turnover minimization matters more than negligible headline change
+
+next_round_focus:
+  - "Round 4 is the LAST round on accruals-family variants. The factor is fully characterized; further tuning is overfit."
+  - "Open a fresh session for SUE/PEAD (Bernard-Thomas 1989). Independent fundamental mechanism for ensemble."
+  - "Open a fresh session for Gross Profitability (Novy-Marx 2013). Value-quality cross."
+  - "After 3 months of paper-trading accumulation, build a 2-3 factor ensemble."
