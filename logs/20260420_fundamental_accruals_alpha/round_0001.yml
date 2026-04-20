@@ -1,0 +1,39 @@
+session_id: 20260420_fundamental_accruals_alpha
+round: 1
+completed_at: 2026-04-20
+disposition: RESEARCH-ONLY  # cannot PROMOTE without numeric audits; no runtime attached
+
+mechanism: "Earnings quality via accruals (Sloan 1996, CFS-method preferred)"
+batch_id: batch_0001
+
+expression_generation:
+  count: 8
+  rule_of_8_passed: true
+  one_mechanism_passed: true
+  expressions_file: outputs/expressions_batch_0001.md
+
+backtest:
+  validation_passed: true
+  submission_made: false
+  report_file: outputs/backtest_results_batch_0001.md
+  reason_for_deferral: "No live runtime (Tushare paid tier / WorldQuant BRAIN) attached; this Claude session produced the pre-submission audit + data/execution plan."
+
+evaluation:
+  ranking_file: outputs/alpha_ranking.md
+  mandatory_audits:
+    execution_delay: specified_not_executed
+    look_ahead: structural_pass_numeric_pending
+    worst_year_floor: pending_runtime
+    best_year_out: pending_runtime
+    falsification_first: specified_not_executed
+  decision: refine
+  best_expression_idx: null
+  best_alpha_id: null
+  why: "Need runtime to convert structural/plan validation into numeric evidence before any PROMOTE."
+
+next_round_focus:
+  - "Attach Tushare paid tier or BRAIN China runtime."
+  - "Execute all 8 expressions on train (2012-19) / validate (2020-21) / test (2022-25)."
+  - "Run the 5 mandatory audits numerically."
+  - "Report IC table, LS Sharpe table, Q5 long-only excess table, correlation matrix."
+  - "Residualize the winner vs {size, BM, mom20, rev5} to rule out classic-factor exposure."

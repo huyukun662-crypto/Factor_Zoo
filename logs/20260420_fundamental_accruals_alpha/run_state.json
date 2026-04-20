@@ -1,0 +1,23 @@
+{
+  "session_id": "20260420_fundamental_accruals_alpha",
+  "current_round": 1,
+  "current_stage": "evaluation",
+  "status": "complete_research_only",
+  "selected_mechanism": "Earnings quality via accruals (Sloan 1996)",
+  "best_alpha_id": null,
+  "continue_research": true,
+  "rounds": [
+    {
+      "round": 1,
+      "decision": "research-only",
+      "best_expression_idx": null,
+      "best_alpha_id": null,
+      "why": "Stages 1-3 produced research brief, hypothesis, and 8 expressions. Stage 4 was executed as a pre-submission audit plan and data-fetch plan rather than a real backtest (no live BRAIN / Tushare runtime attached to this session). Decision is RESEARCH-ONLY pending real data execution and the five mandatory pre-PROMOTE audits.",
+      "next_round_focus": [
+        "Attach runtime (Tushare paid tier OR WorldQuant BRAIN China) and execute handoff_3_to_4 expressions.",
+        "Run execution-delay audit, look-ahead audit, worst-year floor, best-year-out, falsification-first.",
+        "If LS Sharpe < 0.5 but Q5 long-only excess > 0.4, try industry + size neutralization before killing the mechanism."
+      ]
+    }
+  ]
+}

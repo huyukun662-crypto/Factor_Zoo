@@ -1,0 +1,62 @@
+{
+  "batch_id": "batch_0001",
+  "selected_mechanism": "Earnings quality via accruals (Sloan 1996)",
+  "expressions": [
+    {
+      "idx": 1,
+      "code": "alpha_01 = -rank( ts_sum(n_income - n_cashflow_act, 4q) / ts_mean(total_assets, 4q) )",
+      "rationale": "Canonical Sloan CFS-method accruals, rank-normalized and flipped.",
+      "expected_turnover_direction": "lower",
+      "fragility_notes": ["Requires >=3 of 4 quarters present", "Biased toward mature firms; neutralization recommended"]
+    },
+    {
+      "idx": 2,
+      "code": "alpha_02 = -rank( (ts_delta(acct_rcv + inventories - acct_pay, 4q) - ts_sum(dep, 4q)) / ts_mean(total_assets, 4q) )",
+      "rationale": "Balance-sheet-method WCA; isolates working-capital distortion; cross-check for alpha_01.",
+      "expected_turnover_direction": "lower",
+      "fragility_notes": ["A-share BS restatements degrade this version relative to CFS", "Expect alpha_01 to dominate"]
+    },
+    {
+      "idx": 3,
+      "code": "alpha_03 = -group_rank( ts_sum(n_income - n_cashflow_act, 4q) / ts_mean(total_assets, 4q) , sw_l1_industry )",
+      "rationale": "Industry-neutral Sloan; strips structural accrual norms by sector.",
+      "expected_turnover_direction": "lower",
+      "fragility_notes": ["Thin industries fall back to global rank"]
+    },
+    {
+      "idx": 4,
+      "code": "alpha_04 = rank( ts_sum(n_cashflow_act,4q) / (abs(ts_sum(n_income,4q)) + 0.01*ts_mean(total_assets,4q)) )",
+      "rationale": "CFO/|NI| earnings quality score; cleaner narrative than raw accruals.",
+      "expected_turnover_direction": "lower",
+      "fragility_notes": ["Negative NI + positive CFO produces negative ratio; manual inspect bottom decile"]
+    },
+    {
+      "idx": 5,
+      "code": "alpha_05 = -rank( acc_ttm_this - lag(acc_ttm, 252d) )",
+      "rationale": "Change in accruals; captures quality improvement/deterioration dynamics; lower correlation with level alphas.",
+      "expected_turnover_direction": "neutral",
+      "fragility_notes": ["IPO stocks lack lagged baseline", "Noisier than levels"]
+    },
+    {
+      "idx": 6,
+      "code": "alpha_06 = -rank( acc_ttm / (ts_std(n_income/total_assets, 8q) + 1e-4) )",
+      "rationale": "Stability-weighted accruals; downweights noisy firms where accruals are unreliable.",
+      "expected_turnover_direction": "neutral",
+      "fragility_notes": ["Needs 8q of history", "Low earnings-vol firms explode ratio; post-construction winsorize"]
+    },
+    {
+      "idx": 7,
+      "code": "alpha_07 = -rank( acc_ttm * ts_corr(cfo_q, lag(cfo_q,4q), 12q) )",
+      "rationale": "Persistence-weighted: accruals signal amplified when cash earnings are persistent.",
+      "expected_turnover_direction": "neutral",
+      "fragility_notes": ["12q history requirement shrinks universe", "Non-linear interaction; interpretability penalty"]
+    },
+    {
+      "idx": 8,
+      "code": "alpha_08 = -group_rank( acc_ttm , sw_l1_industry x size_quintile(log_mv) )",
+      "rationale": "Double-neutralized (industry x size) Sloan; expected top performer per A-share lessons.",
+      "expected_turnover_direction": "lower",
+      "fragility_notes": ["140 buckets; thin cells fall back to industry-only", "total_mv source precision depends on Tushare tier"]
+    }
+  ]
+}

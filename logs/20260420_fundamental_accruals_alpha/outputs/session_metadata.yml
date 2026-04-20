@@ -1,0 +1,78 @@
+session_id: 20260420_fundamental_accruals_alpha
+agent: 2_hypothesis_architect
+round: 1
+
+# ---- Economic thesis (the one story this batch tests) ----
+selected_mechanism: "Earnings quality via accruals (Sloan 1996)"
+primary_hypothesis: |
+  Within the A-share universe (ex-financials), the cross-section of 20-day
+  forward returns is monotonically decreasing in trailing-TTM accruals
+  (NI - CFO) / Avg(TA). The premium arises because the market extrapolates
+  total earnings uniformly while the cash component of earnings is more
+  persistent than the accrual component. Mispricing corrects over 20-60
+  trading days as subsequent statements re-anchor expectations.
+
+causal_chain:
+  - "High accruals today -> low future earnings persistence (accounting)"
+  - "Market initially anchors on reported NI (behavioral underreaction)"
+  - "Forward 20-60d returns under-perform as realized earnings disappoint"
+
+# ---- Experiment design ----
+time_horizon:
+  primary: "20 trading days"
+  robustness: ["5d", "60d"]
+  ic_decay_check: [1, 5, 10, 20, 40, 60]
+
+market_regime:
+  train: "2012-01-01 to 2019-12-31"
+  validate: "2020-01-01 to 2021-12-31"
+  test: "2022-01-01 to 2025-12-31"
+  stress_years: ["2015 (bubble+crash)", "2018 (deleveraging)", "2021 (style rotation)"]
+  bull_years: ["2014H2-2015H1", "2020H2-2021H1"]
+
+risk_premium_sources:
+  - "Mispricing of earnings persistence (behavioral)"
+  - "Earnings-management reversal (accounting)"
+  - "Limited arbitrage in A-share due to short-sale constraints"
+
+# ---- Constraints (inherited from SKILL.md + README + librarian caveats) ----
+constraints:
+  dataset_id: "a_share_fundamentals_v1"
+  region: "CHN"
+  universe: "all_A_ex_financials_ex_ST_listed252d"
+  delay: 1
+  turnover_range_monthly: [0.05, 0.25]
+  sharpe_target_gross: 1.0
+  q5_long_only_excess_target_annual: 0.04
+  prod_corr_max_against_existing_library: 0.7
+  min_rank_ic_abs: 0.02
+  min_icir: 0.4
+
+# ---- Failure conditions (stop or refine if hit) ----
+failure_conditions:
+  - "Rank IC t-stat < 2 on full train+validate sample -> stop this mechanism."
+  - "Worst calendar-year Sharpe on test < 0 -> RESEARCH-ONLY max."
+  - "Turnover > 40% monthly -> mechanism is not actually fundamental; investigate."
+  - "After residualizing vs {size, BM, momentum_20d, reversal_5d}, Sharpe drops by >50% -> factor is a vehicle for known premia, label and deprioritize."
+  - "Look-ahead audit detects any non-bit-identical past factor value after future-bar randomization -> reject batch entirely."
+
+# ---- Neutralization candidates (pick in Stage 4 after seeing raw numbers) ----
+neutralization_candidates:
+  - "NONE (raw, for signal validation only)"
+  - "INDUSTRY (SW L1 ~28 or stock_basic.industry ~110) -- default"
+  - "INDUSTRY + SIZE (log total_mv decile within industry)"
+  - "FAMA-FRENCH 5-factor residualized (train-only fit)"
+
+# ---- Look-ahead-safety contract (non-negotiable) ----
+lookahead_contract:
+  publication_lag_field: "ann_date"  # not end_date
+  target_shift: "-(1 + delay)"       # invariant from SKILL.md mandatory audit
+  quarterly_to_daily: "forward_fill at ann_date, carry until next ann_date"
+  target_mask_provenance: "ret_fwd20 = close.shift(-21) / close.shift(-1) - 1  (align with delay=1)"
+
+# ---- Evaluation targets (order matters; Stage 5 reads in order) ----
+evaluation_targets:
+  ic_metrics: ["rank_ic_mean", "rank_icir", "ic_tstat", "ic_decay_curve"]
+  portfolio_metrics: ["ls_sharpe_gross", "ls_sharpe_after_cost_10bps", "q5_long_only_excess_ann", "max_drawdown", "turnover_monthly"]
+  stability: ["worst_year_sharpe", "best_year_out_sharpe", "rolling_12m_ic"]
+  attribution: ["residual_sharpe_vs_known_factors", "industry_exposure_hhi"]

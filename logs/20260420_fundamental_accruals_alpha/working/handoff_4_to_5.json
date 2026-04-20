@@ -1,0 +1,19 @@
+{
+  "batch_id": "batch_0001",
+  "validation_passed": true,
+  "submission_made": false,
+  "results": [
+    {"expression_idx": 1, "alpha_id": "pending_runtime", "sharpe": null, "fitness": null, "turnover": null, "ic": null, "status": "awaiting_runtime", "error": null},
+    {"expression_idx": 2, "alpha_id": "pending_runtime", "sharpe": null, "fitness": null, "turnover": null, "ic": null, "status": "awaiting_runtime", "error": null},
+    {"expression_idx": 3, "alpha_id": "pending_runtime", "sharpe": null, "fitness": null, "turnover": null, "ic": null, "status": "awaiting_runtime", "error": null},
+    {"expression_idx": 4, "alpha_id": "pending_runtime", "sharpe": null, "fitness": null, "turnover": null, "ic": null, "status": "awaiting_runtime", "error": null},
+    {"expression_idx": 5, "alpha_id": "pending_runtime", "sharpe": null, "fitness": null, "turnover": null, "ic": null, "status": "awaiting_runtime", "error": null},
+    {"expression_idx": 6, "alpha_id": "pending_runtime", "sharpe": null, "fitness": null, "turnover": null, "ic": null, "status": "awaiting_runtime", "error": null},
+    {"expression_idx": 7, "alpha_id": "pending_runtime", "sharpe": null, "fitness": null, "turnover": null, "ic": null, "status": "awaiting_runtime", "error": null},
+    {"expression_idx": 8, "alpha_id": "pending_runtime", "sharpe": null, "fitness": null, "turnover": null, "ic": null, "status": "awaiting_runtime", "error": null}
+  ],
+  "anomalies": [
+    "No live runtime (Tushare paid / WorldQuant BRAIN) attached; submission deferred.",
+    "Pre-submission audit complete: rule-of-8 ok, look-ahead structural check ok, delay invariants locked, falsification-first test specified (publication-lag leakage)."
+  ]
+}
