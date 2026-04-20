@@ -1,0 +1,14 @@
+{
+  "winner": "alpha_v5 (median-TTM industry-neutral Sloan CFS)",
+  "shuffle_test": {
+    "clean_ic": 0.015720003853404066,
+    "shuffled_ic": 0.00023753267130670965
+  },
+  "publication_lag": {
+    "clean_ic": 0.015720003853404066,
+    "leaky_ic": 0.015586186709169463,
+    "ratio": 0.9914874611048122
+  },
+  "shuffle_pass": true,
+  "pub_lag_pass": true
+}

@@ -1,44 +1,67 @@
 {
   "session_id": "20260420_fundamental_accruals_alpha",
-  "current_round": 1,
+  "current_round": 2,
   "current_stage": "evaluation_complete",
-  "status": "promote_primary_start_round_2",
-  "selected_mechanism": "Earnings quality via accruals (Sloan 1996, CFS-method)",
-  "best_alpha_id": "accruals_ind_neutral_sloan_v1",
+  "status": "promote_alpha_v5_start_round_3",
+  "selected_mechanism": "Earnings quality via accruals (Sloan 1996, CFS-method, median-TTM)",
+  "best_alpha_id": "accruals_median_ttm_ind_neutral_v2",
   "continue_research": true,
   "rounds": [
     {
       "round": 1,
       "subround": "1.5",
-      "decision": "promote_primary_and_refine",
+      "decision": "promote_alpha_03_start_round_2",
       "best_expression_idx": 3,
       "best_alpha_id": "accruals_ind_neutral_sloan_v1",
       "headline": {
         "ic20_mean": 0.0175,
-        "icir20": 0.49,
-        "ls_sharpe_gross": 1.98,
-        "ls_sharpe_net_10bps": 1.38,
-        "worst_year_sharpe": 1.24,
-        "max_drawdown_ls": -0.020,
-        "q5_excess_annualized": 0.038,
-        "rebalances": 64,
-        "window": "2020-01-02 .. 2025-04-18",
-        "universe_size": 5285
+        "icir20": 0.495,
+        "ls_sharpe_net_10bps": 1.379,
+        "worst_year_sharpe": 1.238,
+        "max_drawdown_ls": -0.020
+      }
+    },
+    {
+      "round": 2,
+      "decision": "promote_alpha_v5_replace_alpha_03",
+      "best_expression_idx": "v5",
+      "best_alpha_id": "accruals_median_ttm_ind_neutral_v2",
+      "headline": {
+        "ic20_mean": 0.0157,
+        "icir20": 0.505,
+        "ls_sharpe_gross": 2.267,
+        "ls_sharpe_net_10bps": 1.569,
+        "worst_year_sharpe": 1.551,
+        "no_best_year_sharpe": 1.982,
+        "pct_kept_no_best": 0.88,
+        "max_drawdown_ls": -0.016
+      },
+      "delta_vs_round1": {
+        "sharpe_net_improvement_pct": 14,
+        "worst_year_improvement_pct": 25,
+        "max_dd_improvement_pct": 20
       },
       "audits_pass": {
+        "rule_of_8": true,
+        "one_mechanism": true,
         "execution_delay": true,
         "look_ahead_structural": true,
-        "look_ahead_numeric_shuffle": true,
+        "look_ahead_shuffle": true,
         "worst_year_floor": true,
         "best_year_out": true,
-        "falsification_first_pub_lag": true
+        "falsification_first_pub_lag": true,
+        "residualization_vs_classics": true
       },
-      "why": "alpha_03 (industry-neutral Sloan CFS) clears all five mandatory audits with worst-year Sharpe 1.24 in 2020, max drawdown -2.0%, and ICIR 0.49 -- above the 0.4 target from session_metadata.yml. Net-of-cost Sharpe 1.38 exceeds 1.0 target.",
+      "residualization_result": {
+        "controls": ["log_mv", "mom_20", "rev_5", "turnover_z", "vol_20"],
+        "pct_sharpe_kept": 0.96,
+        "icir_improved": true
+      },
       "next_round_focus": [
-        "Residualize alpha_03 vs {size, mom20, rev5, turnover_z} to rule out classic-factor vehicle exposure.",
-        "Extend test window backward to 2018 for full-cycle stress.",
-        "Run size-neutral-only variant to attribute neutralization contribution.",
-        "Open a second session for SUE / PEAD (independent fundamental mechanism) for ensemble diversity."
+        "Round 3: extend window to 2018-01 for 2018 deleveraging stress",
+        "Open SUE / PEAD session for second fundamental mechanism",
+        "Deploy alpha_v5 Q5 long-only (within industry) as CSI300-benchmarked overlay in paper trading",
+        "Track 2025 YTD as out-of-sample accumulation"
       ]
     }
   ]
