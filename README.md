@@ -62,6 +62,14 @@
 
 (基于 A 股 2018-2025,5,285 只股票,82 次月度再平衡,5 bps 单边手续费,turnover-aware 成本模型)
 
+## 研究记录 (RESEARCH-ONLY)
+
+未通过完整审计、暂不部署但具有研究价值的 session:
+
+| Session | 类别 / 机制 | 最佳原始 LS Sharpe | 关键发现 |
+|---|---|---:|---|
+| [`20260421_volprice_max_lottery`](logs/20260421_volprice_max_lottery/) | `volume_price.lottery_demand` (MAX + 偏度) | 2.62 (α_05) / 2.92 测试 (α_15) | A 股 "lottery demand" 信号 (MAX / 偏度 / 跳跃计数) 基本被波动率 + 短期反转吸收;去除 σ 和 ret_20 后残差 IC < 0.02,不具有独立 alpha,见 [`final_summary.md`](logs/20260421_volprice_max_lottery/outputs/final_summary.md) |
+
 ---
 
 ## 三、评估指标

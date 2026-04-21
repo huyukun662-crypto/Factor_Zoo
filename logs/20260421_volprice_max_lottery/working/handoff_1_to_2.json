@@ -1,0 +1,53 @@
+{
+  "session_id": "20260421_volprice_max_lottery",
+  "from_agent": "research_librarian",
+  "to_agent": "hypothesis_architect",
+  "family": "volume_price",
+  "mechanism": "lottery_demand_max_effect",
+  "hypothesis": "Stocks with extreme positive daily returns in the past 20 trading days attract retail attention and lottery-seeking demand, leading to overpricing that reverses over the next 20-40 trading days.",
+  "direction": "short_high_max",
+  "alpha_sign": "negative",
+  "anchor_papers": [
+    "Bali_Cakici_Whitelaw_2011_JFE_MAX",
+    "Ang_Hodrick_Xing_Zhang_2006_JoF_IVOL",
+    "Liu_Stambaugh_Yuan_2019_JFE_CH3",
+    "Han_Zhou_2013_trend_factor"
+  ],
+  "market": "A_share",
+  "universe": "all_a_ex_st_ex_suspended",
+  "date_range": {
+    "start": "2018-01-02",
+    "end": "2025-04-18",
+    "train": "2018-01-02..2022-12-31",
+    "validate": "2023-01-01..2023-12-31",
+    "test": "2024-01-01..2025-04-18"
+  },
+  "data_available": {
+    "daily_ohlc": "open, close only (no high/low)",
+    "volume": "vol, amount",
+    "market_cap": "total_mv, circ_mv",
+    "industry": "CITIC L1 proxy from stock_basic.industry",
+    "forward_returns": "precomputed fwd_ret_1, fwd_ret_5, fwd_ret_20, fwd_ret_60"
+  },
+  "mandatory_controls": [
+    "industry_neutral (CITIC L1)",
+    "report both LS and Q5 long-only-excess",
+    "residualization audit vs ret_5, ret_20, log_mv, turnover_20"
+  ],
+  "rule_of_8_variant_dimensions": [
+    "window_length (20d vs 60d)",
+    "top_n_average (1 vs 5 vs 10)",
+    "vol_normalization (raw vs divided by sigma_20)",
+    "attention_weighting (turnover × MAX)"
+  ],
+  "cost_model": {
+    "per_side_bps": 5,
+    "turnover_aware": true
+  },
+  "rebalance_cadence_default": 20,
+  "pass_bar_for_promote": {
+    "ls_net_sharpe": 1.0,
+    "q5_long_only_ir": 0.8,
+    "all_five_audits": "pass"
+  }
+}

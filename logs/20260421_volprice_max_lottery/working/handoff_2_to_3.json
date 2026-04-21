@@ -1,0 +1,33 @@
+{
+  "session_id": "20260421_volprice_max_lottery",
+  "from_agent": "hypothesis_architect",
+  "to_agent": "alpha_builder",
+  "mechanism": "lottery_demand_max_effect",
+  "alpha_sign": "negative",
+  "neutralization": {"industry": "mandatory_citic_l1", "size": "tested_if_needed"},
+  "preprocessing": {
+    "daily_return": "ln(close_adj_t / close_adj_{t-1})",
+    "winsorize_raw_alpha_xsection": [0.01, 0.99]
+  },
+  "target": {
+    "default": "fwd_ret_20",
+    "delay": 1,
+    "target_shift_invariant": -2
+  },
+  "rule_of_8_required": true,
+  "variants_to_build": [
+    {"id": "alpha_01", "name": "max_1_20", "sketch": "-max(r_t) over last 20d, industry-neutral rank"},
+    {"id": "alpha_02", "name": "max_avg5_20", "sketch": "-mean of top-5 r_t over last 20d (Bali et al exact form)"},
+    {"id": "alpha_03", "name": "max_avg10_60", "sketch": "-mean of top-10 r_t over last 60d (longer horizon)"},
+    {"id": "alpha_04", "name": "max_vol_scaled_5_20", "sketch": "-(max_avg5_20) / sigma_20 (vol-normalized)"},
+    {"id": "alpha_05", "name": "max_turnover_weighted", "sketch": "-max_avg5_20 * zscore(turnover_20) (attention)"},
+    {"id": "alpha_06", "name": "max_minus_min_20", "sketch": "-(max_avg5_20 - min_avg5_20) (two-sided range)"},
+    {"id": "alpha_07", "name": "max_zscore_rank_20", "sketch": "-(r_max - mean_20) / sigma_20 (standardized extreme)"},
+    {"id": "alpha_08", "name": "max_abnormal_20", "sketch": "-max(r_t) - beta*market_return_same_day (residualized max)"}
+  ],
+  "validation_before_submit_to_agent_4": [
+    "compute summary stats of each alpha per trade_date: non-null coverage >= 70%",
+    "std of cross-section > 0.001 (not constant)",
+    "IC sign on validate period consistent with alpha_sign = negative"
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "session_id": "20260421_volprice_max_lottery",
+  "status": "complete",
+  "decision": "RESEARCH_ONLY",
+  "date_started": "2026-04-21",
+  "date_completed": "2026-04-21",
+  "family": "volume_price",
+  "rounds_completed": 2,
+  "total_alphas_tested": 16,
+  "alphas_passed_all_audits": 0,
+  "cost_model": {"type": "turnover_aware", "bps_per_side": 5},
+  "data_window": {"start": "2018-01-02", "end": "2025-04-18", "train_validate_test": "2018-22 / 2023 / 2024+25YTD"},
+  "mechanism_families_tested": ["MAX_effect", "idiosyncratic_skewness"],
+  "key_finding": "A-share lottery-demand signals are absorbed by volatility and short-term reversal. Standalone deployment would double-count existing risk premia.",
+  "best_raw_sharpe": {"alpha": "alpha_05", "ls_full": 2.62, "ls_test": 1.43},
+  "best_oos_sharpe": {"alpha": "alpha_15", "ls_full": 1.64, "ls_test": 2.92, "caveat": "signal is vol, not skew; flips sign after vol-residualization"},
+  "best_orthogonal_signal": {"alpha": "alpha_11_coskew", "resid_ic_vs_vol_only": 0.025, "fails_audits": ["worst_year"]},
+  "deployed_to_factor_library": false,
+  "follow_on_queue": [
+    {"priority": "high", "session": "logs/20260421_fundamental_sue_pead_alpha", "rationale": "Bernard-Thomas 1989 PEAD — unexplored fundamental mechanism, orthogonal to both accruals (already deployed) and vol/reversal"},
+    {"priority": "high", "session": "logs/20260421_fundamental_gross_profitability", "rationale": "Novy-Marx 2013 gross profitability — uncrowded in A-share per Liu-Stambaugh-Yuan 2019"},
+    {"priority": "medium", "session": "logs/2026XXXX_volprice_sreversal_ts", "rationale": "Short-term reversal as a primary signal (not a control) — may be the actual driver of the MAX results shown here"}
+  ],
+  "continue_research": false,
+  "audits_passed_individually": {
+    "look_ahead": "16 / 16",
+    "falsification": "16 / 16",
+    "execution_delay": "16 / 16",
+    "worst_year_floor_0.5": "2 / 16 (α_08, α_15)",
+    "loyo_50pct_of_headline": "~12 / 16",
+    "residualization_full_stack": "0 / 16"
+  }
+}

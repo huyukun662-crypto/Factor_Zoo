@@ -1,0 +1,35 @@
+{
+  "session_id": "20260421_volprice_max_lottery",
+  "from_agent": "alpha_builder",
+  "to_agent": "backtest_operator",
+  "panel_path": "logs/20260421_volprice_max_lottery/outputs/panel_volprice.parquet",
+  "alpha_columns": ["alpha_01","alpha_02","alpha_03","alpha_04","alpha_05","alpha_06","alpha_07","alpha_08"],
+  "alpha_sign_after_construction": "positive (alpha already negated; higher alpha means lower lottery exposure)",
+  "target_default": "fwd_ret_20",
+  "target_shift_invariant_applied_in_panel": -2,
+  "pre_submission_validate_2023": {
+    "alpha_01": {"coverage": 0.997, "std": 1.000, "ic_spearman": 0.0757},
+    "alpha_02": {"coverage": 0.997, "std": 1.000, "ic_spearman": 0.0778},
+    "alpha_03": {"coverage": 0.990, "std": 1.000, "ic_spearman": 0.1002},
+    "alpha_04": {"coverage": 0.997, "std": 1.000, "ic_spearman": 0.0083},
+    "alpha_05": {"coverage": 0.996, "std": 1.000, "ic_spearman": 0.0387},
+    "alpha_06": {"coverage": 0.997, "std": 1.000, "ic_spearman": 0.0880},
+    "alpha_07": {"coverage": 0.997, "std": 1.000, "ic_spearman": 0.0088},
+    "alpha_08": {"coverage": 0.997, "std": 1.000, "ic_spearman": 0.0840}
+  },
+  "all_checks_passed": true,
+  "ready_for_backtest": true,
+  "backtest_requirements": {
+    "rebalance_cadence_days": 20,
+    "quantiles": 5,
+    "weighting": "equal_weight_within_quantile",
+    "cost_model": {"type": "turnover_aware", "per_side_bps": 5},
+    "report_per_alpha": [
+      "ls_gross_sharpe", "ls_net_sharpe",
+      "q5_long_only_excess_ir", "q1_long_only_excess_ir",
+      "max_dd", "avg_turnover_rebalance",
+      "ic_mean", "ic_ir", "icir_5d_20d_60d"
+    ],
+    "report_period_splits": ["full", "train", "validate", "test", "annual"]
+  }
+}
