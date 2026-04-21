@@ -1,0 +1,41 @@
+round: 5
+date: 2026-04-21
+family: volume_price
+mechanism: walk_forward_validation_of_alpha_26
+batch: "0005"
+n_alphas: 3
+
+rationale: |
+  α_26 from Round 4 passed all audits with full-sample TS-OLS. Concern:
+  β_i fitted with full panel history (2018-2025) means 2018 residuals
+  "know" the future σ-MAX relationship. Must validate with walk-forward.
+
+variants:
+  alpha_29:
+    definition: walk-forward TS-residualize α_22 vs σ_20 per stock
+                (refit every 63d on trailing 252d, min 120 obs)
+    result: {ls_full: 1.29, ls_test: 1.30, worst_year: 0.46, resid_ic: 0.006}
+    validation_verdict: α_26's 2.92 Sharpe dropped to 1.29 under WF - CONFIRMED LOOKAHEAD BIAS
+  alpha_30:
+    definition: cs-residualize α_22 vs σ_20 per date
+    result: {ls_full: 1.61, ls_test: 1.25, worst_year: 0.03, resid_ic: 0.015}
+  alpha_31:
+    definition: cs-residualize α_22 vs σ_20 + ret_20 per date
+    result:
+      ls_sharpe_full: 1.97
+      ls_sharpe_test: 1.20
+      q5_ir_full: 1.29
+      q5_ir_test: 0.08
+      residual_ic: 0.014
+      residual_pct_of_raw: 28.7
+      worst_year: 1.15
+      audits: residual_marginal_fail (28.7% vs 30% bar)
+
+alphas_passed_all_audits: 0
+key_finding: |
+  FULL-SAMPLE TS-OLS IS LOOKAHEAD. Sharpe 2.92 → 1.29 under walk-forward.
+  This is a real and important methodological lesson.
+  Best walk-forward-safe: α_31 with 1.97 LS Sharpe, worst-year 1.15, but
+  residual IC preserves only 28.7% of raw IC (needs 30%). FAILS audit.
+
+decision: iterate_to_round_6 (pre-residualize against full stack in construction)

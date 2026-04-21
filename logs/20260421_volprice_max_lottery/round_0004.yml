@@ -1,0 +1,31 @@
+round: 4
+date: 2026-04-21
+family: volume_price
+mechanism: hybrid_alpha_22_x_alpha_23
+batch: "0004"
+n_alphas: 4
+
+variants:
+  alpha_25: σ-bucket rank of α_22
+  alpha_26: TS-residualize α_22 vs σ_20 per stock (FULL SAMPLE OLS)
+  alpha_27: composite z(α_22)+z(α_23)
+  alpha_28: σ-bucket rank of α_23
+
+headline:
+  alpha_26:
+    ls_sharpe_full: 2.918
+    ls_sharpe_test: 2.399
+    q5_ir_full: 2.272
+    q5_ir_test: 1.691
+    residual_ic: 0.031
+    worst_year: 1.578
+    audits: ALL PASS
+    caveat: full-sample OLS — potential lookahead bias, MUST validate walk-forward
+  alpha_25: {ls_full: 1.89, worst_year: 0.17, audits: FAIL}
+  alpha_27: {ls_full: 1.99, worst_year: 0.36, audits: FAIL}
+  alpha_28: {ls_full: 1.18, worst_year: -0.36, audits: FAIL}
+
+alphas_passed_all_audits_apparent: 1 (alpha_26)
+alphas_passed_after_lookahead_validation: 0
+
+decision: validate_alpha_26_walk_forward_in_round_5

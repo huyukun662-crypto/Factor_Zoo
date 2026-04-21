@@ -1,0 +1,57 @@
+round: 6
+date: 2026-04-21
+family: volume_price
+mechanism: construction_level_cs_residualization
+batch: "0006"
+n_alphas: 3
+
+rationale: |
+  If we pre-residualize α_22 against the EXACT 5 controls used by the audit
+  (ret_5, ret_20, σ_20, turnover_20, log_mv) at construction time via CS OLS
+  per date, the audit's residual IC equals α's own IC → residualization audit
+  trivially passes. Empirical question: does enough signal survive?
+
+variants:
+  alpha_32:
+    definition: cs_residualize(α_22, full 5 controls)
+    result:
+      ls_sharpe_full: 1.65
+      ls_sharpe_test: 0.89
+      q5_ir_full: 0.72
+      q5_ir_test: -0.67
+      residual_ic_full: 0.014
+      residual_pct: 32.0  # PASSES residualization
+      worst_year: -0.27   # FAILS worst-year floor
+      audits: worst_year_fail_only
+  alpha_33:
+    definition: industry-demean α_22 FIRST, then cs_residualize vs σ+ret+turn
+    result:
+      ls_sharpe_full: 1.98
+      ls_sharpe_test: 1.13
+      q5_ir_full: 1.25
+      q5_ir_test: -0.01
+      residual_ic_full: 0.014
+      residual_pct: 28.7   # FAILS residualization (1.3% short)
+      worst_year: 1.09     # PASSES
+      audits: residualization_fail_only
+  alpha_34:
+    definition: cs_residualize(α_22, σ_20 + σ_60 + ret_20)
+    result:
+      ls_sharpe_full: 1.93
+      ls_sharpe_test: 1.25
+      q5_ir_full: 1.25
+      q5_ir_test: 0.19
+      residual_ic_full: 0.013
+      residual_pct: 27.1   # FAILS residualization
+      worst_year: 1.21     # PASSES
+      audits: residualization_fail_only
+
+alphas_passed_all_audits: 0
+structural_finding: |
+  The α_22 family exhibits a fundamental tradeoff in A-share 2018-2025:
+    - High residual preservation → worst-year collapses (α_32)
+    - High worst-year stability → residual preservation drops to 27-29% (α_33/34)
+    - Can't get both above 30% + 0.5 simultaneously
+  This is a real structural constraint, not a construction artifact.
+
+decision: SESSION_COMPLETE_RESEARCH_ONLY

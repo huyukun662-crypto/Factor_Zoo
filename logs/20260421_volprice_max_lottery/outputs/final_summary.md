@@ -89,13 +89,56 @@ Targeted residualization (vs σ only):
 
 ---
 
-## Combined verdict
+## Combined verdict after 2 rounds
 
 Two different mathematical families of "lottery demand" (magnitude via MAX, asymmetry via skew)
 both show the same pattern in A-share: they are **correlated-but-not-additive** with σ and the
 20-day reversal. Any of the 16 alphas, used standalone, would roughly replicate what a simple
 σ + reversal combination delivers — and likely worse, because the lottery signals carry more
 noise than either σ or reversal alone.
+
+---
+
+## Rounds 3-6: Iteration on α_05, α_08, α_15 (user-requested)
+
+### Round 3 — 8 σ-decoupled variants (α_17 – α_24)
+σ-bucket conditional sorts, fixed-threshold jump counts, TS pre-residualization, double-bucket.
+- **α_22** (fixed 3% idio jump count): LS 2.13, test 1.90, worst-year **0.94 ✓**, residual IC 13% ✗
+- **α_23** (TS-residualize top5 vs σ, full sample): residual 34% ✓, worst-year 0.21 ✗
+
+### Round 4 — Hybrid α_22 × α_23 (α_25 – α_28)
+- **α_26 = TS-residualize α_22 vs σ full sample** — *appeared* to PASS all audits:
+  LS Sharpe **2.92**, test **2.40**, residual IC **31% ✓**, worst-year **1.58 ✓**
+- Caveat flagged: full-sample stock-level β_i leaks future information
+
+### Round 5 — Walk-forward validation (α_29 – α_31)
+**Lookahead bias confirmed**: α_26 Sharpe dropped from **2.92 → 1.29** under walk-forward
+(refit β_i every 63d on trailing 252d).
+- **α_31** (cs-resid vs σ_20 + ret_20, no lookahead): LS 1.97, test 1.20, worst-year 1.15, residual **28.7%** (fails 30% bar by 1.3 points)
+
+### Round 6 — Construction-level residualization (α_32 – α_34)
+Pre-residualize α_22 against the audit's own control stack.
+- **α_32** (vs full 5 controls): residual 32% ✓, but worst-year **−0.27 ✗**
+- **α_33** (industry-first then cs-resid): LS 1.98, worst-year **1.09 ✓**, residual **28.7% ✗**
+- **α_34** (vs σ_20 + σ_60 + ret_20): LS 1.93, worst-year **1.21 ✓**, residual 27.1% ✗
+
+## Final verdict after 6 rounds (28 alphas)
+
+**Structural finding (high confidence):**
+
+> In A-share 2018-2025, lottery-demand signals exhibit a fundamental **tradeoff** between:
+> - preserving ≥30% residual IC after full-stack residualization, AND
+> - maintaining worst-year LS Sharpe ≥ 0.5
+>
+> No construction (parametric, non-parametric, per-stock, cross-sectional, walk-forward)
+> simultaneously achieves both. The closest is α_33 at 28.7% residual / 1.09 worst-year,
+> which fails the residualization audit by 1.3 percentage points.
+
+**Methodological finding (transferable):**
+
+> Full-sample time-series OLS per stock introduces lookahead bias. Always validate with
+> walk-forward refitting before accepting any TS-residualized alpha. The 56% Sharpe drop
+> for α_26 (2.92 → 1.29) is a documented case study.
 
 ### What to do with this finding
 
