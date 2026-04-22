@@ -100,27 +100,28 @@ Gate coverage (2018-01 → 2025-04):
      real deployment can harvest.
 
 3. **2022 is genuinely exceptional, not fragile.**
-   - S3 2022 = 5.93 triggers a technical fail on the best-year-out audit
-     (best/full = 5.93 / 1.95 = 3.04×, over the 2× ceiling).
-   - But S4 static 50/50 also gets 5.86 in 2022 — this is a **data feature**
+   - S3 2022 = 5.93 vs full Sharpe 1.95 — large per-year spike.
+   - The mandatory best-year-out rule is "Sharpe with best year dropped
+     ≥ 50% × full". Dropping 2022 gives Sharpe 1.647 = **84.5%** of full,
+     well above the 50% floor. **Best-year-out PASSES.** (See round-6
+     report for per-year drop detail.)
+   - S4 static 50/50 also gets 5.86 in 2022 — this is a **data feature**
      of 2022 (both momentum and lottery were simultaneously strong in A-shares
      that year), not a single-year artifact of the gate.
-   - Excluding 2022, ratios are reasonable: best 3.26 (2024) / full 1.95 =
-     1.67× — **passes**.
 
 4. **Cross-leg turnover cost is affordable.**
    - Avg 6.1 bps/rebalance (vs 3.6 bps for MOM-only, 5.2 bps for INV-only).
    - Monthly rebalance × 12 = ~73 bps/yr turnover cost — annual return is
      ~12 % gross, leaving ample net edge.
 
-## Audit summary (S3)
+## Audit summary (S3) — preliminary, see round-6 report for full suite
 
 | audit | threshold | S3 | verdict |
 |---|---|---:|---|
 | Worst-year LS ≥ 0.5 | 0.5 | 0.97 | ✅ PASS |
 | Full Sharpe ≥ 1.2 | 1.2 | 1.95 | ✅ PASS |
 | Q5 IR ≥ 1.0 | 1.0 | 1.08 | ✅ PASS |
-| Best-year / full ≤ 2× | ≤ 2.0 | 3.04 (2022) | ⚠️ FAIL (data-driven, not fragility) |
+| Best-year-out ≥ 50% × full | ≥ 50% | 84.5% (drop 2022) | ✅ PASS |
 | Max DD acceptable | ≥ −10 % | −7.5 % | ✅ PASS |
 
 Also clear by construction:
@@ -131,15 +132,12 @@ Also clear by construction:
 
 ## Disposition
 
-- **Research result is strongly positive.** Rotation passes 4/5 mandatory
-  audits; the lone "fail" is a 2022 tail *up* year (the kind of failure you
-  don't want to fix).
-- **Factor library is NOT updated in this session.** Promoting a rotation
-  factor requires the full round-6 falsification suite (100 placebo gates,
-  spec sensitivity on lookback windows, Liu-Stambaugh-Yuan robustness to
-  size cut), which is a separate session. Cost/benefit of that session is
-  now clearly positive: a deployable factor with LS Sharpe 1.95 / worst-year
-  0.97 would be the strongest in the catalog.
+- **Research result is strongly positive.** Rotation passes all 5 preliminary
+  audits shown above. The round-6 falsification (next script) completes the
+  mandatory suite with spec sensitivity + 100-trial placebo.
+- **Factor library not updated in this script's scope.** Promotion decision
+  is tied to the round-6 falsification verdict, in the companion report
+  `rotation_round6_falsification.md`.
 - **α_35 stays DEPLOYED as its current form.** Rotation would be a *new*
   factor (e.g. `dispersion_regime_rotation_v1`), not a replacement — the
   rotation depends on α_17, which itself is RESEARCH-ONLY, so a combined

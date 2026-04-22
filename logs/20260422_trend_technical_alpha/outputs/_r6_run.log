@@ -1,0 +1,51 @@
+[r6] loading / building momentum panel...
+[cache] cold — running build_factor() (~75s)...
+[factor] loading base...
+  loaded 7,876,922 rows  15.7s
+[factor] computing returns + controls...
+[factor] cross-sectional residualization (per date)...
+[factor] industry-demeaning...
+[factor] building dispersion gate...
+[factor] done in 32.0s, gate on-fraction = 0.441
+[cache] wrote /home/user/Factor_Zoo/.cache/alpha_n_mom_for_rotation.parquet
+[r6] mom panel: 7,604,203 rows  32.9s
+[r6] loading lottery α_17 panel...
+[r6] lot panel: 7,876,922 rows  34.6s
+[r6] mom after fwd merge: 7,604,203 rows  37.7s
+[r6] building daily dispersion features...
+[r6] daily ready  49.3s
+[r6] 89 rebalance dates  [2018-01-02 → 2025-04-08]
+
+============================================================================================
+A) Spec sensitivity (7 variants of dispersion gate)
+============================================================================================
+variant                LS full   Q5 full  worst-yr   best-yr   on_frac   PASS?
+  BASELINE               1.951     1.080     0.970     5.927     0.876    PASS
+  lookback_60            2.067     1.167     0.780     4.699     0.899    PASS
+  lookback_126           2.050     1.148     0.619     5.817     0.899    PASS
+  lookback_504           1.555     0.803    -0.245     5.927     0.775    FAIL
+  threshold_p40          1.634     0.748     0.841     5.927     0.865    PASS
+  threshold_p60          1.924     1.194     0.796     5.855     0.876    PASS
+  disp_window_60         1.476     0.530     0.820     4.794     0.865    FAIL
+
+[r6] spec sensitivity: 5/7 pass
+
+============================================================================================
+B) Placebo — 100 random complementary gates (p_mom=0.457, p_inv=0.433, p_both_off=0.110)
+============================================================================================
+  [20/100] placebo done  156.4s
+  [40/100] placebo done  224.2s
+  [60/100] placebo done  292.2s
+  [80/100] placebo done  359.5s
+  [100/100] placebo done  426.7s
+
+  baseline LS full: 1.951
+  placebo LS full:  median=1.149  p95=1.660  max=1.945
+  empirical p-value (placebo >= baseline LS): 0.000
+
+  baseline worst-year LS: 0.970
+  placebo worst-year LS: median=-0.231  p95=0.635  max=0.947
+  empirical p-value (placebo >= baseline worst-yr): 0.000
+
+[r6] wrote /home/user/Factor_Zoo/logs/20260422_trend_technical_alpha/outputs/rotation_round6_falsification.json
+[r6] done 426.7s
