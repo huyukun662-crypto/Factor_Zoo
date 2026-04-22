@@ -1,0 +1,83 @@
+[r] loading lottery α_17 panel (extended)...
+[r] α_17 rows=9,202,593  29.2s
+[r] baseline rebalance: 101 dates  [2018-01-02 → 2026-04-03]
+
+===============================================================================================
+Baseline: α_17 Q5 long-only
+===============================================================================================
+  abs_ann                        +0.1253
+  abs_sharpe                     +0.4965
+  abs_maxdd                      -0.3452
+  exc_ann                        +0.0398
+  exc_ir                         +1.0865
+  exc_maxdd                      -0.0418
+  exc_train_ir                   +1.3749
+  exc_valid_ir                   +0.7664
+  exc_test_ir                    +0.8042
+  worst_year_exc                 -0.3251
+  best_year_exc                  +2.7840
+  avg_tov                        +0.7470
+  avg_cost_bps                   +3.7350
+
+  per-year excess IR:
+    2018: +2.413
+    2019: +1.406
+    2020: -0.325
+    2021: +2.174
+    2022: +2.784
+    2023: +0.766
+    2024: +0.840
+    2025: +1.426
+
+===============================================================================================
+Spec sensitivity
+===============================================================================================
+  variant                  abs_ann   exc_ann   exc_IR  worst_yr  test_IR     MaxDD   PASS?
+  BASELINE                 +12.53%    +3.98%   +1.087    -0.325   +0.804    -4.18%    FAIL
+  top_10pct                +12.05%    +3.07%   +0.625    -0.610   +0.587    -6.91%    FAIL
+  top_30pct                +13.39%    +4.41%   +1.368    -0.324   +0.783    -3.77%    FAIL
+  top_50_stocks             +9.84%    +0.86%   +0.116    -0.972   -0.189   -14.26%    FAIL
+  top_100_stocks            +9.09%    +0.11%   +0.018    -1.458   -0.090   -12.06%    FAIL
+  rebal_10d                +30.03%    +9.49%   +1.678    -3.531   +1.529    -6.91%    FAIL
+  rebal_40d                +10.79%    +2.80%   +1.062    +0.263   +0.882    -2.41%    FAIL
+  no_industry_demean       +13.16%    +4.18%   +1.113    -0.333   +0.824    -4.18%    FAIL
+  winsorized+ind           +13.15%    +4.17%   +1.107    -0.272   +0.818    -4.13%    FAIL
+
+  spec sensitivity: 0/9 pass
+
+===============================================================================================
+Placebo — 100 random top-20% portfolios
+===============================================================================================
+  [20/100] placebo done  156.1s
+  [40/100] placebo done  242.2s
+  [60/100] placebo done  326.1s
+  [80/100] placebo done  412.8s
+  [100/100] placebo done  498.4s
+
+  baseline excess IR: 1.087
+  placebo excess IR: median=-0.445  p95=0.145  max=0.340
+  p-value (placebo >= baseline excess IR): 0.000
+
+  baseline worst-year excess: -0.325
+  placebo worst-year: median=-2.052  p95=-1.001  max=-0.395
+  p-value (placebo >= baseline worst-yr): 0.000
+
+===============================================================================================
+Full audit checklist
+===============================================================================================
+  rule_1_full_ir_1p0              True
+  rule_2_worst_year_05            False
+  rule_3_best_year_out            True
+  rule_4_spec_majority            False
+  rule_5_placebo_ir_p             True
+  rule_6_placebo_wy_p             True
+  rule_7_maxdd_abs_20             True
+  best_year_dropped               2022
+  ir_without_best_year            0.980816200625542
+  ir_ratio_vs_full                0.9026932109405554
+
+  audit pass: 5/7
+
+[r] wrote /home/user/Factor_Zoo/logs/20260422_trend_technical_alpha/outputs/alpha17_longonly_review.json
+[r] wrote /home/user/Factor_Zoo/logs/20260422_trend_technical_alpha/outputs/alpha17_longonly_baseline_tape.csv
+[r] done 498.4s
