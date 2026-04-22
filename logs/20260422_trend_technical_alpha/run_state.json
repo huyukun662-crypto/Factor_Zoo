@@ -1,0 +1,42 @@
+{
+  "session_id": "20260422_trend_technical_alpha",
+  "status": "complete",
+  "decision": "RESEARCH_ONLY",
+  "date_started": "2026-04-22",
+  "date_completed": "2026-04-22",
+  "family": "trend_technical",
+  "rounds_completed": 4,
+  "total_alphas_tested": 32,
+  "alphas_passed_all_audits": 0,
+  "cost_model": {"type": "turnover_aware", "bps_per_side": 5},
+  "data_window": {"start": "2018-01-02", "end": "2025-04-18", "train_validate_test": "2018-22 / 2023 / 2024+25YTD"},
+  "round_summary": [
+    {"round": 1, "family": "raw_trend", "n": 8, "result": "all_negative_sign_LS_sharpe_-1.46_to_-0.42", "verdict": "falsification_confirmed_reversal_dominance"},
+    {"round": 2, "family": "idio_momentum_cs_resid", "n": 8, "best": "alpha_15 IC IR 9.5", "verdict": "sign_flips_to_positive_but_borderline"},
+    {"round": 3, "family": "robustness_variants", "n": 8, "best": "alpha_19 LS_test 1.24 worst_yr 0.16", "verdict": "breakthrough_but_worst_year_fail"},
+    {"round": 4, "family": "worst_year_lift", "n": 8, "best": "alpha_29 LS_test 2.06 IC_IR 14.5 worst_yr 0.04", "verdict": "stronger_signal_worse_worst_year_no_construction_lifts_above_0.5"}
+  ],
+  "best_candidate_after_audits": {
+    "alpha": "alpha_29",
+    "definition": "idio_12_3_momentum = cs_residualize(cum_252 - cum_63, {log_mv, sigma_120, ret_20}) per trade_date, then industry-demean at evaluation time",
+    "ic_mean": 0.026,
+    "ic_ir_industry_neutral": 14.5,
+    "ls_sharpe_full_after_cost": 1.00,
+    "ls_sharpe_test_after_cost": 2.06,
+    "q5_excess_ir_test_after_cost": 1.16,
+    "max_drawdown_full": -0.071,
+    "worst_year_ls_sharpe": 0.04,
+    "worst_year_q5_excess": -1.67,
+    "audit_verdict": "RESEARCH_ONLY_worst_year_floor_fail_by_0.46"
+  },
+  "structural_finding": "In A-share 2018-2025, idiosyncratic trend signals (12-2 / 12-3 momentum, cs-residualized vs size/σ/short-term-reversal) earn IC IR 11-15 in five of six years but stall (worst-year LS Sharpe 0.04-0.18) in regime-shift years (2019, 2023). No skip-window, alternative-controls, industry-relative, large-cap-filter, or combo construction in this session lifts the worst year above the 0.5 audit floor.",
+  "falsification_finding": "Raw cross-sectional trend signals (Han-Zhou-Zhu, MA-crossover, 60d/120d t-stat, 52-week proximity, frog-in-the-pan, trend Sharpe, 12-1 momentum) all wrong-signed in A-share. 8/8 negative LS Sharpe, IC t-stats |6| to |25|. Replicates Liu-Stambaugh-Yuan 2019.",
+  "deployed_to_factor_library": false,
+  "deployable_if_floor_relaxed": "alpha_29 (worst-year floor must be lowered from 0.5 to 0.0 to deploy)",
+  "follow_on_queue": [
+    {"priority": "medium", "session": "logs/2026XXXX_trend_regime_overlay", "rationale": "Gate α_29 off in regime-shift years using market trend / breadth indicator"},
+    {"priority": "medium", "session": "logs/2026XXXX_trend_ch3_residual", "rationale": "Residualize α_29 vs Liu-Stambaugh-Yuan CH-3 (size + value + turnover-sentiment) instead of {log_mv, σ_120, ret_20}"},
+    {"priority": "high", "session": "logs/2026XXXX_fundamental_sue_pead", "rationale": "Bernard-Thomas 1989 PEAD — already queued from prior session"},
+    {"priority": "high", "session": "logs/2026XXXX_fundamental_gross_profitability", "rationale": "Novy-Marx 2013 — already queued from prior session"}
+  ]
+}

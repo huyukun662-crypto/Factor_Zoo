@@ -1,0 +1,21 @@
+round: 3
+family: idio_momentum_robustness
+mechanism: variants_of_α_15_with_skip_horizon_filter_combo
+n_expressions: 8
+expressions: [alpha_17..alpha_24]
+breakthrough:
+  alpha: alpha_19_idio_12_2_momentum
+  construction: cs_residualize(cum_252 - cum_42, {log_mv, sigma_120, ret_42})
+  ic_mean: 0.029
+  ic_ir: 11.8
+  ls_sharpe_test: 1.24
+  q5_excess_ir_test: 0.65
+  ls_maxdd: -0.073
+  worst_year: 0.16
+  audit_verdict: worst_year_floor_FAIL_by_0.34_otherwise_pass
+notable_secondary:
+  alpha: alpha_21_combo_50_50
+  worst_year: 0.50_at_floor
+  ls_sharpe_test: 0.52
+  q5_excess_ir_test: -0.27
+decision: try_to_lift_α_19_worst_year_with_round_4_variants

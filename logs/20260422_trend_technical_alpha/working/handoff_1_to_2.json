@@ -1,0 +1,29 @@
+{
+  "session_id": "20260422_trend_technical_alpha",
+  "agent": "research_librarian -> hypothesis_architect",
+  "research_brief": "logs/20260422_trend_technical_alpha/research_brief.md",
+  "candidate_mechanisms_ranked": [
+    {"name": "trend_strength_multi_horizon", "prior_strength": "high", "papers": ["Han-Zhou-Zhu 2016 RFS"]},
+    {"name": "idiosyncratic_momentum", "prior_strength": "high", "papers": ["Blitz-Huij-Martens 2011"]},
+    {"name": "trend_regression_tstat", "prior_strength": "medium", "papers": ["folk technical analysis, formalized via OLS on log-price"]},
+    {"name": "52_week_high_proxy", "prior_strength": "medium-high", "papers": ["George-Hwang 2004"]},
+    {"name": "ma_crossover_stack", "prior_strength": "medium", "papers": ["Han-Yang-Zhou 2013"]},
+    {"name": "trend_sharpe", "prior_strength": "medium-low", "papers": ["practitioner heuristic"]},
+    {"name": "frog_in_the_pan", "prior_strength": "medium", "papers": ["Da-Gurun-Warachka 2014"]},
+    {"name": "classic_12_1_momentum", "prior_strength": "negative_in_a_share", "papers": ["Jegadeesh-Titman 1993", "Liu-Stambaugh-Yuan 2019"]}
+  ],
+  "data_constraints": {
+    "no_high_low_columns": "must use rolling close-max as 52-week-high proxy",
+    "date_range_usable": "2018-01-02 to 2025-04-18",
+    "industry_source": "panel.parquet column 'industry' (CITIC L1, ~110 groups)",
+    "size_source": "daily_basic.parquet total_mv (or panel.parquet size_bin)"
+  },
+  "risks": [
+    "reversal dominance",
+    "microcap 2024-Q1 reversal",
+    "limit-up day mechanical inflation",
+    "lookahead bias if using time-series-per-stock OLS for residualization"
+  ],
+  "recommended_batch_1_mechanism": "trend_strength_multi_horizon",
+  "rationale": "Han-Zhou-Zhu mechanism is the most academically defensible non-momentum trend signal, decouples from raw past return via the price/MA ratio (which is bounded and slope-like), and is testable in 8 distinct constructions sharing one mechanism."
+}

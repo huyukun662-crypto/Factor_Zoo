@@ -1,0 +1,18 @@
+round: 2
+family: idio_momentum
+mechanism: cs_residualize_trend_signals_vs_{log_mv,sigma_120,ret_20}
+n_expressions: 8
+expressions: [alpha_09..alpha_16]
+result: sign_flipped_to_positive_for_7_of_7_idio_trend_signals
+best_alpha_in_round:
+  alpha: alpha_15_idio_12_1_momentum
+  ic_mean: 0.022
+  ic_ir: 9.5
+  ls_sharpe_full: 0.57
+  ls_sharpe_test: 0.88
+  worst_year: -0.10
+runner_up:
+  alpha: alpha_12_idio_ma_crossover
+  ls_sharpe_full: 1.02
+  worst_year: 0.40
+decision: refine_α_15_with_robustness_variants_in_round_3

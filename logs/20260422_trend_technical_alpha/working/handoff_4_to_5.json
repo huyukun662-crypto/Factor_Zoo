@@ -1,0 +1,34 @@
+{
+  "session_id": "20260422_trend_technical_alpha",
+  "agent": "backtest_operator -> evaluator",
+  "rounds_run": 4,
+  "panels": [
+    "outputs/panel_trend.parquet",
+    "outputs/panel_trend_round2.parquet",
+    "outputs/panel_trend_round3.parquet",
+    "outputs/panel_trend_round4.parquet"
+  ],
+  "backtest_results": [
+    "outputs/backtest_results_batch_0001.csv",
+    "outputs/backtest_results_batch_0002.csv",
+    "outputs/backtest_results_batch_0003.csv",
+    "outputs/backtest_results_batch_0004.csv"
+  ],
+  "audits": [
+    "outputs/audits.json",
+    "outputs/audits_round2.json",
+    "outputs/audits_round3.json",
+    "outputs/audits_round4.json"
+  ],
+  "headline_finding_for_evaluator": {
+    "best_alpha": "alpha_29",
+    "headline_metrics": {
+      "ic_ir": 14.5,
+      "ls_sharpe_full": 1.00,
+      "ls_sharpe_test": 2.06,
+      "q5_excess_ir_test": 1.16,
+      "max_drawdown": -0.071
+    },
+    "blocker": "worst_year_LS_sharpe = 0.04 in 2019 (and 0.18 in 2023) - fails 0.5 floor"
+  }
+}

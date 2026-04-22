@@ -1,0 +1,84 @@
+session_id: 20260422_trend_technical_alpha
+date_started: 2026-04-22
+family: trend_technical
+mechanism_primary: trend_strength_multi_horizon
+mechanism_short_description: >
+  A stock with sustained price elevation above its own moving averages across
+  multiple horizons (3d → 252d) is in a coherent up-trend. We test whether
+  multi-horizon trend agreement predicts forward returns in A-share, where
+  raw 12-1 momentum is dominated by reversal noise.
+
+economic_thesis:
+  - Han-Zhou-Zhu (2016 RFS) trend factor: P/MA_k aggregated across k ∈ {3,5,10,20,50,100,200} is the most robust trend signal documented out-of-sample, and beats classic momentum.
+  - In A-share, the dominant raw signal is short-term reversal. Trend signals must therefore (a) avoid loading on the past 1-month return and (b) measure trend *shape* not raw cumulative return.
+  - The signal we test is multi-horizon agreement of price-vs-MA, which is a slope/consistency measure rather than a raw return measure.
+
+falsification_plan:
+  - α_08 (classic 12-1 momentum) is included as a *control* in the same batch. If α_01-07 (the trend-shape signals) outperform α_08 by a wide margin AND α_08 is significantly negative or zero, the falsification confirms the mechanism is "trend shape" not "raw past return".
+  - If α_01-07 are highly correlated with α_08 (|ρ|>0.6) AND α_08 is negative, then α_01-07 are just raw momentum re-skinned and inherit the negative drift.
+
+universe:
+  source: .cache/daily.parquet
+  date_start: 2018-01-02
+  date_end: 2025-04-18
+  min_history_days_at_signal: 270  # ensures MA_252 is well defined
+  exclusions:
+    - ST stocks (no clean flag in cache, accept the small leakage)
+    - stocks with < 250 valid daily observations in trailing year
+
+splits:
+  train: [2018-01-02, 2022-12-31]
+  validate: [2023-01-01, 2023-12-31]
+  test: [2024-01-01, 2025-04-18]
+  rationale: same as 20260421_volprice_max_lottery, allowing apples-to-apples comparison.
+
+target:
+  formula: fwd_ret_K = sum(log_return_{t+1+delay : t+K+delay}) with delay=1
+  primary_horizon_days: 20  # monthly rebalance
+  also_evaluated: [5, 20, 60]
+  invariant: target_shift == -(1+delay) == -2
+
+evaluation:
+  cost_model:
+    type: turnover_aware
+    bps_per_side: 5
+    formula_ls: cost_per_rebalance = (tov_q5 + tov_q1) * 5e-4
+    formula_q5_excess: cost_per_rebalance = tov_q5 * 5e-4
+  primary_metrics:
+    - rank_ic_mean
+    - rank_ic_ir
+    - ls_sharpe_after_cost
+    - q5_excess_ir_after_cost
+    - worst_year_sharpe
+    - max_drawdown
+  rebalance: monthly  # every 20 trading days
+  neutralization:
+    industry: mandatory   # CITIC L1 from panel.parquet
+    size: optional        # not applied in batch 1
+
+mandatory_audits:
+  - execution_delay
+  - lookahead_shuffle
+  - worst_year_floor (Sharpe ≥ 0.5)
+  - best_year_out (test Sharpe ≥ 50% of headline)
+  - falsification (α_08 sign and correlation check)
+  - residualization (residual IC ≥ 30% of raw vs σ_20, ret_20, turnover_20)
+
+decision_thresholds_for_promote:
+  test_ls_sharpe_after_cost: ">= 1.0"
+  worst_year_sharpe: ">= 0.5"
+  q5_excess_ir_test: ">= 0.5"
+  residual_ic_pct_of_raw: ">= 30%"
+  best_year_out_pct_of_headline: ">= 50%"
+
+handoff_files:
+  agent_1_to_2: working/handoff_1_to_2.json
+  agent_2_to_3: working/handoff_2_to_3.json
+  agent_3_to_4: working/handoff_3_to_4.json
+  agent_4_to_5: working/handoff_4_to_5.json
+
+risk_register:
+  - reversal_dominance: A-share short-term reversal is strong. Mitigated by using trend-shape signals, not raw cumulative return.
+  - microcap_2024_q1: violent reversal Jan-Feb 2024. Will appear in worst-year audit.
+  - limit_up_mechanical: trend signals may be polluted by stocks locked at +10% limit. Accept residual leakage; do not deploy if test_ls < 1.0.
+  - multi_horizon_correlation: α_01-07 may be highly correlated with each other, reducing batch information content. Acceptable in batch 1; if mechanism fails we pivot to idiosyncratic momentum in batch 2.

@@ -1,0 +1,31 @@
+{
+  "session_id": "20260422_trend_technical_alpha",
+  "agent": "alpha_builder -> backtest_operator",
+  "expressions_file": "logs/20260422_trend_technical_alpha/outputs/expressions_batch_0001.md",
+  "n_expressions": 8,
+  "expressions": [
+    {"id": "alpha_01", "name": "han_zhou_zhu_trend", "horizons": [3,5,10,20,50,100,200]},
+    {"id": "alpha_02", "name": "trend_tstat_60d"},
+    {"id": "alpha_03", "name": "trend_tstat_120d"},
+    {"id": "alpha_04", "name": "ma_crossover_stack"},
+    {"id": "alpha_05", "name": "close_max_proximity_252d"},
+    {"id": "alpha_06", "name": "frog_in_the_pan_60d"},
+    {"id": "alpha_07", "name": "trend_sharpe_120d"},
+    {"id": "alpha_08", "name": "classic_12_1_momentum_FALSIFICATION"}
+  ],
+  "build_outputs_to": "logs/20260422_trend_technical_alpha/outputs/panel_trend.parquet",
+  "evaluation_settings": {
+    "rebalance_days": 20,
+    "cost_bps_per_side": 5,
+    "industry_neutralize": true,
+    "size_neutralize": false,
+    "target_horizons": [5, 20, 60],
+    "primary_target_horizon": 20,
+    "delay": 1
+  },
+  "validation_checklist": [
+    "no NaN factor values when history < required window",
+    "future-bar shuffle invariance (factors unchanged when future bars permuted)",
+    "fwd_ret_K formed with delay=1 and target_shift=-(1+delay)=-2"
+  ]
+}

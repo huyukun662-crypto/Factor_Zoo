@@ -1,0 +1,21 @@
+round: 4
+family: α_19_worst_year_lift
+mechanism: large_cap_filter_industry_relative_alt_skip_alt_controls_combos
+n_expressions: 8
+expressions: [alpha_25..alpha_32]
+new_champion_signal:
+  alpha: alpha_29_idio_12_3_momentum
+  construction: cs_residualize(cum_252 - cum_63, {log_mv, sigma_120, ret_20})
+  ic_mean: 0.026
+  ic_ir: 14.5
+  ls_sharpe_full: 1.00
+  ls_sharpe_test: 2.06
+  q5_excess_ir_test: 1.16
+  ls_maxdd: -0.071
+  worst_year_ls: 0.04
+  worst_year_q5: -1.67
+  audit_verdict: worst_year_floor_FAIL_by_0.46
+finding: large_cap_filter_lifts_worst_year_~0.07_but_halves_test_sharpe
+finding_2: industry_relative_form_makes_worst_year_worse_(-0.42_vs_+0.16)
+finding_3: longer_skip_(12-3)_strengthens_signal_but_does_not_lift_worst_year
+decision: stop_iterating_RESEARCH_ONLY_for_trend_family_in_a_share_2018_2025

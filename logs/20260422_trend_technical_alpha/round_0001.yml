@@ -1,0 +1,11 @@
+round: 1
+family: trend_technical_raw
+mechanism: trend_strength_multi_horizon
+n_expressions: 8
+expressions: [alpha_01..alpha_08]
+result: all_8_negative_LS_sharpe
+falsification: confirmed_a_share_reversal_dominance
+best_alpha_in_round: alpha_05_close_max_proximity (LS -0.42, least negative)
+worst_alpha_in_round: alpha_01_han_zhou_zhu (LS -1.46)
+ic_t_stat_range: -25_to_-6
+decision: pivot_to_idio_momentum_in_round_2
