@@ -11,8 +11,8 @@
 | `fundamental.quality` | [`accruals_median_ttm_ind_neutral_v2`](fundamental/accruals_median_ttm_ind_neutral_v2/) | **1.34** | **1.13** | −1.85% | DEPLOYED |
 | `fundamental.surprise` | accruals SUE/PEAD | TBA | TBA | TBA | planned |
 | `fundamental.profitability` | gross_profitability | TBA | TBA | TBA | planned |
-| `price_volume.momentum` | — | — | — | — | none yet |
-| `price_volume.volatility` | — | — | — | — | none yet |
+| `price_volume.momentum` | [`idio_12_3_momentum_disp_gated_v1`](price_volume/idio_12_3_momentum_disp_gated_v1/) | **1.22** | **0.56** | −5.53% | DEPLOYED |
+| `price_volume.volatility` | — | — | — | — | none yet (lottery RESEARCH-ONLY, see logs/20260421) |
 
 (数字基于 A 股 2018-2025 全样本,5 bps 单边手续费,turnover-aware 成本模型)
 
