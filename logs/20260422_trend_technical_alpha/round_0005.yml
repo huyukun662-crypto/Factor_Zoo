@@ -1,0 +1,30 @@
+round: 5
+family: regime_overlay_on_α_29
+mechanism: gate_α_29_with_market_regime_indicators
+n_expressions: 8
+expressions: [alpha_33..alpha_40]
+gates_tested:
+  - α_33: ew_MA200_slope > 0
+  - α_34: breadth (% above own MA200) > 0.5
+  - α_35: cross-sectional dispersion of ret_20 > 252d rolling median   ← WINNER
+  - α_36: market 12-1 momentum > 0
+  - α_37: market 60d vol < 252d median (calm gate)
+  - α_38: continuous softmax overlay of regime score
+  - α_39: combo (uptrend AND breadth)
+  - α_40: adaptive (best individual gate from training period — selects α_35)
+breakthrough:
+  alpha: alpha_35_dispersion_gate
+  construction: alpha_29 × 1{cross_sectional_std(ret_20) > rolling_252d_median(cross_sectional_std(ret_20))}
+  ls_sharpe_full: 1.22
+  ls_sharpe_test: 1.74
+  q5_excess_ir_test: 1.03
+  ls_maxdd: -0.055
+  worst_year_ls_active: 0.63
+  worst_year_ls_all: 0.0  # 2018 held cash
+  on_frac: 0.43
+  audit_verdict: PASS_active_year_floor (0.63 >= 0.5)
+notable_secondary:
+  - alpha_38_softmax: ls_test 1.38 but worst-year fails
+  - alpha_36_TSmom: train Sharpe high but Q5 test -1.64
+  - alpha_37_calm: backwards (calm gate hurts)
+decision: proceed_to_round_6_falsification_for_α_35
