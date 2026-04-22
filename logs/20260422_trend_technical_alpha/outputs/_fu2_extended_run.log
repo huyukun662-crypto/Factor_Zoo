@@ -1,0 +1,52 @@
+[fu2] building momentum panel via deployed factor code...
+[factor] loading base...
+  loaded 9,202,593 rows  53.2s
+[factor] computing returns + controls...
+[factor] cross-sectional residualization (per date)...
+[factor] industry-demeaning...
+[factor] building dispersion gate...
+[factor] done in 81.2s, gate on-fraction = 0.445
+[fu2] momentum panel: 8,891,352 rows  81.4s
+[fu2] loading lottery α_17 panel...
+[fu2] lottery panel: 9,202,593 rows  84.1s
+[fu2] momentum panel after fwd merge: 8,891,352 rows  90.2s
+[fu2] building dispersion gates...
+[fu2] gate_mom on-frac = 0.455, gate_inv on-frac = 0.449, both-off = 0.096
+[fu2] rebalance dates: 101  [2018-01-02 → 2026-04-03]
+[fu2] S1 MOM-only (α_35 baseline)...
+[fu2] S2 INV-only (α_17 × INV-gate)...
+[fu2] S3 rotation (MOM→INV→cash)...
+[fu2] S4 static 50/50 (ungated)...
+
+============================================================================================
+MOM ↔ Lottery rotation comparison
+============================================================================================
+metric                 S1 MOM     S2 INV     S3 ROT   S4 50/50
+  ls_full            1.127   1.199   1.806   1.829
+  ls_train           1.189   1.254   1.904   1.959
+  ls_valid           0.962   1.234   1.624   1.998
+  ls_test            1.114   1.106   1.675   1.673
+  q5_full            0.562   0.855   0.973   0.934
+  q5_test            0.655   1.145   0.953   1.059
+  ls_maxdd          -0.062  -0.044  -0.075  -0.055
+  worst_year_ls     -1.442  -0.473  -0.184   0.579
+  best_year_ls       2.057   3.472   5.927   5.864
+  worst_year_q5     -1.093  -1.013  -0.356  -0.593
+  on_frac            0.446   0.446   0.891   1.000
+  avg_cost_bps       3.907   5.161   6.196   5.060
+
+Per-year LS Sharpe:
+year       S1 MOM     S2 INV     S3 ROT   S4 50/50
+  2018      0.000      1.718      1.718      3.327
+  2019      1.361      0.696      1.451      0.579
+  2020      1.280     -0.473      0.970      1.287
+  2021      1.782      1.016      2.317      1.767
+  2022      1.797      3.472      5.927      5.864
+  2023      0.962      1.234      1.624      1.998
+  2024      2.057      1.945      3.261      2.202
+  2025     -1.442      0.534     -0.184      1.186
+
+[fu2] S3 audit: {'worst_year_floor_05': False, 'best_year_out_50pct': False, 'headline_sharpe_12': True, 'q5_ir_1': False}
+[fu2] wrote /home/user/Factor_Zoo/logs/20260422_trend_technical_alpha/outputs/followup_mom_lottery_rotation.json
+[fu2] wrote /home/user/Factor_Zoo/logs/20260422_trend_technical_alpha/outputs/followup_mom_lottery_rotation_tape.csv
+[fu2] done 155.0s
