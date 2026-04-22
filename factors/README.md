@@ -11,10 +11,13 @@
 | `fundamental.quality` | [`accruals_median_ttm_ind_neutral_v2`](fundamental/accruals_median_ttm_ind_neutral_v2/) | **1.34** | **1.13** | −1.85% | DEPLOYED |
 | `fundamental.surprise` | accruals SUE/PEAD | TBA | TBA | TBA | planned |
 | `fundamental.profitability` | gross_profitability | TBA | TBA | TBA | planned |
-| `price_volume.momentum` | [`idio_12_3_momentum_disp_gated_v1`](price_volume/idio_12_3_momentum_disp_gated_v1/) | **1.22** | **0.56** | −5.53% | DEPLOYED |
-| `price_volume.volatility` | — | — | — | — | none yet (lottery RESEARCH-ONLY, see logs/20260421) |
+| `price_volume.momentum` | [`idio_12_3_momentum_disp_gated_v1`](price_volume/idio_12_3_momentum_disp_gated_v1/) | 1.22 (18-25YTD) / **1.13 (18-26)** | 0.56 | −5.53% / −6.21% (ext) | DEPLOYED ⚠️ (2025 kill-switch triggered, see extended_stress_test) |
+| `price_volume.volatility` | [`lottery_idio_max_q5_overlay_v1`](price_volume/lottery_idio_max_q5_overlay_v1/) | n/a (long-only) | **1.13** (excess) | −4.18% (excess) | DEPLOYED |
 
-(数字基于 A 股 2018-2025 全样本,5 bps 单边手续费,turnover-aware 成本模型)
+(动量因子 2018-2025YTD 数字保留作历史参照;扩展至 2026-04 的数字见各因子
+factor.md。均使用 A 股 5 bps 单边手续费 turnover-aware 成本。lottery
+因子为长多 index-enhancement,指标是 Q5 相对 universe 等权 benchmark 的
+超额 IR,非 Q5 绝对 Sharpe。)
 
 ## Directory layout
 

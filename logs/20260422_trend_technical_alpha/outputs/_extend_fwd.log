@@ -1,0 +1,20 @@
+Cache max: 2025-04-18, extending 20250419 → 20260422
+Need 244 trade days from 20260422 to 20250421
+[20/244] 20260325 elapsed=29s eta=321s
+[40/244] 20260225 elapsed=49s eta=252s
+[60/244] 20260120 elapsed=71s eta=217s
+[80/244] 20251219 elapsed=94s eta=194s
+[100/244] 20251121 elapsed=116s eta=167s
+[120/244] 20251024 elapsed=137s eta=142s
+[140/244] 20250918 elapsed=161s eta=120s
+[160/244] 20250821 elapsed=185s eta=97s
+[180/244] 20250724 elapsed=206s eta=73s
+[200/244] 20250626 elapsed=230s eta=51s
+[220/244] 20250528 elapsed=252s eta=28s
+[240/244] 20250425 elapsed=273s eta=5s
+[244/244] 20250421 elapsed=277s eta=0s
+daily.parquet: 7,876,922 + 1,325,671 new -> 9,202,593 total
+adj_factor.parquet: 8,125,160 + 1,331,445 new -> 9,456,605 total
+daily_basic.parquet: 7,812,187 + 1,325,671 new -> 9,137,858 total
+invalidated alpha_n_mom_for_rotation.parquet
+Total 307s

@@ -1,0 +1,36 @@
+[r2] loading α_17 panel...
+[r2] 101 rebalance dates
+[r2] features shape=(2013, 5)  12.5s
+[r2] single gate candidates: 70  212.4s
+[r2] AND-pair candidates: 30  295.5s
+/home/user/Factor_Zoo/logs/20260422_lottery_megacap_overlay/scripts/02_round2_combinations.py:253: Pandas4Warning: Sorting by default when concatenating all DatetimeIndex is deprecated.  In the future, pandas will respect the default of `sort=False`. Specify `sort=True` or `sort=False` to silence this message. If you see this warnings when not directly calling concat, report a bug to pandas.
+  gate_df = pd.concat(gates_all, axis=1).fillna(0).astype(int)
+/home/user/Factor_Zoo/logs/20260422_lottery_megacap_overlay/scripts/02_round2_combinations.py:253: Pandas4Warning: Sorting by default when concatenating all DatetimeIndex is deprecated.  In the future, pandas will respect the default of `sort=False`. Specify `sort=True` or `sort=False` to silence this message. If you see this warnings when not directly calling concat, report a bug to pandas.
+  gate_df = pd.concat(gates_all, axis=1).fillna(0).astype(int)
+
+===================================================================================================================
+Round 2 ranked candidates — total 102 variants
+===================================================================================================================
+  # kind   signal/pair                                   mode      lb    full   worst    2020    2025  on_fr  MaxDD%  PASS
+   1 single size_q5q1_12m_sh                              pct95    126   1.025   0.452   0.452   1.008  0.798   -4.18      
+   2 single size_q5q1_12m_sh                              pct70    126   0.944   0.330   0.330   0.986  0.606   -4.18      
+   3 single size_q5q1_12m_sh                              pct75    126   0.893   0.330   0.330   0.515  0.616   -4.18      
+   4 single size_q5q1_12m_sh                              pct80    126   0.944   0.253   0.253   0.515  0.646   -4.18      
+   5 single size_q5q1_12m_sh                              pct85    126   0.867   0.253   0.253   0.901  0.687   -4.18      
+   6 single size_q5q1_12m_sh                              pct90    126   0.997   0.238   0.238   0.789  0.758   -4.18      
+   7 single size_disp_60d                                 pct95    126   1.129   0.106   0.106   1.418  0.808   -2.66      
+   8 single size_q5q1_12m_sh                              pct90    252   0.971   0.000   0.253   0.829  0.737   -4.18      
+   9 single size_q5q1_12m_sh                              pct95    252   0.929   0.000   0.238   0.829  0.747   -4.18      
+  10 single size_q5q1_12m_sh                              pct85    252   0.925   0.000   0.330   0.731  0.687   -4.18      
+  11 AND    size_q5q1_12m_sh & breadth_60_neg             pct95    252   0.787   0.000   0.238   0.080  0.707   -4.66      
+  12 single concentration                                 median   252   0.697   0.000   0.092   0.151  0.566   -3.54      
+  13 single size_disp_60d                                 pct75    252   1.179  -0.017  -0.017   1.559  0.626   -1.88      
+  14 single size_disp_60d                                 pct70    252   1.163  -0.017  -0.017   1.559  0.616   -1.88      
+  15 single size_spread_60d                               pct75    252   0.828  -0.022  -0.022   1.800  0.687   -4.22      
+
+[r2] candidates passing audit: 0
+[r2] No variant passes both IR ≥ 1.0 AND worst-year ≥ 0.5.
+[r2] Best so far: size_q5q1_12m_sh | pct95 | lb=126
+
+[r2] wrote /home/user/Factor_Zoo/logs/20260422_lottery_megacap_overlay/outputs/overlay_round2.json
+[r2] done 301.2s
