@@ -1,0 +1,86 @@
+[audit] loading panels + features...
+[audit] 101 rebalance dates  2.1s
+
+===============================================================================================
+WINNING SPEC: size_q5q1_12m_sh | pct97 | lb=63
+===============================================================================================
+  abs_ann                       +0.1225
+  abs_sharpe                    +0.4873
+  abs_maxdd                     -0.3452
+  exc_ann                       +0.0370
+  exc_ir                        +1.1293
+  exc_maxdd                     -0.0418
+  exc_train_ir                  +1.6075
+  exc_valid_ir                  +0.7664
+  exc_test_ir                   +0.7729
+  worst_year_exc                +0.7664
+  best_year_exc                 +2.2814
+  on_frac                       +0.8081
+  avg_tov                       +0.7189
+  avg_cost_bps                  +3.5943
+
+  per-year excess IR:
+    2018: +1.796
+    2019: +0.855
+    2020: +1.162
+    2021: +2.164
+    2022: +2.281
+    2023: +0.766
+    2024: +0.840
+    2025: +1.261
+
+===============================================================================================
+Spec sensitivity — neighborhood of winner
+===============================================================================================
+    lb  pct  full_IR   worst    2020    2025  train  valid   test  on_fr  PASS
+    50   97   +1.117  +0.766  +1.162  +1.261 +1.582 +0.766 +0.773 +0.808  PASS
+    75   97   +1.102  +0.638  +1.162  +1.261 +1.607 +0.638 +0.744 +0.788  PASS
+    90   97   +0.978  +0.452  +0.452  +0.770 +1.373 +0.638 +0.663 +0.808  FAIL
+    63   95   +1.035  -0.221  +1.162  +1.261 +1.607 -0.221 +0.744 +0.778  FAIL
+    63   96   +1.102  +0.638  +1.162  +1.261 +1.607 +0.638 +0.744 +0.788  PASS
+    63   98   +1.129  +0.766  +1.162  +1.261 +1.607 +0.766 +0.773 +0.808  PASS
+    63   99   +0.940  +0.016  +0.016  +1.072 +1.215 +0.766 +0.697 +0.859  FAIL
+    63   97   +1.129  +0.766  +1.162  +1.261 +1.607 +0.766 +0.773 +0.808  PASS
+  5/8 pass
+
+===============================================================================================
+Placebo — 100 random on/off gates at matched on_frac
+===============================================================================================
+  [20/100]  86.4s
+  [40/100]  146.3s
+  [60/100]  201.9s
+  [80/100]  257.3s
+  [100/100]  317.7s
+
+  baseline excess IR: 1.129
+  placebo median IR: 0.904, max: 1.241
+  p-value (placebo >= baseline IR): 0.020
+
+  baseline worst-year: 0.766
+  placebo worst-year median: -0.328, max: 0.581
+  p-value (placebo >= baseline worst): 0.000
+
+  baseline 2020 IR: 1.162
+  placebo 2020 median: -0.325, max: 1.662
+  p-value (placebo >= baseline 2020): 0.010
+
+===============================================================================================
+Full 7-audit checklist
+===============================================================================================
+  rule_1_full_ir_1p0               True
+  rule_2_worst_year_0p5            True
+  rule_3_best_year_out_50pct       True
+  rule_4_spec_majority_pass        True
+  rule_5_placebo_ir_p_le_05        True
+  rule_6_placebo_worst_p_le_05     True
+  rule_7_excess_maxdd_ok           True
+  best_year_dropped                2022
+  ir_without_best_year             1.0543156926357569
+  ir_ratio_vs_full                 0.9336405938605047
+
+[audit] AUDIT RESULT: 7/7
+[audit] ✓ ALL AUDITS PASS — deployment candidate ready.
+
+[audit] wrote /home/user/Factor_Zoo/logs/20260422_lottery_megacap_overlay/outputs/overlay_final_audit.json
+[audit] wrote overlay_winning_tape.csv
+[audit] done 317.7s

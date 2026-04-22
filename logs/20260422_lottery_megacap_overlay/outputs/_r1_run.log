@@ -1,0 +1,47 @@
+[r1] loading α_17 panel...
+[r1] α_17 rows=9,202,593  19.7s
+[feat] loading daily + daily_basic...
+[feat] computing per-date size quintiles + ret_60 by bucket...
+[feat] size_spread_60d ready, n=2013
+[feat] all 4 features ready, shape=(2013, 4)
+[r1] features shape=(2013, 4)  76.2s
+[r1] 101 rebalance dates  [2018-01-02 → 2026-04-03]
+
+[r1] BASELINE (no overlay) IR=1.087  worst_yr=-0.325  2020=-0.325
+
+[r1] testing 24 candidate gate combos...
+
+==============================================================================================================
+Ranked candidates (by worst-year IR, then full IR)
+==============================================================================================================
+feature                mode     fb          full IR   worst    2020    2025  on_frac  MaxDD%   PASS?
+  size_q5q1_12m_sh     pct90    benchmark     0.971    0.000    0.253    0.829    0.737   -4.18    FAIL
+  concentration        median   benchmark     0.697    0.000    0.092    0.151    0.566   -3.54    FAIL
+  size_disp_60d        pct75    benchmark     1.179   -0.017   -0.017    1.559    0.626   -1.88    FAIL
+  size_spread_60d      pct75    benchmark     0.828   -0.022   -0.022    1.800    0.687   -4.22    FAIL
+  size_spread_60d      pct90    benchmark     0.809   -0.183   -0.183    1.800    0.768   -6.26    FAIL
+  concentration        pct90    benchmark     0.828   -0.325   -0.325    1.426    0.798   -4.61    FAIL
+  size_spread_60d      median   benchmark     0.523   -0.371    0.135    1.431    0.434   -5.21    FAIL
+  concentration        pct75    benchmark     0.707   -0.563   -0.325    1.426    0.737   -5.82    FAIL
+  size_q5q1_12m_sh     pct75    benchmark     0.754   -0.663   -0.663   -0.128    0.646   -4.18    FAIL
+  size_q5q1_12m_sh     median   benchmark     0.728   -0.795   -0.795   -0.508    0.505   -4.18    FAIL
+  size_disp_60d        median   benchmark     0.712   -0.846   -0.846    1.286    0.444   -2.85    FAIL
+  concentration        pct75    cash          0.001   -0.869   -0.325    1.426    0.737  -38.06    FAIL
+  size_disp_60d        pct75    cash          0.386   -0.931   -0.931   -0.328    0.626  -25.96    FAIL
+  concentration        pct90    cash          0.174   -0.933   -0.325    1.426    0.798  -33.79    FAIL
+  size_spread_60d      pct90    cash          0.062   -1.029   -1.029    0.848    0.768  -34.31    FAIL
+  size_disp_60d        median   cash          0.098   -1.030   -1.030   -1.012    0.444  -35.16    FAIL
+  size_spread_60d      pct75    cash          0.117   -1.069   -0.648    0.848    0.687  -38.16    FAIL
+  size_disp_60d        pct90    cash          0.324   -1.111   -1.111    0.278    0.737  -26.55    FAIL
+  size_spread_60d      median   cash         -0.143   -1.122   -0.940   -1.122    0.434  -54.79    FAIL
+  size_disp_60d        pct90    benchmark     0.983   -1.228   -1.228    1.649    0.737   -4.29    FAIL
+  concentration        median   cash         -0.198   -1.754    0.836   -1.754    0.566  -56.20    FAIL
+  size_q5q1_12m_sh     pct90    cash         -0.181   -2.005   -2.005   -1.188    0.737  -52.22    FAIL
+  size_q5q1_12m_sh     median   cash         -0.532   -2.318   -1.027   -2.318    0.505  -72.65    FAIL
+  size_q5q1_12m_sh     pct75    cash         -0.411   -2.334   -1.472   -2.334    0.646  -62.27    FAIL
+
+[r1] Best: size_q5q1_12m_sh | pct90 | benchmark
+     full_IR=0.971  worst=0.000  2020=0.253  2025=0.829  on_frac=0.737
+
+[r1] wrote /home/user/Factor_Zoo/logs/20260422_lottery_megacap_overlay/outputs/overlay_candidates.json
+[r1] done 145.4s
