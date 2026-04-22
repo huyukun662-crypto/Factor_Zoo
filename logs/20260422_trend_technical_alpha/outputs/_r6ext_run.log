@@ -1,0 +1,42 @@
+[r6ext] loading / building momentum panel...
+[cache] loading /home/user/Factor_Zoo/.cache/alpha_n_mom_for_rotation.parquet...
+[r6ext] mom: 8,891,352 rows  4.7s
+[r6ext] loading lottery α_17 panel...
+[r6ext] lot: 9,202,593 rows  23.9s
+[r6ext] mom after fwd merge: 8,891,352  27.5s
+[r6ext] building daily dispersion features...
+[r6ext] 101 rebalance dates  [2018-01-02 → 2026-04-03]
+
+====================================================================================================
+A) Spec sensitivity — extended sample (2018 → 2026-04)
+====================================================================================================
+variant                LS full   Q5 full  worst-yr   best-yr   on_frac   PASS?
+  BASELINE               1.806     0.973    -0.184     5.927     0.891    FAIL
+  lookback_60            1.904     1.052     0.775     4.699     0.911    PASS
+  lookback_126           1.892     1.034    -0.172     5.817     0.911    FAIL
+  lookback_504           1.460     0.724    -0.727     5.927     0.802    FAIL
+  threshold_p40          1.529     0.673    -0.309     5.927     0.881    FAIL
+  threshold_p60          1.785     1.075    -0.184     5.855     0.891    FAIL
+  disp_window_60         1.413     0.487     0.820     4.794     0.881    FAIL
+
+[r6ext] spec sensitivity: 1/7 pass
+
+====================================================================================================
+B) Placebo — 100 random complementary gates (p_mom=0.457, p_inv=0.449, p_both_off=0.094)
+====================================================================================================
+  [20/100] placebo done  164.2s
+  [40/100] placebo done  234.0s
+  [60/100] placebo done  302.5s
+  [80/100] placebo done  370.4s
+  [100/100] placebo done  438.7s
+
+  baseline LS full: 1.806
+  placebo LS full:  median=1.199  p95=1.587  max=1.929
+  p-value (placebo >= baseline LS): 0.010
+
+  baseline worst-year LS: -0.184
+  placebo worst-year LS: median=-0.111  p95=0.673  max=1.196
+  p-value (placebo >= baseline worst-yr): 0.570
+
+[r6ext] wrote /home/user/Factor_Zoo/logs/20260422_trend_technical_alpha/outputs/rotation_round6_extended.json
+[r6ext] done 438.7s
