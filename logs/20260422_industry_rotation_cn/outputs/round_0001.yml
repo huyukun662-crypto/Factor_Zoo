@@ -1,0 +1,77 @@
+round: 1
+session: 20260422_industry_rotation_cn
+topic: china_industry_rotation_weekly
+date: 2026-04-22
+
+scope:
+  universe: SW_L1_2021 × 31 industries
+  sample: 2018-01-12 → 2026-04-22 (424 weeks)
+  agg: circ_mv weighted stock → industry daily → weekly Friday snapshot
+  delay: 1
+  rebalance_weeks: 1
+  top_n_hold: 3
+  cost_bps_per_side: 5
+
+hypothesis_families_tested:
+  - A_penalized:  z(mom_W) - λ·z(turn_W) + μ·breadth
+  - B_layered:    step1 top-K by mom, step2 bottom-n by crowd
+  - C_reversal:   -mom_W, optional crowd amplifier
+
+summary:
+  A_family: all 8 specs beat bench; Sharpe range 0.92–1.36; best A7
+  B_family: all 8 specs beat bench; Sharpe range 0.85–1.27; best B6 (worst-year)
+  C_family: all 8 specs fail; best 0.24, worst -0.87; A-share industry weekly is NOT a reversal market
+
+winner:
+  spec: B6_m4_K10_t8
+  formula: "step1: rank desc mom_4w, keep top-10; step2: within, rank asc turn_8w, long top-3 equal weight"
+  headline:
+    ann_ret: 23.3%
+    sharpe: 1.20
+    max_dd: -14.5%
+    turnover_annual_oneway: 22.5
+  per_year_sharpe:
+    2018: -0.13
+    2019: 1.36
+    2020: 2.03
+    2021: 1.40
+    2022: 0.50
+    2023: 0.47
+    2024: 1.63
+    2025: 1.88
+    "2026_partial": 4.79
+  audit:
+    delay_monotonic: true
+    lookahead_placebo_p: 0.000
+    worst_year_pass_05: false
+    best_year_out_pct: 0.92
+    placebo_sharpe_p: 0.000
+    placebo_worst_year_p: 0.030
+    pass_count: 6_of_7
+
+decision: RESEARCH-ONLY
+blockers:
+  - worst_year_sharpe_2018: -0.13 (< 0.5 floor, systematic A-share bear)
+mitigations_documented:
+  - kill-switch: rolling 12m sharpe < 0 → pause
+  - optional regime gate: market breadth %above_ma20 < 25% for 6 consecutive weeks → cash
+
+interesting_finding:
+  insight: >
+    "momentum × low-crowding" layered selection de facto builds a
+    DIVIDEND/VALUE-STYLE rotator in A-share 2019-2026 (top holdings: 银行 34%,
+    石油石化 33%, 食品饮料 32%, 煤炭 24%, 非银金融 19%). This matches the
+    "slow growth + policy-support value" macro regime of the period ("中特估",
+    高股息风格 dominance).
+  implication: >
+    The strategy is NOT a speculative growth-chaser — it's a regime-coherent
+    quality/value rotator. Risk: if A-share rotates back to growth/theme
+    leadership (AI, electric, new-consumer), low-turnover filter will miss
+    those leaders. Kill-switch should catch this.
+
+next_rounds_suggested:
+  - Round 2: build the reverse (quality-growth rotator) as a paired alpha
+            (mom_4w × HIGH turnover, when a growth regime is detected)
+  - Round 3: multi-regime ensemble — value-rotator in bear, growth-rotator in bull
+  - Round 4: add ETF-mapping layer (SW L1 → tradable ETF), re-validate with
+             realistic tracking error and spread cost
