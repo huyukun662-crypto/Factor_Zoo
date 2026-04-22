@@ -1,0 +1,44 @@
+round: 2
+date: 2026-04-21
+family: volume_price
+mechanism: idiosyncratic_skewness (pivot from MAX)
+pivot_rationale: |
+  Round 1 showed MAX is 2nd-moment-absorbed (sigma_20 eats ~75% of the signal). Pivot to
+  3rd-moment (skewness) which is mathematically orthogonal to sigma, to test whether
+  lottery demand survives beyond vol.
+batch: "0002"
+n_alphas: 8
+
+builder_output:
+  panel: outputs/panel_round2_skew.parquet
+  expressions: outputs/expressions_batch_0002.md
+
+backtest_and_audit_summary:
+  alpha_09: {ls_full: 0.63, ls_test: -0.32, resid_ic: 0.011, worst_year: -0.48, overall: FAIL}
+  alpha_10: {ls_full: 0.01, ls_test: -0.50, resid_ic: 0.005, worst_year: -0.74, overall: FAIL}
+  alpha_11: {ls_full: 0.61, ls_test:  1.21, resid_ic: 0.006, worst_year: -0.79, overall: FAIL}
+  alpha_12: {ls_full: 0.86, ls_test:  1.37, resid_ic: 0.006, worst_year: -0.50, overall: FAIL}
+  alpha_13: {ls_full: -0.78, ls_test: 0.50, resid_ic: -0.011, worst_year: -3.07, overall: FAIL}
+  alpha_14: {ls_full: 0.67, ls_test:  1.29, resid_ic: 0.005, worst_year: -1.39, overall: FAIL}
+  alpha_15: {ls_full: 1.64, ls_test:  2.92, resid_ic: -0.010, worst_year: 0.68, overall: FAIL}
+  alpha_16: {ls_full: 1.95, ls_test:  0.73, resid_ic: 0.013, worst_year: -1.10, overall: FAIL}
+
+headline_candidate: alpha_15 (jump_up_count)
+headline_candidate_result: |
+  Full LS net Sharpe 1.64, test 2.92. PASSES look-ahead, worst-year, LOYO, falsification.
+  FAILS residualization: residual IC = -0.010 with opposite sign to raw IC = 0.040.
+  Targeted diagnostic: residualizing vs sigma_20 ONLY → resid IC = -0.005. Signal IS vol.
+
+honest_winner_by_orthogonality: alpha_11 (coskew, Harvey-Siddique 2000)
+honest_winner_rationale: |
+  Retains IC 0.025 vs sigma-only, 0.019 vs sigma+size. Most genuinely orthogonal signal.
+  But fails worst-year floor (-0.79 in 2020) and has only 0.61 full LS Sharpe. Not
+  deployable.
+
+decision: RESEARCH_ONLY
+rationale: |
+  Zero of 16 alphas (8 per round) pass the full-stack residualization audit. A-share
+  lottery-demand signals (both MAX-family and skewness-family) are correlated-but-
+  not-additive with volatility and short-term reversal. Deploying any of these
+  standalone would double-count existing risk-factor premia. Per CLAUDE.md
+  "Mandatory audit rules: Any failure → RESEARCH-ONLY, never PROMOTE."

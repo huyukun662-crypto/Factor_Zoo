@@ -1,0 +1,73 @@
+round: 1
+date: 2026-04-21
+family: volume_price
+mechanism: lottery_demand_max_effect
+direction: short_high_max
+alpha_sign: negative
+batch: "0001"
+n_alphas: 8
+
+builder_output:
+  panel: outputs/panel_volprice.parquet
+  expressions: outputs/expressions_batch_0001.md
+  pre_submission_validate_ic:
+    alpha_01: 0.0757
+    alpha_02: 0.0778
+    alpha_03: 0.1002
+    alpha_04: 0.0083
+    alpha_05: 0.0387
+    alpha_06: 0.0880
+    alpha_07: 0.0088
+    alpha_08: 0.0840
+
+backtest_headline_full:
+  alpha_01: {ls_net_sharpe: 1.71, q5_ir: 1.20, ic_ir: 15.1}
+  alpha_02: {ls_net_sharpe: 1.70, q5_ir: 1.01, ic_ir: 14.8}
+  alpha_03: {ls_net_sharpe: 1.51, q5_ir: 1.11, ic_ir: 13.2}
+  alpha_04: {ls_net_sharpe: 0.83, q5_ir: 0.44, ic_ir: 8.1}
+  alpha_05: {ls_net_sharpe: 2.62, q5_ir: 1.32, ic_ir: 16.0}
+  alpha_06: {ls_net_sharpe: 1.45, q5_ir: 0.71, ic_ir: 11.5}
+  alpha_07: {ls_net_sharpe: 0.07, q5_ir: 0.02, ic_ir: 2.2}
+  alpha_08: {ls_net_sharpe: 2.21, q5_ir: 1.73, ic_ir: 17.7}
+
+top_candidate: alpha_08
+top_candidate_rationale: |
+  Best LS test Sharpe (2.03), best Q5 long-only IR (1.73), cleanest ICIR (17.7).
+  Construction uses abnormal returns vs equal-weight market mean, giving structural
+  market-beta residualization that helps out-of-sample stability.
+
+audits_top3:
+  alpha_08:
+    look_ahead_ok: true
+    worst_year_ok: true
+    loyo_ok: true
+    falsification_ok: true
+    residual_survives: false
+    overall: FAIL
+  alpha_02:
+    look_ahead_ok: true
+    worst_year_ok: false
+    loyo_ok: true
+    falsification_ok: true
+    residual_survives: false
+    overall: FAIL
+  alpha_05:
+    look_ahead_ok: true
+    worst_year_ok: false
+    loyo_ok: true
+    falsification_ok: true
+    residual_survives: false
+    overall: FAIL
+
+residualization_screen:
+  stacks_tested: [full, vol_only, rev_only, vol+rev]
+  key_finding: |
+    MAX family is ~85% absorbed by sigma_20 (volatility). Residualizing vs reversal-only
+    preserves 0.07-0.09 IC; residualizing vs sigma-only drops IC to 0.02-0.04; combined
+    controls leave <0.03 IC. In A-share, "MAX effect" ≈ volatility × sign.
+
+decision: iterate_to_round_2
+rationale: |
+  Per CLAUDE.md "Any failure → RESEARCH-ONLY, never PROMOTE." All three audited candidates
+  fail residualization. Before closing the session, pivot to a moment-orthogonal mechanism
+  (skewness) to test whether lottery demand survives at a higher moment than volatility.

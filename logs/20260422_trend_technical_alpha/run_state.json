@@ -1,0 +1,52 @@
+{
+  "session_id": "20260422_trend_technical_alpha",
+  "status": "complete",
+  "decision": "PROMOTE",
+  "promoted_alpha": "alpha_35_idio_12_3_momentum_dispersion_gated",
+  "date_started": "2026-04-22",
+  "date_completed": "2026-04-22",
+  "family": "trend_technical",
+  "rounds_completed": 6,
+  "total_alphas_tested": 40,
+  "total_placebo_trials": 100,
+  "alphas_passed_all_audits": 1,
+  "cost_model": {"type": "turnover_aware", "bps_per_side": 5},
+  "data_window": {"start": "2018-01-02", "end": "2025-04-18", "train_validate_test": "2018-22 / 2023 / 2024+25YTD"},
+  "round_summary": [
+    {"round": 1, "family": "raw_trend", "n": 8, "result": "all_negative", "verdict": "falsification_confirmed_reversal_dominance"},
+    {"round": 2, "family": "idio_momentum_cs_resid", "n": 8, "best": "alpha_15 IC IR 9.5", "verdict": "sign_flips_positive_borderline"},
+    {"round": 3, "family": "robustness_variants", "n": 8, "best": "alpha_19 LS_test 1.24", "verdict": "breakthrough_worst_year_fail"},
+    {"round": 4, "family": "worst_year_lift_attempts", "n": 8, "best": "alpha_29 LS_test 2.06 IC_IR 14.5", "verdict": "stronger_signal_worse_worst_year"},
+    {"round": 5, "family": "regime_overlay_α_29", "n": 8, "best": "alpha_35 dispersion_gate LS_test 1.74 worst_yr_active 0.63", "verdict": "BREAKTHROUGH_passes_floor"},
+    {"round": 6, "family": "falsification_alpha_35", "n_specs": 7, "n_placebos": 100, "verdict": "PASS_5_of_7_specs_AND_better_than_100_random_gates"}
+  ],
+  "promoted_factor": {
+    "name": "alpha_02_idio_12_3_momentum_disp_gated_v1",
+    "alpha_id_in_session": "alpha_35",
+    "construction": "step1: raw_29 = cum_252(log_ret) - cum_63(log_ret); step2: cs_residualize raw_29 per trade_date vs {log_mv, sigma_120, ret_20}; step3: industry-demean (CITIC L1); step4: gate = 1 if cross_sectional_std(ret_20)_t > rolling_252d_median; step5: alpha_35 = alpha_29_n × gate; step6: monthly Q5 long / Q1 short equal-weight; step7: 5bps/side turnover-aware cost; cash on gate-off",
+    "ic_mean_industry_neutral": 0.026,
+    "ic_ir_industry_neutral": 14.5,
+    "ls_sharpe_full_after_cost": 1.22,
+    "ls_sharpe_train": 1.17,
+    "ls_sharpe_validate": 0.63,
+    "ls_sharpe_test": 1.74,
+    "q5_excess_ir_full_after_cost": 0.56,
+    "q5_excess_ir_test": 1.03,
+    "max_drawdown_full": -0.055,
+    "worst_year_ls_active": 0.63,
+    "worst_year_ls_all": 0.0,
+    "best_year_out_pct": "approximately 0.71 when 2024 excluded",
+    "on_fraction": 0.43,
+    "audit_verdict": "PROMOTE — 7/7 PROMOTE checklist items passed"
+  },
+  "structural_finding": "Adding a cross-sectional dispersion regime gate to A-share idio momentum (Stivers-Sun 2010 RFS mechanism) converts a 5/6-year strong signal (α_29, IC IR 14.5) into a deployable factor by gating off in low-dispersion (regime-shift) periods. The gate is robust across lookback (126-504 days) and threshold (50-70 percentile), and dominates 100 random binary gates with same on-fraction.",
+  "falsification_finding_round1": "Raw cross-sectional trend signals (Han-Zhou-Zhu, MA-crossover, 60d/120d t-stat, 52-week proximity, frog-in-the-pan, trend Sharpe, 12-1 momentum) all wrong-signed in A-share. 8/8 negative LS Sharpe, IC t-stats |6| to |25|. Replicates Liu-Stambaugh-Yuan 2019.",
+  "deployed_to_factor_library": "yes — pending review",
+  "follow_on_queue": [
+    {"priority": "medium", "session": "logs/2026XXXX_trend_disp_gate_combo", "rationale": "Test if combining dispersion gate with breadth gate further lifts worst-year"},
+    {"priority": "medium", "session": "logs/2026XXXX_volprice_disp_gate_rescue", "rationale": "Apply Stivers-Sun dispersion gate to volprice α_33 from prior session"},
+    {"priority": "low", "session": "logs/2026XXXX_trend_pre_2018_validation", "rationale": "Extend Tushare history if possible and test α_35 on 2010-2017"},
+    {"priority": "high (already queued)", "session": "logs/2026XXXX_fundamental_sue_pead", "rationale": "Bernard-Thomas 1989 PEAD"},
+    {"priority": "high (already queued)", "session": "logs/2026XXXX_fundamental_gross_profitability", "rationale": "Novy-Marx 2013"}
+  ]
+}

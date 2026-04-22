@@ -1,0 +1,37 @@
+round: 3
+date: 2026-04-21
+family: volume_price
+mechanism: sigma_decoupled_iteration_of_alpha_05_08_15
+batch: "0003"
+n_alphas: 8
+
+hypothesis: |
+  Rounds 1-2 failed because signals were σ-absorbed. Try 8 non-parametric or
+  structural σ-decoupling strategies: σ-bucket conditional sort, fixed-threshold
+  jump counts, time-series residualization per stock, double-bucket sorts.
+
+variants:
+  alpha_17: σ-bucket rank of α_08 (abnormal MAX)
+  alpha_18: σ-bucket rank of α_05 (MAX × turnover)
+  alpha_19: σ-bucket rank of α_15 (jump count)
+  alpha_20: α_17 × α_19 interaction
+  alpha_21: fixed-threshold raw jump count (|r|>5%, up only)
+  alpha_22: fixed-threshold IDIO jump count (idio>3%)
+  alpha_23: TS-residualize top5 vs σ_20 per stock (full sample)
+  alpha_24: σ × turnover double-bucket rank of α_08
+
+headline:
+  alpha_22: {ls_full: 2.13, ls_test: 1.90, q5_ir_full: 1.93, resid_ic: 0.013, worst_year: 0.94}
+  alpha_21: {ls_full: 2.29, ls_test: 1.98, q5_ir_full: 1.34, resid_ic: 0.002, worst_year: 0.28}
+  alpha_24: {ls_full: 1.91, ls_test: 1.88, q5_ir_full: 1.38, resid_ic: 0.016, worst_year: 0.07}
+  alpha_17: {ls_full: 1.69, ls_test: 1.73, q5_ir_full: 1.16, resid_ic: 0.015, worst_year: -0.27}
+  alpha_23: {ls_full: 1.54, ls_test: 1.90, q5_ir_full: 0.51, resid_ic: 0.033, worst_year: 0.21}
+
+alphas_passed_all_audits: 0
+key_finding: |
+  α_22 (fixed-threshold IDIO jump count) has the best "almost passing" profile:
+  worst-year 0.94 (passes floor), but residual IC 0.013 vs IC 0.096 → 13.4%
+  preservation, below 30% bar.
+  α_23 (TS-residualize top5) passes residualization (34%) but worst-year 0.21.
+
+decision: iterate_to_round_4 (hybridize α_22 + α_23)

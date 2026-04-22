@@ -1,0 +1,39 @@
+{
+  "session_id": "20260422_trend_technical_alpha",
+  "agent": "hypothesis_architect -> alpha_builder",
+  "selected_mechanism": "trend_strength_multi_horizon",
+  "session_metadata": "logs/20260422_trend_technical_alpha/session_metadata.yml",
+  "build_constraints": {
+    "exactly_n_expressions": 8,
+    "must_share_one_mechanism": true,
+    "include_falsification_anchor": "alpha_08 = classic 12-1 momentum",
+    "all_use_adjusted_close": true,
+    "all_use_log_returns_for_target": true,
+    "no_use_of_future_data_in_factor_construction": true,
+    "industry_neutralization": "mandatory at evaluation time (Agent 4)",
+    "size_neutralization": "skip in batch 1"
+  },
+  "horizons_to_consider": [3, 5, 10, 20, 50, 60, 100, 120, 200, 252],
+  "target_horizons_to_evaluate": [5, 20, 60],
+  "primary_target_horizon": 20,
+  "expression_brief": [
+    "alpha_01: Han-Zhou-Zhu trend signal — z-score of mean(close_adj / MA_k) over k in {3,5,10,20,50,100,200}",
+    "alpha_02: 60d log-price linear regression t-stat (slope-t > 0 = persistent up-trend)",
+    "alpha_03: 120d log-price linear regression t-stat (longer horizon)",
+    "alpha_04: MA-crossover stack: sign(MA20-MA60) + sign(MA60-MA120) + sign(MA120-MA252), integer ∈ [-3,+3]",
+    "alpha_05: 252-day rolling close max proximity: close / rolling_max(close_adj, 252)",
+    "alpha_06: 60d positive-day fraction × sign(60d cum log-return)  (frog-in-the-pan flavored)",
+    "alpha_07: 120d trend Sharpe = mean(daily_log_ret_120) / std(daily_log_ret_120)",
+    "alpha_08: classic 12-1 momentum = sum(daily_log_ret) over t-252 to t-21  [FALSIFICATION ANCHOR]"
+  ],
+  "expected_turnover_direction": {
+    "alpha_01": "low (slow-moving)",
+    "alpha_02": "medium (slope estimate moves with new bars)",
+    "alpha_03": "low (longer window)",
+    "alpha_04": "low-medium (sign function changes infrequently)",
+    "alpha_05": "low (proximity to running max is sticky)",
+    "alpha_06": "medium",
+    "alpha_07": "medium",
+    "alpha_08": "low (1y window with skip-month)"
+  }
+}

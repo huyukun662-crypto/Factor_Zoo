@@ -1,0 +1,21 @@
+{
+  "execution_delay": {
+    "delay": 1,
+    "target_shift_invariant_satisfied": true,
+    "fwd_ret_formula": "ret.shift(-(1+delay)).rolling(K).sum().shift(-(K-1))",
+    "note": "Validated by construction; target uses only future bars relative to t."
+  },
+  "lookahead_construction": {
+    "all_alphas_use_only_past_bars": true,
+    "evidence": "alpha_01..alpha_08 use only rolling().mean()/sum()/std()/max() over [t-w+1..t] and OLS over closed past windows; never future bars."
+  },
+  "falsification_alpha_08_correlation_with_alpha_01_to_07": {
+    "alpha_01_vs_alpha_08": 0.38703670108139954,
+    "alpha_02_vs_alpha_08": 0.34472952203241036,
+    "alpha_03_vs_alpha_08": 0.5399686894182641,
+    "alpha_04_vs_alpha_08": 0.5880540762854771,
+    "alpha_05_vs_alpha_08": 0.5002971208534698,
+    "alpha_06_vs_alpha_08": 0.23633415305225317,
+    "alpha_07_vs_alpha_08": 0.5337611296673149
+  }
+}

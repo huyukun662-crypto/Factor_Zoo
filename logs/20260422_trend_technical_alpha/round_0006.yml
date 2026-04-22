@@ -1,0 +1,24 @@
+round: 6
+family: falsification_of_α_35
+mechanism: spec_sensitivity_and_placebo_for_dispersion_gate
+n_tests:
+  spec_variants: 7
+  placebo_random_gates: 100
+spec_sensitivity:
+  pass_count: 5_of_7_specs_passed_worst_year_floor
+  passing_variants:
+    - baseline_252d_med:  worst_year_active 0.63, ls_test 1.74, q5_test 1.03
+    - 126d_med:           worst_year_active 0.63, ls_test 2.29, q5_test 1.25
+    - 504d_med:           worst_year_active 0.51, ls_test 1.99, q5_test 1.13
+    - 252d_p60:           worst_year_active 1.24, ls_test 1.54, q5_test 1.22
+    - 252d_p70:           worst_year_active 1.00, ls_test 1.24, q5_test 1.19
+  failing_variants:
+    - 60d_med (too fast):  worst_year_active -1.26
+    - 252d_p40 (too loose): worst_year_active 0.28
+placebo_test:
+  α_35_ls_full: 1.22, placebo_max: 1.17, p_value: <0.01  # better than ALL 100 random
+  α_35_ls_test: 1.74, placebo_p95: 1.99, p_value: 0.09
+  α_35_q5_test: 1.03, placebo_p95: 1.25, p_value: 0.19
+  α_35_worst_year_active: 0.63, placebo_max: 0.19, p_value: <0.01  # ZERO random gates reached 0.5
+decision: PROMOTE_α_35_to_factor_library
+academic_basis: Stivers-Sun_2010_RFS_cross_sectional_return_dispersion_and_time_variation_in_value_and_momentum

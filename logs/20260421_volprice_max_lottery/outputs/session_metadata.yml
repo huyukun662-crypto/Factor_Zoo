@@ -1,0 +1,93 @@
+session_id: 20260421_volprice_max_lottery
+family: volume_price
+mechanism: lottery_demand_max_effect
+direction: short_high_max
+alpha_sign: negative
+
+market: A_share
+universe:
+  base: all_A
+  exclusions:
+    - ST / *ST stocks
+    - suspended on rebalance date
+    - listed <= 60 trading days (seasoning)
+    - circ_mv < 1e9 RMB (optional, tested as variant)
+
+data:
+  daily_prices:
+    source: tushare.daily
+    fields: [open, close, vol, amount]
+    note: no high/low available — MAX computed from daily close-to-close return
+  adj_factor:
+    source: tushare.adj_factor
+  market_cap:
+    source: tushare.daily_basic
+    fields: [total_mv, circ_mv]
+  industry:
+    source: tushare.stock_basic.industry (CITIC L1 proxy)
+    reused_from: logs/20260420_fundamental_accruals_alpha/panel.parquet
+
+period:
+  train: {start: "2018-01-02", end: "2022-12-31"}
+  validate: {start: "2023-01-01", end: "2023-12-31"}
+  test: {start: "2024-01-01", end: "2025-04-18"}
+  walk_forward: false
+
+preprocessing:
+  returns:
+    definition: ln(close_adj_t / close_adj_{t-1})
+    winsorize: [-0.105, 0.105]  # A-share daily limit
+  cross_section_per_date:
+    winsorize_raw_factor: [0.01, 0.99]
+    zscore: per trade_date after industry demean
+
+neutralization:
+  industry: mandatory (CITIC L1)
+  size: tested in Round 2 if needed
+
+forward_returns:
+  primary: fwd_ret_20 (monthly rebalance)
+  secondary: [fwd_ret_5, fwd_ret_60]
+  delay: 1  # signal at t-1, enter at t close
+  target_shift_invariant: -(1 + delay) = -2
+
+backtest:
+  rebalance_cadence_days: 20
+  quantiles: 5
+  weighting: equal_weight_within_quantile
+  cost_model:
+    type: turnover_aware
+    per_side_bps: 5  # 万5
+    charged_on: both_sides_of_long_short
+  reporting:
+    - ls_gross_sharpe
+    - ls_net_sharpe
+    - q5_long_only_excess_ir
+    - q1_long_only_excess_ir
+    - max_dd
+    - avg_turnover_per_rebalance
+    - ic_mean
+    - ic_ir
+    - annual_breakdown
+
+mandatory_audits_pre_promote:
+  - execution_delay_audit: target_shift == -(1+delay)
+  - look_ahead_audit: shuffle future bars → signal should collapse
+  - worst_year_sharpe_floor: 0.5
+  - best_year_out_sharpe: >= 0.5 * headline_sharpe
+  - falsification_check: randomize industry labels → signal should collapse
+  - residualization_check: vs ret_5, ret_20, log_mv, turnover_20
+
+pass_bar_for_promote:
+  ls_net_sharpe_full: 1.0
+  q5_long_only_excess_ir_full: 0.8
+  all_five_audits: pass
+
+rule_of_8:
+  mechanism: extreme recent return as proxy for lottery attention
+  variant_dimensions:
+    - window: 20 vs 60
+    - top_n_average: 1, 5, 10
+    - normalization: raw vs vol-scaled (Sharpe-like)
+    - attention_weighting: turnover multiplier
+  variants_must_share: alpha_sign = -1, monotonically increasing in "extremeness"

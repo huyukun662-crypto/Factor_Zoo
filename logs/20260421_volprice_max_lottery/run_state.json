@@ -1,0 +1,51 @@
+{
+  "session_id": "20260421_volprice_max_lottery",
+  "status": "complete",
+  "decision": "RESEARCH_ONLY",
+  "date_started": "2026-04-21",
+  "date_completed": "2026-04-21",
+  "family": "volume_price",
+  "rounds_completed": 6,
+  "total_alphas_tested": 28,
+  "alphas_passed_all_audits_apparent": 1,
+  "alphas_passed_all_audits_after_lookahead_validation": 0,
+  "cost_model": {"type": "turnover_aware", "bps_per_side": 5},
+  "data_window": {"start": "2018-01-02", "end": "2025-04-18", "train_validate_test": "2018-22 / 2023 / 2024+25YTD"},
+  "round_summary": [
+    {"round": 1, "family": "MAX_effect", "n": 8, "best": "alpha_08 LS 2.21", "failure": "residualization"},
+    {"round": 2, "family": "skewness", "n": 8, "best": "alpha_15 test 2.92", "failure": "residualization (α_15 is σ in disguise)"},
+    {"round": 3, "family": "σ_decoupled", "n": 8, "best": "alpha_22 LS 2.13", "failure": "residualization (13% preserved)"},
+    {"round": 4, "family": "hybrid_α22_α23", "n": 4, "best": "alpha_26 LS 2.92 apparent PASS", "failure": "lookahead bias (full-sample OLS)"},
+    {"round": 5, "family": "walk_forward_validation", "n": 3, "best": "alpha_31 LS 1.97", "failure": "residualization (28.7% of raw)"},
+    {"round": 6, "family": "construction_level_cs_residual", "n": 3, "best": "alpha_33 LS 1.98", "failure": "residualization (28.7%) OR worst_year (α_32)"}
+  ],
+  "best_candidate_after_honest_validation": {
+    "alpha": "alpha_33",
+    "definition": "industry-demean α_22 (fixed 3% idio jump count), then cross-section residualize vs {σ_20, ret_20, turnover_20} per date",
+    "ls_sharpe_full": 1.98,
+    "ls_sharpe_test": 1.13,
+    "q5_ir_full": 1.25,
+    "q5_ir_test": -0.01,
+    "worst_year_sharpe": 1.09,
+    "residual_ic_full_pct_of_raw": 0.287,
+    "audit_verdict": "residualization fails by 1.3 percentage points (28.7% vs 30% bar)"
+  },
+  "structural_finding": "In A-share 2018-2025, lottery demand signals exhibit an intrinsic tradeoff: preserving residual IC above 30% forces worst-year Sharpe below 0.5, and vice versa. No construction bypasses this tradeoff.",
+  "methodological_finding": "Full-sample time-series OLS per stock introduces lookahead bias. The apparent all-audit PASS for α_26 (2.92 Sharpe) was an artifact; honest walk-forward reduced Sharpe to 1.29.",
+  "deployed_to_factor_library": false,
+  "follow_on_queue": [
+    {"priority": "high", "session": "logs/20260421_fundamental_sue_pead_alpha", "rationale": "Bernard-Thomas 1989 PEAD — event-driven, orthogonal to both accruals and σ/reversal"},
+    {"priority": "high", "session": "logs/20260421_fundamental_gross_profitability", "rationale": "Novy-Marx 2013 — Liu-Stambaugh-Yuan 2019 shows uncrowded in A-share"},
+    {"priority": "medium", "session": "logs/2026XXXX_volprice_sreversal_ts", "rationale": "5-day reversal as PRIMARY signal (not a control) — may be the actual driver"}
+  ],
+  "continue_research": false,
+  "audits_passed_individually": {
+    "look_ahead": "28 / 28",
+    "falsification": "28 / 28",
+    "execution_delay": "28 / 28",
+    "worst_year_floor_0.5": "~8 / 28",
+    "loyo_50pct_of_headline": "~20 / 28",
+    "residualization_full_stack_30pct": "0 / 28 (closest: alpha_33 at 28.7%, alpha_34 at 27.1%)",
+    "residualization_AND_worst_year_simultaneously": "0 / 28"
+  }
+}
