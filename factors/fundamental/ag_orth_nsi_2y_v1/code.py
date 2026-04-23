@@ -22,7 +22,7 @@ import numpy as np
 import pandas as pd
 
 DEFAULT_CACHE = "/home/user/Factor_Zoo/.cache"
-DEFAULT_OUT   = "/home/user/Factor_Zoo/deploy/A-Share-Asset-Growth-NSI/picks"
+DEFAULT_OUT   = "/home/user/Factor_Zoo/factors/fundamental/ag_orth_nsi_2y_v1/picks"
 
 
 def log(m: str) -> None:

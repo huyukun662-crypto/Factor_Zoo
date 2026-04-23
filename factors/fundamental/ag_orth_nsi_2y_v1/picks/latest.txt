@@ -2,7 +2,7 @@ as_of: 2025-04-18
 factor: r3_ag_orth_nsi
 
 --- top100 (100 stocks) ---
-  file: /home/user/Factor_Zoo/deploy/A-Share-Asset-Growth-NSI/picks/picks_2025-04-18_top100.csv
+  file: /home/user/Factor_Zoo/factors/fundamental/ag_orth_nsi_2y_v1/picks/picks_2025-04-18_top100.csv
   median total_mv: 553472
   size_bin distribution: {'s1': 3, 's2': 21, 's3': 31, 's4': 33, 's5': 12}
   top10 industries:
@@ -19,7 +19,7 @@ industry
 机械基件    3
 
 --- q5 (731 stocks) ---
-  file: /home/user/Factor_Zoo/deploy/A-Share-Asset-Growth-NSI/picks/picks_2025-04-18_q5.csv
+  file: /home/user/Factor_Zoo/factors/fundamental/ag_orth_nsi_2y_v1/picks/picks_2025-04-18_q5.csv
   median total_mv: 640025
   size_bin distribution: {'s1': 33, 's2': 104, 's3': 237, 's4': 205, 's5': 152}
   top10 industries:

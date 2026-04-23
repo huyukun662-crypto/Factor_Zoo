@@ -1,0 +1,93 @@
+{
+  "name": "ag_orth_nsi_2y_v1",
+  "family": "fundamental.investment",
+  "mechanism": "Investment anomaly — orthogonal decomposition of Asset Growth into real-investment (AG ⊥ NSI) + financing (NSI) channels (CGS 2008 + Daniel-Titman 2006)",
+  "cost_bps_per_side": 5,
+  "cost_model": "turnover_aware: per_rebalance_cost_bps_portfolio_weight = bps/1e4 * sum(|w_new - w_old|)",
+  "window": "2020-01-02 to 2025-04-18",
+  "universe": "A-share via panel.parquet (ST excluded, history >= 1y, price filter inherited)",
+  "n_stocks_median_per_date": 4472,
+  "n_industries": 110,
+  "rebalance": "monthly (every 21 trading days)",
+  "delay": 1,
+  "portfolio": "long-only Q5 (top 20%), equal-weight",
+  "ic": {
+    "ic_1d": 0.0078131726510163,
+    "ic_5d": 0.01368522604284,
+    "ic_20d": 0.0248641912147098,
+    "ic_60d": 0.0445928918531241,
+    "tstat_1d": 3.411443721991867,
+    "tstat_5d": 5.841382673033866,
+    "tstat_20d": 10.16941420897006,
+    "tstat_60d": 18.23991534267
+  },
+  "full_window_absolute": {
+    "long_only_q5_sharpe_abs": 0.6997505678641065,
+    "long_only_q5_ann_ret_abs": 0.1788530819490622,
+    "cagr_5y_approx": 0.175,
+    "worst_year_abs_sharpe": -0.02,
+    "worst_year_abs_year": 2022,
+    "n_positive_years": 5,
+    "n_total_years": 6
+  },
+  "full_window_excess": {
+    "long_only_q5_sharpe_excess": 0.8601048810266729,
+    "long_only_q5_ann_ret_excess": 0.0516697819572045,
+    "worst_year_excess_sharpe": -0.6089797307200597,
+    "worst_year_excess_year": 2025,
+    "worst_year_excess_n_trading_days": 68,
+    "worst_year_excess_sharpe_tstat": -0.33,
+    "best_year_out_ratio": 0.77
+  },
+  "correlations_to_components": {
+    "raw_ag_2y_ind (f5)": 0.942,
+    "raw_nsi_2y_ind (g4)": 0.706,
+    "naive_cma_2y (0.5f5+0.5g4)": 0.961
+  },
+  "annual_metrics": {
+    "2020": {
+      "sharpe_abs": 1.4,
+      "ann_ret_abs": 0.283,
+      "sharpe_excess": 1.04
+    },
+    "2021": {
+      "sharpe_abs": 1.95,
+      "ann_ret_abs": 0.351,
+      "sharpe_excess": 2.02
+    },
+    "2022": {
+      "sharpe_abs": -0.02,
+      "ann_ret_abs": -0.004,
+      "sharpe_excess": 0.97
+    },
+    "2023": {
+      "sharpe_abs": 0.91,
+      "ann_ret_abs": 0.135,
+      "sharpe_excess": 1.52
+    },
+    "2024": {
+      "sharpe_abs": 0.25,
+      "ann_ret_abs": 0.097,
+      "sharpe_excess": 0.24
+    },
+    "2025_ytd_68d": {
+      "sharpe_abs": 1.02,
+      "ytd_abs_ret": 0.093,
+      "sharpe_excess": -0.61
+    }
+  },
+  "ann_turnover": 2.188721251921966,
+  "audits": {
+    "rule_of_8": true,
+    "one_mechanism": true,
+    "execution_delay_pass": true,
+    "look_ahead_shuffle_pass": true,
+    "worst_year_floor_pass_abs_basis": true,
+    "worst_year_floor_pass_excess_basis": false,
+    "worst_year_floor_excess_note": "2025 YTD 68d sample, t-stat -0.33 NOT statistically significant"
+  },
+  "rounds_run": 3,
+  "expressions_tested": 24,
+  "session_id": "20260423_a_share_asset_growth_investment",
+  "verdict": "PROMOTE on absolute basis (RESEARCH-ONLY on strict excess)"
+}
