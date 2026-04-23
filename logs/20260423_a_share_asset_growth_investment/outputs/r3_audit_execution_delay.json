@@ -1,0 +1,5 @@
+{
+  "future_perturbation_test": "PASSED",
+  "delay": 1,
+  "invariant": "fwd_ret_1 at t = close_{t+1}/close_t - 1"
+}
