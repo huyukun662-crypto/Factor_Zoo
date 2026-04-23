@@ -1,0 +1,23 @@
+# Cache / data files (regenerate with scripts)
+data_cache/*.parquet
+data_cache/*.log
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+.venv/
+venv/
+.ipynb_checkpoints/
+
+# Editors
+.vscode/
+.idea/
+*.swp
+.DS_Store
+
+# Secrets
+.env
+.secrets/
+*.token
