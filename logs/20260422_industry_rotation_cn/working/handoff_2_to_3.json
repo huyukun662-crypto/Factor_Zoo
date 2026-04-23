@@ -1,0 +1,57 @@
+{
+  "from_agent": "2_hypothesis_architect",
+  "to_agent": "3_alpha_builder",
+  "session": "20260422_industry_rotation_cn",
+  "three_batches_required": true,
+  "batches": [
+    {
+      "batch_id": "0001",
+      "family": "A_penalized",
+      "specs": [
+        {"name": "A1_lam0_5_mom4w_turn4w",  "score": "z(mom_4w) - 0.5*z(turn_4w)"},
+        {"name": "A2_lam1_0_mom4w_turn4w",  "score": "z(mom_4w) - 1.0*z(turn_4w)"},
+        {"name": "A3_lam1_5_mom4w_turn4w",  "score": "z(mom_4w) - 1.5*z(turn_4w)"},
+        {"name": "A4_lam1_0_mom8w_turn4w",  "score": "z(mom_8w) - 1.0*z(turn_4w)"},
+        {"name": "A5_lam1_0_mom12w_turn4w", "score": "z(mom_12w) - 1.0*z(turn_4w)"},
+        {"name": "A6_lam1_0_mom4w_turn8w",  "score": "z(mom_4w) - 1.0*z(turn_8w)"},
+        {"name": "A7_lam1_0_mom4w_turn4w_breadth", "score": "z(mom_4w) - 1.0*z(turn_4w) + 0.3*breadth"},
+        {"name": "A8_lam0_0_mom4w_pure_mom", "score": "z(mom_4w)   // pure momentum baseline"}
+      ],
+      "common": {"holding": "top-3 long-only equal weight", "rebalance": "weekly", "delay": 1, "cost_bps": 5}
+    },
+    {
+      "batch_id": "0002",
+      "family": "B_layered",
+      "specs": [
+        {"name": "B1_mom4w_K10_turn4w",  "step1": "rank mom_4w desc, keep top 10",  "step2": "within, rank turn_4w asc, keep top 3"},
+        {"name": "B2_mom4w_K8_turn4w",   "step1": "top 8",  "step2": "turn_4w asc top 3"},
+        {"name": "B3_mom4w_K14_turn4w",  "step1": "top 14", "step2": "turn_4w asc top 3"},
+        {"name": "B4_mom8w_K10_turn4w",  "step1": "mom_8w top 10",  "step2": "turn_4w asc top 3"},
+        {"name": "B5_mom12w_K10_turn4w", "step1": "mom_12w top 10", "step2": "turn_4w asc top 3"},
+        {"name": "B6_mom4w_K10_turn8w",  "step1": "mom_4w top 10",  "step2": "turn_8w asc top 3"},
+        {"name": "B7_mom4w_K10_turn4w_breadth", "step1": "mom_4w top 10", "step2": "turn_4w + breadth blend asc top 3"},
+        {"name": "B8_mom4w_K10_turnratio",  "step1": "mom_4w top 10", "step2": "turn_4w / turn_52w (crowding delta) asc top 3"}
+      ],
+      "common": {"holding": "top-3 long-only equal weight", "rebalance": "weekly", "delay": 1, "cost_bps": 5}
+    },
+    {
+      "batch_id": "0003",
+      "family": "C_reversal",
+      "specs": [
+        {"name": "C1_rev1w",  "score": "-mom_1w"},
+        {"name": "C2_rev2w",  "score": "-mom_2w"},
+        {"name": "C3_rev3w",  "score": "-mom_3w"},
+        {"name": "C4_rev4w",  "score": "-mom_4w"},
+        {"name": "C5_rev2w_crowdx",  "score": "-mom_2w * (1 + 0.5*z(turn_2w))"},
+        {"name": "C6_rev4w_crowdx",  "score": "-mom_4w * (1 + 0.5*z(turn_4w))"},
+        {"name": "C7_rev2w_topbot",  "score": "buy bottom-3 by mom_2w (long-only)"},
+        {"name": "C8_rev2w_LS",      "score": "long bottom-3, short top-3 (long-short)"}
+      ],
+      "common": {"holding": "top-3 long-only unless noted", "rebalance": "weekly", "delay": 1, "cost_bps": 5}
+    }
+  ],
+  "next_steps_for_agent3": [
+    "Write expressions_batch_0001.md / _0002.md / _0003.md (precise formulas, Python-runnable pseudocode)",
+    "Hand to Agent 4 for backtest"
+  ]
+}

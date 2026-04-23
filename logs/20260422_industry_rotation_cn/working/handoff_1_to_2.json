@@ -1,0 +1,32 @@
+{
+  "from_agent": "1_research_librarian",
+  "to_agent": "2_hypothesis_architect",
+  "session": "20260422_industry_rotation_cn",
+  "task": "A-share industry rotation, weekly rebalance, capture phase leader + high-low switch",
+  "universe": {
+    "taxonomy": "CITIC/SW L1 (~28-30 industries)",
+    "construction": "stock-level cache aggregated by circ_mv weighting",
+    "source_cache": ["/home/user/Factor_Zoo/.cache/daily.parquet", "/home/user/Factor_Zoo/.cache/daily_basic.parquet", "/home/user/Factor_Zoo/.cache/adj_factor.parquet"],
+    "industry_map_todo": "fetch tushare index_classify(level='L1') OR map 110 fine → 30 L1"
+  },
+  "sample": {"start": "2018-01-02", "end": "2026-04-22", "freq": "daily → weekly", "snapshot_day": "Friday close"},
+  "conventions": {"delay": 1, "rebalance_days": 5, "cost_bps_per_side": 5, "top_n_hold": 3},
+  "hypotheses": [
+    {"id": "A_penalized", "formula_concept": "z(mom_4w) - lambda * z(turnover_20d) + mu * breadth", "params_grid": ["lambda", "mu", "mom_lookback", "turnover_lookback"]},
+    {"id": "B_layered", "formula_concept": "select top-10 by mom, then top-3 by -turnover", "params_grid": ["mom_filter_size", "mom_lookback", "turnover_lookback"]},
+    {"id": "C_reversal", "formula_concept": "-mom_short (1w/2w/4w), optionally * crowd_amplifier", "params_grid": ["reversal_lookback", "crowd_amplifier_on"]}
+  ],
+  "audits_required": [
+    "execution_delay (target_shift == -(1+delay))",
+    "lookahead (randomize future bars)",
+    "worst_year_sharpe >= 0.5",
+    "best_year_out_sharpe >= 50% of full",
+    "placebo 100 trials"
+  ],
+  "next_steps_for_agent2": [
+    "Define precise spec-space per variant (8 specs each)",
+    "Decide on long-only vs long-short per variant",
+    "Decide on market-state gate (binary breadth filter)",
+    "Write session_metadata.yml"
+  ]
+}
