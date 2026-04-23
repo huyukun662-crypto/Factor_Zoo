@@ -437,3 +437,141 @@ Before running any LS backtest, compute IC at horizons {1, 5, 10, 20}.
 If IC is flat or increasing, default to monthly rebalance and skip
 the daily LS entirely — it's misleading. Report "monthly Q5 long-only
 excess" as the PRIMARY metric and "daily LS" as a diagnostic only.
+
+---
+
+## Pitfall 11 — Silent zero-signal backtest (script runs, strategy doesn't)
+
+### Symptom
+The backtest completes without exception, numbers appear in the output,
+but on inspection:
+- Q5 has 3 stocks per day instead of 100
+- The same 5 stocks fill Q5 for 800 consecutive trading days
+- Signal cross-section std is 0 on 40% of days
+- Turnover is 2% annualized (essentially buy-and-hold on a few names)
+
+The headline Sharpe may still print a plausible number (e.g., 0.7) because
+Sharpe is well-defined on any non-degenerate return series — but the
+"strategy" is actually a near-static basket of whatever few stocks
+survived the filters.
+
+### Why it happens
+This is the LLM-quant failure class recently quantified by QuantCode-Bench:
+roughly 17.8% of one-shot generated backtests run to completion but
+produce economically degenerate portfolios. Typical causes:
+- Staleness filter too tight (e.g., `staleness_days ≤ 30` when annual
+  reports publish at 90-180 day intervals → most stocks drop out)
+- Multiple `and`-chained filters where each is reasonable but the
+  intersection is empty (e.g., "total_mv > median AND turnover > median
+  AND ST-excluded AND has-8q-history" can leave < 100 stocks)
+- Neutralization against an industry with only 3 stocks makes the
+  within-industry z-score undefined → entire industry drops
+- Winsor-then-cross-section-z with an all-equal input produces 0/0 → NaN
+  cascades
+
+### Economic impact
+Worse than a negative result: a zero-signal backtest with plausible
+headline numbers actively wastes the next round. Agent 5 builds a
+decision on noise, Agent 1 next round starts from a phantom mechanism.
+
+### How to catch
+**Use `references/validation-gates.md` Gate G3.** Non-negotiable
+invariants:
+- Q5 membership size ≥ 30 on ≥ 95% of days
+- Unique names ever in Q5 ≥ 3× portfolio size
+- Signal cross-section std > 0 on ≥ 99% of days
+- Annual turnover between 10% and 2000%
+
+Plot the Q5 vs Q1 cumulative line. If Q5-Q1 is flat or noisy across the
+full window while headline Sharpe prints 0.5+, you are in zero-signal
+territory regardless of the numbers.
+
+### Fix
+- Relax filters in dependency order: start from the universe, remove one
+  filter at a time, re-measure Q5 size, keep going until Q5 size ≥ 30.
+- If the signal has structural zeros (e.g., no report for a stock), use
+  `merge_asof(direction="backward")` with a bounded staleness, not a
+  strict equality join.
+- Never rank a cross-section with < 30 non-NaN values — use the previous
+  valid date's ranking or mark the day as "no trade" explicitly.
+
+---
+
+## Pitfall 12 — Panel-pandas semantic traps (framework-specific gotchas)
+
+### Symptom
+The code looks right to a Python reader but does the wrong thing at the
+panel level. The backtest runs, the numbers are different from what the
+author intended, and the bug is invisible without explicit verification.
+
+### The specific traps
+
+#### 12.1 `shift(-k)` is the FUTURE, `shift(+k)` is the PAST
+- `ret.shift(-1)` at date `t` is `ret[t+1]` — uses information from
+  tomorrow to fill today's row. This is the standard way to build a
+  target, and the standard way to accidentally create look-ahead on
+  features. See Pitfall 2.
+
+#### 12.2 `merge_asof(direction=...)` sign convention
+- `direction="backward"` (default) matches the latest LEFT key ≤ RIGHT
+  key. For PIT fundamentals: use backward with `by="ts_code"`.
+- `direction="forward"` matches the earliest LEFT key ≥ RIGHT key —
+  this is look-ahead for fundamentals joins.
+- `direction="nearest"` will silently pick future data if it's closer
+  in time than past data. Never use `nearest` for PIT joins.
+
+#### 12.3 `groupby().transform()` vs `apply()`
+- `transform` broadcasts back to the original index shape; use for
+  "demean within industry per date".
+- `apply` can return aggregated (one row per group) or broadcast
+  (one row per input row) — the difference silently changes the result
+  shape. For cross-sectional demean, `transform` is always correct.
+
+#### 12.4 `rolling(window).mean()` with `min_periods=None`
+- Default `min_periods = window` — first `window-1` rows are NaN.
+- Setting `min_periods=1` fills early periods with partial windows,
+  which is usually WHAT YOU WANT for a signal but WHAT YOU DON'T WANT
+  for an IC decay chart (the partial windows have different statistical
+  properties).
+- Be explicit in both cases; never rely on the default.
+
+#### 12.5 `np.polyfit` with NaN inputs
+- Returns `array([nan, nan])` silently, then your residualization returns
+  all-NaN, then winsor-then-zscore returns all-zero, then your "signal"
+  is a constant. Always `dropna()` before `polyfit` and handle the
+  "not enough points" case explicitly (see `build_signal` in
+  `factors/fundamental/ag_orth_nsi_2y_v1/code.py` for an example).
+
+#### 12.6 Winsorize at `quantile(0.01, 0.99)` on all-equal input
+- Produces `lo == hi`, then `clip(lo, hi)` collapses everything to a
+  constant, then z-score divides by zero → NaN everywhere. Always
+  check `std > 0` before z-scoring.
+
+#### 12.7 Timezone-naive vs timezone-aware timestamps
+- `pd.Timestamp("2025-04-01")` is naive. Mixing with timezone-aware
+  timestamps from some Tushare endpoints raises TypeError in `merge_asof`
+  or silently misaligns in join operations. Normalize both sides
+  with `.tz_localize(None)` at the boundary.
+
+#### 12.8 Industry column dtype
+- If industry has both `"银行"` (string) and `nan` (float) values,
+  `groupby("industry")` drops the NaN rows silently. For neutralization,
+  this means stocks with missing industry are dropped from the cross
+  section entirely — check coverage explicitly before groupby.
+
+### How to catch
+- Every panel-pandas bug in the list above passes G1 and G2 but fails
+  G3 or G4 in `validation-gates.md`. Run those gates.
+- Keep a "panel diff" unit: feed the expression the same panel, flip one
+  assumption (e.g., `shift(+1)` vs `shift(-1)`), and check the sign of
+  the IC flips. If it doesn't, either the signal is symmetric (rare) or
+  one of your shifts is silently no-op.
+
+### Fix
+- Use `merge_asof(direction="backward", by="ts_code")` as the default
+  PIT join; add a staleness filter as a separate step.
+- Use `groupby.transform("median")` for cross-sectional demeans.
+- Explicitly set `min_periods` on every `rolling()`.
+- Always wrap winsor+z in a guard: if `std == 0 or sample < 30`, return
+  the input unchanged (or NaN) rather than producing a fake signal.
+- Normalize timestamps at the cache boundary, not at the backtest boundary.

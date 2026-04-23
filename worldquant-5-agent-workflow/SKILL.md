@@ -155,6 +155,40 @@ Translate the original repository into this 5-agent split:
 - If backtests fail due to syntax or invalid operators, fix the expressions before retrying.
 - If results are mediocre, explain whether the issue is mechanism weakness, implementation weakness, or parameter mismatch.
 
+## Core operating principle — reasoning separated from execution
+
+This workflow treats the LLM as a **quant researcher / factor generator**,
+not as a trader or execution engine. Alpha Builder produces auditable
+expressions; Backtest Operator runs them through a deterministic harness;
+Evaluator ranks. No agent in this workflow places real orders, and no
+agent's output is treated as a black box.
+
+This separation is load-bearing. Independent benchmarks (AlphaForgeBench
+2026, QuantCode-Bench 2026) show that LLMs used as direct traders behave
+neurotically and inconsistently, while LLMs used as factor generators
+inside a harness with structured error feedback can reach 95%+ pass
+rates. Preserve the split: never let Agent 3 decide "just go with
+this one", never let Agent 5 send live orders.
+
+## Pre-Agent-5 validation gates (added after real mistakes)
+
+Before Agent 4 hands anything to Agent 5, every expression in the batch
+must pass the 4-stage funnel in `references/validation-gates.md`:
+
+- **G1 Importable** — syntax, column names, endpoint names
+- **G2 Runs end-to-end** — no exception on the full backtest loop
+- **G3 Non-degenerate** — Q5 size ≥ 30 on ≥ 95% of days, turnover in
+  [10%, 2000%] annualized, signal dispersion > 0 on ≥ 99% of days, unique
+  Q5 names ≥ 3× portfolio size. This gate is the one that catches
+  **silent zero-signal backtests** — the single most expensive class of
+  LLM-quant bug because it looks like success.
+- **G4 Fidelity** — IC sign matches thesis, deciles approximately
+  monotonic, factor is not a trivial clone of size / momentum / EW-return.
+
+If any gate fails, enter the retry loop between Agent 3 and Agent 4
+(budget: 5 rounds per expression, structured error payload, no silent
+threshold loosening). See `references/execution-plan.md` Step 4b.
+
 ## Mandatory audit rules (added after real mistakes — see `references/common-pitfalls.md`)
 
 Never issue a PROMOTE / paper-trading recommendation without:
@@ -216,7 +250,9 @@ Read `references/openclaw-call-examples.md` when you want near-real tool-call ex
 
 Read `references/automation-approval-strategy.md` when you want to reduce repeated approvals and make run-mode automation smoother in practice.
 
-Read `references/common-pitfalls.md` BEFORE any Stage 4 evaluation. It catalogues the real mistakes that have occurred in past runs (look-ahead masks, mislabeled delay, fake "N/N positive years" validation, A-share limit-day tail asymmetry, confirmation-first research, IC-vs-LS dispersion trap, bull-market short-leg destruction, industry noise eating signal, hidden classic-factor exposure, daily turnover cost trap). Every backtest submission must pass the checks this file describes.
+Read `references/common-pitfalls.md` BEFORE any Stage 4 evaluation. It catalogues the real mistakes that have occurred in past runs (look-ahead masks, mislabeled delay, fake "N/N positive years" validation, A-share limit-day tail asymmetry, confirmation-first research, IC-vs-LS dispersion trap, bull-market short-leg destruction, industry noise eating signal, hidden classic-factor exposure, daily turnover cost trap, silent zero-signal backtests, panel-pandas semantic traps). Every backtest submission must pass the checks this file describes.
+
+Read `references/validation-gates.md` BEFORE Agent 4 submits anything to Agent 5. This is the 4-stage funnel (G1 import → G2 run → G3 non-degenerate → G4 fidelity) plus the 5-round structured-error retry loop between Agent 3 and Agent 4. Gates G3/G4 catch the silent-failure classes that common-pitfalls.md documents post-hoc.
 
 Read `references/execution-delay-audit.md` BEFORE any Stage 4 submission. This is the mandatory pre-submission checklist: physical execution timeline, future-perturbation invariance test, target-mask provenance audit, IC decay by delay, and the standardized delay-aware API. Without this audit, Agent 5 must reject the submission.
 

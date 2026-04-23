@@ -121,14 +121,56 @@ Input source:
 Expected output:
 - `outputs/backtest_results_batch_0001.md`
 - backtest section in `round_0001.yml`
-- `working/handoff_4_to_5.json`
+- `working/handoff_4_to_5.json` including per-expression gate table
+  (see `references/validation-gates.md`)
 
-Validation before next step:
-- validation result recorded
-- if submitted, status or result recorded
-- if failed, explicit failure reason recorded
+Validation before next step — run the 4-gate funnel from
+`references/validation-gates.md`:
 
-After validation succeeds:
+- G1 Importable & syntactically sound
+- G2 Runs end-to-end without exception
+- G3 Non-degenerate backtest (Q5 size, turnover, signal dispersion, unique
+  names — this is the gate that catches silent zero-signal backtests,
+  the single highest-cost failure class)
+- G4 Behavioral fidelity (IC sign matches thesis, monotonic deciles, not
+  a classic-factor clone)
+
+If ANY expression fails ANY gate, do NOT proceed to Step 5. Invoke the
+repair loop below.
+
+#### Step 4b — Repair loop (Agent 3 ↔ Agent 4)
+
+The benchmark data is explicit: one-shot Agent 3 output passes all gates
+on roughly 75% of expressions; up to 5 rounds of structured-error
+feedback pushes that to ~95%. Use the budget.
+
+Procedure per failing expression:
+
+1. Agent 4 writes `working/agent4_repair_NNNN.json` with `retry_round`,
+   `expression_id`, `failed_gate`, `invariant`, `observed`, `threshold`,
+   `diagnostic_snippet`, `suspected_cause`, `suggested_fix`. Schema in
+   `validation-gates.md`.
+2. Agent 3 returns a revised expression (same `id`, incremented
+   `retry_round`). Not a brand-new mechanism.
+3. Agent 4 re-runs gates G1–G4 on the revised expression only.
+4. Repeat until pass OR retry_count reaches 5.
+
+Stop conditions:
+- 2 consecutive retries fail the same gate on the same invariant →
+  escalate to Agent 5 for a round-level decision (pivot mechanism,
+  change horizon, drop the expression).
+- retry_count ≥ 5 → mark expression RESEARCH-ONLY; do not present as
+  a candidate to Agent 5.
+
+What NOT to do in the repair loop:
+- Do not lower the gate thresholds in `validation-gates.md` to make
+  a failing expression pass.
+- Do not silently drop failing expressions to preserve the "8 expressions"
+  Rule of 8. Better to return a batch of 5 + 3 RESEARCH-ONLY than a batch
+  of 8 with 3 silently corrupted.
+- Do not swap to a different mechanism mid-retry — that is a new batch.
+
+After all gates pass (or retry budgets exhaust):
 - call `C:\Users\Hu\.openclaw\workspace-evaluator\scripts\worldquant_stage_notify.py --stage 4 --title "Stage 4 complete" --summary "Backtest validation and result capture are complete." --session-id <session_id> --artifact <session_folder>\outputs\backtest_results_batch_0001.md`
 
 ### Step 5 — Run Evaluator & Recorder
