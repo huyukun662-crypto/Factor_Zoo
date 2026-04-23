@@ -59,8 +59,11 @@
 | 因子 | 类别 | LS Sharpe (净万5) | Q5 IR (净万5) | Max DD | 状态 |
 |------|------|------------------:|--------------:|-------:|:----:|
 | [`accruals_median_ttm_ind_neutral_v2`](factors/fundamental/accruals_median_ttm_ind_neutral_v2/) | `fundamental.quality` | **1.34** | **1.13** | −1.85% | DEPLOYED |
+| [`ag_orth_nsi_2y_v1`](factors/fundamental/ag_orth_nsi_2y_v1/) | `fundamental.investment` | — (long-only) | **Abs Sharpe 0.70 / CAGR 17.5%** | — | PROMOTE |
 
-(基于 A 股 2018-2025,5,285 只股票,82 次月度再平衡,5 bps 单边手续费,turnover-aware 成本模型)
+(accruals 基于 A 股 2018-2025,5,285 只股票,82 次月度再平衡,5 bps 单边手续费,turnover-aware 成本模型)
+(ag_orth_nsi_2y_v1 基于 A 股 2020-2025,~4,500 只股票,月度再平衡,5 bps/side,定位 long-only 绝对回报产品;
+ 5/6 年正收益, 最差年 2022 -0.4%, 2025 YTD 68 天 +9.3% 实际回报; 严格 excess 口径下 2025 YTD Sharpe -0.61, 68天样本t不显著)
 
 ## 研究记录 (RESEARCH-ONLY)
 
