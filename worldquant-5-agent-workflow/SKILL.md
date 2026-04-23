@@ -173,21 +173,27 @@ this one", never let Agent 5 send live orders.
 ## Pre-Agent-5 validation gates (added after real mistakes)
 
 Before Agent 4 hands anything to Agent 5, every expression in the batch
-must pass the 4-stage funnel in `references/validation-gates.md`:
+must pass the funnel in `references/validation-gates.md`:
 
 - **G1 Importable** — syntax, column names, endpoint names
 - **G2 Runs end-to-end** — no exception on the full backtest loop
 - **G3 Non-degenerate** — Q5 size ≥ 30 on ≥ 95% of days, turnover in
   [10%, 2000%] annualized, signal dispersion > 0 on ≥ 99% of days, unique
-  Q5 names ≥ 3× portfolio size. This gate is the one that catches
-  **silent zero-signal backtests** — the single most expensive class of
-  LLM-quant bug because it looks like success.
+  Q5 names ≥ 3× portfolio size, **net Sharpe at declared cost > -0.5**
+  (direct Pitfall 10 check added after 20260423 BTC dogfood).
+  This gate catches **silent zero-signal backtests** and cost-unviable
+  factors — two of the most expensive LLM-quant failure classes.
 - **G4 Fidelity** — IC sign matches thesis, deciles approximately
   monotonic, factor is not a trivial clone of size / momentum / EW-return.
+- **G5 Batch-level horizon consistency** (meta-gate, run after G1–G4) —
+  if ≥ 4 of 8 surviving expressions peak at a different horizon than
+  Agent 2 declared, the failure is at Agent 2 (wrong horizon), not Agent
+  3. Return batch to Agent 2 for hypothesis revision.
 
 If any gate fails, enter the retry loop between Agent 3 and Agent 4
 (budget: 5 rounds per expression, structured error payload, no silent
-threshold loosening). See `references/execution-plan.md` Step 4b.
+threshold loosening). G5 failures do NOT retry — they escalate to Agent 2.
+See `references/execution-plan.md` Step 4b.
 
 ## Mandatory audit rules (added after real mistakes — see `references/common-pitfalls.md`)
 

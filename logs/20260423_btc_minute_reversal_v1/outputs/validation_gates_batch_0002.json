@@ -1,0 +1,542 @@
+{
+  "per_expression": {
+    "r2_rev_15m": {
+      "G1": true,
+      "G2": true,
+      "G3": {
+        "passed": false,
+        "checks": {
+          "coverage": {
+            "pass": true,
+            "observed": 0.9998263486918268,
+            "threshold": 0.95,
+            "desc": "non-NaN fraction"
+          },
+          "std_nonzero": {
+            "pass": true,
+            "observed": true,
+            "threshold": true,
+            "desc": "signal std > 0"
+          },
+          "trade_freq_per_hour_ok": {
+            "pass": true,
+            "observed": 2.331843756512075,
+            "threshold": 4.0,
+            "desc": "trades/hour \u2264 4 (tightened w/ hold)"
+          },
+          "net_sharpe_not_wipeout": {
+            "pass": false,
+            "observed": -28.035877260150684,
+            "threshold": -0.5,
+            "desc": "G3 NEW: net Sharpe at 5 bps > -0.5"
+          },
+          "flat_frac_sane": {
+            "pass": true,
+            "observed": 0.6927297985644825,
+            "threshold": 0.9,
+            "desc": "not always flat"
+          }
+        }
+      },
+      "G4": {
+        "passed": true,
+        "ic_primary": 0.013137058295379787,
+        "ic_60m": 0.0016892643125838056,
+        "checks": {
+          "ic_sign": {
+            "pass": true,
+            "observed": 0.013137058295379787,
+            "desc": "IC sign positive"
+          },
+          "decile_dir": {
+            "pass": true,
+            "observed": 0.00015291133007186794,
+            "desc": "D10 > D1"
+          },
+          "horizon_decay": {
+            "pass": true,
+            "observed": 0.011447793982795981,
+            "desc": "|IC_15m| >= |IC_60m|"
+          }
+        }
+      }
+    },
+    "r2_rev_30m": {
+      "G1": true,
+      "G2": true,
+      "G3": {
+        "passed": false,
+        "checks": {
+          "coverage": {
+            "pass": true,
+            "observed": 0.9996526973836536,
+            "threshold": 0.95,
+            "desc": "non-NaN fraction"
+          },
+          "std_nonzero": {
+            "pass": true,
+            "observed": true,
+            "threshold": true,
+            "desc": "signal std > 0"
+          },
+          "trade_freq_per_hour_ok": {
+            "pass": true,
+            "observed": 1.655977216420848,
+            "threshold": 4.0,
+            "desc": "trades/hour \u2264 4 (tightened w/ hold)"
+          },
+          "net_sharpe_not_wipeout": {
+            "pass": false,
+            "observed": -21.690914572603898,
+            "threshold": -0.5,
+            "desc": "G3 NEW: net Sharpe at 5 bps > -0.5"
+          },
+          "flat_frac_sane": {
+            "pass": true,
+            "observed": 0.7392451956471405,
+            "threshold": 0.9,
+            "desc": "not always flat"
+          }
+        }
+      },
+      "G4": {
+        "passed": true,
+        "ic_primary": 0.010135907798350564,
+        "ic_60m": -0.002959039497636277,
+        "checks": {
+          "ic_sign": {
+            "pass": true,
+            "observed": 0.010135907798350564,
+            "desc": "IC sign positive"
+          },
+          "decile_dir": {
+            "pass": true,
+            "observed": 0.00014395360256057462,
+            "desc": "D10 > D1"
+          },
+          "horizon_decay": {
+            "pass": true,
+            "observed": 0.007176868300714287,
+            "desc": "|IC_15m| >= |IC_60m|"
+          }
+        }
+      }
+    },
+    "r2_rev_45m": {
+      "G1": true,
+      "G2": true,
+      "G3": {
+        "passed": false,
+        "checks": {
+          "coverage": {
+            "pass": true,
+            "observed": 0.9994790460754804,
+            "threshold": 0.95,
+            "desc": "non-NaN fraction"
+          },
+          "std_nonzero": {
+            "pass": true,
+            "observed": true,
+            "threshold": true,
+            "desc": "signal std > 0"
+          },
+          "trade_freq_per_hour_ok": {
+            "pass": true,
+            "observed": 1.400356572275348,
+            "threshold": 4.0,
+            "desc": "trades/hour \u2264 4 (tightened w/ hold)"
+          },
+          "net_sharpe_not_wipeout": {
+            "pass": false,
+            "observed": -19.5327783354462,
+            "threshold": -0.5,
+            "desc": "G3 NEW: net Sharpe at 5 bps > -0.5"
+          },
+          "flat_frac_sane": {
+            "pass": true,
+            "observed": 0.7533688353785598,
+            "threshold": 0.9,
+            "desc": "not always flat"
+          }
+        }
+      },
+      "G4": {
+        "passed": false,
+        "ic_primary": 0.002139741401679122,
+        "ic_60m": -0.00652285126380223,
+        "checks": {
+          "ic_sign": {
+            "pass": true,
+            "observed": 0.002139741401679122,
+            "desc": "IC sign positive"
+          },
+          "decile_dir": {
+            "pass": true,
+            "observed": 0.0001266679282461786,
+            "desc": "D10 > D1"
+          },
+          "horizon_decay": {
+            "pass": false,
+            "observed": -0.004383109862123108,
+            "desc": "|IC_15m| >= |IC_60m|"
+          }
+        }
+      }
+    },
+    "r2_rev_60m": {
+      "G1": true,
+      "G2": true,
+      "G3": {
+        "passed": false,
+        "checks": {
+          "coverage": {
+            "pass": true,
+            "observed": 0.9993053947673073,
+            "threshold": 0.95,
+            "desc": "non-NaN fraction"
+          },
+          "std_nonzero": {
+            "pass": true,
+            "observed": true,
+            "threshold": true,
+            "desc": "signal std > 0"
+          },
+          "trade_freq_per_hour_ok": {
+            "pass": true,
+            "observed": 1.232258213897057,
+            "threshold": 4.0,
+            "desc": "trades/hour \u2264 4 (tightened w/ hold)"
+          },
+          "net_sharpe_not_wipeout": {
+            "pass": false,
+            "observed": -14.067204402294333,
+            "threshold": -0.5,
+            "desc": "G3 NEW: net Sharpe at 5 bps > -0.5"
+          },
+          "flat_frac_sane": {
+            "pass": true,
+            "observed": 0.7617504051863857,
+            "threshold": 0.9,
+            "desc": "not always flat"
+          }
+        }
+      },
+      "G4": {
+        "passed": false,
+        "ic_primary": 0.001770999259257406,
+        "ic_60m": -0.00231099992610167,
+        "checks": {
+          "ic_sign": {
+            "pass": true,
+            "observed": 0.001770999259257406,
+            "desc": "IC sign positive"
+          },
+          "decile_dir": {
+            "pass": true,
+            "observed": 0.00018714347515827725,
+            "desc": "D10 > D1"
+          },
+          "horizon_decay": {
+            "pass": false,
+            "observed": -0.000540000666844264,
+            "desc": "|IC_15m| >= |IC_60m|"
+          }
+        }
+      }
+    },
+    "r2_rev_15m_volscale": {
+      "G1": true,
+      "G2": true,
+      "G3": {
+        "passed": false,
+        "checks": {
+          "coverage": {
+            "pass": true,
+            "observed": 0.9998263486918268,
+            "threshold": 0.95,
+            "desc": "non-NaN fraction"
+          },
+          "std_nonzero": {
+            "pass": true,
+            "observed": true,
+            "threshold": true,
+            "desc": "signal std > 0"
+          },
+          "trade_freq_per_hour_ok": {
+            "pass": true,
+            "observed": 2.985482414503693,
+            "threshold": 4.0,
+            "desc": "trades/hour \u2264 4 (tightened w/ hold)"
+          },
+          "net_sharpe_not_wipeout": {
+            "pass": false,
+            "observed": -39.05756605292077,
+            "threshold": -0.5,
+            "desc": "G3 NEW: net Sharpe at 5 bps > -0.5"
+          },
+          "flat_frac_sane": {
+            "pass": true,
+            "observed": 0.6176892799259088,
+            "threshold": 0.9,
+            "desc": "not always flat"
+          }
+        }
+      },
+      "G4": {
+        "passed": false,
+        "ic_primary": 0.0065698298324513614,
+        "ic_60m": -0.005458631926541295,
+        "checks": {
+          "ic_sign": {
+            "pass": true,
+            "observed": 0.0065698298324513614,
+            "desc": "IC sign positive"
+          },
+          "decile_dir": {
+            "pass": false,
+            "observed": -9.742648477527474e-05,
+            "desc": "D10 > D1"
+          },
+          "horizon_decay": {
+            "pass": true,
+            "observed": 0.0011111979059100661,
+            "desc": "|IC_15m| >= |IC_60m|"
+          }
+        }
+      }
+    },
+    "r2_rev_30m_volscale": {
+      "G1": true,
+      "G2": true,
+      "G3": {
+        "passed": false,
+        "checks": {
+          "coverage": {
+            "pass": true,
+            "observed": 0.9996526973836536,
+            "threshold": 0.95,
+            "desc": "non-NaN fraction"
+          },
+          "std_nonzero": {
+            "pass": true,
+            "observed": true,
+            "threshold": true,
+            "desc": "signal std > 0"
+          },
+          "trade_freq_per_hour_ok": {
+            "pass": true,
+            "observed": 2.2408483641668018,
+            "threshold": 4.0,
+            "desc": "trades/hour \u2264 4 (tightened w/ hold)"
+          },
+          "net_sharpe_not_wipeout": {
+            "pass": false,
+            "observed": -32.799688210146094,
+            "threshold": -0.5,
+            "desc": "G3 NEW: net Sharpe at 5 bps > -0.5"
+          },
+          "flat_frac_sane": {
+            "pass": true,
+            "observed": 0.6803889789303079,
+            "threshold": 0.9,
+            "desc": "not always flat"
+          }
+        }
+      },
+      "G4": {
+        "passed": true,
+        "ic_primary": 0.008333749692073275,
+        "ic_60m": -0.005239867803306433,
+        "checks": {
+          "ic_sign": {
+            "pass": true,
+            "observed": 0.008333749692073275,
+            "desc": "IC sign positive"
+          },
+          "decile_dir": {
+            "pass": true,
+            "observed": 0.00011226293593917091,
+            "desc": "D10 > D1"
+          },
+          "horizon_decay": {
+            "pass": true,
+            "observed": 0.003093881888766842,
+            "desc": "|IC_15m| >= |IC_60m|"
+          }
+        }
+      }
+    },
+    "r2_rev_30m_ema15": {
+      "G1": true,
+      "G2": true,
+      "G3": {
+        "passed": false,
+        "checks": {
+          "coverage": {
+            "pass": true,
+            "observed": 0.9994906228293586,
+            "threshold": 0.95,
+            "desc": "non-NaN fraction"
+          },
+          "std_nonzero": {
+            "pass": true,
+            "observed": true,
+            "threshold": true,
+            "desc": "signal std > 0"
+          },
+          "trade_freq_per_hour_ok": {
+            "pass": true,
+            "observed": 1.053045914468962,
+            "threshold": 4.0,
+            "desc": "trades/hour \u2264 4 (tightened w/ hold)"
+          },
+          "net_sharpe_not_wipeout": {
+            "pass": false,
+            "observed": -12.933993281129673,
+            "threshold": -0.5,
+            "desc": "G3 NEW: net Sharpe at 5 bps > -0.5"
+          },
+          "flat_frac_sane": {
+            "pass": true,
+            "observed": 0.7849386432044455,
+            "threshold": 0.9,
+            "desc": "not always flat"
+          }
+        }
+      },
+      "G4": {
+        "passed": false,
+        "ic_primary": 0.003630926268204775,
+        "ic_60m": -0.006697277126953516,
+        "checks": {
+          "ic_sign": {
+            "pass": true,
+            "observed": 0.003630926268204775,
+            "desc": "IC sign positive"
+          },
+          "decile_dir": {
+            "pass": true,
+            "observed": 0.00012794844120942643,
+            "desc": "D10 > D1"
+          },
+          "horizon_decay": {
+            "pass": false,
+            "observed": -0.003066350858748741,
+            "desc": "|IC_15m| >= |IC_60m|"
+          }
+        }
+      }
+    },
+    "r2_rev_30m_volscale_hd": {
+      "G1": true,
+      "G2": true,
+      "G3": {
+        "passed": false,
+        "checks": {
+          "coverage": {
+            "pass": true,
+            "observed": 0.9996526973836536,
+            "threshold": 0.95,
+            "desc": "non-NaN fraction"
+          },
+          "std_nonzero": {
+            "pass": true,
+            "observed": true,
+            "threshold": true,
+            "desc": "signal std > 0"
+          },
+          "trade_freq_per_hour_ok": {
+            "pass": true,
+            "observed": 2.2561300331102827,
+            "threshold": 4.0,
+            "desc": "trades/hour \u2264 4 (tightened w/ hold)"
+          },
+          "net_sharpe_not_wipeout": {
+            "pass": false,
+            "observed": -31.088868134333907,
+            "threshold": -0.5,
+            "desc": "G3 NEW: net Sharpe at 5 bps > -0.5"
+          },
+          "flat_frac_sane": {
+            "pass": true,
+            "observed": 0.6784672377865246,
+            "threshold": 0.9,
+            "desc": "not always flat"
+          }
+        }
+      },
+      "G4": {
+        "passed": true,
+        "ic_primary": 0.010735164191308585,
+        "ic_60m": -0.003286974922596095,
+        "checks": {
+          "ic_sign": {
+            "pass": true,
+            "observed": 0.010735164191308585,
+            "desc": "IC sign positive"
+          },
+          "decile_dir": {
+            "pass": true,
+            "observed": 0.0001278224678953226,
+            "desc": "D10 > D1"
+          },
+          "horizon_decay": {
+            "pass": true,
+            "observed": 0.007448189268712491,
+            "desc": "|IC_15m| >= |IC_60m|"
+          }
+        }
+      }
+    }
+  },
+  "G5_batch": {
+    "passed": true,
+    "declared_k": 15,
+    "survivors": 4,
+    "peak_counts": {
+      "5": 0,
+      "15": 4,
+      "30": 0,
+      "60": 0
+    },
+    "fraction_peaking_at_declared_k": 1.0,
+    "per_expression_peak": {
+      "r2_rev_15m": {
+        "peak_k": 15,
+        "ic_by_k": {
+          "5": 0.010037884626641342,
+          "15": 0.013137058295379787,
+          "30": 0.010110506989400171,
+          "60": 0.0016892643125838056
+        }
+      },
+      "r2_rev_30m": {
+        "peak_k": 15,
+        "ic_by_k": {
+          "5": 0.004570161929456952,
+          "15": 0.010135907798350564,
+          "30": 0.0022803839421105835,
+          "60": 0.002959039497636277
+        }
+      },
+      "r2_rev_30m_volscale": {
+        "peak_k": 15,
+        "ic_by_k": {
+          "5": 0.0030079906865876733,
+          "15": 0.008333749692073275,
+          "30": 0.0010497010010099362,
+          "60": 0.005239867803306433
+        }
+      },
+      "r2_rev_30m_volscale_hd": {
+        "peak_k": 15,
+        "ic_by_k": {
+          "5": 0.004808199720830141,
+          "15": 0.010735164191308585,
+          "30": 0.0035928886432597057,
+          "60": 0.003286974922596095
+        }
+      }
+    }
+  }
+}

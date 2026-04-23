@@ -123,6 +123,7 @@ invariants:
 | Fraction of trading days with zero rebalancing | ≤ 5% | Sustained zero-rebalance days usually means the signal collapsed to a tie |
 | Unique Q5 names over full window | ≥ 3× headline portfolio size | Below this, the "portfolio" is the same handful of names forever — essentially a static bet |
 | Signal std(cross-section) per date | > 0 on ≥ 99% of days | Catches the "all stocks get the same score" bug (usually from a broken neutralization) |
+| **Net Sharpe at declared cost assumption** | **> -0.5 annualized** | **Added after 20260423 BTC 1m dogfood. The `trade_freq` gate is a proxy — a direct check against Pitfall 10 "costs wipe the signal" is decisive. Use whatever cost Agent 2 declared in `session_metadata.yml` (default: 5 bps per side equities, 5 bps per side crypto taker). Net Sharpe well below zero means the factor is cost-unviable regardless of IC t-stat.** |
 
 Optional but strongly recommended:
 
@@ -159,6 +160,33 @@ Verify by checking SIGNED invariants:
 **Failure mode**: the factor is real but different from the thesis. Agent
 5 would later catch this with correlation analysis, but catching it here
 saves a round.
+
+### G5 — Batch-level horizon consistency (meta-gate)
+
+G1–G4 are per-expression. They cannot catch the failure mode where **all
+8 expressions fail G4 for the same reason because Agent 2 mis-specified
+the primary horizon**. The 20260423 BTC 1m dogfood hit exactly this: 4
+of 8 expressions flipped IC sign at k=5m because 5m fell between the
+microstructure-reversal regime (<2m) and the slower mean-reversion
+regime (~15m) — the mechanism was real, just at the wrong horizon.
+
+G5 is a single check run AFTER all 8 expressions have been gated:
+
+| Invariant | Threshold | Why |
+|---|---|---|
+| At least half of expressions that passed G4 have their peak IC at the declared primary horizon | ≥ 4 of the surviving 8 | If the batch majority says "peak is elsewhere", the hypothesis, not the code, is broken. |
+| Among surviving expressions, the peak-IC horizon is consistent (same horizon for ≥ 60% of them) | — | Catches "each expression says a different horizon is best" — i.e., no coherent mechanism. |
+
+**If G5 fails**, DO NOT retry expressions. The failure is at Agent 2,
+not Agent 3. Return the batch to Agent 2 with a one-line diagnostic:
+"batch IC peak is at k=X, not the declared k=Y. Re-specify primary
+horizon or mechanism." Agent 2 issues a revised `session_metadata.yml`,
+Agent 3 may keep most expressions unchanged but re-target the new k.
+
+**What G5 does not do**: G5 does not protect against Agent 2 picking a
+wrong *mechanism* — if the whole thing is momentum when Agent 2 claims
+reversal, every expression's IC sign flips, which G4 catches. G5 only
+catches the more subtle "right mechanism, wrong horizon" failure.
 
 ---
 
@@ -250,6 +278,6 @@ fragile implementations.
 
 ## One-line summary
 
-If Agent 4 hands anything to Agent 5 without a clean G1/G2/G3/G4 table in
-`handoff_4_to_5.json`, the workflow is operating in pre-funnel mode and
-every downstream decision is suspect.
+If Agent 4 hands anything to Agent 5 without a clean G1/G2/G3/G4 table
+(and a G5 batch-level pass) in `handoff_4_to_5.json`, the workflow is
+operating in pre-funnel mode and every downstream decision is suspect.

@@ -1,21 +1,39 @@
-# Final Summary — BTC 1m Reversal v1, Round 1
+# Final Summary — BTC 1m Reversal v1 (Rounds 1 + 2)
 
 **Session:** 20260423_btc_minute_reversal_v1
 **Data:** BTC-USD 1m, Coinbase, 2026-02-22 → 2026-04-23 (60 days, 86,380 bars)
-**Verdict:** RESEARCH-ONLY. No factor promoted.
+**Verdict:** RESEARCH-ONLY. No factor promoted. Session closed after Round 2.
 
-## One-paragraph summary
+## Two-round summary
+
+| | Round 1 | Round 2 |
+|---|---|---|
+| Primary horizon | 5 min | 15 min |
+| Hold | 1 bar | 15 bars |
+| Expressions | 8 (1/5/15m windows) | 8 (15/30/45/60m windows) |
+| G3 pass | 5/8 | **0/8** (new net-Sharpe gate fires) |
+| G4 pass | 3/8 | 4/8 |
+| G5 batch horizon | — (not yet defined) | **PASS, 4/4 peak at k=15m** |
+| Best IC t-stat @ k=15m | 3.86 (r1_rev_15m) | 3.86 (r2_rev_15m) — same signal |
+| Best gross Sharpe | 8.42 (cost-unviable variant) | 2.54 (r2_rev_60m) |
+| Best net Sharpe @ 5bps | -68 (r1_rev_15m) | -12.9 (r2_rev_30m_ema15) |
+| Verdict | RESEARCH-ONLY | RESEARCH-ONLY (close) |
+
+## Round 2 detail
+
+## One-paragraph summary (two rounds)
 
 Ran the WorldQuant 5-agent workflow on 60 days of BTC-USD 1-minute bars
-testing a short-term reversal mechanism. 8 expressions, 4-gate funnel,
-5 bps/side cost assumption. **2 of 8 expressions passed both G3 and G4
-gates. None passed the hard IC-t-stat-≥4 floor at the declared primary
-horizon (5 minutes). After cost, all 8 had negative Sharpe.** The
-mechanism is partially real — IC is +0.01 (t-stat 3-4) at k=1m and k=15m
-horizons — but the 5m horizon chosen at Agent 2 falls in a dead zone
-between microstructure reversal and slower mean reversion. Best single
-signal: `r1_rev_15m` with IC +0.0131 / t-stat 3.86 at k=15m, gross
-annualized Sharpe 2.04. Still cost-unviable.
+testing short-term reversal. Round 1 (k=5m primary, 1-bar hold) found
+the mechanism real at k=1m and k=15m but flat at k=5m — horizon was
+mis-specified. Round 2 (k=15m primary, 15-bar hold, cost-sensitivity
+curve) confirmed the mechanism cleanly: G5 batch-horizon-consistency
+passes 100% (all 4 G4-survivors peak at k=15m), best IC t-stat 3.86
+(`r2_rev_15m`), gross Sharpe up to 2.54. **But 0 of 8 Round-2 expressions
+pass the new G3 net-Sharpe gate.** Breakeven cost is 0.4 bps per side;
+realistic spot taker is 5-10 bps — the signal is 30× smaller than the
+cost per bar. Mechanism confirmed, deployability structurally blocked
+at spot-taker fee levels.
 
 ## Key numbers
 

@@ -72,7 +72,7 @@
 | Session | 类别 / 机制 | 最佳原始 LS Sharpe | 关键发现 |
 |---|---|---:|---|
 | [`20260421_volprice_max_lottery`](logs/20260421_volprice_max_lottery/) | `volume_price.lottery_demand` (MAX + 偏度) | 2.62 (α_05) / 2.92 测试 (α_15) | A 股 "lottery demand" 信号 (MAX / 偏度 / 跳跃计数) 基本被波动率 + 短期反转吸收;去除 σ 和 ret 20 后残差 IC < 0.02,不具有独立 alpha,见 [`final_summary.md`](logs/20260421_volprice_max_lottery/outputs/final_summary.md) |
-| [`20260423_btc_minute_reversal_v1`](logs/20260423_btc_minute_reversal_v1/) | `crypto.minute_reversal` (vol-scaled, hour-demeaned) | 8.42 gross / −68 net (5 bps/side) | BTC-USD 1m × 60d,Coinbase 数据。Reversal 在 k=1m 和 k=15m 有效 (IC t 3-4),但在 k=5m 塌陷;所有 8 个表达式在 5 bps/side 成本下净 Sharpe < 0 (典型 Pitfall 10 成本吞噬)。首次用 `validation-gates.md` 的 G1-G4 漏斗,**2/8 过闸**,与 QuantCode-Bench one-shot 通过率一致,见 [`final_summary.md`](logs/20260423_btc_minute_reversal_v1/outputs/final_summary.md) |
+| [`20260423_btc_minute_reversal_v1`](logs/20260423_btc_minute_reversal_v1/) | `crypto.minute_reversal` (vol-scaled, 15m hold) | R1: 8.42 gross / R2: 2.54 gross | BTC-USD 1m × 60d,Coinbase。**2 rounds**:R1 (k=5m) 撞到死区,2/8 过闸;R2 (k=15m + 15-bar hold) 机制确认 (IC t=3.86,G5 batch-horizon 100% 过),但 0/8 过新 G3 net-Sharpe 闸 — 成本结构性阻塞 (breakeven 0.4 bps/side vs 现实 5-10 bps,信号比成本小 30×)。首次 dogfood `validation-gates.md` 的 G1-G5 + 新 net-Sharpe 闸 + G5 batch horizon,见 [`final_summary.md`](logs/20260423_btc_minute_reversal_v1/outputs/final_summary.md) |
 
 ---
 
