@@ -1,0 +1,21 @@
+{
+  "from": "Agent 2 Hypothesis Architect",
+  "to": "Agent 3 Alpha Builder",
+  "session": "20260423_a_share_asset_growth_investment",
+  "dominant_mechanism": "asset_growth_investment_anomaly",
+  "required_count": 8,
+  "required_diversity": {
+    "neutralization_variants": ">= 2",
+    "window_variants": ">= 2",
+    "transformation_variants": ">= 2"
+  },
+  "must_include": [
+    "1 raw YoY AG (no neutralization, benchmark)",
+    "1 industry-neutralized YoY AG (primary candidate)",
+    "1 2-year AG (slower signal)",
+    "1 QoQ AG (faster signal)"
+  ],
+  "pit_rule_enforced": "f_ann_date + 1 trading day",
+  "universe_filter_required": "exclude ST, listing>=504d, price>=2",
+  "output_format": "expressions_batch_0001.md with table [name | formula | neutralization | horizon | expected_turnover | expected_ic_sign | economic_note]"
+}

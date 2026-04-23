@@ -1,0 +1,38 @@
+{
+  "from": "Agent 1 Research Librarian",
+  "to": "Agent 2 Hypothesis Architect",
+  "session": "20260423_a_share_asset_growth_investment",
+  "mechanism_selected": "Asset Growth (CGS 2008)",
+  "mechanism_reason": "Cleanly orthogonal to accruals (session 20260420), robust globally with 15+ years of replication, all required data cached.",
+  "primary_signal": "neg_asset_growth_yoy = -(TA_t - TA_{t-4q}) / TA_{t-4q}",
+  "data_paths": {
+    "balancesheet": ".cache/balancesheet.parquet",
+    "income": ".cache/income.parquet",
+    "cashflow": ".cache/cashflow.parquet",
+    "daily": ".cache/daily.parquet",
+    "daily_basic": ".cache/daily_basic.parquet",
+    "sw_l1": ".cache/sw_l1_map.parquet"
+  },
+  "pit_rule": "shift by f_ann_date; factor usable from f_ann_date + 1 trading day",
+  "universe_filter": "exclude ST/*ST; require >= 504 trading days listing history",
+  "neutralization_required": ["SW L1 industry median"],
+  "neutralization_optional": ["size quintile"],
+  "horizon_hypothesis": "best IC at 20-60d; monthly rebalance (21d) likely optimal",
+  "tvt_split": {
+    "train": "2020-01-01 to 2021-12-31",
+    "validate": "2022-01-01 to 2022-12-31",
+    "test": "2023-01-01 to 2026-04-22"
+  },
+  "required_audits": [
+    "execution-delay (target_shift == -(1 + delay))",
+    "look-ahead (perturb future bars)",
+    "worst-year Sharpe >= 0.5",
+    "best-year-out Sharpe >= 50% headline",
+    "residualize against Size and Momentum (classic factor exposure check)"
+  ],
+  "known_risks": [
+    "2020-2021 bull run inverts AG short leg",
+    "2024 H2 policy-driven M&A may invert signal",
+    "AG highly correlated with size; must decompose"
+  ]
+}

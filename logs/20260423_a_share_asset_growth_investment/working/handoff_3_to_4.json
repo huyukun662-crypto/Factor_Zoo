@@ -1,0 +1,41 @@
+{
+  "from": "Agent 3 Alpha Builder",
+  "to": "Agent 4 Backtest Operator",
+  "session": "20260423_a_share_asset_growth_investment",
+  "batch_id": "0001",
+  "count": 8,
+  "rule_of_8_passed": true,
+  "dominant_mechanism": "asset_growth_investment_anomaly",
+  "expressions": [
+    {"name": "ag_yoy_raw",        "window_q": 4, "neutralization": "none",              "transform": "ratio"},
+    {"name": "ag_yoy_ind",        "window_q": 4, "neutralization": "sw_l1",             "transform": "ratio"},
+    {"name": "ag_yoy_ind_size",   "window_q": 4, "neutralization": "sw_l1+size_q5",     "transform": "ratio"},
+    {"name": "ag_log_yoy_ind",    "window_q": 4, "neutralization": "sw_l1",             "transform": "log"},
+    {"name": "ag_2y_ind",         "window_q": 8, "neutralization": "sw_l1",             "transform": "ratio"},
+    {"name": "ag_qoq_ind",        "window_q": 1, "neutralization": "sw_l1",             "transform": "ratio"},
+    {"name": "ag_rank_ind",       "window_q": 4, "neutralization": "sw_l1",             "transform": "cs_rank"},
+    {"name": "ag_composite",      "window_q": 4, "neutralization": "sw_l1",             "transform": "avg(z_ratio,z_log)"}
+  ],
+  "execution_params": {
+    "delay": 1,
+    "cost_bps_per_side": 5,
+    "rebalance": "monthly (21d)",
+    "horizons_to_check": [1, 5, 10, 21, 42, 63],
+    "quintiles": 5,
+    "min_history_days": 504,
+    "min_price": 2,
+    "exclude_st": true
+  },
+  "pre_submission_audits_required": [
+    "execution-delay invariant: target_shift == -(1 + delay), i.e. -2 for delay=1",
+    "future-perturbation test on past factor values",
+    "universe count stability per date"
+  ],
+  "expected_outputs": [
+    "outputs/ic_table_batch_0001.csv",
+    "outputs/ls_summary_batch_0001.csv",
+    "outputs/ls_annual_batch_0001.csv",
+    "outputs/q5_long_only_batch_0001.csv",
+    "outputs/backtest_results_batch_0001.md"
+  ]
+}

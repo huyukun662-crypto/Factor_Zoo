@@ -1,0 +1,102 @@
+session_id: 20260423_a_share_asset_growth_investment
+created_at: 2026-04-23
+agent: 2_hypothesis_architect
+
+primary_mechanism:
+  name: asset_growth_investment_anomaly
+  theory_anchor: "q-theory (Cochrane 1991) + managerial overinvestment (Jensen 1986) + issuance dilution (Daniel-Titman 2006). Firms that grow total assets quickly earn low subsequent returns because growth reveals low cost of capital and/or empire-building."
+  key_papers:
+    - "Cooper, Gulen, Schill (2008) JF - The Asset Growth Effect in Stock Returns"
+    - "Daniel, Titman (2006) JF - Market Reactions to Tangible and Intangible Information"
+    - "Fama, French (2015) JFE - A Five-Factor Asset Pricing Model (CMA factor)"
+
+primary_hypothesis: |
+  H1: Cross-sectionally in A-share, the lowest-AG-quintile portfolio (bottom 20% by year-over-year total-asset growth,
+  industry-neutralized, PIT-lagged) earns positive excess returns over the top-AG quintile over a 21-63 trading-day horizon,
+  with worst-year Sharpe >= 0.5 and headline Sharpe >= 1.0 after 5bps/side cost.
+
+failure_conditions:
+  - "IC t-stat < 2 on full sample => mechanism weak, switch family in batch 2"
+  - "LS Sharpe < 0.5 on Test window => deploy as long-only Q5 only; RESEARCH-ONLY"
+  - "Worst-year Sharpe < 0.0 even after industry neutralization => mechanism broken in A-share"
+  - "Residualized-against-Size Sharpe < 50% of raw => factor is a size proxy, relabel"
+
+universe:
+  base: A-share stocks in daily.parquet
+  exclusions:
+    - "ST and *ST (name prefix)"
+    - "Listing history < 504 trading days as of signal date"
+    - "Non-tradable bars (0 volume, suspension)"
+    - "Price < 2 CNY (penny-stock bucket)"
+  liquidity_filter: "top 80% by circulating market cap at month-end"
+  estimated_count: "~3500 stocks"
+
+data_sources:
+  quarterly_fundamentals:
+    file: .cache/balancesheet.parquet
+    field_used: total_assets
+    pit_field: f_ann_date
+    frequency: quarterly (end_date)
+    lag_convention: "signal usable from f_ann_date + 1 trading day"
+  daily_price:
+    file: .cache/daily.parquet
+    fields: [open, close, vol, amount]
+    adjustment: use adj_factor from .cache/adj_factor.parquet
+  market_cap:
+    file: .cache/daily_basic.parquet
+    fields: [total_mv, circ_mv]
+  industry:
+    file: .cache/sw_l1_map.parquet
+    level: SW L1 (approx 31 groups)
+    handling: point-in-time via in_date/out_date
+
+factor_construction:
+  raw_signal: "neg_ag_yoy = -(TA_t - TA_{t-4q}) / TA_{t-4q}"
+  pit_apply: "forward-fill on trading-day index from f_ann_date + 1"
+  neutralization_stack:
+    - "(mandatory) subtract SW L1 industry median per date"
+    - "(optional) subtract size quintile median per date"
+  standardization: "cross-sectional winsorize 1%/99% then rank to N(0,1)"
+
+evaluation:
+  horizons_checked: [1, 5, 10, 21, 42, 63]
+  rebalance_frequencies_checked: [daily, weekly, monthly]
+  primary_rebalance: monthly (21 trading day)
+  portfolio_construction:
+    - "LS dollar-neutral Q1-Q5 equal-weight (signal validation)"
+    - "long-only Q5 equal-weight excess to CSI300 (deployable)"
+  cost_model:
+    turnover_unit_cost_bps: 5
+    side: "each side (buy+sell both pay 5bps)"
+
+tvt_split:
+  train: {start: 2020-01-01, end: 2021-12-31, horizon: "burn-in + mechanism confirmation"}
+  validate: {start: 2022-01-01, end: 2022-12-31, horizon: "parameter stability test"}
+  test: {start: 2023-01-01, end: 2026-04-22, horizon: "true out-of-sample"}
+
+promotion_criteria:
+  hard_floors:
+    - "Test Sharpe (after 5bps/side cost) >= 1.0"
+    - "Worst year in Test window Sharpe >= 0.5"
+    - "Best-year-out Test Sharpe >= 50% of headline Test Sharpe"
+    - "IC t-stat on Test >= 2.5"
+    - "Residualized-against-Size Sharpe >= 50% of raw"
+    - "Execution-delay audit passes (invariant and future-perturbation)"
+    - "Look-ahead audit passes (past-bar invariance under future randomization)"
+  soft_preferences:
+    - "Annual turnover <= 400%"
+    - "Max drawdown <= 15% on Test"
+    - "Q5 long-only excess Sharpe >= 0.8"
+
+expected_batch_1_outcome: |
+  Agent 3 should produce 8 Asset-Growth variants. If >= 3 variants pass hard floors, promote to TVT-split evaluation
+  in round 2. If 0-2 pass, either refine (tighter universe, alternative lag) or pivot to a sibling mechanism
+  (Net Share Issuance) in batch 2.
+
+handoff_contract:
+  to: Agent 3 Alpha Builder
+  requires:
+    - "exactly 8 expressions"
+    - "one dominant mechanism (Asset Growth)"
+    - "each expression has: name, formula (pseudocode), expected turnover, expected IC direction, economic note"
+    - "at least 2 neutralization variants, at least 2 horizon/window variants"
