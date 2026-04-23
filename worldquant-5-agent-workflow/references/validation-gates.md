@@ -33,6 +33,51 @@ Translation for this workflow:
 
 ---
 
+## What this funnel does NOT catch (dogfood retrospective)
+
+This funnel was retroactively tested against the Round 1 failure of session
+`logs/20260423_a_share_asset_growth_investment/` (the Asset Growth factor
+that went -1.5 Sharpe in 2020 on all 8 variants, despite +0.6 to +0.8 LS
+Sharpe on the full 2020-2025 window). **All 8 variants would have passed
+G1, G2, and G3; 7 of 8 would have passed G4.** Only `f6_ag_qoq_ind` fails
+G4 on near-zero IC sign.
+
+The Round 1 death was:
+- Q5 had ~900 stocks per day (healthy)
+- IC sign correct (`-AG` → positive IC, monotone across {1, 5, 20, 60} day
+  horizons from 0.005 → 0.042 — a textbook slow-fundamental signature)
+- No exception, no zero-signal, no direction flip
+- Just one catastrophic year (2020 A-share small-cap rally destroyed the
+  high-AG short leg — Pitfall 7) buried under 5 decent years (Pitfall 3
+  "N/N positive years" masking)
+
+Conclusion: **this 4-gate funnel is orthogonal to regime-concentrated
+failures.** Those are already caught by the worst-year-Sharpe floor in
+`SKILL.md` mandatory audit 3 and by the per-year reporting in
+`common-pitfalls.md` Pitfall 3 / Pitfall 7. Don't expect G1–G4 to save
+you from "the code is correct but the market hated this factor in one
+specific year".
+
+What this funnel DOES catch is the disjoint failure class: **code-level
+bugs that produce plausible-looking but meaningless numbers**. Examples
+that would trip G3/G4 even on an otherwise-sound Agent 3 output:
+
+| Hypothetical bug | Caught by |
+|---|---|
+| Staleness filter tightened from 200d to 30d → Q5 shrinks to ~50 stocks | G3 "Q5 ≥ 30 on 95% of days" |
+| `shift(8)` accidentally written as `shift(-8)` (uses future balance sheet) | G4 IC sign flip vs thesis |
+| Industry column has NaN rows → `groupby` silently drops them → coverage collapses | G3 "unique names ≥ 3× portfolio size" |
+| Winsor hardcoded to `clip(-1, 1)` instead of `quantile(0.01, 0.99)` | G4 decile monotonicity degradation |
+| All-equal input into winsor+z → `std == 0` → constant signal | G3 "signal std > 0 on 99% of days" |
+| Thesis claimed 20d signal but IC peaks at 1d (factor is really a 1d micro-signal) | G4 horizon consistency |
+
+If a failure resembles the Round 1 case (per-year variance with a single
+bad year dragging the mean into doubt), the answer is the worst-year
+floor and the falsification prompt from `common-pitfalls.md` Pitfall 5,
+not this funnel. Use the right tool for the right failure mode.
+
+---
+
 ## The 4 gates
 
 Every one of the 8 expressions in a batch must pass gates G1–G4. If any
