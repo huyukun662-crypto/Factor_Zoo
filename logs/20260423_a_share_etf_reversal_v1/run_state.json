@@ -1,0 +1,17 @@
+{
+  "session_id": "20260423_a_share_etf_reversal_v1",
+  "current_round": 2,
+  "current_stage": "evaluator_complete",
+  "status": "closed",
+  "verdict": "RESEARCH_ONLY",
+  "continue_research": false,
+  "close_reason": "mechanism confirmed (r2_lt_rev_60d IC t=2.35, net Sharpe +0.56); worst-year 2020 = -0.68 blocks PROMOTE; further gains require Round 3 direction (long-only variant, extended universe, or extended history)",
+  "rounds_completed": 2,
+  "total_expressions_tested": 16,
+  "g4_passed": {"r1": 0, "r2": 2},
+  "best_expression": "r2_lt_rev_60d",
+  "best_net_sharpe_5bps": 0.560,
+  "best_ic_tstat": 2.35,
+  "worst_year_best_expression": {"year": 2020, "sharpe": -0.678},
+  "mechanism_topology_finding": "reversal on A-share ETFs is a narrow ~60d window; ≤20d is momentum, ~1y is momentum; only 2-3 months carries reversal payoff"
+}

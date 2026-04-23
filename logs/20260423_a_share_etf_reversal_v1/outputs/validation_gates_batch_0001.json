@@ -1,0 +1,409 @@
+{
+  "session": "20260423_a_share_etf_reversal_v1",
+  "round": 1,
+  "expressions": {
+    "r1_dd20": {
+      "G1": "pass",
+      "G2": "pass",
+      "G3": {
+        "pct_days_enough_signal": 0.9718032786885246,
+        "annual_turnover_pct": 4246.819672131148,
+        "zero_rebalance_days_pct": 0.8432786885245902,
+        "net_sharpe_at_5bps": -0.5180787238481571,
+        "pass": false
+      },
+      "G4": {
+        "ic_mean_at_k10": -0.049288158724738344,
+        "ic_peak_horizon": 5,
+        "decile_inversions": 4,
+        "q5_minus_q1": -0.0040843545393970835,
+        "corr_vs_universe_ew": 0.1866657088327496,
+        "pass": false
+      },
+      "ic_row": [
+        {
+          "expression": "r1_dd20",
+          "horizon_days": 5,
+          "ic_mean": -0.0407115472544703,
+          "ic_std": 0.3730759397191827,
+          "ic_tstat": -4.24041966854799,
+          "n_days": 1510,
+          "icir_ann": -1.73229015419851
+        },
+        {
+          "expression": "r1_dd20",
+          "horizon_days": 10,
+          "ic_mean": -0.049288158724738344,
+          "ic_std": 0.37363793128147443,
+          "ic_tstat": -5.117523969253692,
+          "n_days": 1505,
+          "icir_ann": -2.0940734274812924
+        },
+        {
+          "expression": "r1_dd20",
+          "horizon_days": 20,
+          "ic_mean": -0.05420849355333648,
+          "ic_std": 0.3617259435599766,
+          "ic_tstat": -5.794397390707983,
+          "n_days": 1495,
+          "icir_ann": -2.378964441611239
+        }
+      ],
+      "G5_expr_peak_horizon": 5
+    },
+    "r1_rsi14": {
+      "G1": "pass",
+      "G2": "pass",
+      "G3": {
+        "pct_days_enough_signal": 0.9685245901639344,
+        "annual_turnover_pct": 4222.0327868852455,
+        "zero_rebalance_days_pct": 0.8432786885245902,
+        "net_sharpe_at_5bps": 0.09750708450414794,
+        "pass": false
+      },
+      "G4": {
+        "ic_mean_at_k10": -0.022390965104660154,
+        "ic_peak_horizon": 20,
+        "decile_inversions": 3,
+        "q5_minus_q1": -0.0010415878509113887,
+        "corr_vs_universe_ew": 0.12272162236760446,
+        "pass": false
+      },
+      "ic_row": [
+        {
+          "expression": "r1_rsi14",
+          "horizon_days": 5,
+          "ic_mean": -0.02686373984883583,
+          "ic_std": 0.38363319066027046,
+          "ic_tstat": -2.716555293444135,
+          "n_days": 1505,
+          "icir_ann": -1.1116051997924707
+        },
+        {
+          "expression": "r1_rsi14",
+          "horizon_days": 10,
+          "ic_mean": -0.022390965104660154,
+          "ic_std": 0.37745656473277095,
+          "ic_tstat": -2.2974785196080902,
+          "n_days": 1500,
+          "icir_ann": -0.9416859710509538
+        },
+        {
+          "expression": "r1_rsi14",
+          "horizon_days": 20,
+          "ic_mean": -0.015011155488649649,
+          "ic_std": 0.35697849840040585,
+          "ic_tstat": -1.6231744550634488,
+          "n_days": 1490,
+          "icir_ann": -0.6675323778768645
+        }
+      ],
+      "G5_expr_peak_horizon": 20
+    },
+    "r1_bb_pos": {
+      "G1": "pass",
+      "G2": "pass",
+      "G3": {
+        "pct_days_enough_signal": 0.9718032786885246,
+        "annual_turnover_pct": 6312.393442622951,
+        "zero_rebalance_days_pct": 0.8124590163934426,
+        "net_sharpe_at_5bps": -0.417618887928465,
+        "pass": false
+      },
+      "G4": {
+        "ic_mean_at_k10": -0.035233119889071754,
+        "ic_peak_horizon": 20,
+        "decile_inversions": 3,
+        "q5_minus_q1": -0.0028131027399500783,
+        "corr_vs_universe_ew": 0.08334463059257274,
+        "pass": false
+      },
+      "ic_row": [
+        {
+          "expression": "r1_bb_pos",
+          "horizon_days": 5,
+          "ic_mean": -0.035945349460349406,
+          "ic_std": 0.3709629085392372,
+          "ic_tstat": -3.765309636919593,
+          "n_days": 1510,
+          "icir_ann": -1.5381988862857197
+        },
+        {
+          "expression": "r1_bb_pos",
+          "horizon_days": 10,
+          "ic_mean": -0.035233119889071754,
+          "ic_std": 0.37193957078254586,
+          "ic_tstat": -3.6749121874791477,
+          "n_days": 1505,
+          "icir_ann": -1.5037615859471003
+        },
+        {
+          "expression": "r1_bb_pos",
+          "horizon_days": 20,
+          "ic_mean": -0.028929836959779257,
+          "ic_std": 0.3443062381444002,
+          "ic_tstat": -3.2487903845229997,
+          "n_days": 1495,
+          "icir_ann": -1.3338327149295484
+        }
+      ],
+      "G5_expr_peak_horizon": 20
+    },
+    "r1_logbias_ma20": {
+      "G1": "pass",
+      "G2": "pass",
+      "G3": {
+        "pct_days_enough_signal": 0.9718032786885246,
+        "annual_turnover_pct": 5320.918032786885,
+        "zero_rebalance_days_pct": 0.8268852459016394,
+        "net_sharpe_at_5bps": 0.06504236077333438,
+        "pass": false
+      },
+      "G4": {
+        "ic_mean_at_k10": -0.020487345470616973,
+        "ic_peak_horizon": 20,
+        "decile_inversions": 2,
+        "q5_minus_q1": -0.0018420610731475918,
+        "corr_vs_universe_ew": 0.0648917994727053,
+        "pass": false
+      },
+      "ic_row": [
+        {
+          "expression": "r1_logbias_ma20",
+          "horizon_days": 5,
+          "ic_mean": -0.017066219085144458,
+          "ic_std": 0.40693109984514175,
+          "ic_tstat": -1.6296896520837119,
+          "n_days": 1510,
+          "icir_ann": -0.6657584766062784
+        },
+        {
+          "expression": "r1_logbias_ma20",
+          "horizon_days": 10,
+          "ic_mean": -0.020487345470616973,
+          "ic_std": 0.4054488576441225,
+          "ic_tstat": -1.9602788746969202,
+          "n_days": 1505,
+          "icir_ann": -0.8021394577961095
+        },
+        {
+          "expression": "r1_logbias_ma20",
+          "horizon_days": 20,
+          "ic_mean": -0.015854968289775107,
+          "ic_std": 0.38020523479648693,
+          "ic_tstat": -1.612381780196536,
+          "n_days": 1495,
+          "icir_ann": -0.6619840964895773
+        }
+      ],
+      "G5_expr_peak_horizon": 20
+    },
+    "r1_rev_5d": {
+      "G1": "pass",
+      "G2": "pass",
+      "G3": {
+        "pct_days_enough_signal": 0.9744262295081967,
+        "annual_turnover_pct": 9468.590163934427,
+        "zero_rebalance_days_pct": 0.8104918032786885,
+        "net_sharpe_at_5bps": -0.8672018595194828,
+        "pass": false
+      },
+      "G4": {
+        "ic_mean_at_k10": -0.021653006054790442,
+        "ic_peak_horizon": 10,
+        "decile_inversions": 2,
+        "q5_minus_q1": -0.0014087246595805539,
+        "corr_vs_universe_ew": 0.02313828911187243,
+        "pass": false
+      },
+      "ic_row": [
+        {
+          "expression": "r1_rev_5d",
+          "horizon_days": 5,
+          "ic_mean": -0.02385630944986873,
+          "ic_std": 0.40401003645025335,
+          "ic_tstat": -2.297597992560033,
+          "n_days": 1514,
+          "icir_ann": -0.9373707033427814
+        },
+        {
+          "expression": "r1_rev_5d",
+          "horizon_days": 10,
+          "ic_mean": -0.021653006054790442,
+          "ic_std": 0.3961390336369483,
+          "ic_tstat": -2.12331867473247,
+          "n_days": 1509,
+          "icir_ann": -0.8677024624206279
+        },
+        {
+          "expression": "r1_rev_5d",
+          "horizon_days": 20,
+          "ic_mean": -0.03392849634259855,
+          "ic_std": 0.3939545662646542,
+          "ic_tstat": -3.334412232840578,
+          "n_days": 1499,
+          "icir_ann": -1.3671581146833505
+        }
+      ],
+      "G5_expr_peak_horizon": 10
+    },
+    "r1_vol_scaled_rev5": {
+      "G1": "pass",
+      "G2": "pass",
+      "G3": {
+        "pct_days_enough_signal": 0.9711475409836066,
+        "annual_turnover_pct": 9361.180327868853,
+        "zero_rebalance_days_pct": 0.8026229508196722,
+        "net_sharpe_at_5bps": -0.33881316450205734,
+        "pass": false
+      },
+      "G4": {
+        "ic_mean_at_k10": -0.028372238432366956,
+        "ic_peak_horizon": 10,
+        "decile_inversions": 3,
+        "q5_minus_q1": -0.001359726920238472,
+        "corr_vs_universe_ew": 0.09436260015465124,
+        "pass": false
+      },
+      "ic_row": [
+        {
+          "expression": "r1_vol_scaled_rev5",
+          "horizon_days": 5,
+          "ic_mean": -0.03597774821449077,
+          "ic_std": 0.374663461732303,
+          "ic_tstat": -3.7302441375034188,
+          "n_days": 1509,
+          "icir_ann": -1.524378823611884
+        },
+        {
+          "expression": "r1_vol_scaled_rev5",
+          "horizon_days": 10,
+          "ic_mean": -0.028372238432366956,
+          "ic_std": 0.37141086064212553,
+          "ic_tstat": -2.962531112215925,
+          "n_days": 1504,
+          "icir_ann": -1.2126606136475166
+        },
+        {
+          "expression": "r1_vol_scaled_rev5",
+          "horizon_days": 20,
+          "ic_mean": -0.032302253322646204,
+          "ic_std": 0.3636098310953152,
+          "ic_tstat": -3.4337802664820796,
+          "n_days": 1494,
+          "icir_ann": -1.4102544282912188
+        }
+      ],
+      "G5_expr_peak_horizon": 10
+    },
+    "r1_vol_confirmed_rev": {
+      "G1": "pass",
+      "G2": "pass",
+      "G3": {
+        "pct_days_enough_signal": 0.959344262295082,
+        "annual_turnover_pct": 9799.081967213115,
+        "zero_rebalance_days_pct": 0.8052459016393443,
+        "net_sharpe_at_5bps": 0.161144986772693,
+        "pass": false
+      },
+      "G4": {
+        "ic_mean_at_k10": 0.02017172487552853,
+        "ic_peak_horizon": 10,
+        "decile_inversions": 3,
+        "q5_minus_q1": -0.0001297271219189392,
+        "corr_vs_universe_ew": -0.14038919231208374,
+        "pass": false
+      },
+      "ic_row": [
+        {
+          "expression": "r1_vol_confirmed_rev",
+          "horizon_days": 5,
+          "ic_mean": 0.018162499717754566,
+          "ic_std": 0.31981592741193854,
+          "ic_tstat": 2.1928774100189687,
+          "n_days": 1491,
+          "icir_ann": 0.9015209060285019
+        },
+        {
+          "expression": "r1_vol_confirmed_rev",
+          "horizon_days": 10,
+          "ic_mean": 0.02017172487552853,
+          "ic_std": 0.30099203763421645,
+          "ic_tstat": 2.583434374068761,
+          "n_days": 1486,
+          "icir_ann": 1.0638693559207333
+        },
+        {
+          "expression": "r1_vol_confirmed_rev",
+          "horizon_days": 20,
+          "ic_mean": 0.014908751896589533,
+          "ic_std": 0.3030180118161498,
+          "ic_tstat": 1.890235964128339,
+          "n_days": 1476,
+          "icir_ann": 0.7810397073162273
+        }
+      ],
+      "G5_expr_peak_horizon": 10
+    },
+    "r1_kitchen_sink": {
+      "G1": "pass",
+      "G2": "pass",
+      "G3": {
+        "pct_days_enough_signal": 0.9744262295081967,
+        "annual_turnover_pct": 6097.573770491803,
+        "zero_rebalance_days_pct": 0.8236065573770491,
+        "net_sharpe_at_5bps": -0.48931260006060673,
+        "pass": false
+      },
+      "G4": {
+        "ic_mean_at_k10": -0.03177640824007371,
+        "ic_peak_horizon": 20,
+        "decile_inversions": 3,
+        "q5_minus_q1": -0.0022426959079036553,
+        "corr_vs_universe_ew": 0.15562083797309334,
+        "pass": false
+      },
+      "ic_row": [
+        {
+          "expression": "r1_kitchen_sink",
+          "horizon_days": 5,
+          "ic_mean": -0.03268477153939172,
+          "ic_std": 0.3858067508951184,
+          "ic_tstat": -3.2963898524172173,
+          "n_days": 1514,
+          "icir_ann": -1.3448563606244524
+        },
+        {
+          "expression": "r1_kitchen_sink",
+          "horizon_days": 10,
+          "ic_mean": -0.03177640824007371,
+          "ic_std": 0.38380781303953554,
+          "ic_tstat": -3.2161449575704957,
+          "n_days": 1509,
+          "icir_ann": -1.3142901875231783
+        },
+        {
+          "expression": "r1_kitchen_sink",
+          "horizon_days": 20,
+          "ic_mean": -0.03140150698134738,
+          "ic_std": 0.3634306988478239,
+          "ic_tstat": -3.3452586157424387,
+          "n_days": 1499,
+          "icir_ann": -1.371605291386097
+        }
+      ],
+      "G5_expr_peak_horizon": 20
+    }
+  },
+  "G5_batch": {
+    "declared_k": 10,
+    "n_g4_survivors": 0,
+    "peak_k_counts": {
+      "5": 0,
+      "10": 0,
+      "20": 0
+    },
+    "fraction_peaking_at_declared_k": 0.0,
+    "pass": false
+  }
+}

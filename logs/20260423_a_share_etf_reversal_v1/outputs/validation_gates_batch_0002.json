@@ -1,0 +1,153 @@
+{
+  "session": "20260423_a_share_etf_reversal_v1",
+  "round": 2,
+  "expressions": {
+    "r2_lt_rev_60d": {
+      "G3": {
+        "pct_enough_signal": 0.9606557377049181,
+        "ann_turnover_pct": 1363.27868852459,
+        "zero_reb": 0.9547540983606557,
+        "net_sharpe_5bps": 0.5597302950314623,
+        "pass": false
+      },
+      "G4": {
+        "ic_at_primary_k": 0.02257502460569794,
+        "inversions": 2,
+        "q5_q1": 0.005116840886446679,
+        "corr_vs_uew": 0.12485772679908433,
+        "pass": true
+      },
+      "peak_k": 60
+    },
+    "r2_lt_rev_120d": {
+      "G3": {
+        "pct_enough_signal": 0.921311475409836,
+        "ann_turnover_pct": 735.344262295082,
+        "zero_reb": 0.9659016393442623,
+        "net_sharpe_5bps": 0.2558360915994404,
+        "pass": false
+      },
+      "G4": {
+        "ic_at_primary_k": -0.010721942584463998,
+        "inversions": 2,
+        "q5_q1": -0.0031134254492770673,
+        "corr_vs_uew": 0.1781304047761504,
+        "pass": false
+      },
+      "peak_k": 20
+    },
+    "r2_lt_rev_250d": {
+      "G3": {
+        "pct_enough_signal": 0.8360655737704918,
+        "ann_turnover_pct": 375.93442622950823,
+        "zero_reb": 0.980327868852459,
+        "net_sharpe_5bps": 0.03586266815163278,
+        "pass": false
+      },
+      "G4": {
+        "ic_at_primary_k": -0.11018202026147657,
+        "inversions": 3,
+        "q5_q1": -0.021401383672694795,
+        "corr_vs_uew": 0.13328391629706177,
+        "pass": false
+      },
+      "peak_k": 20
+    },
+    "r2_vol_scaled_lt_120": {
+      "G3": {
+        "pct_enough_signal": 0.921311475409836,
+        "ann_turnover_pct": 694.032786885246,
+        "zero_reb": 0.9685245901639344,
+        "net_sharpe_5bps": -0.14752099628596957,
+        "pass": false
+      },
+      "G4": {
+        "ic_at_primary_k": -0.026218972296346118,
+        "inversions": 2,
+        "q5_q1": -0.009673886098420542,
+        "corr_vs_uew": -0.05137555779670666,
+        "pass": false
+      },
+      "peak_k": 20
+    },
+    "r2_deep_dip_rev": {
+      "G3": {
+        "pct_enough_signal": 0.9967213114754099,
+        "ann_turnover_pct": 1627.672131147541,
+        "zero_reb": 0.9580327868852458,
+        "net_sharpe_5bps": 0.19558989522599984,
+        "pass": false
+      },
+      "G4": {
+        "ic_at_primary_k": -0.022623391340055365,
+        "inversions": 0,
+        "q5_q1": 0.02497714535270895,
+        "corr_vs_uew": 0.2907729712924681,
+        "pass": false
+      },
+      "peak_k": 120
+    },
+    "r2_rsi_extreme_os": {
+      "G3": {
+        "pct_enough_signal": 0.9908196721311475,
+        "ann_turnover_pct": 380.06557377049177,
+        "zero_reb": 0.9868852459016394,
+        "net_sharpe_5bps": 0.13317149625947702,
+        "pass": false
+      },
+      "G4": {
+        "ic_at_primary_k": 0.006990906285703866,
+        "inversions": 1,
+        "q5_q1": 0.13471973644486818,
+        "corr_vs_uew": 0.8157432452907161,
+        "pass": true
+      },
+      "peak_k": 20
+    },
+    "r2_vol_confirmed_lt60": {
+      "G3": {
+        "pct_enough_signal": 0.9606557377049181,
+        "ann_turnover_pct": 2131.6721311475408,
+        "zero_reb": 0.9527868852459016,
+        "net_sharpe_5bps": 0.1530115573871776,
+        "pass": false
+      },
+      "G4": {
+        "ic_at_primary_k": -0.02193270194966567,
+        "inversions": 2,
+        "q5_q1": -0.009567988632139599,
+        "corr_vs_uew": 0.0834445044638995,
+        "pass": false
+      },
+      "peak_k": 60
+    },
+    "r2_residual_rev": {
+      "G3": {
+        "pct_enough_signal": 0.9606557377049181,
+        "ann_turnover_pct": 2371.27868852459,
+        "zero_reb": 0.9514754098360656,
+        "net_sharpe_5bps": -0.41446279038969813,
+        "pass": false
+      },
+      "G4": {
+        "ic_at_primary_k": -0.020857235079490347,
+        "inversions": 2,
+        "q5_q1": -0.004189362152563809,
+        "corr_vs_uew": -0.3106203857100048,
+        "pass": false
+      },
+      "peak_k": 120
+    }
+  },
+  "G5_batch": {
+    "declared_k": 60,
+    "n_g4_survivors": 2,
+    "peak_k_counts": {
+      "20": 1,
+      "60": 1,
+      "120": 0
+    },
+    "fraction_peaking_at_declared_k": 0.5,
+    "pass": true
+  }
+}

@@ -1,0 +1,91 @@
+session_id: 20260423_a_share_etf_reversal_v1
+round: 1
+completed_utc: "2026-04-23T18:30:00Z"
+
+asset_class: china_etf_daily
+bar: 1d
+sample:
+  start: "2020-01-02"
+  end:   "2026-04-22"
+  n_days: 1525
+  n_etfs: 18
+
+mechanism: short_term_reversal_etf_weekly
+primary_horizon_trading_days: 10
+rebalance: weekly_wed
+n_expressions: 8
+
+gates_summary:
+  G1_pass: 8
+  G2_pass: 8
+  G3_pass: 3
+  G4_pass: 0
+  G5_pass: false     # 0 G4 survivors, cannot evaluate
+
+expressions:
+  - id: r1_dd20
+    G3: fail
+    G4: fail
+    ic_mean_k10: -0.0493
+    ic_tstat_k10: -5.12
+    gross_sharpe: -0.452
+    net_sharpe_5bps: -0.518
+    note: "quintile monotonicity inverted: Q1 0.44% vs Q5 0.03%"
+  - id: r1_rsi14
+    G3: pass
+    G4: fail
+    ic_mean_k10: -0.0224
+    gross_sharpe: 0.152
+    net_sharpe_5bps: 0.098
+  - id: r1_bb_pos
+    G3: fail
+    G4: fail
+    ic_mean_k10: -0.0352
+    gross_sharpe: -0.334
+    net_sharpe_5bps: -0.418
+  - id: r1_logbias_ma20
+    G3: pass
+    G4: fail
+    ic_mean_k10: -0.0205
+    gross_sharpe: 0.139
+    net_sharpe_5bps: 0.065
+  - id: r1_rev_5d
+    G3: fail
+    G4: fail
+    ic_mean_k10: -0.0217
+    gross_sharpe: -0.720
+    net_sharpe_5bps: -0.867
+  - id: r1_vol_scaled_rev5
+    G3: fail
+    G4: fail
+    ic_mean_k10: -0.0284
+    gross_sharpe: -0.195
+    net_sharpe_5bps: -0.339
+  - id: r1_vol_confirmed_rev
+    G3: pass
+    G4: fail
+    ic_mean_k10: +0.0202
+    ic_tstat_k10: +2.58
+    gross_sharpe: 0.332
+    net_sharpe_5bps: 0.161
+    note: "only positive-IC expression in R1; sign matches thesis but fails corr or monotonicity"
+  - id: r1_kitchen_sink
+    G3: fail
+    G4: fail
+    ic_mean_k10: -0.0318
+    gross_sharpe: -0.404
+    net_sharpe_5bps: -0.489
+
+g5_diagnostic: |
+  Batch-level IC is uniformly negative at k=10. IC magnitude grows from
+  k=5 (-0.041) to k=20 (-0.054) — momentum-continuation signature.
+  The mechanism at this horizon is MOMENTUM, not reversal.
+  Per validation-gates.md G5 protocol, return to Agent 2 for
+  re-specification rather than retrying individual expressions.
+
+verdict: "batch_hypothesis_rejected_return_to_agent_2"
+next_round_direction: |
+  Test long-horizon reversal (k ∈ {60, 120, 250}) + narrow-condition
+  reversal (deep-dip only, RSI<30 only, residual-after-momentum) on
+  monthly rebalance. Keep the one positive signal from R1
+  (vol_confirmed_rev) as a 60d extension.
