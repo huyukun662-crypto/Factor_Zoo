@@ -1,0 +1,28 @@
+{
+  "from": "Agent 4 Backtest Operator",
+  "to": "Agent 5 Evaluator & Recorder",
+  "session": "20260423_a_share_asset_growth_investment",
+  "batch_id": "0001",
+  "status": "submitted",
+  "audits_passed": {
+    "execution_delay": true,
+    "look_ahead_future_perturbation": true,
+    "rule_of_8": true,
+    "universe_filter": "inherited from panel build (ST exclusion, history >= 1y, price filter)"
+  },
+  "top_factor_by_sharpe_ls": "f5_ag_2y_ind",
+  "top_factor_by_sharpe_q5_excess": "f5_ag_2y_ind",
+  "broken_factors": ["f3_ag_yoy_ind_size (double-demean kills signal)", "f6_ag_qoq_ind (seasonal noise)"],
+  "result_files": [
+    "outputs/ic_table_batch_0001.csv",
+    "outputs/ls_summary_batch_0001.csv",
+    "outputs/ls_annual_batch_0001.csv",
+    "outputs/audit_execution_delay.json",
+    "outputs/backtest_results_batch_0001.md"
+  ],
+  "notes_for_evaluator": [
+    "ALL 8 factors have negative worst-year Sharpe in 2020 — textbook Pitfall 7 (bull-market short-leg destruction). Evaluator should not dismiss the mechanism; it IS working in 5 of 6 years.",
+    "IC is strong (up to t-stat 17 at h=60) but rebalance freq is mismatched — signal is slow, trade is fast.",
+    "Do not promote. Suggest round 2 refinement: quarterly rebal, long-only Q5, regime filter."
+  ]
+}

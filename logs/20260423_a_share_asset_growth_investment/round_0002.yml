@@ -1,0 +1,62 @@
+session_id: 20260423_a_share_asset_growth_investment
+round: 2
+date: 2026-04-23
+mechanism: asset_growth_investment_anomaly
+batch_id: "0002"
+parent_factor: f5_ag_2y_ind (Round 1 winner)
+
+execution:
+  rebalance: quarterly_63d
+  delay: 1
+  cost_bps_per_side: 5
+  panel_dates: 2020-01-02 to 2025-04-18
+
+refinements_tested:
+  - quarterly_rebal (vs Round 1 monthly)
+  - long_only_q5_equal_weight
+  - long_only_q5_rank_weighted
+  - long_only_q10 (top decile)
+  - regime_filter_csi300_6m_20pct
+  - liquidity_floor_top60_circmv
+  - size_residualize_ols_log_mv
+  - composite_0.6f5_0.4f2
+
+results_summary:
+  top_variant: r2_q5_rw_q (rank-weighted Q5)
+  top_sharpe_excess: 0.293
+  round1_best_sharpe_excess_comparison: 0.594 (monthly — BETTER than any Round 2)
+  degradation_vs_round1: -51%
+  all_variants_negative_2025: true
+  regime_break_detected: 2025-01 to 2025-04
+
+findings:
+  quarterly_rebal_worse_than_monthly: true
+  regime_filter_destroyed_best_year: true
+  liquidity_floor_catastrophic: "AG lives in small caps; filtering kills it"
+  size_residualize_wipes_90pct_ir: true
+  composite_f5_f2_adds_no_value: "too correlated"
+
+audits:
+  execution_delay: PASSED (inherited from R1)
+  look_ahead: PASSED (inherited from R1)
+  worst_year_floor: FAILED (best variant -0.75 in 2025)
+  best_year_out: PASSED (ratio 1.50, inverted sign — not concentrated in best year)
+  falsification_first:
+    question: "Why did every refinement fail?"
+    answer: "Assumed wrong about where information lives (horizon != rebal freq), and assumed size/liquidity were noise (they're features)"
+
+decision:
+  outcome: RESEARCH-ONLY
+  do_not_promote: true
+  best_deployable_form: "Round 1 f5_ag_2y_ind monthly Q5 excess (Sharpe 0.594) — still below 0.8 floor"
+  mechanism_status: "statistically real, currently regime-broken (2025 YTD negative every variant)"
+
+next_actions:
+  user_pick_direction: true
+  options:
+    A_NSI_sibling: "Net Share Issuance — same investment family, different data channel, highest expected marginal info"
+    B_AG_momentum_pair: "AG residualized against 12M momentum to balance 2020/2025 small-cap-rally failure modes"
+    C_OCF_assets: "Cash-flow earnings quality — overlaps with accruals (done in 20260420)"
+    D_close_session: "Accept RESEARCH-ONLY, archive session, start fresh mechanism"
+
+recommendation: A (NSI) — clean orthogonal channel in same family, cached data ready

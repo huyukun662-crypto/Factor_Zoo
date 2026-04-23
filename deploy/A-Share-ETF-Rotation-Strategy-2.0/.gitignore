@@ -1,5 +1,6 @@
 # Cache / data files (regenerate with scripts)
 data_cache/*.parquet
+data_cache/*.csv
 data_cache/*.log
 
 # Python

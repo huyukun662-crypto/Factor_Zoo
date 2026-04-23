@@ -1,0 +1,8 @@
+{
+  "delay": 1,
+  "invariant": "fwd_ret_1 at t = close_{t+1}/close_t - 1, compatible with delay=1 (signal at t, trade at t+1)",
+  "future_perturbation_test": "PASSED",
+  "last_day_fwd_ret_nan_share": 1.0,
+  "last_day_fwd_ret_nan_expected": "high (cannot observe close_{t+1})",
+  "inherited_panel_from": "20260420_fundamental_accruals_alpha"
+}

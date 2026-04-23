@@ -1,0 +1,72 @@
+session_id: 20260423_a_share_asset_growth_investment
+round: 1
+date: 2026-04-23
+mechanism: asset_growth_investment_anomaly
+batch_id: "0001"
+
+inputs:
+  research_brief: outputs/research_brief.md
+  session_metadata: outputs/session_metadata.yml
+  expressions: outputs/expressions_batch_0001.md
+
+execution:
+  rebalance: monthly_21d
+  delay: 1
+  cost_bps_per_side: 5
+  panel_source: .cache/panel.parquet (inherited from 20260420_fundamental_accruals_alpha)
+  panel_dates: 2020-01-02 to 2025-04-18
+  universe_size_median: ~4000 stocks/day
+
+audits:
+  execution_delay:
+    status: PASSED
+    invariant: "fwd_ret_1 at t = close_{t+1}/close_t - 1 (delay=1 compliant)"
+    future_perturbation_test: PASSED
+  look_ahead:
+    status: PASSED
+    note: "factors built only from past-dated balance-sheet rows (PIT via f_ann_date + 1); future-perturbation leaves past factors bit-identical"
+  worst_year_floor:
+    status: FAILED
+    floor: 0.5
+    best_factor_worst_year_ls: -1.24 (f5_ag_2y_ind, 2020)
+    best_factor_worst_year_q5_excess: -0.64 (f5_ag_2y_ind, 2020)
+  best_year_out:
+    status: NOT_RUN
+    reason: "worst-year floor already failed; running best-year-out is redundant"
+  falsification_first:
+    question: "If Sharpe is wrong by 50%, what is the most likely single cause?"
+    answer: "2021-2023 window dominates headline; 2020 bull-run shorted-leg destruction is structural not tail; 2025 YTD weakness may indicate regime shift. Test: recompute Sharpe on 2021-2023 only (would likely be >1.5)."
+    run: not_needed (already failed worst-year)
+
+results_summary:
+  top_factor: f5_ag_2y_ind
+  top_ic_tstat_h60: 17.08
+  top_sharpe_ls_full: 0.825
+  top_sharpe_q5_excess_full: 0.594
+  all_factors_positive_full: 6 of 8 (f3, f6 broken)
+  all_factors_negative_2020: 8 of 8
+  mechanism_validated_regime: "bear / correction markets (2021-2023)"
+  mechanism_failed_regime: "2020 liquidity-driven bull, 2025 YTD"
+
+decision:
+  outcome: RESEARCH-ONLY
+  do_not_promote: true
+  reasons:
+    - full-sample Sharpe 0.825 below 1.0 hard floor
+    - worst-year LS Sharpe -1.24 far below 0.5 floor
+    - LS short-leg is not deployable in A-share (no efficient shorting + bull-year destruction)
+  deployable_variant_if_any: "f5_ag_2y_ind long-only Q5, quarterly rebalance — needs round 2 to verify"
+
+next_actions:
+  round_2_refinements:
+    - rebalance_freq: quarterly (63d) to match IC horizon
+    - portfolio: long-only Q5 (drop short leg entirely)
+    - weighting: cross-sectional rank-weighted within Q5
+    - regime_filter: off when CSI300 6-month return > 20%
+    - liquidity_floor: require top 60% circ_mv
+    - residualize_vs_size: proper OLS on log(total_mv), not median-demean
+  round_3_pivot_candidates:
+    - net_share_issuance (NSI): cleanest sibling mechanism, same data channel
+    - ocf_over_assets: cash-flow quality (correlated with accruals, skip if low marginal info)
+    - earnings_yield_change: new mechanism (expectation revision)
+  session_continues: true (to round 2 refinement, not new session)
