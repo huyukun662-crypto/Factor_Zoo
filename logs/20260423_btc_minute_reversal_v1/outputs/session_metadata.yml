@@ -1,0 +1,84 @@
+session_id: 20260423_btc_minute_reversal_v1
+created_utc: "2026-04-23T16:45:00Z"
+agent: 2_hypothesis_architect
+
+asset: BTC-USD
+source: coinbase_exchange
+bar_frequency: 1m
+sample_window:
+  start_utc: "2026-02-22T16:00:00Z"
+  end_utc:   "2026-04-23T16:00:00Z"
+  days: 60
+
+# ---- Economic thesis ----
+mechanism:
+  name: short_term_reversal_vol_scaled_hour_demeaned
+  anchor_papers:
+    - "Nagel 2012 — Evaporating Liquidity (review of microstructural reversal)"
+    - "Heston & Sadka 2008 — Seasonality in the cross-section"
+    - "Lehmann 1990 — Fads, martingales, and market efficiency (reversal)"
+  one_line: >
+    At minute scale, aggressive liquidity-demanding flows pay liquidity
+    providers; the previous k-minute return is expected to predict the
+    NEXT k-minute return with a negative sign, strongest when the
+    past move is large relative to contemporaneous realized vol.
+  expected_ic_sign: "positive (signal = -z(past_ret) → long when past move was extreme down)"
+  expected_horizon_profile: "IC peaks at 1-15 min; decays past 60 min"
+
+# ---- Target ----
+target:
+  definition: "log(close[t+k+delay]) - log(close[t+delay])"
+  delay_bars: 1
+  primary_horizon_minutes: 5
+  aux_horizons_minutes: [1, 15, 60]
+  invariant: "target_shift == -(delay + k); delay=1, primary k=5 → shift -6"
+
+# ---- Regime / universe ----
+regime:
+  notes: >
+    Single asset, 60-day sample. Window spans one full monthly options-expiry
+    cycle and several US/Asia sessions. Decompose per hour-of-day and per week.
+  splits:
+    train_window: "first 40 days (2026-02-22 → 2026-04-02)"
+    test_window:  "last 20 days  (2026-04-02 → 2026-04-22)"
+    note: >
+      This is a time-series split; we are NOT doing k-fold. Model
+      decisions are made on train; final Sharpe is reported on test.
+
+# ---- Neutralization ----
+neutralization:
+  hour_of_day_demean: true
+  weekday_demean: false    # 7-day cycle is barely 8-9 folds, too noisy
+  robust_winsorize_target: true
+  target_winsor_pct: [0.005, 0.995]   # 0.5% / 99.5% — generous at minute scale
+
+# ---- Evaluation targets (hard floors) ----
+targets_required_for_promote:
+  ic_tstat_min_at_5min: 4.0
+  decile_spread_sharpe_min_gross: 1.0
+  after_cost_sharpe_min: 0.0
+  cost_bps_per_side: 5.0
+  trade_frequency_max_per_hour: 10
+  worst_week_sharpe_min: -1.0
+  best_week_out_sharpe_min_ratio: 0.5   # ≥ 50% of headline when best week removed
+
+# ---- Failure conditions (RESEARCH-ONLY) ----
+failure_conditions:
+  - "IC sign inverts between train and test → mechanism is spurious"
+  - "IC positive but decile D10-D1 Sharpe < 0.3 → dispersion trap"
+  - "Hour-demean inverts the sign vs raw → hour seasonality IS the factor, not the mechanism"
+  - "Trade frequency > 10/hour → cost >> alpha"
+  - "Best-week-out Sharpe < 50% of headline → regime-concentrated"
+
+# ---- Notes for Agent 3 ----
+constraints_for_agent_3:
+  rule_of_8: true
+  mechanism_consistency: >
+    All 8 expressions MUST express the reversal mechanism (past return's
+    effect on future return). Distinguish by: (a) lookback window length,
+    (b) volume weighting, (c) range vs close-to-close, (d) vol-scaling
+    method, (e) hour-of-day treatment.
+  forbidden:
+    - "Any expression that uses future bars to compute the signal"
+    - "Any expression where the sign is not pre-specified"
+    - "Mixing reversal and momentum in the same expression (different mechanism)"

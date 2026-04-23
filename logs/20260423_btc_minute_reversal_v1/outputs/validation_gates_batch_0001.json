@@ -1,0 +1,498 @@
+{
+  "r1_rev_1m": {
+    "G1": true,
+    "G2": true,
+    "G3": {
+      "passed": false,
+      "checks": {
+        "coverage": {
+          "pass": true,
+          "observed": 0.9999884232461218,
+          "threshold": 0.95,
+          "desc": "non-NaN fraction"
+        },
+        "std_nonzero": {
+          "pass": true,
+          "observed": 1.0,
+          "threshold": true,
+          "desc": "signal std > 0"
+        },
+        "trade_freq_per_hour_ok": {
+          "pass": false,
+          "observed": 17.780710589379364,
+          "threshold": 10.0,
+          "desc": "pos changes / hour \u2264 10"
+        },
+        "days_coverage": {
+          "pass": true,
+          "observed": 1.0,
+          "threshold": 0.8,
+          "desc": "fraction of days with any active position"
+        },
+        "bars_per_day_median_ok": {
+          "pass": true,
+          "observed": 282.0,
+          "threshold": 30,
+          "desc": "median active bars per day"
+        }
+      }
+    },
+    "G4": {
+      "passed": true,
+      "ic_primary": 0.008059444390358383,
+      "ic_60m": 0.0023630127070265418,
+      "d10_minus_d1_mean_fwd": 5.4113694415188175e-05,
+      "checks": {
+        "ic_sign": {
+          "pass": true,
+          "observed": 0.008059444390358383,
+          "desc": "IC sign matches thesis"
+        },
+        "decile_dir": {
+          "pass": true,
+          "observed": 5.4113694415188175e-05,
+          "desc": "D10 > D1 mean fwd_ret"
+        },
+        "horizon_decay": {
+          "pass": true,
+          "observed": 0.005696431683331842,
+          "desc": "|IC_5m| >= |IC_60m|"
+        }
+      }
+    }
+  },
+  "r1_rev_5m": {
+    "G1": true,
+    "G2": true,
+    "G3": {
+      "passed": true,
+      "checks": {
+        "coverage": {
+          "pass": true,
+          "observed": 0.9999421162306089,
+          "threshold": 0.95,
+          "desc": "non-NaN fraction"
+        },
+        "std_nonzero": {
+          "pass": true,
+          "observed": 1.0,
+          "threshold": true,
+          "desc": "signal std > 0"
+        },
+        "trade_freq_per_hour_ok": {
+          "pass": true,
+          "observed": 9.056787264833574,
+          "threshold": 10.0,
+          "desc": "pos changes / hour \u2264 10"
+        },
+        "days_coverage": {
+          "pass": true,
+          "observed": 1.0,
+          "threshold": 0.8,
+          "desc": "fraction of days with any active position"
+        },
+        "bars_per_day_median_ok": {
+          "pass": true,
+          "observed": 279.0,
+          "threshold": 30,
+          "desc": "median active bars per day"
+        }
+      }
+    },
+    "G4": {
+      "passed": false,
+      "ic_primary": -0.0026273138407286243,
+      "ic_60m": 0.002965368026920179,
+      "d10_minus_d1_mean_fwd": -1.5661882973334664e-06,
+      "checks": {
+        "ic_sign": {
+          "pass": false,
+          "observed": -0.0026273138407286243,
+          "desc": "IC sign matches thesis"
+        },
+        "decile_dir": {
+          "pass": false,
+          "observed": -1.5661882973334664e-06,
+          "desc": "D10 > D1 mean fwd_ret"
+        },
+        "horizon_decay": {
+          "pass": false,
+          "observed": -0.00033805418619155475,
+          "desc": "|IC_5m| >= |IC_60m|"
+        }
+      }
+    }
+  },
+  "r1_rev_15m": {
+    "G1": true,
+    "G2": true,
+    "G3": {
+      "passed": true,
+      "checks": {
+        "coverage": {
+          "pass": true,
+          "observed": 0.9998263486918268,
+          "threshold": 0.95,
+          "desc": "non-NaN fraction"
+        },
+        "std_nonzero": {
+          "pass": true,
+          "observed": 1.0,
+          "threshold": true,
+          "desc": "signal std > 0"
+        },
+        "trade_freq_per_hour_ok": {
+          "pass": true,
+          "observed": 5.232675273548312,
+          "threshold": 10.0,
+          "desc": "pos changes / hour \u2264 10"
+        },
+        "days_coverage": {
+          "pass": true,
+          "observed": 1.0,
+          "threshold": 0.8,
+          "desc": "fraction of days with any active position"
+        },
+        "bars_per_day_median_ok": {
+          "pass": true,
+          "observed": 289.0,
+          "threshold": 30,
+          "desc": "median active bars per day"
+        }
+      }
+    },
+    "G4": {
+      "passed": true,
+      "ic_primary": 0.010037884626641342,
+      "ic_60m": 0.0016892643125838056,
+      "d10_minus_d1_mean_fwd": 6.227034009742446e-05,
+      "checks": {
+        "ic_sign": {
+          "pass": true,
+          "observed": 0.010037884626641342,
+          "desc": "IC sign matches thesis"
+        },
+        "decile_dir": {
+          "pass": true,
+          "observed": 6.227034009742446e-05,
+          "desc": "D10 > D1 mean fwd_ret"
+        },
+        "horizon_decay": {
+          "pass": true,
+          "observed": 0.008348620314057536,
+          "desc": "|IC_5m| >= |IC_60m|"
+        }
+      }
+    }
+  },
+  "r1_rev_5m_volscale": {
+    "G1": true,
+    "G2": true,
+    "G3": {
+      "passed": false,
+      "checks": {
+        "coverage": {
+          "pass": true,
+          "observed": 0.9999421162306089,
+          "threshold": 0.95,
+          "desc": "non-NaN fraction"
+        },
+        "std_nonzero": {
+          "pass": true,
+          "observed": 1.0,
+          "threshold": true,
+          "desc": "signal std > 0"
+        },
+        "trade_freq_per_hour_ok": {
+          "pass": false,
+          "observed": 11.115716353111432,
+          "threshold": 10.0,
+          "desc": "pos changes / hour \u2264 10"
+        },
+        "days_coverage": {
+          "pass": true,
+          "observed": 1.0,
+          "threshold": 0.8,
+          "desc": "fraction of days with any active position"
+        },
+        "bars_per_day_median_ok": {
+          "pass": true,
+          "observed": 288.0,
+          "threshold": 30,
+          "desc": "median active bars per day"
+        }
+      }
+    },
+    "G4": {
+      "passed": false,
+      "ic_primary": -0.002166244718854309,
+      "ic_60m": -0.005224395182781328,
+      "d10_minus_d1_mean_fwd": -1.5271296056742425e-05,
+      "checks": {
+        "ic_sign": {
+          "pass": false,
+          "observed": -0.002166244718854309,
+          "desc": "IC sign matches thesis"
+        },
+        "decile_dir": {
+          "pass": false,
+          "observed": -1.5271296056742425e-05,
+          "desc": "D10 > D1 mean fwd_ret"
+        },
+        "horizon_decay": {
+          "pass": false,
+          "observed": -0.003058150463927019,
+          "desc": "|IC_5m| >= |IC_60m|"
+        }
+      }
+    }
+  },
+  "r1_rev_15m_volscale": {
+    "G1": true,
+    "G2": true,
+    "G3": {
+      "passed": true,
+      "checks": {
+        "coverage": {
+          "pass": true,
+          "observed": 0.9998263486918268,
+          "threshold": 0.95,
+          "desc": "non-NaN fraction"
+        },
+        "std_nonzero": {
+          "pass": true,
+          "observed": 1.0,
+          "threshold": true,
+          "desc": "signal std > 0"
+        },
+        "trade_freq_per_hour_ok": {
+          "pass": true,
+          "observed": 6.5957274358825915,
+          "threshold": 10.0,
+          "desc": "pos changes / hour \u2264 10"
+        },
+        "days_coverage": {
+          "pass": true,
+          "observed": 1.0,
+          "threshold": 0.8,
+          "desc": "fraction of days with any active position"
+        },
+        "bars_per_day_median_ok": {
+          "pass": true,
+          "observed": 290.0,
+          "threshold": 30,
+          "desc": "median active bars per day"
+        }
+      }
+    },
+    "G4": {
+      "passed": false,
+      "ic_primary": 0.005303477547916951,
+      "ic_60m": -0.005458631926541295,
+      "d10_minus_d1_mean_fwd": -1.6041014641158275e-05,
+      "checks": {
+        "ic_sign": {
+          "pass": true,
+          "observed": 0.005303477547916951,
+          "desc": "IC sign matches thesis"
+        },
+        "decile_dir": {
+          "pass": false,
+          "observed": -1.6041014641158275e-05,
+          "desc": "D10 > D1 mean fwd_ret"
+        },
+        "horizon_decay": {
+          "pass": false,
+          "observed": -0.0001551543786243439,
+          "desc": "|IC_5m| >= |IC_60m|"
+        }
+      }
+    }
+  },
+  "r1_rev_5m_volscale_hd": {
+    "G1": true,
+    "G2": true,
+    "G3": {
+      "passed": false,
+      "checks": {
+        "coverage": {
+          "pass": true,
+          "observed": 0.9999421162306089,
+          "threshold": 0.95,
+          "desc": "non-NaN fraction"
+        },
+        "std_nonzero": {
+          "pass": true,
+          "observed": 1.0,
+          "threshold": true,
+          "desc": "signal std > 0"
+        },
+        "trade_freq_per_hour_ok": {
+          "pass": false,
+          "observed": 11.103212735166425,
+          "threshold": 10.0,
+          "desc": "pos changes / hour \u2264 10"
+        },
+        "days_coverage": {
+          "pass": true,
+          "observed": 1.0,
+          "threshold": 0.8,
+          "desc": "fraction of days with any active position"
+        },
+        "bars_per_day_median_ok": {
+          "pass": true,
+          "observed": 285.0,
+          "threshold": 30,
+          "desc": "median active bars per day"
+        }
+      }
+    },
+    "G4": {
+      "passed": false,
+      "ic_primary": -0.0015795923378317258,
+      "ic_60m": -0.004433841031608264,
+      "d10_minus_d1_mean_fwd": -1.1604704361959145e-05,
+      "checks": {
+        "ic_sign": {
+          "pass": false,
+          "observed": -0.0015795923378317258,
+          "desc": "IC sign matches thesis"
+        },
+        "decile_dir": {
+          "pass": false,
+          "observed": -1.1604704361959145e-05,
+          "desc": "D10 > D1 mean fwd_ret"
+        },
+        "horizon_decay": {
+          "pass": false,
+          "observed": -0.002854248693776538,
+          "desc": "|IC_5m| >= |IC_60m|"
+        }
+      }
+    }
+  },
+  "r1_rev_range5m": {
+    "G1": true,
+    "G2": true,
+    "G3": {
+      "passed": true,
+      "checks": {
+        "coverage": {
+          "pass": true,
+          "observed": 0.9999421162306089,
+          "threshold": 0.95,
+          "desc": "non-NaN fraction"
+        },
+        "std_nonzero": {
+          "pass": true,
+          "observed": 1.0,
+          "threshold": true,
+          "desc": "signal std > 0"
+        },
+        "trade_freq_per_hour_ok": {
+          "pass": true,
+          "observed": 5.53424023154848,
+          "threshold": 10.0,
+          "desc": "pos changes / hour \u2264 10"
+        },
+        "days_coverage": {
+          "pass": true,
+          "observed": 1.0,
+          "threshold": 0.8,
+          "desc": "fraction of days with any active position"
+        },
+        "bars_per_day_median_ok": {
+          "pass": true,
+          "observed": 244.0,
+          "threshold": 30,
+          "desc": "median active bars per day"
+        }
+      }
+    },
+    "G4": {
+      "passed": false,
+      "ic_primary": -0.0036443716601667155,
+      "ic_60m": 0.0009605722228664981,
+      "d10_minus_d1_mean_fwd": -8.70328319774725e-06,
+      "checks": {
+        "ic_sign": {
+          "pass": false,
+          "observed": -0.0036443716601667155,
+          "desc": "IC sign matches thesis"
+        },
+        "decile_dir": {
+          "pass": false,
+          "observed": -8.70328319774725e-06,
+          "desc": "D10 > D1 mean fwd_ret"
+        },
+        "horizon_decay": {
+          "pass": true,
+          "observed": 0.0026837994373002175,
+          "desc": "|IC_5m| >= |IC_60m|"
+        }
+      }
+    }
+  },
+  "r1_rev_amount5m": {
+    "G1": true,
+    "G2": true,
+    "G3": {
+      "passed": true,
+      "checks": {
+        "coverage": {
+          "pass": true,
+          "observed": 0.9999421162306089,
+          "threshold": 0.95,
+          "desc": "non-NaN fraction"
+        },
+        "std_nonzero": {
+          "pass": true,
+          "observed": 1.0,
+          "threshold": true,
+          "desc": "signal std > 0"
+        },
+        "trade_freq_per_hour_ok": {
+          "pass": true,
+          "observed": 4.390853835021708,
+          "threshold": 10.0,
+          "desc": "pos changes / hour \u2264 10"
+        },
+        "days_coverage": {
+          "pass": true,
+          "observed": 1.0,
+          "threshold": 0.8,
+          "desc": "fraction of days with any active position"
+        },
+        "bars_per_day_median_ok": {
+          "pass": true,
+          "observed": 316.0,
+          "threshold": 30,
+          "desc": "median active bars per day"
+        }
+      }
+    },
+    "G4": {
+      "passed": true,
+      "ic_primary": 0.0015704302177249126,
+      "ic_60m": -0.00042236742684492387,
+      "d10_minus_d1_mean_fwd": 2.224929692487524e-05,
+      "checks": {
+        "ic_sign": {
+          "pass": true,
+          "observed": 0.0015704302177249126,
+          "desc": "IC sign matches thesis"
+        },
+        "decile_dir": {
+          "pass": true,
+          "observed": 2.224929692487524e-05,
+          "desc": "D10 > D1 mean fwd_ret"
+        },
+        "horizon_decay": {
+          "pass": true,
+          "observed": 0.0011480627908799887,
+          "desc": "|IC_5m| >= |IC_60m|"
+        }
+      }
+    }
+  }
+}

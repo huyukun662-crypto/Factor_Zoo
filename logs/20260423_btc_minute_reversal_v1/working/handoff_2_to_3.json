@@ -1,0 +1,32 @@
+{
+  "session_id": "20260423_btc_minute_reversal_v1",
+  "from": "agent_2_hypothesis_architect",
+  "to": "agent_3_alpha_builder",
+  "mechanism": "short_term_reversal_vol_scaled_hour_demeaned",
+  "target": {
+    "definition": "log(close[t+k+delay]) - log(close[t+delay])",
+    "primary_k_min": 5,
+    "aux_k_min": [1, 15, 60],
+    "delay_bars": 1,
+    "invariant": "target_shift = -(delay + k)"
+  },
+  "rule_of_8_required": true,
+  "expression_distinguishing_axes": [
+    "lookback window length (1m / 5m / 15m / 60m)",
+    "volume weighting (equal / amount-weighted)",
+    "price path (close-to-close / high-low range / candle body)",
+    "vol scaling (divide by realized vol / winsor then z)",
+    "hour demean (on / off for one reference variant)"
+  ],
+  "forbidden": [
+    "future-bar references",
+    "expressions without pre-specified sign",
+    "mixing reversal and momentum in one expression"
+  ],
+  "hard_floors": {
+    "ic_tstat_min": 4.0,
+    "decile_spread_sharpe_min_gross": 1.0,
+    "after_cost_sharpe_min": 0.0,
+    "cost_bps_per_side": 5.0
+  }
+}
