@@ -1,0 +1,36 @@
+{
+  "session_id": "20260424_a_share_etf_reversal_v2",
+  "from_agent": "1_research_librarian",
+  "to_agent": "2_hypothesis_architect",
+  "timestamp": "2026-04-24T00:00:00Z",
+  "round": 1,
+  "brief_ref": "outputs/research_brief.md",
+  "objective_ref": "inputs/objective.md",
+  "universe": {
+    "size_declared": 34,
+    "source_parquet": "logs/20260422_industry_rotation_cn/outputs/etf_daily.parquet",
+    "schema": ["trade_date", "ts_code", "etf_name", "close", "close_adj", "ret", "vol", "amount", "turnover_proxy"],
+    "date_range": ["2015-01-05", "2026-04-22"],
+    "common_window_hint": "≈ 2019-01-04 onward (≥ 10 live ETFs; aligns with V7 baseline)"
+  },
+  "prior_evidence": {
+    "best_ref": "logs/20260423_a_share_etf_reversal_v1/outputs/final_summary.md",
+    "key_finding": "Reversal on A-share ETFs is a narrow ~60d window; ≤20d is momentum, ~1y is also momentum",
+    "best_candidate_prior": {"id": "r2_lt_rev_60d", "ic_tstat_at_k60": 2.35, "net_sharpe_5bps": 0.56, "worst_year_sharpe": -0.68, "worst_year": 2020}
+  },
+  "recommended_expressions_count": 8,
+  "recommended_split": {
+    "short_falsification_probes": 2,
+    "medium_horizon_scan": 4,
+    "drawdown_event_type": 2
+  },
+  "v7_baseline_source": "logs/20260423_a_share_etf_weekly_tqpb_v1/outputs/round2/d2_v7_pnl_series.csv",
+  "mandatory_audits": [
+    "execution_delay",
+    "look_ahead_randomization",
+    "worst_year_sharpe_floor_0.5",
+    "best_year_out_at_least_50pct_headline",
+    "falsification_adversarial"
+  ],
+  "g1_non_degeneracy_threshold": "signal_raw_nonzero_fraction >= 0.01"
+}

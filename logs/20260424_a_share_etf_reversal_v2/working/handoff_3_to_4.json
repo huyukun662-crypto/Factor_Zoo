@@ -1,0 +1,24 @@
+{
+  "session_id": "20260424_a_share_etf_reversal_v2",
+  "from_agent": "3_alpha_builder",
+  "to_agent": "4_backtest_operator",
+  "timestamp": "2026-04-24T00:30:00Z",
+  "round": 1,
+  "batch": 1,
+  "expressions_spec_ref": "outputs/expressions_batch_0001.md",
+  "build_script": "scripts/01_build_and_backtest.py",
+  "panel_source": "logs/20260422_industry_rotation_cn/outputs/etf_daily.parquet",
+  "common_window_start": "2019-01-04",
+  "staggered_join_bars": 60,
+  "neutralization": "universe_ew_demean_per_date",
+  "strategies_to_test": [
+    "ls_top4_bot4_weekly",
+    "ls_top4_bot4_monthly",
+    "longonly_top3_weekly",
+    "longonly_top3_monthly"
+  ],
+  "cost_grid_bps": [0, 5, 10, 15],
+  "forward_targets": [1, 5, 20, 40, 60, 80],
+  "gates_to_apply": ["G1", "G2", "G3", "G4"],
+  "audits_to_apply": ["execution_delay", "lookahead_randomization", "best_year_out", "falsification_probe"]
+}

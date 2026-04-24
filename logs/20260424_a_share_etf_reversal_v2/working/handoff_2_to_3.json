@@ -1,0 +1,34 @@
+{
+  "session_id": "20260424_a_share_etf_reversal_v2",
+  "from_agent": "2_hypothesis_architect",
+  "to_agent": "3_alpha_builder",
+  "timestamp": "2026-04-24T00:10:00Z",
+  "round": 1,
+  "batch": 1,
+  "metadata_ref": "outputs/session_metadata.yml",
+  "expressions_required_count": 8,
+  "convention": "high_signal_equals_long",
+  "neutralization": "universe_ew_demean_per_date",
+  "expressions": [
+    {"id": "r1_rev_1d",       "formula_raw": "-logret_1d",      "horizon_k": 1,  "hold": "weekly",  "cluster": "short_falsification"},
+    {"id": "r1_rev_5d",       "formula_raw": "-logret_5d",      "horizon_k": 5,  "hold": "weekly",  "cluster": "short_falsification"},
+    {"id": "r1_rev_20d",      "formula_raw": "-logret_20d",     "horizon_k": 20, "hold": "monthly", "cluster": "medium_horizon_scan"},
+    {"id": "r1_rev_40d",      "formula_raw": "-logret_40d",     "horizon_k": 40, "hold": "monthly", "cluster": "medium_horizon_scan"},
+    {"id": "r1_rev_60d",      "formula_raw": "-logret_60d",     "horizon_k": 60, "hold": "monthly", "cluster": "medium_horizon_scan"},
+    {"id": "r1_rev_80d",      "formula_raw": "-logret_80d",     "horizon_k": 80, "hold": "monthly", "cluster": "medium_horizon_scan"},
+    {"id": "r1_dd60_raw",     "formula_raw": "(max(close_adj, 60) - close_adj) / max(close_adj, 60)", "horizon_k": 60, "hold": "monthly", "cluster": "drawdown_event"},
+    {"id": "r1_dd60_recover", "formula_raw": "dd60_raw * I[logret_5d > 0]", "horizon_k": 60, "hold": "monthly", "cluster": "drawdown_event"}
+  ],
+  "audit_probes_outside_rule_of_8": [
+    {"id": "probe_mom_20d_plus", "formula_raw": "+logret_20d", "purpose": "pipeline sanity / falsification control"}
+  ],
+  "strategies_to_test": ["ls_top4_bot4_weekly", "ls_top4_bot4_monthly", "longonly_top3_weekly", "longonly_top3_monthly"],
+  "cost_grid_bps_side": [0, 5, 10, 15],
+  "g1_check": "signal_raw_nonzero_fraction >= 0.01",
+  "pitfalls_to_avoid": [
+    "No rolling().max() without shift(1) when forward-looking feature needed",
+    "Dense weekly rebalance matrix (no ffill on sparse signals)",
+    "Universe staggered-join: new ETFs need 60 bars before ranked",
+    "Compute target with single canonical path, then re-verify via shift(-1-k) on close_adj"
+  ]
+}

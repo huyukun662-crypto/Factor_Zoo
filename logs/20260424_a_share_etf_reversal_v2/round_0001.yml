@@ -1,0 +1,117 @@
+round: 1
+session_id: 20260424_a_share_etf_reversal_v2
+status: closed
+verdict: RESEARCH_ONLY
+closed_on: 2026-04-24
+
+universe:
+  label: a_share_thematic_etf_34
+  n_symbols: 34
+  sample_window: [2019-01-04, 2026-04-22]
+  live_rows: 43136
+  source: logs/20260422_industry_rotation_cn/outputs/etf_daily.parquet
+
+agents:
+  agent_1_research_librarian:
+    deliverable: outputs/research_brief.md
+    key_prior_evidence_cited: r2_lt_rev_60d (IC t=2.35 on 18-ETF universe, prior session)
+  agent_2_hypothesis_architect:
+    deliverable: outputs/session_metadata.yml
+    clusters: [short_falsification, medium_horizon_scan, drawdown_event]
+    rule_of_8: true
+  agent_3_alpha_builder:
+    deliverable: outputs/expressions_batch_0001.md
+    expressions_written: 8
+    audit_probes: 1 (probe_mom_20d_plus)
+  agent_4_backtest_operator:
+    deliverable: outputs/validation_gates_batch_0001.json + audit_report.json
+    strategies_per_expression: 4
+    gates_applied: [G1, G2, G3, G4, G5]
+  agent_5_evaluator:
+    deliverables: [outputs/alpha_ranking.md, outputs/final_summary.md, round_0001.yml]
+    verdict: RESEARCH_ONLY
+
+expressions_tested:
+  - {id: r1_rev_1d,       cluster: short_falsification, k: 1,  kind: logret,        g1_pass: true, ic_t_own: 1.27, best_net_sh_5bps: 0.260, best_strat: longonly_top3_monthly, worst_year_sh: -1.466}
+  - {id: r1_rev_5d,       cluster: short_falsification, k: 5,  kind: logret,        g1_pass: true, ic_t_own: 0.46, best_net_sh_5bps: 0.273, best_strat: longonly_top3_monthly, worst_year_sh: -0.515}
+  - {id: r1_rev_20d,      cluster: medium_scan,         k: 20, kind: logret,        g1_pass: true, ic_t_own: 0.79, best_net_sh_5bps: 0.559, best_strat: longonly_top3_monthly, worst_year_sh: -0.640}
+  - {id: r1_rev_40d,      cluster: medium_scan,         k: 40, kind: logret,        g1_pass: true, ic_t_own: 3.02, best_net_sh_5bps: 0.774, best_strat: longonly_top3_monthly, worst_year_sh: -0.585}
+  - {id: r1_rev_60d,      cluster: medium_scan,         k: 60, kind: logret,        g1_pass: true, ic_t_own: 2.43, best_net_sh_5bps: 0.559, best_strat: longonly_top3_monthly, worst_year_sh: -0.775}
+  - {id: r1_rev_80d,      cluster: medium_scan,         k: 80, kind: logret,        g1_pass: true, ic_t_own: 2.29, best_net_sh_5bps: 0.757, best_strat: longonly_top3_monthly, worst_year_sh: -0.705}
+  - {id: r1_dd60_raw,     cluster: drawdown_event,      k: 60, kind: dd60_raw,      g1_pass: true, ic_t_own: -0.78, best_net_sh_5bps: 0.392, best_strat: longonly_top3_weekly,  worst_year_sh: -0.675}
+  - {id: r1_dd60_recover, cluster: drawdown_event,      k: 60, kind: dd60_recover,  g1_pass: true, ic_t_own: 1.63, best_net_sh_5bps: 0.354, best_strat: longonly_top3_weekly,  worst_year_sh: -1.262}
+
+cluster_findings:
+  short_falsification:
+    hypothesis: "≤5d should show momentum sign (negative IC) based on prior 18-ETF session"
+    result: "weakly positive IC (t=0.46-1.27); hypothesis did NOT replicate on 34-ETF universe"
+    interpretation: "thicker cross-section dampens the short-horizon momentum effect; signal fades toward noise not toward reversal"
+  medium_horizon_scan:
+    hypothesis: "40-80d reversal zone should extend prior 60d point estimate"
+    result: "confirmed — IC t-stat ladder: k=20: 0.79 | k=40: 3.02 | k=60: 2.43 | k=80: 2.29"
+    interpretation: "34-ETF universe sharpens and widens the reversal zone; k=40 is new sweet spot"
+  drawdown_event:
+    hypothesis: "drawdown depth from 60d max should positively predict reversal"
+    result: "dd60_raw IC -0.006 (t=-0.78); dd60_recover IC +0.013 (t=+1.63)"
+    interpretation: "drawdown depth alone is NOT a reversal feature on this universe; conditional recovery gate adds marginally"
+
+audits:
+  audit_1_execution_delay:
+    method: "double-path: path A = log(close[t+1+k]/close[t+1]); path B = sum of 1-bar logrets[t+2..t+1+k]"
+    max_abs_diff: 1.5e-15
+    pass: true
+  audit_2_lookahead_randomization:
+    method: "within-date symbol-label permutation on target; signal = r1_rev_40d at k=40"
+    real_ic: 0.0262
+    real_ic_t: 3.02
+    shuffled_ic: 0.0037
+    shuffled_ic_t: 0.60
+    pass: true
+  audit_3_best_year_out:
+    method: "remove best calendar year, recompute full-period Sharpe"
+    results:
+      r1_rev_40d_longonly_top3_monthly: {headline: 0.774, drop_year: 2020, out_sharpe: 0.563, ratio: 0.73, pass: true}
+      r1_rev_80d_longonly_top3_monthly: {headline: 0.757, drop_year: 2020, out_sharpe: 0.534, ratio: 0.71, pass: true}
+      r1_rev_60d_longonly_top3_weekly:  {headline: 0.556, drop_year: 2019, out_sharpe: 0.422, ratio: 0.76, pass: true}
+  audit_4_falsification:
+    method: "audit probe probe_mom_20d_plus (+logret_20d) at k=60 on same pipeline"
+    probe_ic: -0.0028
+    probe_ic_t: -0.32
+    pass: true
+    interpretation: "pipeline clean — no momentum leakage"
+  audit_5_worst_year_floor:
+    threshold_research_floor: 0.0
+    threshold_promote_floor: 0.5
+    results:
+      r1_rev_40d_longonly_top3_monthly: {worst_year: 2023, worst_sharpe: -0.585, pass_research_floor: false, pass_promote_floor: false}
+      r1_rev_80d_longonly_top3_monthly: {worst_year: 2023, worst_sharpe: -0.705, pass_research_floor: false, pass_promote_floor: false}
+      r1_rev_60d_longonly_top3_weekly:  {worst_year: 2022, worst_sharpe: -0.349, pass_research_floor: false, pass_promote_floor: false}
+    pass: false
+    notes: "all candidates fail the ≥0 research floor; the least-bad is r1_rev_40d weekly with 2023 Sh -0.028 (nearly flat)"
+
+v7_fusion:
+  v7_baseline_source: logs/20260423_a_share_etf_weekly_tqpb_v1/outputs/round2/d2_v7_pnl_series.csv
+  common_weeks: 349
+  v7_sharpe_on_common: 3.733
+  best_blend: {id: r1_rev_80d_monthly, weight: 0.10, combined_sharpe: 3.718, delta_vs_v7: -0.015}
+  verdict: "no fusion variant beats V7 alone; maximum delta is -0.015 within noise"
+
+workflow_dogfood:
+  - pattern: long_only_vs_ls_diverge_by_universe
+    observation: "Short leg on A-share thematic ETFs sheds ~0.8-1.0 Sharpe at long-term reversal horizons due to momentum persistence in leading themes. Long-only lifted r1_rev_40d from -0.010 to +0.774 at 5 bps."
+    recommendation: "Update references/common-pitfalls.md with explicit 'test both LS and long-only top-N for concentrated-regime universes' directive."
+  - pattern: within_date_vs_within_symbol_shuffle
+    observation: "Within-symbol shuffle preserves per-symbol mean return and produces spurious non-zero IC when signals correlate with symbol-level performance. Within-date symbol-label permutation is the correct randomization."
+    recommendation: "Update references/execution-delay-audit.md with within-date shuffle as the default."
+  - pattern: baseline_reproduction_on_common_window
+    observation: "V7 Sharpe changed from 1.76 (377w full) to 3.73 (349w inner-join with reversal strategy). Fusion comparisons must use the inner-join baseline to avoid sign-flip mistakes."
+    recommendation: "Add to references/tvt-split-template.md: baseline Sharpe must be quoted on the exact alignment window used."
+  - pattern: cross_session_bad_year_rotation
+    observation: "18-ETF session's bad year was 2020 (COVID momentum, short-leg pain); 34-ETF session's bad year is 2023 (TMT dispersion, long-leg pain). Same mechanism, different regime."
+    recommendation: "Reversal family on A-share ETFs appears to have ~1-in-4 bad years; full-sample worst-year floor may be structurally hard to pass without regime-conditioning."
+
+next_round_suggestions:
+  - regime_conditional_longonly: "gate r1_rev_40d top-3 by universe breadth/dispersion/200d-mom filter; activate only when regime is rotation-friendly"
+  - ensemble_k40_k80: "low-corr combination of k=40 and k=80 long-only top-3 may smooth year-variance"
+  - stop_loss_overlay: "intra-month 20d-low stop on held ETFs to cut long-leg losers early in 2022-2023 style regimes"
+  - dispersion_conditional: "only enter when 40d-return cross-section dispersion > 75th percentile"

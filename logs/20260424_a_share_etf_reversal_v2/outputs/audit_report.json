@@ -1,0 +1,148 @@
+{
+  "audit_1_execution_delay": {
+    "path_A_spec": "log(close_adj[t+1+60] / close_adj[t+1])",
+    "path_B_spec": "sum of 1-bar logrets[t+2 .. t+1+60]",
+    "max_abs_diff": 1.4988010832439613e-15,
+    "median_abs_diff": 2.671474153004283e-16,
+    "n_compared": 46526,
+    "pass": true
+  },
+  "audit_2_lookahead_randomization": {
+    "signal": "r1_rev_40d (demeaned)",
+    "horizon_k_signal": 40,
+    "horizon_k_target": 40,
+    "shuffle_scheme": "within-date symbol-label permutation",
+    "ic_real": 0.02615922097971305,
+    "ic_tstat_real": 3.019906409356353,
+    "ic_shuffled": 0.0036848805152570226,
+    "ic_tstat_shuffled": 0.6045545351655798,
+    "pass": true
+  },
+  "audit_3_best_year_out": {
+    "r1_rev_40d__longonly_top3_monthly": {
+      "headline_sharpe": 0.7742206132974665,
+      "worst_year": 2023,
+      "worst_year_sharpe": -0.5845014460993391,
+      "best_year_out": {
+        "headline": 0.7742206132974665,
+        "best_year": 2020,
+        "out_sharpe": 0.563485774185159,
+        "ratio": 0.7278103482484518,
+        "per_year_removed": {
+          "2019": 0.565568239657356,
+          "2020": 0.563485774185159,
+          "2021": 0.8496512357898002,
+          "2022": 1.0087779934390386,
+          "2023": 0.9670227013273986,
+          "2024": 0.7172616623690534,
+          "2025": 0.7507247304307686,
+          "2026": 0.7797654506373264
+        }
+      },
+      "per_year": {
+        "2019": 2.6059255759296933,
+        "2020": 2.063262705497316,
+        "2021": 0.2527287943007646,
+        "2022": -0.4430035956884289,
+        "2023": -0.5845014460993391,
+        "2024": 1.0661487341084641,
+        "2025": 0.986994177223414,
+        "2026": 0.6455603238618964
+      }
+    },
+    "r1_rev_80d__longonly_top3_monthly": {
+      "headline_sharpe": 0.7566534436686927,
+      "worst_year": 2023,
+      "worst_year_sharpe": -0.7053789498939631,
+      "best_year_out": {
+        "headline": 0.7566534436686927,
+        "best_year": 2020,
+        "out_sharpe": 0.5338236699027055,
+        "ratio": 0.7055061658272778,
+        "per_year_removed": {
+          "2019": 0.6234568162983128,
+          "2020": 0.5338236699027055,
+          "2021": 0.7376695297682742,
+          "2022": 0.8188608685843857,
+          "2023": 0.9769301458244384,
+          "2024": 0.9364432297045295,
+          "2025": 0.6777665100595974,
+          "2026": 0.7668053793920382
+        }
+      },
+      "per_year": {
+        "2019": 2.0352000766317637,
+        "2020": 2.083200133972806,
+        "2021": 0.9044867648600429,
+        "2022": 0.4786431132625466,
+        "2023": -0.7053789498939631,
+        "2024": -0.060318754894235896,
+        "2025": 1.479094199773938,
+        "2026": 0.5076638423805391
+      }
+    },
+    "r1_rev_60d__longonly_top3_weekly": {
+      "headline_sharpe": 0.5557985112237611,
+      "worst_year": 2022,
+      "worst_year_sharpe": -0.34862986951790925,
+      "best_year_out": {
+        "headline": 0.5557985112237611,
+        "best_year": 2019,
+        "out_sharpe": 0.42165959898690897,
+        "ratio": 0.7586555027981199,
+        "per_year_removed": {
+          "2019": 0.42165959898690897,
+          "2020": 0.4896494275155248,
+          "2021": 0.5891722124969787,
+          "2022": 0.7658277712046465,
+          "2023": 0.6435114377996444,
+          "2024": 0.5120223766013301,
+          "2025": 0.5385632433584724,
+          "2026": 0.5089836248565808
+        }
+      },
+      "per_year": {
+        "2019": 1.7927654127264125,
+        "2020": 1.006859287343893,
+        "2021": 0.32607542026498826,
+        "2022": -0.34862986951790925,
+        "2023": -0.07309819485296569,
+        "2024": 0.7807389958584116,
+        "2025": 0.7248891769404706,
+        "2026": 1.6125191060233768
+      }
+    }
+  },
+  "audit_4_falsification_probe": {
+    "probe_id": "probe_mom_20d_plus (+logret_20d)",
+    "target_horizon": 60,
+    "ic": -0.0027798297681525,
+    "ic_tstat": -0.3214771901221915,
+    "expected": "near zero if no momentum leakage",
+    "pass": true
+  },
+  "audit_5_worst_year_floor": {
+    "threshold_promote": 0.5,
+    "threshold_research_floor": 0.0,
+    "results": {
+      "r1_rev_40d__longonly_top3_monthly": {
+        "worst_year": 2023,
+        "worst_year_sharpe": -0.5845014460993391,
+        "pass_research_floor_0": false,
+        "pass_promote_floor_0.5": false
+      },
+      "r1_rev_80d__longonly_top3_monthly": {
+        "worst_year": 2023,
+        "worst_year_sharpe": -0.7053789498939631,
+        "pass_research_floor_0": false,
+        "pass_promote_floor_0.5": false
+      },
+      "r1_rev_60d__longonly_top3_weekly": {
+        "worst_year": 2022,
+        "worst_year_sharpe": -0.34862986951790925,
+        "pass_research_floor_0": false,
+        "pass_promote_floor_0.5": false
+      }
+    }
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "session_id": "20260424_a_share_etf_reversal_v2",
+  "current_round": 1,
+  "current_stage": "evaluator_complete",
+  "status": "closed",
+  "verdict": "RESEARCH_ONLY",
+  "continue_research": false,
+  "close_reason": "mechanism cross-universe replicated (k=40-80 reversal band, IC t up to 3.02) and long-only dominates LS, but worst-year 2023 Sharpe -0.585 blocks the >=0 research floor for all candidates; V7 fusion delta within noise",
+  "rounds_completed": 1,
+  "total_expressions_tested": 8,
+  "audit_probes_tested": 1,
+  "g1_pass": 8,
+  "g3_pass": 7,
+  "g4_pass_net_sharpe_metric": 4,
+  "g4_pass_all_metrics_including_worst_year": 0,
+  "best_expression": "r1_rev_40d",
+  "best_strategy": "longonly_top3_monthly",
+  "best_net_sharpe_5bps": 0.774,
+  "best_ic_tstat": 3.02,
+  "worst_year_best_expression": {"year": 2023, "sharpe": -0.585},
+  "best_year_out_ratio": 0.73,
+  "mandatory_audits": {
+    "execution_delay": "pass",
+    "lookahead_randomization": "pass",
+    "best_year_out_ratio_50pct": "pass",
+    "falsification_probe": "pass",
+    "worst_year_floor_0.5": "fail",
+    "worst_year_floor_0.0": "fail"
+  },
+  "v7_fusion_delta_best": -0.015,
+  "cross_session_pattern": "reversal family on A-share ETFs: ~1-in-4 years show regime-flip; 18-ETF v1 bad year = 2020, 34-ETF v2 bad year = 2023",
+  "files": {
+    "research_brief": "outputs/research_brief.md",
+    "session_metadata": "outputs/session_metadata.yml",
+    "expressions": "outputs/expressions_batch_0001.md",
+    "alpha_ranking": "outputs/alpha_ranking.md",
+    "final_summary": "outputs/final_summary.md",
+    "round_meta": "round_0001.yml",
+    "audit_report": "outputs/audit_report.json"
+  }
+}

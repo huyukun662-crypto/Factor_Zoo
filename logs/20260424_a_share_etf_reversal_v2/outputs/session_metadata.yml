@@ -1,0 +1,138 @@
+session_id: 20260424_a_share_etf_reversal_v2
+round: 1
+created_by: agent_2_hypothesis_architect
+date: 2026-04-24
+
+# ---------------------------------------------------------------------------
+# Universe
+# ---------------------------------------------------------------------------
+universe:
+  label: a_share_thematic_etf_34
+  source_parquet: logs/20260422_industry_rotation_cn/outputs/etf_daily.parquet
+  n_symbols: 34
+  live_earliest: 2015-01-05
+  live_latest: 2026-04-22
+  common_window_start: 2019-01-04  # aligns with V7_gold baseline
+  staggered_join_buffer_days: 60    # new ETF entrants need 60 trading days of history before ranked
+  neutralization: universe_ew_demean_per_date
+
+# ---------------------------------------------------------------------------
+# Targets
+# ---------------------------------------------------------------------------
+targets:
+  execution_delay_bars: 1
+  horizons_tested: [1, 5, 20, 40, 60, 80]
+  target_spec: "target_ret_k = log(close_adj[t+1+k]) - log(close_adj[t+1])"
+  rebalance_schedules:
+    weekly: "every Friday close"
+    monthly_4w: "every 20th bar, rolling anchor"
+
+# ---------------------------------------------------------------------------
+# Hypotheses (3 clusters, 8 expressions total — Rule of 8)
+# ---------------------------------------------------------------------------
+hypotheses:
+  cluster_short_falsification:
+    description: >
+      Prior session Round 1 at k=10 weekly found 7/8 negative IC — ≤ 20d horizon
+      is momentum, not reversal, on A-share ETFs. This cluster keeps 2 minimal
+      probes (1d and 5d) to validate the inversion persists on the extended
+      34-ETF universe. If they flip sign to positive IC, we have a universe-
+      size-driven regime change worth investigating.
+    count: 2
+    expressions: [r1_rev_1d, r1_rev_5d]
+    expected_sign: negative  # falsification if positive
+    strategy: LS top-4 / bot-4 weekly, also long-only top-3 weekly
+
+  cluster_medium_horizon_scan:
+    description: >
+      Prior session Round 2 found k=60 monthly as the sweet spot. This cluster
+      scans k ∈ {20, 40, 60, 80} at 4-week hold. If k=40 or k=80 matches or
+      beats k=60 on the extended universe, the reversal zone is wider than
+      prior session's 2-3 month window.
+    count: 4
+    expressions: [r1_rev_20d, r1_rev_40d, r1_rev_60d, r1_rev_80d]
+    expected_sign: positive  # IC > 0 = hypothesis confirmed
+    strategy: LS top-4 / bot-4 monthly, also long-only top-3 monthly
+
+  cluster_drawdown_event:
+    description: >
+      Event-type reversal. r1_dd60_raw = current drawdown depth from 60d max
+      (richer when deeper); r1_dd60_recover adds 5d ret > 0 gate, making it
+      a conditional deep-dip-with-green-shoots signal. Fires sparsely but
+      should be higher-conviction per unit of turnover.
+    count: 2
+    expressions: [r1_dd60_raw, r1_dd60_recover]
+    expected_sign: positive
+    strategy: LS top-3 / bot-3 monthly, also long-only top-3 monthly
+
+# ---------------------------------------------------------------------------
+# Strategy wrappers (Agent 4 must test each surviving expression under both)
+# ---------------------------------------------------------------------------
+strategies:
+  ls_top4_bot4_weekly:
+    long_n: 4
+    short_n: 4
+    rebalance: Friday
+    hold_weeks: 1
+    gross_leverage: 1.0
+  ls_top4_bot4_monthly:
+    long_n: 4
+    short_n: 4
+    rebalance: Friday
+    hold_weeks: 4
+    gross_leverage: 1.0
+  longonly_top3_weekly:
+    long_n: 3
+    short_n: 0
+    rebalance: Friday
+    hold_weeks: 1
+    gross_leverage: 1.0
+  longonly_top3_monthly:
+    long_n: 3
+    short_n: 0
+    rebalance: Friday
+    hold_weeks: 4
+    gross_leverage: 1.0
+
+# ---------------------------------------------------------------------------
+# Gates (funnel order: G1 → G2 → G3 → G4 → G5)
+# ---------------------------------------------------------------------------
+gates:
+  G1_non_degeneracy:
+    signal_raw_nonzero_fraction: ">= 0.01"
+    note: "Critical — rejects ghost signals. Failure: skip expression entirely, do not compute IC."
+  G2_data_hygiene:
+    n_obs_min: 2000
+    nan_fraction_max: 0.30
+  G3_ic_and_quintile:
+    ic_abs_min: 0.005
+    ic_tstat_abs_min: 2.0
+    quintile_monotonicity_required: false   # log it, don't block at this stage
+    net_sharpe_5bps_min: -0.5
+  G4_full_backtest:
+    net_sharpe_5bps_min: 0.5
+    max_drawdown_abs_max: 0.40
+    worst_year_sharpe_min: 0.0
+    note: "G4 is research-grade floor. Net Sh @ 5bps < 0.5 → research-only."
+  G5_batch_level_horizon:
+    description: >
+      If ≥ 4 of 4 medium-horizon expressions flip sign to negative IC at their
+      target k, interpret as mechanism failure (hypothesis wrong, not code
+      wrong), and route the whole batch back to Agent 2. Note: expected
+      Round 1 pattern — short probes negative, medium positive, drawdown
+      positive.
+
+# ---------------------------------------------------------------------------
+# Mandatory pre-PROMOTE audits
+# ---------------------------------------------------------------------------
+audits:
+  execution_delay:
+    check: "target_ret_k built with shift(-(1+delay_bars)) on close_adj; verified by comparing two independent compute paths"
+  look_ahead_randomization:
+    check: "randomize future bars after t+1; target_ret distribution should become zero-centered and IC should collapse"
+  worst_year_sharpe_floor:
+    threshold: 0.5
+  best_year_out_floor_ratio:
+    threshold: 0.5  # best-year-removed Sharpe must be >= 50% of headline
+  falsification_adversarial:
+    check: "run +logret_20d as a control; IC at k=60 must be near zero or negative on this universe; if positive, pipeline is leaking momentum"

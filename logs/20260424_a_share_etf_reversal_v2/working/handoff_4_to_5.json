@@ -1,0 +1,35 @@
+{
+  "session_id": "20260424_a_share_etf_reversal_v2",
+  "from_agent": "4_backtest_operator",
+  "to_agent": "5_evaluator_and_recorder",
+  "timestamp": "2026-04-24T01:00:00Z",
+  "round": 1,
+  "batch": 1,
+  "artifacts": {
+    "ic_table": "outputs/ic_table_batch_0001.csv",
+    "ls_summary": "outputs/ls_summary_batch_0001.csv",
+    "longonly_summary": "outputs/longonly_summary_batch_0001.csv",
+    "decile_summary": "outputs/decile_summary_batch_0001.csv",
+    "per_year_sharpe": "outputs/per_year_sharpe_batch_0001.csv",
+    "cost_sensitivity": "outputs/cost_sensitivity_batch_0001.csv",
+    "validation_gates": "outputs/validation_gates_batch_0001.json",
+    "audit_report": "outputs/audit_report.json",
+    "v7_fusion": "outputs/v7_fusion_results.csv",
+    "signal_panel": "outputs/signal_panel.parquet"
+  },
+  "g1_nondegeneracy_pass": 8,
+  "g3_ic_pass": 4,
+  "g3_net_sharpe_pass": 7,
+  "g4_full_pass_strict": 0,
+  "g4_net_sharpe_only_pass": 4,
+  "audits_summary": {
+    "execution_delay": "pass",
+    "lookahead_randomization": "pass",
+    "best_year_out_ratio_50pct": "pass (top 3 candidates)",
+    "falsification_probe": "pass",
+    "worst_year_floor_research_0": "fail (all candidates)",
+    "worst_year_floor_promote_0.5": "fail (all candidates)"
+  },
+  "v7_fusion_summary": "no blend weight produces positive delta vs V7 alone; best is -0.015",
+  "recommended_verdict": "RESEARCH_ONLY"
+}
