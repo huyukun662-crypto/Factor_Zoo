@@ -1,0 +1,74 @@
+session_id: 20260424_a_share_etf_daily_flow_accum_v1
+authored_by: agent_2_hypothesis_architect
+authored_at: 2026-04-24
+
+objective: |
+  Mine one A-share ETF daily factor with the 5-agent workflow. Test whether an
+  amount-based price-volume-orthogonal (PVO) flow signal identifies institutional
+  stealth-accumulation on thematic/broad ETFs and predicts 5-20d forward returns.
+
+selected_mechanism: amount_based_stealth_accumulation_pvo
+
+causal_chain:
+  - step: "institutional desk builds a position across several sessions via MOC/VWAP-type algorithms, spreading impact"
+  - step: "during the accumulation window, daily amount z-scores stay elevated relative to the symbol's 60d baseline while daily return magnitude stays small (quiet-day pattern)"
+  - step: "as accumulation completes or external news arrives, residual demand resolves into positive 5-20d cross-sectional excess returns vs the rest of the ETF universe"
+
+time_horizon:
+  primary_k: 10
+  evaluated_k: [5, 10, 20]
+  rebalance_period_days: 5  # weekly Mondays
+  rebalance_rule: "sort by signal rank per day; form top-6 long, bot-6 short; hold 5 days"
+
+market_regime: a_share_onshore_etf_2019_2026
+
+risk_premium_sources:
+  - informed_trading_premium   # Amihud, Llorente et al
+  - patience_discount           # one-sided accumulation demands time-in-market
+  - non_price_information       # trading activity carries information that quote snapshots don't
+
+failure_conditions:
+  - "IC at primary k is insignificant on TEST (t-stat < 2) -> mechanism does not work on ETFs at daily horizon"
+  - "|corr(signal, ret20d)| > 0.5 or |corr(signal, log_amount_60d_mean)| > 0.5 -> factor is a vehicle for momentum/size (Pitfall 9) -> label honestly, do not PROMOTE"
+  - "worst-year Sharpe < 0.5 -> regime fragility (the failure mode that killed the reversal session)"
+  - "turnover > 600% annualized -> cost-unviable (Pitfall 10)"
+
+constraints:
+  dataset_id: inputs/etf_daily.parquet
+  region: CN_A_SHARE
+  universe: ONSHORE_ETF_34
+  delay: 1
+  target_shift: -2                   # = -(1 + delay)
+  turnover_range_pct_per_year: [50, 600]
+  sharpe_target_long_only: 1.0
+  ic_tstat_target: 3.0
+  fitness_target: 1.5
+  prod_corr_max: 0.85
+  cost_bps_per_side_primary: 5
+  cost_grid_bps: [2, 5, 8]
+
+neutralization_candidates:
+  - xs_demean   # the only one that applies — ETFs have no industry group above themselves
+
+tvt_split:
+  train:     {start: 2019-01-02, end: 2020-12-31, n_days_approx: 486}
+  validate:  {start: 2021-01-01, end: 2021-12-31, n_days_approx: 243}
+  test:      {start: 2022-01-01, end: 2026-04-22, n_days_approx: 1041}
+
+evaluation_targets:
+  primary_metric: long_only_top_6_excess_annualized_sharpe
+  secondary_metrics:
+    - ls_top_6_bot_6_net_sharpe_at_5bps
+    - ic_tstat_at_primary_k
+    - worst_year_sharpe
+    - best_year_out_sharpe
+    - ann_turnover_pct
+    - cost_sensitivity_2_5_8_bps
+
+mandatory_audits:
+  - execution_delay_audit
+  - look_ahead_future_perturbation_test
+  - worst_year_floor_check
+  - best_year_out_check
+  - falsification_first_writeup
+  - orthogonality_check_vs_momentum_and_amount_level  # session-specific: Pitfall 9 defense

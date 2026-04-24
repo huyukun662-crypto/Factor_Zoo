@@ -1,0 +1,53 @@
+{
+  "from": "agent_1_research_librarian",
+  "to": "agent_2_hypothesis_architect",
+  "session_id": "20260424_a_share_etf_daily_flow_accum_v1",
+  "objective": "Mine one daily ETF factor on A-share on-shore ETFs using the WorldQuant 5-agent workflow. Mechanism must be orthogonal to the prior 20260423 reversal and weekly-TQPB sessions.",
+  "mechanism_candidates": [
+    {
+      "name": "amount_based_stealth_accumulation_pvo",
+      "why": "Institutional ETF buying leaves a volume footprint before a price footprint. High-amount / low-price-impact days identify patient one-sided flow that predicts 5-20d returns. Fully orthogonal to the prior reversal (price-only) and weekly-TQPB (volume-as-filter) sessions.",
+      "supporting_evidence": [
+        "Amihud (2002) JFMkts 5:31-56 — price impact asymmetry",
+        "Llorente-Michaely-Saar-Wang (2002) RFS 15:1005-1047 — informed vs liquidity volume decomposition",
+        "Kaniel-Saar-Titman (2008) JFE 63:273-310 — persistent one-sided flow predicts returns",
+        "Barardehi-Bernhardt (2018) JFE 131(2):460-482 — PVO family",
+        "logs/20260423_a_share_etf_weekly_tqpb_v1 r1_breakout_vol_conf: weekly LS Sharpe +0.45 with volume as filter"
+      ],
+      "datasets": ["inputs/etf_daily.parquet"],
+      "operators": ["zscore_ts", "rolling_mean_ts", "xs_demean", "xs_rank", "sign", "log", "abs"],
+      "caveats": [
+        "daily horizon is cost-sensitive (Pitfall 10) — use weekly rebalance and explicit cost sensitivity",
+        "log(amount) = log(close) + log(volume) — use z-scored per-symbol to remove price-level effect",
+        "4 of 34 ETFs have thin Yahoo history (131 bars) and will be excluded from cross-section until 60d accumulates",
+        "check correlation vs 20d momentum and 60d log(amount) level — if >0.5, factor is a vehicle for a known premium (Pitfall 9)",
+        "look-ahead risk must be directly audited via future_perturbation_test"
+      ]
+    }
+  ],
+  "datasets_available": [
+    {
+      "name": "inputs/etf_daily.parquet",
+      "rows": 48106,
+      "symbols": 34,
+      "date_min": "2019-01-02",
+      "date_max": "2026-04-22",
+      "columns": ["date", "symbol", "open", "high", "low", "close", "volume", "amount"],
+      "notes": "Yahoo v8/chart; split/div adjusted via adj-close ratio; amount = close × volume in CNY"
+    }
+  ],
+  "operators_suggested": [
+    "zscore_ts(x, win=60) — backward-looking per-symbol z-score",
+    "rolling_mean_ts(x, win=5) — backward-looking per-symbol mean",
+    "xs_demean — cross-sectional mean subtraction per date",
+    "xs_rank — cross-sectional rank per date",
+    "log, abs, sign — elementwise"
+  ],
+  "risks": [
+    "Pitfall 10: daily rebalance cost blow-up — mitigated by weekly rebalance",
+    "Pitfall 9: factor being a vehicle for momentum/amount-level premium",
+    "Pitfall 1: look-ahead via hidden future-derived windows",
+    "2020 regime risk — kept inside train window"
+  ],
+  "recommended_focus": "amount_based_stealth_accumulation_pvo, horizon k=10 primary (evaluate k in {5,10,20}), weekly rebalance (5-day period), long-only top-6 as primary deployable metric, LS reported for sanity. Rule of 8 expressions covering pure abnormal-volume, smoothed, ratio, quiet-day-filtered, inverse-Amihud, signed, relative share-of-universe, rank-ensemble motifs."
+}

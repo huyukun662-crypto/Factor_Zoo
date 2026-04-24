@@ -1,0 +1,22 @@
+{
+  "from": "agent_3_alpha_builder",
+  "to": "agent_4_backtest_operator",
+  "session_id": "20260424_a_share_etf_daily_flow_accum_v1",
+  "batch_id": "batch_0001",
+  "selected_mechanism": "amount_based_stealth_accumulation_pvo",
+  "rule_of_8_check": "8 expressions submitted",
+  "expressions": [
+    {"idx": 1, "id": "e1_abnormal_amount_z60",         "code": "z60(log(amount))",                                                                  "rationale": "baseline PVO: amount vs own 60d normal range",                        "expected_turnover_direction": "moderate",   "fragility_notes": ["log_amount correlates with log_close; per-symbol z60 removes most of the level effect"]},
+    {"idx": 2, "id": "e2_abnormal_amount_smoothed_5d", "code": "z60(log(amount_ma5))",                                                              "rationale": "smoothed flow isolates persistent accumulation",                      "expected_turnover_direction": "lower",      "fragility_notes": ["small lag vs e1"]},
+    {"idx": 3, "id": "e3_amount_ratio_5d_60d",         "code": "log(amount_ma5) - log(amount_ma60)",                                                "rationale": "ratio form of flow surge, scale-free",                                "expected_turnover_direction": "moderate",   "fragility_notes": ["no sigma normalization"]},
+    {"idx": 4, "id": "e4_quiet_day_amount_z60",        "code": "z60(log(amount)) * indicator(abs(ret1d) < 0.5 * std20(ret1d))",                     "rationale": "Llorente-Michaely-Saar-Wang informed-trading regime: big amount + quiet price",   "expected_turnover_direction": "moderate",   "fragility_notes": ["threshold=0.5 is a choice; ties dense"]},
+    {"idx": 5, "id": "e5_inverse_amihud_z60",          "code": "z60(log(amount) - log(abs(ret1d) + 1e-6))",                                         "rationale": "Amihud-inverse: amount per unit of price impact",                     "expected_turnover_direction": "high",       "fragility_notes": ["1e-6 floor can blow up near-zero-return days"]},
+    {"idx": 6, "id": "e6_signed_flow_5d",              "code": "mean5d( sign(ret1d) * z60(log(amount)) )",                                          "rationale": "signed directional flow proxy, order-imbalance-like",                 "expected_turnover_direction": "moderate",   "fragility_notes": ["weak if flow is not directional"]},
+    {"idx": 7, "id": "e7_relative_amount_share_z20",   "code": "z20( amount / sum_over_universe(amount) )",                                         "rationale": "what fraction of today's cross-sectional flow went to this ETF",      "expected_turnover_direction": "moderate",   "fragility_notes": ["correlated with e1 in calm regimes"]},
+    {"idx": 8, "id": "e8_flow_ensemble_rank",          "code": "mean( xs_rank(e1), xs_rank(e3), xs_rank(e4), xs_rank(e6) )",                        "rationale": "diversified ensemble over four flow motifs",                          "expected_turnover_direction": "lowest",     "fragility_notes": ["dominance by single sub-signal possible"]}
+  ],
+  "expected_ic_sign_at_primary_k": {
+    "e1": "+", "e2": "+", "e3": "+", "e4": "+", "e5": "+", "e6": "+", "e7": "+", "e8": "+"
+  },
+  "instruction_to_agent_4": "Validate all 8 expressions against G1 (imports), G2 (runs end-to-end), G3 (non-degenerate: net_sharpe>-0.5 at 5bps, 10<=ann_turnover<=2000, q5_size>=6 on 95% of days, dispersion>0), G4 (IC sign matches, decile monotonicity, |corr vs uew|<=0.85), and G5 (batch-level: >=4 of 8 G4-survivors peak at declared k=10). Mandatory audits (must be included in handoff_4_to_5): execution_delay_audit (invariant target_shift==-2), future_perturbation_test (randomize amount after cutoff, rebuild, assert bit-identity), per-year Sharpe table on net returns @5bps, orthogonality check vs ret20d and log_amount_60d_mean."
+}
