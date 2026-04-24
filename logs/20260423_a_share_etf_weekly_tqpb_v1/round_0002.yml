@@ -1,0 +1,162 @@
+session_id: 20260423_a_share_etf_weekly_tqpb_v1
+round: 2
+completed_utc: "2026-04-24T14:00:00Z"
+
+asset_class: china_etf_daily
+bar: 1d (weekly rebalance Fri close T+1)
+sample:
+  start: "2019-01-01"
+  end:   "2026-04-22"
+  weeks: 377
+  n_etfs_base: 34
+  n_etfs_extended: 48     # 34 V7_gold + 14 broad-index (D4)
+  universe: "V7_gold thematic basket + broad-index (ZZ500/HS300/ChiNext/STAR/HK/Nasdaq/Gold)"
+
+mechanism: breakout_vol_conf_overlay_on_V7_gold
+primary_horizon_trading_days: 5
+rebalance: weekly_friday_close_execute_monday
+n_expressions_tested: 0       # Round 2 evaluates 4 directions on the R1 signal, not new expressions
+directions_tested: 4
+
+combine_target:
+  name: V7_gold
+  session: 20260422_industry_rotation_cn
+  pnl_file: round7c_v7_pnl.csv
+  baseline_sharpe_published: 1.91
+  baseline_sharpe_round2_reproduction_377w: 1.759
+  baseline_maxdd_repro: -0.091
+
+# ---- Critical finding: Round 1 was spurious ----
+round1_audit:
+  finding: "Round 1's r1_breakout_vol_conf signal was identically zero on all 42,788 obs"
+  root_cause: |
+    max_high_20 = rolling(20).max() INCLUDES the current bar.
+    On breakout days (close == max), signal_raw = (close - max_high_20)/std = 0.
+    On non-breakout days, signal_raw < 0, clipped to 0.
+    Signal is always 0; LS top-5/bot-5 book ranks ties by ts_code alphabetically.
+    Reported Sh 1.79 / corr -0.009 / residual Sh +0.44 are ghost artifacts.
+  corrected_semantics: "max_high_20 = shift(1).rolling(20).max(); breakout = close > max_high_20"
+  corrected_breakout_frequency: "1,901 / 42,788 obs = 4.4% (sparse but nonzero)"
+  round1_recommendation: RETRACTED
+
+# ---- Round 2 directions ----
+directions:
+  - id: d1_long_only_top3
+    spec: "top-3 long-only; Friday rebalance with explicit cash weeks"
+    standalone_sharpe_34etf: 0.63
+    standalone_maxdd_34etf: -0.243
+    turnover_ann_34etf: 3502    # %/y
+    grid_over_overlay_weight:
+      best_weight: 0.05
+      combined_sharpe: 1.714
+      delta_vs_v7: -0.045
+      maxdd_combined: -0.089
+    verdict: "dilutive at all weights; breakout is too correlated with V7's trend picks"
+
+  - id: d2_signal_level_fusion
+    spec: "V7 Leg A score: z(mom4) - 1.5*z(turn4) + w_b*breadth + w_k*z(breakout)"
+    best_variant: fused_20_10            # breadth=0.20, brk_z=0.10
+    best_variant_sharpe: 1.746
+    best_variant_maxdd: -0.096
+    v7_orig_reproduced_sharpe: 1.759
+    delta_vs_v7_orig: -0.013
+    variants_tested: 6
+    verdict: "all variants neutral-to-worse; V7 mom_4w already captures breakout information"
+
+  - id: d3_regime_conditional
+    spec: "15% LS overlay fires only when V7 breadth_z[t] < threshold"
+    overlay_base_weight: 0.15
+    always_on_sharpe_correct_signal: 1.693    # LS top-5/bot-5 with corrected signal
+    threshold_sensitivity:
+      - {threshold: -0.50, frac: 0.36, sh: 1.740, dd: -0.085}
+      - {threshold: -0.25, frac: 0.46, sh: 1.748, dd: -0.084}   # best
+      - {threshold:  0.00, frac: 0.54, sh: 1.729, dd: -0.083}
+      - {threshold:  0.25, frac: 0.60, sh: 1.726, dd: -0.075}
+      - {threshold:  0.50, frac: 0.66, sh: 1.744, dd: -0.075}
+    best_threshold: -0.25
+    best_combined_sharpe: 1.748
+    delta_vs_v7: +0.021
+    delta_vs_always_on: +0.055
+    t_stat_of_delta: ~0.4    # 0.021 * sqrt(377/52) / ~0.1 vol dispersion
+    verdict: "marginal +0.021 within noise on 377 weeks; MaxDD improvement -9.1 -> -8.4 is real but halving V7 gets similar"
+
+  - id: d4_extended_universe_48
+    spec: "34 V7 ETFs + 14 broad-index ETFs (HS300/ZZ500/SZ50/SH180/STAR/ChiNext/HK/Nasdaq/Gold-SH)"
+    standalone_sharpe_top3: 0.60
+    standalone_maxdd_top3: -0.186
+    turnover_ann: 4043
+    grid_over_overlay_weight:
+      best_weight: 0.05
+      combined_sharpe: 1.711
+      delta_vs_v7: -0.048
+    verdict: "universe expansion hurts (broad-index ETFs too correlated with V7 picks, higher TO)"
+
+# ---- Verdict ----
+verdict: RESEARCH_ONLY
+deploy_recommendation: NONE
+v7_gold_standalone: "continue with Sh 1.76 (reproduced), MaxDD -9.1%; retract Round 1 overlay"
+
+stop_reason: |
+  None of the 4 directions produces a meaningful improvement over V7_gold
+  on the 377-week sample. The best candidate (regime-conditional at
+  breadth_z<-0.25, Sh 1.748) has t-stat ~0.4 and is within noise. Round 1's
+  claimed improvement was built on a degenerate signal (identically zero),
+  and is formally retracted.
+
+continue_research: false
+
+# ---- Workflow dogfood — new lessons ----
+workflow_dogfood:
+  critical_bugs_discovered:
+    - name: "R1 breakout signal was always-zero"
+      severity: critical
+      class: "boundary-inclusive rolling + non-strict inequality"
+      fix_as_gate: "G1 should check count(signal != 0), unique_count(signal)"
+    - name: "ffill-carry held positions indefinitely across cash weeks"
+      severity: high
+      class: "rebalancing semantics"
+      fix_as_spec: "every rebalance date must write explicit weights including cash"
+
+  new_patterns_for_common_pitfalls_md:
+    - "Rolling + comparison for 'breaks prior N-day high': use shift(1).rolling(N).max() and strict > inequality"
+    - "Signal with NaN IC: first hypothesis is degenerate signal (all-zero / all-constant), NOT sparse-trigger"
+    - "pd.qcut collapse: a real signal should have unique values > N_BINS"
+
+  new_gate_for_validation_gates_md:
+    - name: G1.5
+      name_long: "Signal Non-Degeneracy"
+      checks:
+        - "count(signal != 0) > 0.01 * n_obs"
+        - "unique_count(signal) > 10"
+        - "max(|signal|) > 1e-6"
+      failure: "fail as G1; treat as code bug not signal issue"
+
+  new_pattern_for_execution_plan_md:
+    - name: "Dense rebalancing for overlay/combine sessions"
+      rule: "Every rebalance date must write explicit weights for ALL symbols (zeros for non-held). Never `continue` on a rebalance date."
+
+  new_audit_for_combine_sessions:
+    - name: "Baseline reproduction"
+      rule: "For combine-mode sessions, re-compute the target strategy's PnL from source over the exact evaluation sample. Do not trust pre-saved PnL files for the full sample — sample alignment matters."
+    - name: "Zero-signal probe"
+      rule: "Replace the new signal's pnl with pure zeros and re-run the combine analysis. Results should look identical to baseline + 0. If the zero-signal combine gives suspiciously close numbers to your real combine, your signal is likely degenerate."
+
+# ---- Audits ----
+audits:
+  execution_delay:
+    status: PASS
+    invariant: "weights shift(1) before multiplying returns"
+  look_ahead:
+    status: PASS
+    notes: "breakout uses shift(1).rolling(20).max() for past window; breadth z uses past 52w"
+  signal_nondegeneracy:
+    status: PASS
+    count_nonzero_breakout: 1901
+    total_obs: 42788
+    nonzero_pct: 4.4
+    unique_nonzero_values: ">100"
+  v7_reproduction_match:
+    status: PASS_NEAR_MATCH
+    published_sharpe: 1.91
+    reproduced_sharpe: 1.759
+    note: "small discrepancy from sample-alignment + eligibility mask; per-year patterns match exactly"
