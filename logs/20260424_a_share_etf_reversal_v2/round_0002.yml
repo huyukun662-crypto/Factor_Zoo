@@ -1,0 +1,113 @@
+round: 2
+session_id: 20260424_a_share_etf_reversal_v2
+status: closed
+verdict: RESEARCH_ONLY
+closed_on: 2026-04-24
+baseline_from_round_1:
+  expression: r1_rev_40d
+  strategy: longonly_top3_monthly
+  net_sharpe_5bps: 0.774
+  worst_year: {year: 2023, sharpe: -0.585}
+
+directions_tested:
+  D1_regime_breadth:
+    hypothesis: "gate on universe breadth of 40d positive returns > 0.30"
+    result: {net5_sh: 0.417, worst: {year: 2022, sh: -1.441}, maxdd: -0.407, turnover_ann: 0.12}
+    verdict: "hurt headline and worst year; gate lags during 2022 recovery"
+  D1b_regime_mom200:
+    hypothesis: "gate on universe EW 200d momentum > 0"
+    result: {net5_sh: 0.580, worst: {year: 2022, sh: -0.789}, maxdd: -0.245, turnover_ann: 0.11}
+    verdict: "reduced MaxDD but also Sharpe; lagging gate"
+  D2_ensemble_k40_k80:
+    hypothesis: "diversify across k=40 and k=80 (both in reversal zone)"
+    result: {net5_sh: 0.811, worst: {year: 2023, sh: -0.677}, maxdd: -0.376, turnover_ann: 0.13}
+    verdict: "marginal +0.037 Sharpe; signals ~85% correlated, diversification weak"
+  D3_stoploss_20dlow:
+    hypothesis: "intra-month 20d-low stop to cut losers early"
+    result: {net5_sh: 0.467, worst: {year: 2023, sh: -1.753}, maxdd: -0.350, turnover_ann: 0.17}
+    verdict: "catastrophic - stop sells oversold names exactly when they are about to reverse"
+  D4_dispersion_q75:
+    hypothesis: "only trade when 40d return dispersion > rolling 252d Q75"
+    result: {net5_sh: 0.480, worst: {year: 2023, sh: -0.801}, maxdd: -0.189, turnover_ann: 0.05}
+    verdict: "22% active time; lowered MaxDD but also Sharpe; shifted worst to 2023"
+  D5_double_gate:
+    hypothesis: "breadth > 0.30 AND dispersion > Q75"
+    result: {net5_sh: 0.140, worst: {year: 2023, sh: -0.801}, maxdd: -0.196, turnover_ann: 0.04}
+    verdict: "overfiltered; 18% active time; severely hurt headline"
+  D6_gold_blend_55pct:
+    hypothesis: "always-on 55/45 split: 55% gold ETF + 45% reversal ensemble (k=40 ⊕ k=80)"
+    result:
+      net5_sh: 1.318
+      net_25bps_sh: 1.232
+      gross_sh: 1.339
+      cagr_net: 0.1886
+      vol_ann: 0.1431
+      maxdd: -0.1875
+      worst: {year: 2021, sh: 0.241}
+      best_year_out: {drop_year: 2025, out_sh: 1.108, ratio: 0.84}
+      turnover_ann: 0.06
+      corr_gold_vs_reversal: 0.082
+      years_positive: 8
+      years_total: 8
+    verdict: "WINNER - passes research floor (worst year >= 0); fails promote floor (>= 0.5)"
+
+winner:
+  id: R2_winner_k40_k80_gold55
+  description: "k=40 ⊕ k=80 long-only top-3 monthly ensemble + 55% gold blend (always-on)"
+  weights_at_rebalance:
+    reversal_leg_A_per_etf: 0.075  # (1-0.55) * 0.5 / 3
+    reversal_leg_B_per_etf: 0.075
+    gold_159934: 0.55
+  rebalance: "every 4th Friday close, 20-bar hold"
+  execution_delay: 1
+
+gold_blend_grid:
+  span_tested: [0.00, 0.90] step 0.05
+  sharpe_peak_at_weight: 0.65 (Sh 1.353)
+  research_floor_pass_range: [0.50, 0.70]
+  optimal_recommended: 0.55  # best tradeoff Sharpe vs worst-year margin
+  csv_ref: outputs/round2/r2_gold_blend_grid.csv
+
+decomposition:
+  gold_standalone_sharpe: 1.148
+  reversal_ensemble_standalone_sharpe: 0.811
+  winner_sharpe: 1.318
+  correlation_daily_gold_vs_reversal: 0.082
+  predicted_uncorrelated_blend: 1.385  # = (1.148 + 0.811)/sqrt(2)
+  actual: 1.318
+  marginal_over_gold_alone: 0.170
+  interpretation: |
+    Gold is doing the heavy lifting. Reversal adds low-correlation diversification worth +0.17 Sharpe over pure gold.
+    The winner is a deployable portfolio recipe, not a newly-discovered A-share reversal alpha.
+
+audits_winner:
+  execution_delay: pass (inherited R1)
+  lookahead_randomization: pass (inherited R1)
+  best_year_out_ratio: {value: 0.84, threshold: 0.5, pass: true}
+  falsification_probe: pass (inherited R1)
+  worst_year_floor:
+    value: 0.241
+    threshold_research_0: {pass: true}
+    threshold_promote_0.5: {pass: false}
+  audits_passed: 5
+  audits_total: 6  # counting research vs promote floors as separate
+
+workflow_dogfood_new:
+  - pattern: gold_or_low_corr_hedge_blend_as_worst_year_rescue
+    observation: "When single-asset factor fails worst-year floor, always-on blending with a low-correlation defensive asset (here gold) can shift the year distribution enough to pass research floor. Diversification, not factor improvement."
+    recommendation: "Add Round 2+ template to references/tvt-split-template.md: blend with cash/gold/bonds at 20-60% weight grid as a standard rescue attempt."
+  - pattern: decompose_blend_wins
+    observation: "Blending a Sh 0.81 reversal with a Sh 1.15 gold gives Sh 1.32. Most of the lift is the gold. Publishing only the 1.32 number without decomposition is misleading."
+    recommendation: "Blend-win reports must include standalone Sharpes of each leg and the corr; claim is about the portfolio, not the factor."
+  - pattern: stoploss_is_antipattern_for_reversal
+    observation: "20d-low stop-loss on top-3 reversal picks sold at exactly the wrong moment; 2023 Sh -0.585 (baseline) became -1.753 (with stop). Oversold names need to be allowed to bounce, not stopped out."
+    recommendation: "Document in references/common-pitfalls.md: stop-loss overlays on mean-reversion signals are structurally opposite to the signal's thesis."
+  - pattern: lagging_regime_gate_cannot_save_worst_year
+    observation: "Breadth / dispersion / 200d-mom gates all lag 2022-2023 regime shift; they turn OFF at the bottom, missing the recovery. Net: gating always reduced headline more than it saved worst year."
+    recommendation: "Regime-gating needs leading indicators (implied vol term structure, credit spreads) not lagging momentum; lagged gates fail the worst-year floor."
+
+next_round_suggestions:
+  - gold_blend_with_lookback_regime: "55% gold fixed, but reversal weight scaled by 1-year rolling reversal-family Sharpe (less weight after bad years)"
+  - bonds_or_cash_blend: "replace gold with 5-year CGB ETF (e.g. 511010) or cash to see if gold-specific tail drives the gain"
+  - reversal_family_with_v7: "combine this recipe with V7_gold chassis as an alternate Leg / allocation"
+  - survey_2021_mechanism: "investigate what makes 2021 worst for the blend (both components weak); may be a systemic 2021 issue, not a reversal-family issue"

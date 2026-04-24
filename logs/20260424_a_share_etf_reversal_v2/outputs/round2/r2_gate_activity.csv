@@ -1,0 +1,8 @@
+variant,gate_active_rebal_pct
+baseline_k40_monthly,1.0
+D1_regime_breadth,0.7272727272727273
+D1b_regime_mom200,0.6590909090909091
+D2_ensemble_k40_k80,1.0
+D3_stoploss_20dlow,0.875
+D4_disp_gt_Q75,0.2159090909090909
+D5_breadth_and_disp,0.18181818181818182

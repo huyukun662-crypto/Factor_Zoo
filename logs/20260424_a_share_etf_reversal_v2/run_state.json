@@ -1,41 +1,64 @@
 {
   "session_id": "20260424_a_share_etf_reversal_v2",
-  "current_round": 1,
+  "current_round": 2,
   "current_stage": "evaluator_complete",
   "status": "closed",
   "verdict": "RESEARCH_ONLY",
   "continue_research": false,
-  "close_reason": "mechanism cross-universe replicated (k=40-80 reversal band, IC t up to 3.02) and long-only dominates LS, but worst-year 2023 Sharpe -0.585 blocks the >=0 research floor for all candidates; V7 fusion delta within noise",
-  "rounds_completed": 1,
-  "total_expressions_tested": 8,
-  "audit_probes_tested": 1,
-  "g1_pass": 8,
-  "g3_pass": 7,
-  "g4_pass_net_sharpe_metric": 4,
-  "g4_pass_all_metrics_including_worst_year": 0,
-  "best_expression": "r1_rev_40d",
-  "best_strategy": "longonly_top3_monthly",
-  "best_net_sharpe_5bps": 0.774,
-  "best_ic_tstat": 3.02,
-  "worst_year_best_expression": {"year": 2023, "sharpe": -0.585},
-  "best_year_out_ratio": 0.73,
-  "mandatory_audits": {
-    "execution_delay": "pass",
-    "lookahead_randomization": "pass",
-    "best_year_out_ratio_50pct": "pass",
-    "falsification_probe": "pass",
-    "worst_year_floor_0.5": "fail",
-    "worst_year_floor_0.0": "fail"
+  "close_reason": "Round 2 winner (k=40 ⊕ k=80 ensemble + 55% gold blend) passes the worst-year ≥ 0 research floor (2021 Sh +0.241, all 8 years positive) but fails the ≥ 0.5 promote floor. Gold does heavy lifting (standalone Sh 1.148); reversal adds +0.17 marginal Sh via +0.08 correlation diversification. Deployable portfolio recipe, not a newly-discovered alpha.",
+  "rounds_completed": 2,
+  "round_1_summary": {
+    "expressions_tested": 8,
+    "best": "r1_rev_40d longonly_top3_monthly",
+    "best_net_sharpe_5bps": 0.774,
+    "worst_year": {"year": 2023, "sharpe": -0.585},
+    "verdict": "RESEARCH_ONLY (fails ≥0 floor)"
   },
-  "v7_fusion_delta_best": -0.015,
-  "cross_session_pattern": "reversal family on A-share ETFs: ~1-in-4 years show regime-flip; 18-ETF v1 bad year = 2020, 34-ETF v2 bad year = 2023",
+  "round_2_summary": {
+    "directions_tested": 7,
+    "winner": {
+      "id": "R2_winner_k40_k80_gold55",
+      "description": "k=40 ⊕ k=80 long-only top-3 monthly ensemble + 55% gold blend",
+      "net_sharpe_5bps": 1.318,
+      "net_sharpe_25bps": 1.232,
+      "maxdd": -0.1875,
+      "vol_ann": 0.1431,
+      "cagr_net": 0.1886,
+      "turnover_ann": 0.06,
+      "worst_year": {"year": 2021, "sharpe": 0.241},
+      "best_year_out_ratio": 0.84,
+      "years_positive": 8,
+      "years_total": 8,
+      "corr_gold_daily": 0.082
+    },
+    "decomposition": {
+      "gold_standalone_sharpe": 1.148,
+      "reversal_ensemble_standalone_sharpe": 0.811,
+      "marginal_sharpe_from_reversal": 0.170
+    },
+    "audits_passed": 5,
+    "audits_total_including_promote_floor": 6,
+    "verdict": "RESEARCH_ONLY with upgrade (passes research floor, fails promote floor)"
+  },
+  "mandatory_audits_winner": {
+    "execution_delay": "pass (inherited)",
+    "lookahead_randomization": "pass (inherited)",
+    "best_year_out_ratio_0.5": "pass (0.84)",
+    "falsification_probe": "pass (inherited)",
+    "worst_year_floor_0.0": "pass (0.241)",
+    "worst_year_floor_0.5": "fail (0.241)"
+  },
+  "cross_session_lessons": [
+    "Gold blend can rescue worst-year floor when single-asset mechanisms fail",
+    "Lagging regime gates (breadth, dispersion, mom200) don't save worst-year",
+    "Stop-loss on reversal signals is structurally anti-pattern",
+    "Cross-asset blending is a portfolio-construction technique, not factor discovery"
+  ],
   "files": {
-    "research_brief": "outputs/research_brief.md",
-    "session_metadata": "outputs/session_metadata.yml",
-    "expressions": "outputs/expressions_batch_0001.md",
-    "alpha_ranking": "outputs/alpha_ranking.md",
-    "final_summary": "outputs/final_summary.md",
-    "round_meta": "round_0001.yml",
-    "audit_report": "outputs/audit_report.json"
+    "round_0001_meta": "round_0001.yml",
+    "round_0002_meta": "round_0002.yml",
+    "round_2_final_summary": "outputs/round2/final_summary.md",
+    "round_2_winner_report": "outputs/round2/r2_winner_report.json",
+    "round_2_gold_grid": "outputs/round2/r2_gold_blend_grid.csv"
   }
 }
