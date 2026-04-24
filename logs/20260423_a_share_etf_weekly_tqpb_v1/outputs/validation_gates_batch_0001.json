@@ -1,0 +1,168 @@
+{
+  "session": "20260423_a_share_etf_weekly_tqpb_v1",
+  "expressions": {
+    "r1_trend_sharpe_20d": {
+      "G1": "pass",
+      "G2": "pass",
+      "G3": {
+        "pct_enough_signal": 0.7052631578947368,
+        "ann_turnover_pct": 3896.4210526315783,
+        "net_sharpe_5bps_ls": 0.03817869994026494,
+        "pass": false
+      },
+      "G4": {
+        "ic_at_k5": 0.01762772308920222,
+        "inversions": 0,
+        "q5_q1": 0.0026586638979744755,
+        "corr_vs_uew": 0.9284001807083488,
+        "corr_vs_v7_gold": 0.44090432313633576,
+        "pass": false
+      },
+      "peak_k": 20
+    },
+    "r1_trend_sharpe_60d": {
+      "G1": "pass",
+      "G2": "pass",
+      "G3": {
+        "pct_enough_signal": 0.7,
+        "ann_turnover_pct": 1550.3157894736842,
+        "net_sharpe_5bps_ls": 0.06042509107203379,
+        "pass": false
+      },
+      "G4": {
+        "ic_at_k5": 0.016372617471529117,
+        "inversions": 1,
+        "q5_q1": 0.0015786819859688285,
+        "corr_vs_uew": 0.9178527383262176,
+        "corr_vs_v7_gold": 0.44414632666727655,
+        "pass": false
+      },
+      "peak_k": 5
+    },
+    "r1_pullback_in_uptrend": {
+      "G1": "pass",
+      "G2": "pass",
+      "G3": {
+        "pct_enough_signal": 0.7023391812865497,
+        "ann_turnover_pct": 173.8947368421053,
+        "net_sharpe_5bps_ls": 0.5121023923673523,
+        "pass": false
+      },
+      "G4": {
+        "ic_at_k5": 0.00968111253452301,
+        "inversions": 99,
+        "q5_q1": NaN,
+        "corr_vs_uew": 0.9403477992732935,
+        "corr_vs_v7_gold": 0.4513975995645831,
+        "pass": false
+      },
+      "peak_k": 5
+    },
+    "r1_vol_adj_mom_4w": {
+      "G1": "pass",
+      "G2": "pass",
+      "G3": {
+        "pct_enough_signal": 0.6994152046783626,
+        "ann_turnover_pct": 3908.210526315789,
+        "net_sharpe_5bps_ls": 0.04379115268888622,
+        "pass": false
+      },
+      "G4": {
+        "ic_at_k5": 0.020278185525653258,
+        "inversions": 0,
+        "q5_q1": 0.0026716145252771396,
+        "corr_vs_uew": 0.9218813966608744,
+        "corr_vs_v7_gold": 0.4395491453429929,
+        "pass": false
+      },
+      "peak_k": 20
+    },
+    "r1_rel_strength_zscore": {
+      "G1": "pass",
+      "G2": "pass",
+      "G3": {
+        "pct_enough_signal": 0.6994152046783626,
+        "ann_turnover_pct": 3784.421052631579,
+        "net_sharpe_5bps_ls": 0.020078207508860954,
+        "pass": false
+      },
+      "G4": {
+        "ic_at_k5": 0.013095850158186338,
+        "inversions": 0,
+        "q5_q1": 0.0020353014144994697,
+        "corr_vs_uew": 0.9216635795222913,
+        "corr_vs_v7_gold": 0.4390800841155944,
+        "pass": false
+      },
+      "peak_k": 10
+    },
+    "r1_low_drawdown_20d": {
+      "G1": "pass",
+      "G2": "pass",
+      "G3": {
+        "pct_enough_signal": 0.7052631578947368,
+        "ann_turnover_pct": 4421.0526315789475,
+        "net_sharpe_5bps_ls": 0.36373642992507144,
+        "pass": false
+      },
+      "G4": {
+        "ic_at_k5": 0.02075324091105749,
+        "inversions": 1,
+        "q5_q1": 0.0021119389233678863,
+        "corr_vs_uew": 0.9285174977009026,
+        "corr_vs_v7_gold": 0.4445374284298352,
+        "pass": false
+      },
+      "peak_k": 20
+    },
+    "r1_breakout_vol_conf": {
+      "G1": "pass",
+      "G2": "pass",
+      "G3": {
+        "pct_enough_signal": 0.7052631578947368,
+        "ann_turnover_pct": 94.31578947368422,
+        "net_sharpe_5bps_ls": 0.40629323951967644,
+        "pass": false
+      },
+      "G4": {
+        "ic_at_k5": NaN,
+        "inversions": 99,
+        "q5_q1": NaN,
+        "corr_vs_uew": 0.9527007067905053,
+        "corr_vs_v7_gold": 0.4663454796161466,
+        "pass": false
+      },
+      "peak_k": 5
+    },
+    "r1_kitchen_sink": {
+      "G1": "pass",
+      "G2": "pass",
+      "G3": {
+        "pct_enough_signal": 0.7052631578947368,
+        "ann_turnover_pct": 3271.5789473684213,
+        "net_sharpe_5bps_ls": 0.04515231639614324,
+        "pass": false
+      },
+      "G4": {
+        "ic_at_k5": 0.020205532661944293,
+        "inversions": 0,
+        "q5_q1": 0.002676373080509847,
+        "corr_vs_uew": 0.9264432155883348,
+        "corr_vs_v7_gold": 0.44404520067462117,
+        "pass": false
+      },
+      "peak_k": 10
+    }
+  },
+  "G5_batch": {
+    "declared_k": 5,
+    "n_survivors": 0,
+    "peak_k_counts": {
+      "5": 0,
+      "10": 0,
+      "20": 0
+    },
+    "fraction_at_declared": 0.0,
+    "pass": false
+  }
+}

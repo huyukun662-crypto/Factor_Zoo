@@ -1,0 +1,33 @@
+{
+  "session_id": "20260423_a_share_etf_reversal_v1",
+  "round": 1,
+  "producer": "agent_2_hypothesis_architect",
+  "consumer": "agent_3_alpha_builder",
+  "universe_size": 18,
+  "panel_path": "inputs/etf_daily.parquet",
+  "primary_horizon": 10,
+  "horizon_grid": [5, 10, 20],
+  "rebalance": "weekly_wed",
+  "portfolio_construction": "threshold_top_bottom_4",
+  "neutralization": "universe_ew_demean",
+  "cost_bps_per_side": 5,
+  "expected_batch_size": 8,
+  "expressions_to_build": [
+    {"id": "r1_dd20",              "core": "-drawdown_from_20d_high"},
+    {"id": "r1_rsi14",             "core": "50 - RSI14"},
+    {"id": "r1_bb_pos",            "core": "-(close-MA20)/(2*std20)"},
+    {"id": "r1_logbias_ma20",      "core": "-(log(close)-log(MA20))"},
+    {"id": "r1_rev_5d",            "core": "-ret_5d"},
+    {"id": "r1_vol_scaled_rev5",   "core": "-ret_5d/std20"},
+    {"id": "r1_vol_confirmed_rev", "core": "-ret_5d*z(log(vol_5d/vol_20d))"},
+    {"id": "r1_kitchen_sink",      "core": "mean(rank(sig1..sig6))"}
+  ],
+  "gate_thresholds": {
+    "G3_min_signal_names_pct": 0.90,
+    "G3_min_portfolio_names": 4,
+    "G3_net_sharpe_floor": -0.5,
+    "G4_allow_one_decile_inversion": true,
+    "G4_max_corr_vs_universe_ew": 0.85,
+    "G5_fraction_peaking_at_k": 0.50
+  }
+}

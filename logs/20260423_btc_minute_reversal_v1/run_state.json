@@ -1,0 +1,14 @@
+{
+  "session_id": "20260423_btc_minute_reversal_v1",
+  "current_round": 2,
+  "current_stage": "evaluator_complete",
+  "status": "closed",
+  "selected_mechanism": "short_term_reversal_15m_hold",
+  "best_expression_id": "r2_rev_15m",
+  "verdict": "RESEARCH_ONLY",
+  "continue_research": false,
+  "close_reason": "mechanism confirmed; deployability blocked by spot taker fee structure (breakeven 0.4 bps/side vs realistic 5-10 bps)",
+  "rounds_completed": 2,
+  "total_expressions_tested": 16,
+  "g3_g4_both_passed": {"r1": 2, "r2": 0}
+}

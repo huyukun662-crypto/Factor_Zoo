@@ -1,0 +1,34 @@
+{
+  "session_id": "20260423_btc_minute_reversal_v1",
+  "from": "agent_3_alpha_builder",
+  "to": "agent_4_backtest_operator",
+  "batch_id": "0001",
+  "mechanism": "short_term_reversal_vol_scaled_hour_demeaned",
+  "n_expressions": 8,
+  "expressions": [
+    {"id": "r1_rev_1m",             "lookback_min": 1,  "vol_scaled": false, "hour_demean": false, "path": "close",  "expected_ic_sign_pos": true},
+    {"id": "r1_rev_5m",             "lookback_min": 5,  "vol_scaled": false, "hour_demean": false, "path": "close",  "expected_ic_sign_pos": true},
+    {"id": "r1_rev_15m",            "lookback_min": 15, "vol_scaled": false, "hour_demean": false, "path": "close",  "expected_ic_sign_pos": true},
+    {"id": "r1_rev_5m_volscale",    "lookback_min": 5,  "vol_scaled": true,  "hour_demean": false, "path": "close",  "expected_ic_sign_pos": true},
+    {"id": "r1_rev_15m_volscale",   "lookback_min": 15, "vol_scaled": true,  "hour_demean": false, "path": "close",  "expected_ic_sign_pos": true},
+    {"id": "r1_rev_5m_volscale_hd", "lookback_min": 5,  "vol_scaled": true,  "hour_demean": true,  "path": "close",  "expected_ic_sign_pos": true},
+    {"id": "r1_rev_range5m",        "lookback_min": 5,  "vol_scaled": false, "hour_demean": false, "path": "range",  "expected_ic_sign_pos": true},
+    {"id": "r1_rev_amount5m",       "lookback_min": 5,  "vol_scaled": false, "hour_demean": false, "path": "amount", "expected_ic_sign_pos": true}
+  ],
+  "target": {
+    "primary_k_min": 5,
+    "aux_k_min": [1, 15, 60],
+    "delay_bars": 1,
+    "shift_formula": "shift(-(delay + k))"
+  },
+  "data_path": "inputs/btc_1m.parquet",
+  "script": "scripts/02_build_and_backtest.py",
+  "required_outputs": [
+    "outputs/backtest_results_batch_0001.md",
+    "outputs/ic_table_batch_0001.csv",
+    "outputs/decile_summary_batch_0001.csv",
+    "outputs/ls_summary_batch_0001.csv",
+    "outputs/validation_gates_batch_0001.json",
+    "working/handoff_4_to_5.json"
+  ]
+}

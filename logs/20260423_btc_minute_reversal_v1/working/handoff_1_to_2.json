@@ -1,0 +1,36 @@
+{
+  "session_id": "20260423_btc_minute_reversal_v1",
+  "from": "agent_1_research_librarian",
+  "to": "agent_2_hypothesis_architect",
+  "primary_mechanism": "short_term_reversal_vol_scaled_hour_demeaned",
+  "asset": "BTC-USD (Coinbase spot)",
+  "bar_frequency": "1_minute",
+  "sample_window_days": 60,
+  "data_path": "inputs/btc_1m.parquet",
+  "target_horizons_minutes": [1, 5, 15, 60],
+  "primary_horizon_minutes": 5,
+  "delay_bars": 1,
+  "expected_ic_sign": "positive (signal = -past_return * vol_scaler, so high signal → long)",
+  "hard_floors": {
+    "ic_tstat_min": 4.0,
+    "decile_spread_sharpe_min_gross": 1.0,
+    "after_cost_sharpe_min": 0.0,
+    "cost_bps_per_side": 5.0,
+    "trade_frequency_max_per_hour": 10
+  },
+  "operators_suggested": [
+    "log_return_1",
+    "rolling_sum",
+    "rolling_std",
+    "rolling_high_low_range",
+    "hour_of_day_demean",
+    "ts_zscore"
+  ],
+  "risks": [
+    "60-day sample covers limited regimes",
+    "Coinbase volume lower than Binance — noisier volume-based sub-signals",
+    "5-bps cost may kill sub-5-min hold strategies",
+    "Sustained trend days can dominate backtest"
+  ],
+  "caveats": "Single-asset time-series — cross-sectional operators (Q5 by stock) do not apply. Replace with signal deciles over time."
+}

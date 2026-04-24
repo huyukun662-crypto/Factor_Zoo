@@ -1,0 +1,44 @@
+{
+  "session_id": "20260423_a_share_etf_reversal_v1",
+  "producer": "agent_4_backtest_operator",
+  "consumer": "agent_5_evaluator",
+  "rounds_completed": 2,
+  "round_1_summary": {
+    "verdict": "batch_level_hypothesis_rejected",
+    "g1_pass": 8, "g2_pass": 8, "g3_pass": 3, "g4_pass": 0, "g5_pass": false,
+    "diagnostic": "IC uniformly negative at k=10 horizon; mechanism is momentum, not reversal. Returned to Agent 2."
+  },
+  "round_2_summary": {
+    "verdict": "mechanism_confirmed_but_fails_worst_year",
+    "g1_pass": 8, "g2_pass": 8, "g3_pass": 0, "g4_pass": 2, "g5_pass": true,
+    "best_expression": "r2_lt_rev_60d",
+    "best_net_sharpe_5bps": 0.56,
+    "best_ic_at_k60": 0.0226,
+    "best_ic_tstat_at_k60": 2.35,
+    "worst_year_best_expression": -0.68,
+    "worst_year_year": 2020,
+    "audit_probe_momentum_at_k60": {"ic": -0.0035, "tstat": -0.34, "verdict": "pipeline_clean"}
+  },
+  "expressions": [
+    {"id": "r1_dd20",               "round": 1, "gates": {"G1":"pass","G2":"pass","G3":"fail","G4":"fail","G5":"batch_fail"}, "retry_count": 0},
+    {"id": "r1_rsi14",              "round": 1, "gates": {"G1":"pass","G2":"pass","G3":"pass","G4":"fail","G5":"batch_fail"}, "retry_count": 0},
+    {"id": "r1_bb_pos",             "round": 1, "gates": {"G1":"pass","G2":"pass","G3":"fail","G4":"fail","G5":"batch_fail"}, "retry_count": 0},
+    {"id": "r1_logbias_ma20",       "round": 1, "gates": {"G1":"pass","G2":"pass","G3":"pass","G4":"fail","G5":"batch_fail"}, "retry_count": 0},
+    {"id": "r1_rev_5d",             "round": 1, "gates": {"G1":"pass","G2":"pass","G3":"fail","G4":"fail","G5":"batch_fail"}, "retry_count": 0},
+    {"id": "r1_vol_scaled_rev5",    "round": 1, "gates": {"G1":"pass","G2":"pass","G3":"fail","G4":"fail","G5":"batch_fail"}, "retry_count": 0},
+    {"id": "r1_vol_confirmed_rev",  "round": 1, "gates": {"G1":"pass","G2":"pass","G3":"pass","G4":"fail","G5":"batch_fail"}, "retry_count": 0},
+    {"id": "r1_kitchen_sink",       "round": 1, "gates": {"G1":"pass","G2":"pass","G3":"fail","G4":"fail","G5":"batch_fail"}, "retry_count": 0},
+    {"id": "r2_lt_rev_60d",         "round": 2, "gates": {"G1":"pass","G2":"pass","G3":"fail","G4":"pass","G5":"batch_pass"}, "retry_count": 0, "note": "best candidate, worst-year 2020 blocks PROMOTE"},
+    {"id": "r2_lt_rev_120d",        "round": 2, "gates": {"G1":"pass","G2":"pass","G3":"fail","G4":"fail","G5":"batch_pass"}, "retry_count": 0},
+    {"id": "r2_lt_rev_250d",        "round": 2, "gates": {"G1":"pass","G2":"pass","G3":"fail","G4":"fail","G5":"batch_pass"}, "retry_count": 0, "note": "1y-momentum direction, not reversal"},
+    {"id": "r2_vol_scaled_lt_120",  "round": 2, "gates": {"G1":"pass","G2":"pass","G3":"fail","G4":"fail","G5":"batch_pass"}, "retry_count": 0},
+    {"id": "r2_deep_dip_rev",       "round": 2, "gates": {"G1":"pass","G2":"pass","G3":"fail","G4":"fail","G5":"batch_pass"}, "retry_count": 0},
+    {"id": "r2_rsi_extreme_os",     "round": 2, "gates": {"G1":"pass","G2":"pass","G3":"fail","G4":"pass","G5":"batch_pass"}, "retry_count": 0, "note": "IC t=7.75 at k=20, but strategy spec mismatch"},
+    {"id": "r2_vol_confirmed_lt60", "round": 2, "gates": {"G1":"pass","G2":"pass","G3":"fail","G4":"fail","G5":"batch_pass"}, "retry_count": 0},
+    {"id": "r2_residual_rev",       "round": 2, "gates": {"G1":"pass","G2":"pass","G3":"fail","G4":"fail","G5":"batch_pass"}, "retry_count": 0}
+  ],
+  "total_expressions_tested": 16,
+  "total_passed_g4": 2,
+  "promote_candidate_count": 0,
+  "research_only_candidate_count": 2
+}

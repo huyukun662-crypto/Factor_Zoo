@@ -1,0 +1,78 @@
+session_id: 20260423_btc_minute_reversal_v1
+round: 2
+created_utc: "2026-04-23T17:05:00Z"
+agent: 2_hypothesis_architect
+
+asset: BTC-USD
+source: coinbase_exchange
+bar_frequency: 1m
+sample_window:
+  start_utc: "2026-02-22T16:00:00Z"
+  end_utc:   "2026-04-23T16:00:00Z"
+  days: 60
+
+# ---- Mechanism (revised from Round 1) ----
+mechanism:
+  name: short_term_reversal_15m_hold
+  parent: short_term_reversal_vol_scaled_hour_demeaned
+  one_line: >
+    At 15-minute horizon, past 15-60 minute return predicts future 15-minute
+    return with a negative sign. Hold positions for 15 bars to amortize
+    transaction cost.
+  expected_ic_sign: positive
+  round_1_evidence:
+    peak_ic_horizon: 15
+    peak_ic: 0.0131
+    peak_ic_tstat: 3.86
+    expression: r1_rev_15m
+
+# ---- Target ----
+target:
+  definition: "log(close[t+k+delay]) - log(close[t+delay])"
+  delay_bars: 1
+  primary_horizon_minutes: 15      # was 5
+  aux_horizons_minutes: [5, 15, 30, 60]
+  invariant: "target_shift = -(delay + k)"
+
+# ---- Strategy rules (the key change) ----
+strategy:
+  hold_bars: 15                    # was 1
+  signal_refresh_rule: "position resets every 15 bars; intra-hold signals ignored"
+  reason: "cut trade frequency ~15x to fight Pitfall 10 (cost wipeout)"
+
+# ---- Neutralization ----
+neutralization:
+  hour_of_day_demean: true
+  weekday_demean: false
+  robust_winsorize_target: true
+  target_winsor_pct: [0.005, 0.995]
+
+# ---- Hard floors ----
+targets_required_for_promote:
+  ic_tstat_min_at_15min: 4.0
+  decile_spread_sharpe_min_gross: 1.0
+  after_cost_sharpe_min_at_5bps: 0.5
+  cost_bps_per_side_primary: 5.0
+  cost_bps_per_side_stress: 10.0
+  after_cost_sharpe_min_at_10bps: 0.0
+  trade_frequency_max_per_hour: 4    # tightened from 10 given hold constraint
+
+# ---- Failure conditions ----
+failure_conditions:
+  - "IC t-stat at k=15m below 3.0 (mechanism weaker than Round 1 implied)"
+  - "IC sign inverts vs Round 1 (regime changed in last 60d)"
+  - "After-cost Sharpe at 5 bps still < 0 even with 15-bar hold"
+  - "Best expression's peak IC horizon differs from declared k=15m (G5 fail again)"
+
+# ---- Constraints for Agent 3 ----
+constraints_for_agent_3:
+  rule_of_8: true
+  mechanism_consistency: >
+    All 8 expressions express reversal at 15m horizon. Distinguish by:
+    (a) lookback window (15/30/45/60m), (b) vol-scaling on/off,
+    (c) EMA smoothing on/off, (d) weighting (equal/amount/range).
+  hold_bars: 15
+  forbidden:
+    - "Expressions with sub-5m lookback (too noisy, Round 1 showed)"
+    - "Any expression that disables the 15-bar hold constraint"
+    - "Re-introducing naive 1-bar rebalance"

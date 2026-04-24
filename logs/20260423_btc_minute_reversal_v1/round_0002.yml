@@ -1,0 +1,146 @@
+session_id: 20260423_btc_minute_reversal_v1
+round: 2
+completed_utc: "2026-04-23T17:15:00Z"
+parent_round: 1
+
+asset: BTC-USD
+bar: 1m
+sample:
+  start_utc: "2026-02-22T16:00:00Z"
+  end_utc:   "2026-04-23T16:00:00Z"
+  n_bars: 86380
+
+mechanism: short_term_reversal_15m_hold
+primary_horizon_minutes: 15
+hold_bars: 15
+n_expressions: 8
+
+# ---- Round-2 design diff ----
+design_changes_from_r1:
+  primary_horizon_min: {r1: 5, r2: 15}
+  hold_bars:           {r1: 1, r2: 15}
+  lookback_windows:    {r1: "1/5/15", r2: "15/30/45/60"}
+  cost_model:          {r1: "fixed 5 bps", r2: "curve 2/5/8/10 bps"}
+  g3_new_checks:       ["trade_freq ≤ 4/h (tightened)", "net_sharpe ≥ -0.5 (new)"]
+  g5_added:            true
+
+# ---- Gate results ----
+gates_summary:
+  G1_pass: 8
+  G2_pass: 8
+  G3_pass: 0          # ALL 8 fail new net-Sharpe check
+  G4_pass: 4
+  G5_pass: true       # 4/4 survivors peak at k=15m
+  both_G3_G4_pass: 0
+
+g5_batch:
+  declared_k_min: 15
+  survivors: 4
+  peak_counts: {5: 0, 15: 4, 30: 0, 60: 0}
+  fraction_peaking_at_declared_k: 1.0
+  passed: true
+
+expressions:
+  - id: r2_rev_15m
+    G3: fail           # net_sharpe -28
+    G4: pass
+    ic_15m: 0.01314
+    ic_tstat_15m: 3.86
+    gross_sharpe: 1.64
+    net_sharpe_5bps: -28.0
+    trades_per_hour: 2.33
+  - id: r2_rev_30m
+    G3: fail
+    G4: pass
+    ic_15m: 0.01014
+    ic_tstat_15m: 2.98
+    gross_sharpe: 0.70
+    net_sharpe_5bps: -21.7
+  - id: r2_rev_45m
+    G3: fail
+    G4: fail            # horizon_decay
+    ic_15m: 0.00214
+    gross_sharpe: -0.71
+  - id: r2_rev_60m
+    G3: fail
+    G4: fail
+    ic_15m: 0.00177
+    gross_sharpe: 2.54     # highest gross, but fails G4
+  - id: r2_rev_15m_volscale
+    G3: fail
+    G4: fail
+    ic_15m: 0.00657
+  - id: r2_rev_30m_volscale
+    G3: fail
+    G4: pass
+    ic_15m: 0.00833
+    ic_tstat_15m: 2.45
+  - id: r2_rev_30m_ema15
+    G3: fail
+    G4: fail
+    ic_15m: 0.00363
+    gross_sharpe: 2.24
+    net_sharpe_5bps: -12.9   # best net, still deeply negative
+  - id: r2_rev_30m_volscale_hd
+    G3: fail
+    G4: pass
+    ic_15m: 0.01074
+    ic_tstat_15m: 3.15
+
+# ---- Cost sensitivity (best expression) ----
+cost_sensitivity_best_net:
+  expression: r2_rev_30m_ema15
+  curve_bps_per_side: [2, 5, 8, 10]
+  net_sharpe:         [-3.88, -12.93, -21.62, -27.11]
+  gross_sharpe_flat:  2.24
+
+breakeven_cost_bps_per_side: 0.4
+  # signal is ~30x smaller than cost at 5 bps; requires maker rebate tier to be viable
+
+# ---- Mandatory audits ----
+audits:
+  execution_delay:  {status: PASS, invariant: "target_shift = -(1 + k)"}
+  look_ahead:       {status: PASS, notes: "no shift(-k) in signal construction"}
+  worst_year_floor: {status: N/A, notes: "60-day window"}
+  best_year_out:    {status: N/A, notes: "60-day window"}
+  falsification_first:
+    prompt: "If verdict wrong by 50%, most likely single cause?"
+    answer: "Cost assumption too conservative. But even at 2 bps/side, best net Sharpe -3.9. Does not invert verdict."
+
+# ---- Verdict ----
+verdict: RESEARCH_ONLY
+reasons:
+  - "Mechanism confirmed: 15m reversal IC t-stat 3.86 (r2_rev_15m), G5 100% at k=15m"
+  - "Cost wipeout is structural: breakeven requires 0.4 bps/side (spot taker 5-10 bps)"
+  - "0 of 8 expressions pass the new G3 net-Sharpe gate"
+  - "IC t-stat 3.86 just below hard floor of 4.0"
+
+best_reference_expression: r2_rev_15m
+  # IC 0.0131 at k=15m, t-stat 3.86, gross 1.64, peaks exactly at declared horizon
+
+deployability_gating_factor: "spot taker fee > 30x per-bar signal"
+deployability_conditions_needed:
+  - "maker rebates (-0.04 bps Coinbase Pro VIP 10; requires L2 book + microsecond execution)"
+  - "perpetual futures with maker rebates (-2 bps OKX)"
+  - "consolidated basket of 50+ crypto symbols (amortize cost over more signals per trade)"
+
+# ---- Continue / stop ----
+continue_research: false
+stop_reason: "mechanism confirmed; deployability requires different infrastructure (perps/maker/basket) that this session cannot test"
+
+round_3_direction_if_user_approves:
+  - "Pivot to perpetual futures: OKX/Bybit BTC-USDT-SWAP with funding rate as secondary signal"
+  - "Test maker-rebate adjusted Sharpe assuming 2 bps maker edge (negative total cost)"
+  - "Multi-symbol basket: same mechanism on top 20 crypto by liquidity"
+
+# ---- Meta / workflow dogfood ----
+workflow_dogfood:
+  gates_tested:
+    - "G3 net_sharpe_not_wipeout (new): fired on 8/8 expressions, catches what trade_freq misses"
+    - "G5 batch horizon consistency (new): passed cleanly at 100%, confirmed horizon choice"
+  gates_earned_keep:
+    - G3_net_sharpe_gate: "all 8 passed trade_freq but 8/8 failed net Sharpe — gate is strictly more informative"
+    - G5_batch_horizon:  "unambiguous confirmation of Agent 2 pivot; Round 1 would have failed this gate"
+  residual_gaps_identified:
+    - "no capacity/liquidity gate for order-book impact"
+    - "no regime-fragility gate for sub-year samples"

@@ -1,0 +1,103 @@
+session_id: 20260423_a_share_etf_reversal_v1
+round: 2
+parent_round: 1
+produced_by: agent_2_hypothesis_architect
+produced_utc: "2026-04-23T18:45:00Z"
+
+round_1_diagnostic: |
+  Round 1 batch IC is uniformly negative at k∈{5,10,20} with IC magnitude
+  growing in k. This is a momentum-continuation signature, not a reversal
+  signature. Per validation-gates.md G5, returning the batch to Agent 2 for
+  re-specification. Agent 2 chooses to test LONG-HORIZON reversal (DeBondt-
+  Thaler 3-60 month window) + narrow-condition reversal variants before
+  closing the session.
+
+# ---- Round 2 design diff vs Round 1 ----
+design_changes_from_r1:
+  primary_horizon:      {r1: 10,   r2: 60}        # trading days
+  horizon_grid:         {r1: [5,10,20], r2: [20,60,120]}
+  rebalance:            {r1: weekly_wed, r2: monthly_end}
+  portfolio_cut:        {r1: top4/bot4,  r2: top4/bot4 (same, |U|=18)}
+  mechanism_scope:      {r1: "broad reversal",   r2: "long-term reversal + extreme oversold"}
+  cost_baseline:        {r1: 5 bps/side, r2: 5 bps/side}
+
+# ---- Hypothesis (Round 2) ----
+mechanism: long_term_mean_reversion_and_selective_oversold
+primary_horizon_trading_days: 60
+horizon_grid: [20, 60, 120]
+rebalance_period: 20   # trading days (monthly)
+portfolio_construction: threshold_top_bottom_4
+neutralization: universe_ew_demean
+
+# ---- Expression candidates (Round 2) ----
+expression_specs:
+  - id: r2_lt_rev_60d
+    rationale: "60d long-term reversal (3-month contrarian)"
+    formula: "-logret_60d"
+  - id: r2_lt_rev_120d
+    rationale: "120d long-term reversal (6-month DeBondt-Thaler range)"
+    formula: "-logret_120d"
+  - id: r2_lt_rev_250d
+    rationale: "250d long-term reversal (1y, closer to DeBondt-Thaler)"
+    formula: "-logret_250d"
+  - id: r2_vol_scaled_lt_120
+    rationale: "vol-scaled 120d reversal; stronger in high-vol regimes"
+    formula: "-logret_120d / std_60"
+  - id: r2_deep_dip_rev
+    rationale: "selective 5d reversal, active only if 20d drawdown is in the tail"
+    formula: "-logret_5d * I[dd20 < -5%]"
+  - id: r2_rsi_extreme_os
+    rationale: "RSI14 selective: only when RSI < 30 (classic oversold)"
+    formula: "(30 - RSI14) * I[RSI14 < 30]"
+  - id: r2_vol_confirmed_lt60
+    rationale: "Round 1 only positive signal was vol-confirmed; extend to 60d"
+    formula: "-logret_60d * z(log(vol_20d/vol_60d))"
+  - id: r2_residual_rev
+    rationale: "short-term reversal after controlling for mid-term trend"
+    formula: "-logret_5d - beta * logret_60d  (beta by OLS per date)"
+
+# ---- Audit probe (falsification, OUTSIDE rule of 8) ----
+audit_probe:
+  - id: probe_momentum_20d
+    rationale: "sanity probe: +logret_20d should be a positive-IC factor given Round 1 finding. If NOT, pipeline has a bug. Not an alpha candidate — reported separately."
+    formula: "+logret_20d"
+
+# ---- Gates (unchanged thresholds) ----
+gates:
+  G1_syntax:   enabled
+  G2_runs:     enabled
+  G3_nondegenerate:
+    min_signal_names_pct: 0.90
+    min_portfolio_names:  4
+    max_annual_turnover:  2000
+    min_annual_turnover:  5
+    net_sharpe_floor:     -0.5
+  G4_fidelity:
+    decile_monotonicity_allow_inv: 1
+    ic_sign_match_thesis:          true
+    horizon_consistency:           true
+    max_corr_vs_universe_ew:       0.85
+  G5_batch_horizon:
+    fraction_peaking_at_k: 0.50
+
+# ---- Hard floors (same as r1) ----
+hard_floors:
+  rank_ic_at_primary_k:   0.03
+  icir:                   0.3
+  gross_sharpe_spread:    1.0
+  net_sharpe_at_5bps:     0.5
+  worst_year_sharpe:      0.0
+
+# ---- Outputs expected ----
+round_2_outputs_expected:
+  - outputs/expressions_batch_0002.md
+  - outputs/backtest_results_batch_0002.md
+  - outputs/ic_table_batch_0002.csv
+  - outputs/ls_summary_batch_0002.csv
+  - outputs/decile_summary_batch_0002.csv
+  - outputs/cost_sensitivity_batch_0002.csv
+  - outputs/per_year_sharpe_batch_0002.csv
+  - outputs/validation_gates_batch_0002.json
+  - outputs/momentum_probe_batch_0002.json
+  - outputs/alpha_ranking_round2.md
+  - round_0002.yml

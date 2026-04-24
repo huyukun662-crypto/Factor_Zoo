@@ -1,0 +1,125 @@
+session_id: 20260423_btc_minute_reversal_v1
+round: 1
+completed_utc: "2026-04-23T16:55:00Z"
+
+asset: BTC-USD
+bar: 1m
+sample:
+  start_utc: "2026-02-22T16:00:00Z"
+  end_utc:   "2026-04-23T16:00:00Z"
+  n_bars: 86380
+  coverage: 0.9998
+
+mechanism: short_term_reversal_vol_scaled_hour_demeaned
+n_expressions: 8
+
+# ---- Gate funnel (dogfood of validation-gates.md) ----
+gates_summary:
+  passed_G1: 8
+  passed_G2: 8
+  passed_G3: 5
+  passed_G4: 3
+  passed_both_G3_G4: 2
+
+expressions:
+  - id: r1_rev_1m
+    G3: fail      # trade_freq 17.8 > 10 per hour
+    G4: pass
+    ic_at_k5m: 0.0081
+    ic_tstat_at_k5m: 2.37
+    net_sharpe_ann: -239.2
+  - id: r1_rev_5m
+    G3: pass
+    G4: fail      # IC sign - at k=5m
+    ic_at_k5m: -0.0026
+    ic_tstat_at_k5m: -0.77
+    net_sharpe_ann: -117.8
+  - id: r1_rev_15m
+    G3: pass
+    G4: pass
+    ic_at_k5m: 0.0100
+    ic_tstat_at_k5m: 2.95
+    ic_at_k15m: 0.0131
+    ic_tstat_at_k15m: 3.86
+    net_sharpe_ann: -68.5
+    gross_sharpe_ann: 2.04
+  - id: r1_rev_5m_volscale
+    G3: fail      # trade_freq 11.1 > 10
+    G4: fail      # IC sign - at k=5m
+    ic_at_k5m: -0.0022
+    net_sharpe_ann: -169.4
+  - id: r1_rev_15m_volscale
+    G3: pass
+    G4: fail      # D10 < D1
+    ic_at_k5m: 0.0053
+    net_sharpe_ann: -102.9
+  - id: r1_rev_5m_volscale_hd
+    G3: fail      # trade_freq 11.1 > 10
+    G4: fail      # IC sign - at k=5m
+    ic_at_k5m: -0.0016
+    net_sharpe_ann: -168.7
+  - id: r1_rev_range5m
+    G3: pass
+    G4: fail      # IC sign - at k=5m
+    ic_at_k5m: -0.0036
+    net_sharpe_ann: -80.0
+  - id: r1_rev_amount5m
+    G3: pass
+    G4: pass
+    ic_at_k5m: 0.0016
+    ic_tstat_at_k5m: 0.46
+    net_sharpe_ann: -75.0
+
+# ---- Mandatory audits ----
+audits:
+  execution_delay:
+    status: PASS
+    invariant: "target = log(close[t+k+1]) - log(close[t+1]); shift = -(delay+k)"
+    delay_bars: 1
+  look_ahead:
+    status: PASS
+    notes: "No shift(-k) anywhere in signal construction; all signal ops are <= bar t"
+  worst_year_floor:
+    status: NA
+    notes: "60-day single-asset window; per-week stability reported below instead"
+  best_year_out_floor:
+    status: NA
+    notes: "60-day window; not applicable"
+  falsification_first:
+    most_likely_failure: "Agent 2 picked wrong primary horizon (5m); true signal is at 15m"
+    test_to_run_round2: "Re-center on k=15m; test IC at k ∈ {1, 5, 15, 30, 60} for the 15m-variant family"
+
+# ---- Verdict ----
+verdict: RESEARCH_ONLY
+reasons:
+  - "IC t-stat 2.95 at declared primary horizon (5m); floor was 4.0"
+  - "All 8 net Sharpes are deeply negative after 5 bps/side cost"
+  - "Primary-horizon mechanism breaks (IC flips sign) at k=5m for 4 of 8 expressions"
+  - "Only 2 of 8 pass both G3 and G4 gates"
+
+best_expression_for_reference: r1_rev_15m
+  # IC t-stat 3.86 at k=15m, gross Sharpe 2.04, trade freq 5.2/h
+  # Still cost-unviable at 5 bps/side but strongest signal in batch
+
+# ---- Continue / stop ----
+continue_research: false     # needs user confirmation for Round 2
+stop_reason: "Awaiting user decision on horizon pivot (5m → 15m) before Agent 1 re-runs"
+
+round2_direction_suggested:
+  - "Re-center primary horizon on k=15m"
+  - "Add 15m hold constraint to strategy (signal refreshes every 15 bars)"
+  - "Test longer reversal windows: 15m, 30m, 45m, 60m"
+  - "Reduce trade frequency: EMA signal smoothing or quintile (not decile) thresholds"
+  - "Sensitivity chart: net Sharpe at costs {2, 5, 8, 10} bps/side"
+
+# ---- Meta (funnel dogfood) ----
+funnel_meta:
+  source_file: worldquant-5-agent-workflow/references/validation-gates.md
+  first_real_use: true
+  observations:
+    - "G3 trade_freq gate correctly caught 3 cost-unviable expressions pre-Agent-5"
+    - "G4 IC sign gate correctly caught 4 horizon-mismatched expressions"
+    - "Gaps identified: no gate for batch-level horizon consistency; no direct net-Sharpe gate"
+  updates_suggested_to_validation_gates_md:
+    - "Add G3 check: net_sharpe_at_assumed_cost > -0.5 (cheap cost wipeout detector)"
+    - "Add per-batch check: majority of expressions agree on peak IC horizon"

@@ -1,0 +1,125 @@
+session_id: 20260423_a_share_etf_weekly_tqpb_v1
+round: 1
+produced_by: agent_2_hypothesis_architect
+produced_utc: "2026-04-23T19:40:00Z"
+
+# ---- Combine target ----
+combine_target_session: 20260422_industry_rotation_cn
+combine_target_name: V7_gold
+v7_gold_pnl_csv: "../../20260422_industry_rotation_cn/outputs/round7c_v7_pnl.csv"
+v7_gold_metrics:
+  sharpe: 1.91
+  maxdd:  -0.0889
+  annret: 0.286
+  weeks:  377
+
+# ---- Asset & sample ----
+asset_class: china_etf_weekly
+bar: 1d (weekly rebalance, Fri close -> Mon open, delay=1)
+panel_path: "../../20260422_industry_rotation_cn/outputs/etf_daily.parquet"
+universe_path: "../../20260422_industry_rotation_cn/outputs/etf_universe.csv"
+universe_size_max: 34
+staggered_join: "ETF enters pool 12 weeks after first trade (same rule as V7_gold)"
+
+window:
+  start: "2019-01-01"
+  end:   "2026-04-22"
+  weeks: 377
+
+# ---- Mechanism ----
+mechanism: trend_quality_plus_pullback_in_trend
+primary_horizon_trading_days: 5
+horizon_grid: [5, 10, 20]
+rebalance_cadence: weekly
+
+# ---- Portfolio construction ----
+strategy_primary: long_only_top_5
+strategy_aux: long_short_top5_bot5
+neutralization: universe_ew_demean
+
+# ---- Cost model ----
+cost_baseline_bps_per_side: 5
+cost_sensitivity_grid: [2, 5, 8]
+
+# ---- Expressions to build (handoff 2->3) ----
+expression_specs:
+  - id: r1_trend_sharpe_20d
+    rationale: "tsmom Sharpe (Moskowitz-Ooi-Pedersen 2012): trend quality orthogonal to mom_4w magnitude"
+    formula: "mean(daily_ret[t-20..t]) / std(daily_ret[t-20..t]) * sqrt(252)"
+  - id: r1_trend_sharpe_60d
+    rationale: "longer-horizon trend-Sharpe; smoother but slower"
+    formula: "mean(daily_ret[t-60..t]) / std(daily_ret[t-60..t]) * sqrt(252)"
+  - id: r1_pullback_in_uptrend
+    rationale: "RSI<40 inside uptrend (mom_4w>0); captures sibling session R2 RSI finding with trend filter"
+    formula: "(40 - RSI14) * I[RSI14<40] * I[mom_4w>0]"
+  - id: r1_vol_adj_mom_4w
+    rationale: "vol-adjusted 4w momentum; should be less correlated with V7_gold's raw mom_4w"
+    formula: "mom_4w / std_20d_of_daily_ret"
+  - id: r1_rel_strength_zscore
+    rationale: "relative strength: (ETF mom_4w − universe mean) / cross std"
+    formula: "xs_zscore(mom_4w)"
+  - id: r1_low_drawdown_20d
+    rationale: "shallow drawdown = strong trend (AQR QMJ style quality)"
+    formula: "-maxdd_20d = -(max(max_close_20d − close, 0) / max_close_20d)"
+  - id: r1_breakout_vol_conf
+    rationale: "20d high breakout confirmed by volume surge"
+    formula: "(close − max_high_20) / std_20d * I[close >= max_high_20 AND vol5/vol20 > 1.2]"
+  - id: r1_kitchen_sink
+    rationale: "robust rank ensemble of 1-7"
+    formula: "mean(rank(e1)..rank(e7))"
+
+# ---- Validation gates ----
+gates:
+  G1_syntax:   enabled
+  G2_runs:     enabled
+  G3_nondegenerate:
+    min_signal_names_pct: 0.85  # relaxed given staggered listing
+    min_portfolio_names:  5
+    min_annual_turnover_pct: 50    # weekly = high TO expected
+    max_annual_turnover_pct: 5000
+    net_sharpe_floor: -0.5
+  G4_fidelity:
+    decile_monotonicity_allow_inv: 1
+    ic_sign_match_thesis:          true
+    max_corr_vs_universe_ew:       0.85
+    max_corr_vs_v7_gold_pnl:       0.70   # combine-specific
+  G5_batch_horizon:
+    fraction_peaking_at_k: 0.50
+
+# ---- Combine-specific analysis (beyond vanilla Agent 4) ----
+combine_analysis:
+  correlation_weekly_pnl_vs_v7_gold: required
+  ensemble_50_50_backtest:           required_for_all_g4_survivors
+  per_year_sharpe_of_combined:       required_for_best_candidate
+
+# ---- Hard floors ----
+hard_floors:
+  rank_ic_at_k5:                    0.02
+  icir_ann:                         0.3
+  standalone_net_sharpe_at_5bps:    0.4
+  abs_corr_with_v7_gold:            0.70
+  combined_sharpe_above_v7:         true  # > 1.91
+  worst_year_sharpe_combined:       0.0
+
+# ---- Decisions ----
+decision_rules:
+  promote_if: "best candidate clears all hard floors and combined 50/50 Sharpe > V7_gold Sharpe 1.91"
+  research_only_if: "mechanism confirmed (IC & monotonicity pass) BUT corr too high OR combined does not beat V7_gold"
+  fail_if: "no candidate clears IC/standalone Sharpe floors"
+
+# ---- Outputs expected ----
+round_1_outputs_expected:
+  - outputs/expressions_batch_0001.md
+  - outputs/backtest_results_batch_0001.md
+  - outputs/ic_table_batch_0001.csv
+  - outputs/ls_summary_batch_0001.csv
+  - outputs/longonly_summary_batch_0001.csv
+  - outputs/decile_summary_batch_0001.csv
+  - outputs/cost_sensitivity_batch_0001.csv
+  - outputs/per_year_sharpe_batch_0001.csv
+  - outputs/validation_gates_batch_0001.json
+  - outputs/combine_analysis_v7_gold.json
+  - outputs/combined_5050_equity.csv
+  - outputs/alpha_ranking.md
+  - outputs/final_summary.md
+  - round_0001.yml

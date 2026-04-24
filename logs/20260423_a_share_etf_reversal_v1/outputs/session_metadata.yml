@@ -1,0 +1,161 @@
+session_id: 20260423_a_share_etf_reversal_v1
+round: 1
+produced_by: agent_2_hypothesis_architect
+produced_utc: "2026-04-23T18:05:00Z"
+
+# ---- Asset & sample ----
+asset_class: china_etf_daily
+bar: 1d
+universe_symbols:
+  broad_index:
+    - 510300.SS   # 沪深300
+    - 510500.SS   # 中证500
+    - 510050.SS   # 上证50
+    - 159915.SZ   # 创业板
+    - 510180.SS   # 上证180
+    - 159949.SZ   # 创业板50
+    - 588000.SS   # 科创50
+    - 588080.SS   # 科创板100
+    - 510880.SS   # 红利
+  thematic:
+    - 512880.SS   # 证券
+    - 512660.SS   # 军工
+    - 512170.SS   # 医疗
+    - 512760.SS   # 芯片
+    - 515030.SS   # 新能源车
+    - 512290.SS   # 生物医药
+    - 512690.SS   # 酒
+    - 512980.SS   # 传媒
+  commodity:
+    - 518880.SS   # 黄金
+universe_size: 18
+dropped_from_handoff_1_to_2:
+  - {sym: 512100.SS, reason: "Yahoo only 131 bars (~6 months), insufficient history"}
+  - {sym: 515050.SS, reason: "Yahoo only 131 bars (~6 months), insufficient history"}
+
+sample:
+  start: "2020-01-02"
+  end:   "2026-04-22"
+  total_days: 1525
+  full_xsec_days_from: "2021-08-02"   # after 588000/588080/515030 all listed
+  n_rows: 27017
+
+# ---- Mechanism ----
+mechanism: short_term_reversal_etf_basket
+primary_horizon_trading_days: 10
+horizon_grid: [5, 10, 20]
+
+rebalance:
+  primary:  weekly_wed
+  aux:      monthly_end
+
+portfolio_construction: threshold_top_bottom_4
+  # reason: |universe|=18 is too thin for Q5 (would be 3-4 names, high noise)
+  # top-4 long / bottom-4 short is a 4/18 = 22% / 22% cut
+  # long-only variant: top-3 equal weight
+
+neutralization: universe_ew_demean
+  # zero-sum demean across the 18 ETFs per date, so the factor does not
+  # pick up market beta. Reversal SHOULD be orthogonal to the universe EW.
+
+# ---- Cost model ----
+cost_baseline_bps_per_side: 5
+cost_sensitivity_grid_bps: [2, 5, 8]
+
+# ---- Validation gates (see references/validation-gates.md) ----
+gates:
+  G1_syntax:             enabled
+  G2_runs:               enabled
+  G3_nondegenerate:
+    min_signal_names_pct: 0.90   # at least 14 of 18 non-NaN signals 90% of days
+    min_portfolio_names:  4
+    max_annual_turnover:  2000
+    min_annual_turnover:  10
+    net_sharpe_floor:     -0.5
+  G4_fidelity:
+    decile_monotonicity_allow_inv: 1
+    ic_sign_match_thesis:          true
+    horizon_consistency:           true
+    max_corr_vs_universe_ew:       0.85
+  G5_batch_horizon:
+    fraction_peaking_at_k: 0.50
+
+# ---- Hard floors ----
+hard_floors:
+  rank_ic_at_k10:            0.03
+  icir_at_k10:               0.3
+  gross_sharpe_spread:       1.0
+  net_sharpe_at_5bps:        0.5
+  worst_year_sharpe:         0.0
+  best_year_out_fraction:    0.5
+
+# ---- Decisions ----
+decision_rules:
+  promote_if: "all hard floors passed + G1..G5 all pass + retry_count <= 2"
+  research_only_if: "mechanism confirmed (G5 pass + Q5 monotone) BUT any hard floor fails"
+  fail_if: "G1..G4 fail on >=4 of 8 after 5 retries, OR G5 fails AND Agent 2 has no better horizon to propose"
+
+# ---- Expressions to build (handoff 2->3) ----
+expression_specs:
+  - id: r1_dd20
+    name: "20-day rolling drawdown"
+    rationale: "deeper drawdown from 20d high → mean-reversion opportunity"
+    formula: "-(close - max(high, 20)) / max(high, 20)"
+    sign_convention: "high signal = long; we negate raw drawdown so depth of dip maps to positive signal"
+  - id: r1_rsi14
+    name: "Wilder RSI(14) oversold"
+    rationale: "canonical oversold indicator; 30 is the classic floor"
+    formula: "50 - RSI14"
+    sign_convention: "low RSI = positive signal = long"
+  - id: r1_bb_pos
+    name: "Bollinger band position"
+    rationale: "position within bollinger band as z-score; extreme low = oversold"
+    formula: "-(close - MA20) / (2 * std20)"
+    sign_convention: "below lower band = positive signal = long"
+  - id: r1_logbias_ma20
+    name: "Log bias vs MA20"
+    rationale: "log-return distance from 20d MA; widely-used A-share indicator"
+    formula: "-(log(close) - log(MA20))"
+    sign_convention: "below MA = positive signal = long"
+  - id: r1_rev_5d
+    name: "5-day return reversal"
+    rationale: "shortest classical weekly reversal"
+    formula: "-ret_5d"
+    sign_convention: "negative 5d return = positive signal = long"
+  - id: r1_vol_scaled_rev5
+    name: "Vol-scaled 5d reversal"
+    rationale: "Nagel (2012) — reversal premium scales with volatility"
+    formula: "-ret_5d / std_20d"
+    sign_convention: "same as r1_rev_5d, normalized by vol"
+  - id: r1_vol_confirmed_rev
+    name: "Volume-confirmed reversal"
+    rationale: "down days on heavy volume should rebound harder"
+    formula: "-ret_5d * z(log(vol_5d / vol_20d))"
+    sign_convention: "down on heavy volume = positive signal = long"
+  - id: r1_kitchen_sink
+    name: "Kitchen-sink rank combo"
+    rationale: "robust ensemble of the 6 directional signals"
+    formula: "mean(rank(r1_dd20), rank(r1_rsi14), rank(r1_bb_pos), rank(r1_logbias_ma20), rank(r1_rev_5d), rank(r1_vol_scaled_rev5))"
+    sign_convention: "avg of ranks; high = long"
+
+# ---- Audits required before promote ----
+mandatory_audits:
+  - execution_delay        # target_shift = -(1 + k)
+  - look_ahead             # grep for future bars in signal
+  - worst_year_sharpe      # ≥ 0.0
+  - best_year_out_sharpe   # ≥ 50% of headline
+  - falsification_first    # if verdict wrong by 50%, most likely cause?
+
+# ---- Outputs to produce in this round ----
+round_1_outputs_expected:
+  - outputs/expressions_batch_0001.md
+  - outputs/backtest_results_batch_0001.md
+  - outputs/ic_table_batch_0001.csv
+  - outputs/ls_summary_batch_0001.csv
+  - outputs/decile_summary_batch_0001.csv
+  - outputs/cost_sensitivity_batch_0001.csv
+  - outputs/validation_gates_batch_0001.json
+  - outputs/alpha_ranking.md
+  - outputs/final_summary.md
+  - round_0001.yml
+  - working/handoff_4_to_5.json

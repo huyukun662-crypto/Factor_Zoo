@@ -1,0 +1,11 @@
+[
+  {
+    "expression": "probe_momentum_20d",
+    "ic_at_primary_k": -0.00347698154775955,
+    "ic_tstat": -0.34018484764002727,
+    "gross_sharpe": -0.17482933949123078,
+    "net_sharpe_5bps": -0.215935482626392,
+    "net_cagr": -0.06509556912301051,
+    "role": "pipeline sanity probe \u2014 NOT an alpha candidate"
+  }
+]

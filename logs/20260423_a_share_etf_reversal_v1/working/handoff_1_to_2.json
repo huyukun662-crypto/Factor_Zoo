@@ -1,0 +1,53 @@
+{
+  "session_id": "20260423_a_share_etf_reversal_v1",
+  "producer": "agent_1_research_librarian",
+  "consumer": "agent_2_hypothesis_architect",
+  "asset_class": "china_etf_daily",
+  "universe_symbols": [
+    "510300.SS", "510500.SS", "510050.SS", "159915.SZ", "510180.SS",
+    "159949.SZ", "588000.SS", "588080.SS", "512100.SS", "510880.SS",
+    "512880.SS", "512660.SS", "512170.SS", "512760.SS", "515030.SS",
+    "512290.SS", "515050.SS", "512690.SS", "512980.SS", "518880.SS"
+  ],
+  "universe_size": 20,
+  "window": {
+    "start": "2020-01-01",
+    "end": "2026-04-22"
+  },
+  "bar": "1d",
+  "mechanism_hypothesis": "short_term_reversal_on_etf_basket",
+  "primary_horizon_trading_days": 10,
+  "horizon_grid": [5, 10, 20],
+  "rebalance_primary": "weekly_wed",
+  "rebalance_aux": "monthly_end",
+  "portfolio_construction": "threshold_top_bottom_4",
+  "neutralization": "universe_ew_demean",
+  "cost_baseline_bps_per_side": 5,
+  "cost_sensitivity_grid_bps": [2, 5, 8],
+  "hard_floors": {
+    "rank_ic_mean": 0.03,
+    "icir": 0.3,
+    "gross_sharpe_decile_spread": 1.0,
+    "net_sharpe_at_5bps": 0.5,
+    "worst_year_sharpe": 0.0,
+    "best_year_out_fraction_of_headline": 0.5,
+    "g5_horizon_consistency_fraction": 0.5
+  },
+  "preregistered_concerns": [
+    "universe size 20 is thin for Q5 — use threshold strategy instead",
+    "2020 was momentum-dominated — worst year at risk",
+    "thematic ETF liquidity varies — report cost curve",
+    "TVT split needed (train 2020-2022, validate 2023-2024, test 2025-2026)",
+    "correlation to universe-EW must be < 0.85"
+  ],
+  "expression_candidates_suggested": [
+    "rolling_drawdown_20d",
+    "rsi14_oversold",
+    "bollinger_position_20d",
+    "log_bias_ma20",
+    "ret_5d_reversal",
+    "vol_scaled_ret_5d",
+    "volume_confirmed_reversal",
+    "kitchen_sink_rank_combo"
+  ]
+}

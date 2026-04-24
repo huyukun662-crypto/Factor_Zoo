@@ -1,0 +1,96 @@
+{
+  "session_id": "20260423_btc_minute_reversal_v1",
+  "from": "agent_4_backtest_operator",
+  "to": "agent_5_evaluator_recorder",
+  "batch_id": "0001",
+  "expressions": [
+    {
+      "id": "r1_rev_1m",
+      "gates": {
+        "G1": true,
+        "G2": true,
+        "G3": "fail",
+        "G4": "pass"
+      },
+      "retry_count": 0,
+      "ic_primary": 0.008059444390358383
+    },
+    {
+      "id": "r1_rev_5m",
+      "gates": {
+        "G1": true,
+        "G2": true,
+        "G3": "pass",
+        "G4": "fail"
+      },
+      "retry_count": 0,
+      "ic_primary": -0.0026273138407286243
+    },
+    {
+      "id": "r1_rev_15m",
+      "gates": {
+        "G1": true,
+        "G2": true,
+        "G3": "pass",
+        "G4": "pass"
+      },
+      "retry_count": 0,
+      "ic_primary": 0.010037884626641342
+    },
+    {
+      "id": "r1_rev_5m_volscale",
+      "gates": {
+        "G1": true,
+        "G2": true,
+        "G3": "fail",
+        "G4": "fail"
+      },
+      "retry_count": 0,
+      "ic_primary": -0.002166244718854309
+    },
+    {
+      "id": "r1_rev_15m_volscale",
+      "gates": {
+        "G1": true,
+        "G2": true,
+        "G3": "pass",
+        "G4": "fail"
+      },
+      "retry_count": 0,
+      "ic_primary": 0.005303477547916951
+    },
+    {
+      "id": "r1_rev_5m_volscale_hd",
+      "gates": {
+        "G1": true,
+        "G2": true,
+        "G3": "fail",
+        "G4": "fail"
+      },
+      "retry_count": 0,
+      "ic_primary": -0.0015795923378317258
+    },
+    {
+      "id": "r1_rev_range5m",
+      "gates": {
+        "G1": true,
+        "G2": true,
+        "G3": "pass",
+        "G4": "fail"
+      },
+      "retry_count": 0,
+      "ic_primary": -0.0036443716601667155
+    },
+    {
+      "id": "r1_rev_amount5m",
+      "gates": {
+        "G1": true,
+        "G2": true,
+        "G3": "pass",
+        "G4": "pass"
+      },
+      "retry_count": 0,
+      "ic_primary": 0.0015704302177249126
+    }
+  ]
+}
