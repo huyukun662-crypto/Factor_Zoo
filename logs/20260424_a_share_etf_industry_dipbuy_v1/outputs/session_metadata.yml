@@ -1,0 +1,88 @@
+session_id: 20260424_a_share_etf_industry_dipbuy_v1
+round: 1
+created_by: agent_2_hypothesis_architect
+date: 2026-04-24
+
+universe:
+  label: a_share_industry_etf_32
+  source_parquet: logs/20260422_industry_rotation_cn/outputs/etf_daily.parquet
+  excluded_symbols: ["159934.SZ", "515080.SH"]   # 黄金, 红利 (safe-haven / defensive)
+  n_symbols: 32
+  common_window_start: 2019-01-04
+  staggered_join_bars: 60
+
+tvt_split:
+  train:   [2019-01-04, 2022-12-31]
+  val:     [2023-01-01, 2023-12-31]
+  oos:     [2024-01-01, 2026-04-22]
+  principle: "Any hyperparameter search must use train only; val for model comparison; OOS untouched until final report."
+
+targets:
+  execution_delay_bars: 1
+  horizons_probed: [20, 40, 60, 80]
+
+expressions:
+  cluster_signal_refinement:
+    description: "Refine the base -logret_40d signal via risk-adjustment or trend-residualization"
+    count: 3
+    list:
+      - {id: d40_baseline,       formula: "-logret_40d",                                                     expected_sign: positive}
+      - {id: d40_vol_scaled,     formula: "-logret_40d / std_40d",                                           expected_sign: positive}
+      - {id: d40_resid_250d,     formula: "-resid(logret_40d ~ logret_250d)",                               expected_sign: positive}
+
+  cluster_conditional_trigger:
+    description: "Only fire on deeper dips or with bounce confirmation (higher conviction, sparser triggers)"
+    count: 3
+    list:
+      - {id: d40_deep_only,       formula: "dd40 * I[dd40 > 0.10]",                                          expected_sign: positive}
+      - {id: d40_bounce_conf,     formula: "dd40 * I[dd40 > 0.10] * I[logret_5d > 0]",                      expected_sign: positive}
+      - {id: d40_low_vol_surrender, formula: "dd40 / (vol_5d / vol_60d)",                                    expected_sign: positive}
+
+  cluster_portfolio_construction:
+    description: "Different top-N selections / industry diversification"
+    count: 2
+    list:
+      - {id: p_top1_conviction,    formula: "top-1 of d40_baseline (monthly), all-in",                      expected_sign: positive}
+      - {id: p_top3_diversified,   formula: "top-3 of d40_baseline forced into distinct industry clusters", expected_sign: positive}
+
+strategies_to_test:
+  # expressions 1-6 tested as long-only top-3 monthly
+  top3_monthly:
+    long_n: 3
+    short_n: 0
+    rebalance: "every 4th Friday, 20-bar hold"
+  # expression 7 (p_top1) is its own strategy; expression 8 (p_top3_diversified) similar
+
+industry_clusters:
+  # for p_top3_diversified — max 1 ETF per cluster allowed
+  TMT_hardware:   [512480.SH, 159779.SZ, 159713.SZ, 515880.SH]       # 半导体 消费电子 稀土 通信
+  TMT_software:   [515230.SH, 159869.SZ, 515980.SH, 159890.SZ, 562500.SH]  # 软件 游戏 AI 云计算 机器人
+  consumer:       [512690.SH, 515170.SH, 561120.SH, 159867.SZ]       # 酒 食品 家电 畜牧
+  healthcare:     [512010.SH, 159883.SZ, 159992.SZ]                  # 医药 医疗器械 创新药
+  financial:      [512800.SH, 512880.SH, 159892.SZ, 512200.SH]       # 银行 证券 非银 房地产
+  manufacturing:  [512660.SH, 159227.SZ, 516750.SH, 159870.SZ, 515210.SH]  # 军工 航空航天 建材 化工 钢铁
+  new_energy:     [515030.SH, 159857.SZ, 159755.SZ, 159326.SZ, 159980.SH, 515220.SH]  # 新能源车 光伏 电池 电网设备 有色 煤炭
+  oil_gas:        [561360.SH]                                        # 石油
+
+gates:
+  G1_non_degeneracy:
+    signal_raw_nonzero_fraction_min: 0.01
+  G3_ic:
+    ic_tstat_min: 2.0
+    net_sharpe_5bps_min: -0.3
+  G4_train:
+    net_sharpe_5bps_train_min: 0.5
+    worst_year_train_min: 0.0
+  G5_oos_sanity:
+    net_sharpe_5bps_oos_min: 0.3
+  promote:
+    net_sharpe_val_and_oos_min: 0.5
+    worst_year_full_sample_min: 0.0
+
+mandatory_audits:
+  - execution_delay_double_path
+  - lookahead_within_date_randomization
+  - best_year_out_ratio_0.5
+  - falsification_probe_plus_logret_20d
+  - worst_year_floor
+  - train_only_hyperparam_reselection

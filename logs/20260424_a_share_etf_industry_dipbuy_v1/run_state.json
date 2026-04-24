@@ -1,0 +1,34 @@
+{
+  "session_id": "20260424_a_share_etf_industry_dipbuy_v1",
+  "current_round": 1,
+  "current_stage": "evaluator_complete",
+  "status": "closed",
+  "verdict": "RESEARCH_ONLY",
+  "continue_research": false,
+  "close_reason": "Winner p_top3_diversified passes Train research floor (Sh 0.886, worst 2022 +0.112) and OOS sanity (Sh 0.929 with 3/3 OOS years positive), but fails Val 2023 (-0.244) and therefore full-sample worst-year (≥0). 2023 is structurally unfixable within pure-thematic universe (all 8 variants Val-negative). Industry-cluster diversification is a clean +0.23 Sh / +12pp MaxDD uplift over naive top-3.",
+  "universe": {"label": "a_share_industry_etf_32", "n_symbols": 32, "excludes": ["159934.SZ (黄金)", "515080.SH (红利)"]},
+  "rounds_completed": 1,
+  "expressions_tested": 8,
+  "g1_pass": 8,
+  "g4_train_floor_pass": 2,
+  "oos_sanity_pass": 7,
+  "promote_pass": 0,
+  "winner": {
+    "id": "p_top3_diversified",
+    "full_sample_net_sharpe_5bps": 0.766,
+    "train_sharpe": 0.886,
+    "val_2023_sharpe": -0.244,
+    "oos_sharpe": 0.929,
+    "maxdd": -0.3163,
+    "years_positive": 7,
+    "years_total": 8
+  },
+  "key_finding": "Industry-cluster diversification (max 1 ETF per cluster for top-3 selection) is a free-parameter-free uplift on pure -logret_40d reversal: lifts full-sample Sh from 0.54 to 0.77, halves MaxDD. OOS 2024-2026 is strong (Sh 0.93) without any safe-haven blending. 2023 remains a tail year (-0.24) that no pure-thematic variant rescues.",
+  "files": {
+    "final_summary": "outputs/final_summary.md",
+    "alpha_ranking": "outputs/alpha_ranking.md",
+    "tvt_summary": "outputs/tvt_summary_batch_0001.csv",
+    "per_year": "outputs/per_year_batch_0001.csv",
+    "round_meta": "round_0001.yml"
+  }
+}
