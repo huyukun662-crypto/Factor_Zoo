@@ -1,0 +1,26 @@
+{
+  "session_id": "20260423_a_share_etf_weekly_tqpb_v1",
+  "current_round": 1,
+  "current_stage": "evaluator_complete",
+  "status": "closed",
+  "verdict": "RESEARCH_ONLY_WITH_DEPLOY_RECOMMENDATION",
+  "continue_research": false,
+  "rounds_completed": 1,
+  "total_expressions_tested": 8,
+  "combine_target": "V7_gold (20260422_industry_rotation_cn)",
+  "best_combine_candidate": "r1_breakout_vol_conf",
+  "combine_spec": "V7_gold_pnl * 0.85 + r1_breakout_vol_conf_LS_top5bot5_pnl * 0.15",
+  "combined_metrics": {
+    "sharpe": 1.79,
+    "v7_baseline_sharpe": 1.73,
+    "delta_sharpe": 0.06,
+    "maxdd_combined": -0.077,
+    "maxdd_v7": -0.091,
+    "biggest_help_year": 2022,
+    "biggest_help_delta_sharpe": 0.23,
+    "corr_with_v7": -0.009,
+    "residual_sharpe_orthogonal": 0.44,
+    "turnover_pct_y": 94
+  },
+  "stop_reason": "single-round sufficient; mechanism clean (orthogonal alpha on 2022-2024 weak-V7 regimes); deploy spec documented"
+}

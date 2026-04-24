@@ -1,0 +1,41 @@
+{
+  "session_id": "20260423_a_share_etf_weekly_tqpb_v1",
+  "producer": "agent_1_research_librarian",
+  "consumer": "agent_2_hypothesis_architect",
+  "combine_target": "V7_gold (logs/20260422_industry_rotation_cn/outputs/v7_gold_description.md)",
+  "v7_gold_pnl_path": "logs/20260422_industry_rotation_cn/outputs/round7c_v7_pnl.csv",
+  "v7_gold_sharpe": 1.91,
+  "v7_gold_maxdd": -0.0889,
+  "v7_gold_worst_year": {"year": 2022, "annret": 0.078, "sharpe_approx": 0.81},
+  "universe_path": "logs/20260422_industry_rotation_cn/outputs/etf_universe.csv",
+  "panel_daily_path": "logs/20260422_industry_rotation_cn/outputs/etf_daily.parquet",
+  "window": {"start": "2019-01-01", "end": "2026-04-22"},
+  "primary_horizon_trading_days": 5,
+  "horizon_grid": [5, 10, 20],
+  "rebalance_cadence": "weekly_friday_close_execute_monday",
+  "strategy_spec_primary": "long_only_top_5",
+  "strategy_spec_aux": "ls_top5_bot5",
+  "cost_bps_per_side": 5,
+  "expression_candidates": [
+    {"id": "r1_trend_sharpe_20d",   "axis": "trend_quality"},
+    {"id": "r1_trend_sharpe_60d",   "axis": "trend_quality_long"},
+    {"id": "r1_pullback_in_uptrend","axis": "pullback_in_trend"},
+    {"id": "r1_vol_adj_mom_4w",     "axis": "vol_adj_momentum"},
+    {"id": "r1_rel_strength_zscore","axis": "relative_strength"},
+    {"id": "r1_low_drawdown_20d",   "axis": "drawdown_quality"},
+    {"id": "r1_breakout_vol_conf",  "axis": "breakout_volume"},
+    {"id": "r1_kitchen_sink",       "axis": "ensemble"}
+  ],
+  "combine_analysis_required": [
+    "correlation_weekly_pnl_vs_v7_gold",
+    "ensemble_50_50_backtest_if_passes_g4",
+    "per_year_sharpe_of_combined"
+  ],
+  "hard_floors": {
+    "ic_at_k5":         0.02,
+    "icir":             0.3,
+    "standalone_net_sharpe_5bps": 0.4,
+    "abs_corr_with_v7_gold":      0.70,
+    "combined_sharpe_above_v7":   true
+  }
+}
