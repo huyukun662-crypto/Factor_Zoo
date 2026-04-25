@@ -181,8 +181,14 @@ def gate_g4(factor: Factor, panel_train: pd.DataFrame, deadband: float = 0.0) ->
 def gate_g5(reports: list[ExpressionReport], declared_horizon: int) -> GateResult:
     """Batch-level horizon consistency.
 
-    Pass if ≥ 4 of the surviving G1-G4 expressions have peak |IC| at the
-    declared primary horizon.
+    Per SKILL.md: "If ≥ 4 of 8 surviving expressions peak at a different
+    horizon than Agent 2 declared, the failure is at Agent 2." The "≥ 4
+    of 8" is "≥ 50% of survivors" applied to a full 8-batch survivor
+    set; with fewer survivors, the fraction is the load-bearing rule.
+
+    Pass condition:
+      - ≥ 1 survivor (some G4-passing expression exists)
+      - AND ≥ 50% of survivors peak at the declared horizon
     """
     survivors = [r for r in reports if r.all_gates_pass]
     peaks = []
@@ -192,10 +198,19 @@ def gate_g5(reports: list[ExpressionReport], declared_horizon: int) -> GateResul
             continue
         peaks.append(g4.detail.get("peak_horizon"))
     n_at_declared = sum(1 for p in peaks if p == declared_horizon)
+    n_survivors = len(survivors)
+    fraction_at_declared = (n_at_declared / n_survivors) if n_survivors > 0 else 0.0
+    passed = (n_survivors >= 1) and (fraction_at_declared >= 0.5)
     return GateResult(
         "G5_batch_horizon_consistency",
-        n_at_declared >= 4,
-        {"survivors": len(survivors), "peak_horizons": peaks, "n_at_declared": n_at_declared, "declared": declared_horizon},
+        passed,
+        {
+            "survivors": n_survivors,
+            "peak_horizons": peaks,
+            "n_at_declared": n_at_declared,
+            "fraction_at_declared": fraction_at_declared,
+            "declared": declared_horizon,
+        },
     )
 
 

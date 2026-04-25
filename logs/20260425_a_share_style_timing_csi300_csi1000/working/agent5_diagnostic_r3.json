@@ -1,0 +1,155 @@
+{
+  "selection_table": [
+    {
+      "name": "r3_e1_amt_accel_5_20_neg",
+      "train_sharpe": 0.5024291787042039,
+      "val_sharpe": 0.9181613205257648,
+      "eligible": true,
+      "score": 0.7934416779792965,
+      "horizon": 20,
+      "ic": 0.2008982839804933,
+      "all_gates_pass": false,
+      "g5_pass": true
+    },
+    {
+      "name": "r3_e2_amt_accel_5_60_neg",
+      "train_sharpe": 1.0241765923020008,
+      "val_sharpe": 0.32040376872316656,
+      "eligible": true,
+      "score": 0.1092719216495163,
+      "horizon": 20,
+      "ic": 0.2711931783477818,
+      "all_gates_pass": true,
+      "g5_pass": true
+    },
+    {
+      "name": "r3_e3_amt_accel_10_60_neg",
+      "train_sharpe": 1.164993173080136,
+      "val_sharpe": -0.2564517004397003,
+      "eligible": false,
+      "score": -0.6828851624956511,
+      "horizon": 20,
+      "ic": 0.262585103346546,
+      "all_gates_pass": false,
+      "g5_pass": true
+    },
+    {
+      "name": "r3_e4_amt_accel_5_120_neg",
+      "train_sharpe": 1.131845102299833,
+      "val_sharpe": 0.43838087394379005,
+      "eligible": true,
+      "score": 0.23034160543697715,
+      "horizon": 20,
+      "ic": 0.31105272703952314,
+      "all_gates_pass": true,
+      "g5_pass": true
+    },
+    {
+      "name": "r3_e5_amt_accel_spread_5_20_neg",
+      "train_sharpe": -0.6124184524382957,
+      "val_sharpe": -0.12628780959897926,
+      "eligible": false,
+      "score": -0.2721270024507742,
+      "horizon": 20,
+      "ic": 0.014734378602878214,
+      "all_gates_pass": false,
+      "g5_pass": true
+    },
+    {
+      "name": "r3_e6_amt_accel_spread_5_60_neg",
+      "train_sharpe": -0.22491811036422993,
+      "val_sharpe": -0.338134503955617,
+      "eligible": false,
+      "score": -0.37209942203303314,
+      "horizon": 20,
+      "ic": 0.02930971882986136,
+      "all_gates_pass": false,
+      "g5_pass": true
+    },
+    {
+      "name": "r3_e7_vol_accel_spread_5_60_neg",
+      "train_sharpe": -0.7653345764497134,
+      "val_sharpe": -0.027022156350050872,
+      "eligible": false,
+      "score": -0.2485158823799496,
+      "horizon": 20,
+      "ic": -0.03918507028220852,
+      "all_gates_pass": false,
+      "g5_pass": true
+    },
+    {
+      "name": "r3_e8_accel_high_vol_regime",
+      "train_sharpe": -0.2461235990466996,
+      "val_sharpe": 0.19678038862127992,
+      "eligible": false,
+      "score": 0.06390919232088607,
+      "horizon": 20,
+      "ic": 0.10096343375094409,
+      "all_gates_pass": false,
+      "g5_pass": true
+    }
+  ],
+  "winner": "r3_e4_amt_accel_5_120_neg",
+  "test_blocks": {
+    "r3_e4_amt_accel_5_120_neg": {
+      "metrics": {
+        "n_days": 557,
+        "ann_return": 0.0632133688388874,
+        "ann_vol": 0.10882670491226155,
+        "sharpe": 0.5808626558145943,
+        "max_dd": -0.12713115653597518,
+        "calmar": 0.4972295585228903,
+        "ann_turnover": 15.382405745062837,
+        "non_zero_frac": 0.482078853046595
+      },
+      "per_year": [
+        {
+          "year": 2024,
+          "n_days": 241,
+          "ann_return": 0.1885660332794937,
+          "ann_vol": 0.12453308431385918,
+          "sharpe": 1.514184237212443,
+          "max_dd": -0.05124275857303662,
+          "calmar": 3.67985718432253,
+          "ann_turnover": 8.365145228215768,
+          "non_zero_frac": 0.5186721991701245
+        },
+        {
+          "year": 2025,
+          "n_days": 243,
+          "ann_return": -0.10775522034039534,
+          "ann_vol": 0.09028593228655572,
+          "sharpe": -1.193488482772647,
+          "max_dd": -0.12312807466894071,
+          "calmar": -0.8751474481357808,
+          "ann_turnover": 20.74074074074074,
+          "non_zero_frac": 0.46502057613168724
+        },
+        {
+          "year": 2026,
+          "n_days": 73,
+          "ann_return": 0.21849247898107343,
+          "ann_vol": 0.10800830380296612,
+          "sharpe": 2.0229229724749476,
+          "max_dd": -0.03861510500207266,
+          "calmar": 5.658212737459755,
+          "ann_turnover": 20.712328767123285,
+          "non_zero_frac": 0.4246575342465753
+        }
+      ],
+      "audit_3_worst_year": {
+        "worst_year": 2025,
+        "worst_sharpe": -1.193488482772647,
+        "pass": false
+      },
+      "audit_4_best_year_out": {
+        "best_year": 2026,
+        "best_sharpe": 2.0229229724749476,
+        "headline_sharpe": 0.5808626558145943,
+        "no_best_sharpe": 0.36512748559665886,
+        "ratio": 0.6285952142759269,
+        "pass": true
+      }
+    }
+  }
+}

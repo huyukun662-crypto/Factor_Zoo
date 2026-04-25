@@ -134,3 +134,89 @@ round_0002:
     - "G5 fails: < 4 of 8 expressions peak |IC| at h=5"
     - "M2 turnover signal has |corr| > 0.85 with R1 vol-spread (M2 is just M1 in disguise)"
     - "Best-year-out test Sharpe < 50% × headline → factor is one-regime"
+
+# ----------------------------------------------------------------------
+# Round 3 — mechanism pivot to acceleration-as-MOMENTUM
+# ----------------------------------------------------------------------
+# R2 surfaced a strong anti-thesis sub-mechanism: r2_e3_abnormal_amount_1000
+# had TRAIN IC = -0.196 with t = -5.93. Inverted, this would be the
+# strongest signal of the entire session. R3 hypothesis is built ENTIRELY
+# from R2 TRAIN+VAL information (no R2 test results inform R3 design).
+#
+# Honesty caveat (acknowledged): this is the THIRD round of testing on
+# the same TEST window [2024-01, today]. Even though R3 design is
+# information-clean (no test peeking), the multiple-comparisons risk
+# accumulates. Stage-5 R3 narrative MUST flag this and use a higher
+# bar than R1/R2 for any PROMOTE-leaning conclusion.
+#
+round_0003:
+  selected_mechanism: M3_turnover_acceleration_momentum
+  pivot_reason: "R2 alpha_ranking_r2.md R3#1 lead: turnover acceleration is MOMENTUM (continuation), not mean-reversion. Source: R2 TRAIN IC of E3 = -0.196, t = -5.93 (anti-thesis under M2). Inverted → IC ≈ +0.20."
+  economic_thesis:
+    one_liner: |
+      When small-cap turnover ACCELERATES (current attention rising vs
+      its trailing baseline), small-cap CONTINUES to outperform large-cap
+      for ~5 trading days. This is consistent with sustained-rally
+      dynamics in A-share micro-cap surges (e.g. 2024-Q4). Trade:
+      negate-at-source so positive score = long 300 (i.e. score is high
+      when small-cap acceleration is LOW, predicting small-cap weakness).
+    causal_chain:
+      - "small-cap turnover MA5/MA60 ratio rises sharply"
+      - "marginal retail buyers continue piling in for several days"
+      - "small-cap continues to outperform large-cap over t+1..t+5"
+      - "negated signal → score is high when this momentum is absent → favour 300"
+    thesis_sign: +1   # positive score = long 300; signals are negated at source per validation-gates.md:140
+  primary_horizon_days: 5
+  build_directive_for_agent_3: |
+    Produce 8 expressions, all variants of "small-cap turnover
+    acceleration as momentum" with negation at source. Cover:
+      (a) MA windows {5/20, 5/60, 10/60, 5/120}
+      (b) single-leg (small-cap only) vs spread (1000-300)
+      (c) amount-derived vs volume-derived (vol = shares, amount = CNY)
+      (d) regime-conditioning by R1 vol-spread state (signal-on
+          when high-vol, flat when low-vol)
+    Anti-clone constraints (TRAIN):
+      - |corr| < 0.85 vs R1 vol-spread
+      - |corr| < 0.85 vs R2-level cluster (r2_e1)
+    All thesis_sign=+1, declared_horizon=5.
+  falsification_conditions:
+    - "TRAIN IC of acceleration-momentum signals is not positive after negation"
+    - "G5 fails: < 4 of 8 peak |IC| at h=5"
+    - "Best-year-out test Sharpe < 50% × headline → factor is one-regime (likely 2024 Q4 micro-cap surge)"
+    - "Headline test Sharpe drops below the R2 best Sharpe (E1 +0.16 train) when adjusted for 3-rounds-on-same-test multiple comparisons"
+  multiple_comparisons_bar: |
+    With 3 rounds × 8 expressions = 24 expressions tested on the same
+    test window, a single +1.5 test Sharpe is no longer convincing
+    on its own. R3 PROMOTE-eligibility additionally requires:
+      - test IC t-stat ≥ 3.5 (vs the standard 3.0)
+      - worst-year Sharpe ≥ 0.7 (vs the standard 0.5)
+      - economic story consistent across all 3 rounds' findings
+    These tightened bars are pre-registered HERE before any R3 test
+    is run.
+
+  # ----- Agent 2 R3 revision after Stage-4 v1 G5 escalation -----
+  # Stage 4 v1 (handoff_4_to_5_r3.json with horizon=5) reported all
+  # four single-leg amount-acceleration expressions (E1, E2, E3, E4)
+  # have IC strictly increasing 1d→20d:
+  #   E2: 1d=0.10 → 5d=0.20 → 10d=0.26 → 20d=0.27
+  #   E3: 1d=0.10 → 5d=0.19 → 10d=0.25 → 20d=0.26
+  #   E4: 1d=0.10 → 5d=0.21 → 10d=0.28 → 20d=0.31
+  # All peak at h=20, not at the declared h=5. Per
+  # validation-gates.md G5: "If G5 fails, return batch to Agent 2
+  # with diagnostic 'batch IC peak is at k=X, not the declared k=Y.
+  # Re-specify primary horizon or mechanism.' Agent 2 issues a
+  # revised session_metadata.yml, Agent 3 may keep most expressions
+  # unchanged but re-target the new k."
+  agent_2_revision_v2_after_g5_horizon_escalation:
+    trigger: "Stage 4 v1: 4/8 expressions peak at h=20, not declared h=5; G5 fails (0 survivors at h=5)."
+    revised_primary_horizon_days: 20
+    economic_re_interpretation: |
+      M3 acceleration-momentum signal is SLOWER than initially declared.
+      Small-cap turnover acceleration predicts 20-day forward style spread
+      better than 5-day. Consistent with retail-attention persistence:
+      crowded small-cap rallies sustain for ~1 month, not 1 week.
+    expression_changes: "None. Same 8 expressions, re-evaluated against the revised horizon. Backtest mechanics (daily position, daily rebalance) unchanged."
+    backtest_caveat: |
+      Daily-rebalance Sharpe is what is measured; a 20d-rebalance
+      version may have higher Sharpe and lower turnover. Reported
+      Sharpe is the as-tested daily-rebalance result.

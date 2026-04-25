@@ -1,0 +1,20 @@
+{
+  "batch_id": "batch_0003",
+  "round": 3,
+  "selected_mechanism": "M3_turnover_acceleration_momentum",
+  "anti_clone_vs_r1_passed": true,
+  "anti_clone_vs_r1_max_corr": 0.227,
+  "anti_clone_vs_r2_passed": true,
+  "anti_clone_vs_r2_max_corr": 0.339,
+  "negate_at_source": true,
+  "expressions": [
+    {"idx": 1, "code": "src/factors/expressions/r3_e1.py", "rationale": "-z(log(MA5/MA20)(amt_1000))",                                            "expected_turnover_direction": "higher",  "fragility_notes": ["fast baseline → noisier"]},
+    {"idx": 2, "code": "src/factors/expressions/r3_e2.py", "rationale": "-z(log(MA5/MA60)(amt_1000))  [R2 E3 negated]",                            "expected_turnover_direction": "neutral", "fragility_notes": ["primary R3 lead"]},
+    {"idx": 3, "code": "src/factors/expressions/r3_e3.py", "rationale": "-z(log(MA10/MA60)(amt_1000))",                                            "expected_turnover_direction": "neutral", "fragility_notes": ["shares MA60 with E2"]},
+    {"idx": 4, "code": "src/factors/expressions/r3_e4.py", "rationale": "-z(log(MA5/MA120)(amt_1000))",                                            "expected_turnover_direction": "lower",   "fragility_notes": ["very long baseline; loses ~120 train days"]},
+    {"idx": 5, "code": "src/factors/expressions/r3_e5.py", "rationale": "-z((MA5/MA20)(amt_1000) - (MA5/MA20)(amt_300))",                          "expected_turnover_direction": "neutral", "fragility_notes": ["spread of fast accels"]},
+    {"idx": 6, "code": "src/factors/expressions/r3_e6.py", "rationale": "-z((MA5/MA60)(amt_1000) - (MA5/MA60)(amt_300))",                          "expected_turnover_direction": "neutral", "fragility_notes": ["spread cluster cleanest small-cap-only signal"]},
+    {"idx": 7, "code": "src/factors/expressions/r3_e7.py", "rationale": "-z((MA5/MA60)(vol_1000) - (MA5/MA60)(vol_300))",                          "expected_turnover_direction": "neutral", "fragility_notes": ["volume (shares) version of E6"]},
+    {"idx": 8, "code": "src/factors/expressions/r3_e8.py", "rationale": "E2 base * gate(R1_volspread_z > 0)",                                      "expected_turnover_direction": "lower",   "fragility_notes": ["regime gate ~45% non-zero days"]}
+  ]
+}
