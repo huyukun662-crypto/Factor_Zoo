@@ -1,0 +1,16 @@
+{
+  "batch_id": "batch_0005",
+  "round": 5,
+  "selected_mechanism": "M3_calm_regime_amplified",
+  "construction_note": "7 reverse-direction mirror gates of R4 + 1 combo (reverse-gate × 20d discretization). R5 ≈ -R4 in gross terms; net differs by 2 × cost.",
+  "expressions": [
+    {"idx": 1, "code": "src/factors/expressions/r5_e1.py", "rationale": "E4 * tanh(-vol_z/1.0) - primary lead, mirror of R4 E1",          "expected_turnover_direction": "neutral", "fragility_notes": ["mirror of R4 E1"]},
+    {"idx": 2, "code": "src/factors/expressions/r5_e2.py", "rationale": "E4 * tanh(-vol_z/2.0) softer mirror",                                "expected_turnover_direction": "neutral", "fragility_notes": ["mirror of R4 E2"]},
+    {"idx": 3, "code": "src/factors/expressions/r5_e3.py", "rationale": "E4 * tanh(-turnover_z/1.5)",                                          "expected_turnover_direction": "neutral", "fragility_notes": ["mirror of R4 E3"]},
+    {"idx": 4, "code": "src/factors/expressions/r5_e4.py", "rationale": "E4 * max(0, tanh(-vol_z)) one-sided calm",                            "expected_turnover_direction": "lower",   "fragility_notes": ["never flips, only dampens; mirror of R4 E4"]},
+    {"idx": 5, "code": "src/factors/expressions/r5_e5.py", "rationale": "E4 * tanh(-composite/1.5) mirror of R4 E5",                           "expected_turnover_direction": "neutral", "fragility_notes": ["mirror of R4 E5"]},
+    {"idx": 6, "code": "src/factors/expressions/r5_e6.py", "rationale": "E2 base * tanh(-vol_z) mirror of R4 E6",                              "expected_turnover_direction": "neutral", "fragility_notes": ["mirror of R4 E6"]},
+    {"idx": 7, "code": "src/factors/expressions/r5_e7.py", "rationale": "E4 * tanh(-mkt60d_z) mirror of R4 E8",                                "expected_turnover_direction": "neutral", "fragility_notes": ["mirror of R4 E8"]},
+    {"idx": 8, "code": "src/factors/expressions/r5_e8.py", "rationale": "E1 mirror gate * 20d discretization - new combo",                     "expected_turnover_direction": "much_lower", "fragility_notes": ["combo of R5 E1 + R4 E7"]}
+  ]
+}

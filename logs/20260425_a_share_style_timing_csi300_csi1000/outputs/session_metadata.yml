@@ -289,3 +289,72 @@ round_0004:
       - economic story coherent with R1+R2+R3 findings
       - R4 winner test Sharpe > R3 winner E4's +0.58 (raw improvement, not just survive audits)
     These bars are committed BEFORE Stage 4 runs.
+
+# ----------------------------------------------------------------------
+# Round 5 — REVERSE-direction gate test (R4 hypothesis was sign-flipped)
+# ----------------------------------------------------------------------
+# R4 demonstrated that smooth-tanh-gate × R3 E4 produces NEGATIVE TRAIN
+# IC (t = -4.85 to -6.47): the gate flips the M3 signal in the WRONG
+# direction. Implication: M3 worked PRIMARILY in CALM regimes (low
+# vol-spread z) on TRAIN, not elevated-vol regimes. R5 tests the
+# REVERSE direction: amplify M3 in calm regimes, dampen/flip in
+# elevated-vol regimes.
+#
+# R5 expressions are constructed as MIRROR GATES of R4 (same base, gate
+# sign reversed). Mathematically R5_i ≈ -R4_i in gross terms; cost is
+# symmetric so net differs by 2 × annual cost. R5 expressions inherit
+# R4's anti-clone properties.
+#
+# Honesty caveat: R5 is the FIFTH round on the same test window. Tighter
+# PROMOTE bars pre-registered:
+#   - test IC t-stat >= 4.5 (vs R4's 4.0)
+#   - worst-year Sharpe >= 0.7
+#   - R5 winner test Sharpe must MATERIALLY exceed R3 E4 +0.58 (delta >= +0.2)
+#   - all 5 mandatory audits pass
+#   - economic story coherent with R1+R2+R3+R4 findings
+#
+# This is committed before any R5 Stage 4 runs.
+#
+round_0005:
+  selected_mechanism: M3_calm_regime_amplified
+  pivot_reason: "R4 falsification of vol-amplified hypothesis. R4 E1 had TRAIN IC=-0.21 (t=-6.13); mirror gate should give IC ≈ +0.21."
+  economic_thesis:
+    one_liner: |
+      M3 momentum (small-cap turnover acceleration → small-cap continuation)
+      operates PRIMARILY in CALM regimes (low vol-spread z). Multiplying
+      R3 E4 by tanh(-vol_spread_z) should preserve the M3 direction in
+      calm days and dampen/flip in elevated-vol days where M3 is weaker.
+    causal_chain:
+      - "small-cap turnover acceleration is bullish for small-cap continuation in CALM regimes (low vol-spread)"
+      - "in elevated-vol regimes, M3 weakens or partially inverts"
+      - "tanh(-vol_spread_z) gate amplifies M3 in calm and dampens in elevated-vol"
+      - "weighted score (negated for thesis_sign=+1 convention) → favour 300 when M3 says small-cap weak"
+    thesis_sign: +1
+  primary_horizon_days: 20
+  build_directive_for_agent_3: |
+    Produce 8 R5 expressions, all REVERSE-direction mirrors of R4 with
+    one new combo (reverse gate × monthly rebalance). Cover:
+      (a) R3 E4 × tanh(-vol_spread_z / 1.0)        # mirror of R4 E1
+      (b) R3 E4 × tanh(-vol_spread_z / 2.0)        # mirror of R4 E2
+      (c) R3 E4 × tanh(-turnover_level_z / 1.5)    # mirror of R4 E3
+      (d) R3 E4 × max(0, tanh(-vol_spread_z))      # one-sided calm gate
+      (e) R3 E4 × tanh(-(vol_z + turnover_z)/2 / 1.5)  # composite mirror
+      (f) R3 E2 × tanh(-vol_spread_z / 1.0)        # mirror of R4 E6
+      (g) R3 E4 × tanh(-z(60d log-ret idx1000))    # mirror of R4 E8
+      (h) reverse-gate (a) × 20d signal-discretization (combo of R4 E1 mirror + R4 E7 monthly rebalance)
+    Anti-clone vs R1 raw vol-spread: |corr| < 0.85
+    Anti-clone vs R2 E1 (turnover level): |corr| < 0.85
+    Correlation with R3 E4 (base): not capped (regime-conditioned variants by design)
+    All thesis_sign=+1, declared_horizon=20.
+  pre_registered_tighter_bars: |
+    R5 PROMOTE eligibility requires:
+      - test IC t-stat ≥ 4.5
+      - worst-year Sharpe ≥ 0.7
+      - R5 winner test Sharpe ≥ +0.78 (R3 E4 +0.58 + 0.2 material improvement)
+      - all 5 mandatory audits pass
+      - economic story coherent with R1+R2+R3+R4 findings
+  falsification_conditions:
+    - "TRAIN IC of mirror-gate variants is NOT positive (R4 → R5 mirror should give IC ≈ +0.21 by construction)"
+    - "R5 test Sharpe does not exceed R3 E4 +0.58 by ≥ +0.2"
+    - "2025 worst-year Sharpe still below 0.5 (the audit-3 failure that R5 is trying to fix)"
+    - "if all 8 R5 mirrors fail to clear the bars, the M3 mechanism is genuinely 2025-broken regardless of regime axis"

@@ -1,0 +1,221 @@
+{
+  "batch_id": "batch_0005",
+  "validation_passed": false,
+  "submission_made": true,
+  "results": [
+    {
+      "expression_idx": 1,
+      "alpha_id": "r5_e1_e4_x_neg_volgate_tanh_t1",
+      "sharpe": 0.5608436714223607,
+      "fitness": null,
+      "turnover": 24.888888888888886,
+      "ic": 0.20576232530571503,
+      "status": "failed",
+      "error": "failed gates: ['G3_non_degenerate']",
+      "val_sharpe": -0.26802675402316717,
+      "horizon": 20,
+      "thesis_sign": 1
+    },
+    {
+      "expression_idx": 2,
+      "alpha_id": "r5_e2_e4_x_neg_volgate_tanh_t2",
+      "sharpe": 1.2392056487366867,
+      "fitness": null,
+      "turnover": 15.555555555555555,
+      "ic": 0.2167865685616394,
+      "status": "failed",
+      "error": "failed gates: ['G3_non_degenerate', 'G4_behavioral_fidelity']",
+      "val_sharpe": 0.10190114148274107,
+      "horizon": 20,
+      "thesis_sign": 1
+    },
+    {
+      "expression_idx": 3,
+      "alpha_id": "r5_e3_e4_x_neg_turnoverlevel_tanh",
+      "sharpe": -0.23867593103767204,
+      "fitness": null,
+      "turnover": 14.777777777777777,
+      "ic": 0.05602031970664885,
+      "status": "failed",
+      "error": "failed gates: ['G3_non_degenerate', 'G4_behavioral_fidelity']",
+      "val_sharpe": -0.6639689098893026,
+      "horizon": 20,
+      "thesis_sign": 1
+    },
+    {
+      "expression_idx": 4,
+      "alpha_id": "r5_e4_e4_x_neg_volgate_oneside",
+      "sharpe": 0.8757840269776145,
+      "fitness": null,
+      "turnover": 12.962962962962964,
+      "ic": 0.29458445981029524,
+      "status": "failed",
+      "error": "failed gates: ['G3_non_degenerate']",
+      "val_sharpe": 0.3478841520031532,
+      "horizon": 20,
+      "thesis_sign": 1
+    },
+    {
+      "expression_idx": 5,
+      "alpha_id": "r5_e5_e4_x_neg_composite",
+      "sharpe": 0.5551807815851638,
+      "fitness": null,
+      "turnover": 18.14814814814815,
+      "ic": 0.19039297617678566,
+      "status": "failed",
+      "error": "failed gates: ['G3_non_degenerate', 'G4_behavioral_fidelity']",
+      "val_sharpe": -0.819207589730405,
+      "horizon": 20,
+      "thesis_sign": 1
+    },
+    {
+      "expression_idx": 6,
+      "alpha_id": "r5_e6_e2_x_neg_volgate_tanh_t1",
+      "sharpe": 0.8493814253514256,
+      "fitness": null,
+      "turnover": 24.37037037037037,
+      "ic": 0.16222705863345407,
+      "status": "failed",
+      "error": "failed gates: ['G3_non_degenerate']",
+      "val_sharpe": -1.1331384272987821,
+      "horizon": 20,
+      "thesis_sign": 1
+    },
+    {
+      "expression_idx": 7,
+      "alpha_id": "r5_e7_e4_x_neg_market_60d_gate",
+      "sharpe": -0.23925640314087956,
+      "fitness": null,
+      "turnover": 15.037037037037036,
+      "ic": -0.018583272810718122,
+      "status": "failed",
+      "error": "failed gates: ['G4_behavioral_fidelity']",
+      "val_sharpe": -0.7427159194332781,
+      "horizon": 20,
+      "thesis_sign": 1
+    },
+    {
+      "expression_idx": 8,
+      "alpha_id": "r5_e8_e4_x_neg_volgate_monthly",
+      "sharpe": 0.9457857156911774,
+      "fitness": null,
+      "turnover": 5.703703703703704,
+      "ic": 0.30859575572765274,
+      "status": "failed",
+      "error": "failed gates: ['G3_non_degenerate']",
+      "val_sharpe": 1.584276456893587,
+      "horizon": 20,
+      "thesis_sign": 1
+    }
+  ],
+  "expressions": [
+    {
+      "id": "r5_e1_e4_x_neg_volgate_tanh_t1",
+      "gates": {
+        "G1_importable": "pass",
+        "G2_runs_e2e": "pass",
+        "G3_non_degenerate": "fail",
+        "G4_behavioral_fidelity": "pass"
+      },
+      "retry_count": 0,
+      "notes": ""
+    },
+    {
+      "id": "r5_e2_e4_x_neg_volgate_tanh_t2",
+      "gates": {
+        "G1_importable": "pass",
+        "G2_runs_e2e": "pass",
+        "G3_non_degenerate": "fail",
+        "G4_behavioral_fidelity": "fail"
+      },
+      "retry_count": 0,
+      "notes": ""
+    },
+    {
+      "id": "r5_e3_e4_x_neg_turnoverlevel_tanh",
+      "gates": {
+        "G1_importable": "pass",
+        "G2_runs_e2e": "pass",
+        "G3_non_degenerate": "fail",
+        "G4_behavioral_fidelity": "fail"
+      },
+      "retry_count": 0,
+      "notes": ""
+    },
+    {
+      "id": "r5_e4_e4_x_neg_volgate_oneside",
+      "gates": {
+        "G1_importable": "pass",
+        "G2_runs_e2e": "pass",
+        "G3_non_degenerate": "fail",
+        "G4_behavioral_fidelity": "pass"
+      },
+      "retry_count": 0,
+      "notes": ""
+    },
+    {
+      "id": "r5_e5_e4_x_neg_composite",
+      "gates": {
+        "G1_importable": "pass",
+        "G2_runs_e2e": "pass",
+        "G3_non_degenerate": "fail",
+        "G4_behavioral_fidelity": "fail"
+      },
+      "retry_count": 0,
+      "notes": ""
+    },
+    {
+      "id": "r5_e6_e2_x_neg_volgate_tanh_t1",
+      "gates": {
+        "G1_importable": "pass",
+        "G2_runs_e2e": "pass",
+        "G3_non_degenerate": "fail",
+        "G4_behavioral_fidelity": "pass"
+      },
+      "retry_count": 0,
+      "notes": ""
+    },
+    {
+      "id": "r5_e7_e4_x_neg_market_60d_gate",
+      "gates": {
+        "G1_importable": "pass",
+        "G2_runs_e2e": "pass",
+        "G3_non_degenerate": "pass",
+        "G4_behavioral_fidelity": "fail"
+      },
+      "retry_count": 0,
+      "notes": ""
+    },
+    {
+      "id": "r5_e8_e4_x_neg_volgate_monthly",
+      "gates": {
+        "G1_importable": "pass",
+        "G2_runs_e2e": "pass",
+        "G3_non_degenerate": "fail",
+        "G4_behavioral_fidelity": "pass"
+      },
+      "retry_count": 0,
+      "notes": ""
+    }
+  ],
+  "g5": {
+    "passed": false,
+    "detail": {
+      "survivors": 0,
+      "peak_horizons": [],
+      "n_at_declared": 0,
+      "fraction_at_declared": 0.0,
+      "declared": 20
+    }
+  },
+  "anomalies": [
+    "r5_e1_e4_x_neg_volgate_tanh_t1",
+    "r5_e2_e4_x_neg_volgate_tanh_t2",
+    "r5_e3_e4_x_neg_turnoverlevel_tanh",
+    "r5_e4_e4_x_neg_volgate_oneside",
+    "r5_e5_e4_x_neg_composite",
+    "r5_e6_e2_x_neg_volgate_tanh_t1",
+    "r5_e7_e4_x_neg_market_60d_gate",
+    "r5_e8_e4_x_neg_volgate_monthly"
+  ]
+}

@@ -1,55 +1,53 @@
 {
   "session_id": "20260425_a_share_style_timing_csi300_csi1000",
-  "current_round": 4,
+  "current_round": 5,
   "current_stage": "complete",
   "status": "complete",
-  "selected_mechanism_r1": "M1_volatility_regime_contrarian (R1 v2)",
+  "selected_mechanism_r1": "M1_volatility_regime_contrarian",
   "selected_mechanism_r2": "M2_turnover_divergence",
-  "selected_mechanism_r3": "M3_turnover_acceleration_momentum (Agent-2 v2 horizon revised 5 → 20)",
-  "selected_mechanism_r4": "M3_regime_conditioned (FALSIFIED — gates flip wrong direction)",
+  "selected_mechanism_r3": "M3_turnover_acceleration_momentum (Agent-2 v2 horizon 5 → 20)",
+  "selected_mechanism_r4": "M3_regime_conditioned (FALSIFIED)",
+  "selected_mechanism_r5": "M3_calm_regime_amplified (mirror; G3 blocked)",
   "session_best_alpha_id": "r3_e4_amt_accel_5_120_neg",
-  "session_best_alpha_note": "R3 winner unchanged after R4. Test Sharpe +0.58, calmar +0.50. RESEARCH-ONLY (near-PROMOTE), blocked by audit-3 (2025 worst-year).",
-  "continue_research": "diminishing_returns_at_4_rounds",
-  "next_round_pivot": "R5: reverse-direction gate test OR cross-sectional expansion OR paper-trade R3 E4 as is",
-  "decision_r1": "RESEARCH-ONLY",
-  "decision_r2": "RESEARCH-ONLY",
-  "decision_r3": "RESEARCH-ONLY (near-PROMOTE)",
-  "decision_r4": "RESEARCH-ONLY (R4 hypothesis falsified)",
-  "session_decision": "RESEARCH-ONLY across all 4 rounds. Session winner is R3 E4 (test Sh +0.58, near-PROMOTE). R4 falsified the regime-conditioning refinement; M3 worked in CALM regimes on TRAIN, not vol regimes (opposite of R4 hypothesis).",
+  "session_best_alpha_note": "Unchanged across R3, R4, R5. Test Sharpe +0.58, calmar +0.50, audit-4 PASS, audit-3 FAIL (2025 -1.19). Near-PROMOTE.",
+  "continue_research": "STOP_RECOMMENDED",
+  "next_round_pivot": "Either: (1) WAIT for more data, (2) EXPAND to constituents (NEW session), (3) PAPER-TRADE R3 E4 as-is",
+  "decisions": {
+    "r1": "RESEARCH-ONLY",
+    "r2": "RESEARCH-ONLY",
+    "r3": "RESEARCH-ONLY (near-PROMOTE)",
+    "r4": "RESEARCH-ONLY (R4 hypothesis falsified)",
+    "r5": "RESEARCH-ONLY (R5 mirror direction confirmed but G3 blocks)"
+  },
+  "session_decision": "RESEARCH-ONLY across all 5 rounds. Session winner = R3 E4. Strong recommendation: STOP this session and either WAIT for more data, EXPAND to constituents (new session), or PAPER-TRADE R3 E4.",
   "history": [
-    {
-      "round": 1,
-      "decision": "RESEARCH-ONLY",
-      "best_alpha_id": "r1_e1_volspread_20d",
-      "why": "Only G4 survivor; train Sharpe +0.14 < 0.5 floor; regime-concentrated.",
-      "next_round_focus": ["pivot to M2 turnover divergence"]
+    {"round": 1, "decision": "RESEARCH-ONLY", "best_alpha_id": "r1_e1_volspread_20d", "why": "Train +0.14 < eligibility floor"},
+    {"round": 2, "decision": "RESEARCH-ONLY", "best_alpha_id": "r2_e1_log_amount_ratio_20d", "why": "Val-strong / test-failed regime artifact; E3 anti-thesis IC -0.20 found (R3 lead)"},
+    {"round": 3, "decision": "RESEARCH-ONLY (near-PROMOTE)", "best_alpha_id": "r3_e4_amt_accel_5_120_neg", "why": "First TVT-eligible winner; test Sh +0.58; audit-3 FAIL (2025 = -1.19)"},
+    {"round": 4, "decision": "RESEARCH-ONLY (FALSIFIED)", "best_alpha_id": null, "why": "Smooth tanh gates flip M3 in WRONG direction on TRAIN; cost not the binding constraint"},
+    {"round": 5, "decision": "RESEARCH-ONLY (G3-blocked)", "best_alpha_id": null, "why": "Mirror gates produce predicted positive IC but G3 (non-zero / turnover) blocks all 8; VAL/TEST opposition discovered as structural"}
+  ],
+  "structural_finding": "VAL [2022,2024) and TEST [2024,2026] are OPPOSITE regimes for M3 mechanism. R5 E6 (calm-amplified) test Sh +0.78 (all 3 years positive) but val Sh -1.13. R4 E1 (vol-amplified) had inverse picture. No single-gate factor can navigate this val/test regime opposition.",
+  "session_winner_summary": {
+    "alpha_id": "r3_e4_amt_accel_5_120_neg",
+    "construction": "-z(log(MA5(amt_1000)/MA120(amt_1000)))",
+    "interpretation": "small-cap turnover acceleration (5d/120d) NEGATED -> high score = small-cap attention LOW = favour 300",
+    "horizon_days": 20,
+    "train_sharpe": 1.13,
+    "val_sharpe": 0.44,
+    "test_sharpe": 0.58,
+    "test_ann_return": 0.0632,
+    "test_max_dd": -0.1271,
+    "test_calmar": 0.50,
+    "train_ic": 0.311,
+    "train_ic_t_stat": 9.5,
+    "audits": {
+      "audit_1_execution_delay": "PASS",
+      "audit_2_lookahead": "PASS",
+      "audit_3_worst_year_ge_0_5": "FAIL (2025 = -1.19)",
+      "audit_4_best_year_out_ge_0_5x_headline": "PASS (ratio 0.63)",
+      "audit_5_falsification": "completed"
     },
-    {
-      "round": 2,
-      "decision": "RESEARCH-ONLY",
-      "best_alpha_id": "r2_e1_log_amount_ratio_20d",
-      "why": "2/8 G4 PASS but val-strong / test-failed. Notable: E3 anti-thesis IC = -0.20 (t=-5.93) found.",
-      "next_round_focus": ["PIVOT to acceleration as MOMENTUM"]
-    },
-    {
-      "round": 3,
-      "decision": "RESEARCH-ONLY (near-PROMOTE)",
-      "best_alpha_id": "r3_e4_amt_accel_5_120_neg",
-      "why": "First TVT-eligible winner. Test Sharpe +0.58, calmar +0.50. Audit-4 PASS. Audit-3 FAIL (2025 = -1.19).",
-      "next_round_focus": ["regime-condition E4 with smooth gate", "20d-rebalance variant", "extend test window", "expand to constituents"]
-    },
-    {
-      "round": 4,
-      "decision": "RESEARCH-ONLY (hypothesis CLEANLY FALSIFIED)",
-      "best_alpha_id": null,
-      "why": "0/8 G4 PASS. Smooth-tanh-gate variants have IC sign FLIPPED on TRAIN (t=-5 to -6.5). M3 worked in CALM regimes on TRAIN, not vol regimes. Monthly-rebalance E7 has strong train IC but val/test don't generalize. ALL R4 variants have WORSE test Sharpe than R3 E4.",
-      "session_winner_unchanged": "r3_e4_amt_accel_5_120_neg",
-      "next_round_focus": [
-        "REVERSE-DIRECTION test: tanh(-vol_spread_z) gate (cheap, 1 expression) to confirm calm-regime hypothesis",
-        "CROSS-SECTIONAL EXPANSION: constituent stocks (high-value but new session)",
-        "STOP & DEPLOY R3 E4 as RESEARCH-ONLY paper-trade",
-        "ABANDON: 3-asset universe ceiling reached"
-      ]
-    }
-  ]
+    "promote_decision": "RESEARCH-ONLY (audit-3 blocks)"
+  }
 }

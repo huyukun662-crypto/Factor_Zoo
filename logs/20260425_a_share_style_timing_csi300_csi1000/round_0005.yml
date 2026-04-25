@@ -1,0 +1,75 @@
+round: 5
+session_id: 20260425_a_share_style_timing_csi300_csi1000
+mechanism_family: M3_calm_regime_amplified (mirror of R4)
+pivot_from: M3_regime_conditioned (R4 falsified — gate direction was wrong)
+
+agents:
+  agent_2_hypothesis_architect:
+    artifact_block: outputs/session_metadata.yml#round_0005
+    handoff: working/handoff_2_to_3_r5.json
+    decision: |
+      R4 sign-flip diagnostic (R4 E1 IC=-0.21 t=-6.13) implied calm-regime
+      amplification. R5 mirrors R4 with negated gate. Pre-registered tighter
+      bars (test IC t-stat >= 4.5, worst-year >= 0.7, R5 winner test Sh >= +0.78).
+  agent_3_alpha_builder:
+    artifact: outputs/expressions_batch_0005.md
+    handoff: working/handoff_3_to_4_r5.json
+    expressions:
+      - r5_e1_e4_x_neg_volgate_tanh_t1
+      - r5_e2_e4_x_neg_volgate_tanh_t2
+      - r5_e3_e4_x_neg_turnoverlevel_tanh
+      - r5_e4_e4_x_neg_volgate_oneside
+      - r5_e5_e4_x_neg_composite
+      - r5_e6_e2_x_neg_volgate_tanh_t1
+      - r5_e7_e4_x_neg_market_60d_gate
+      - r5_e8_e4_x_neg_volgate_monthly
+    rule_of_8_compliance: true
+    construction_note: "7 mirror gates of R4 + 1 combo (mirror gate × monthly rebalance). R5 ≈ -R4 in gross terms; net differs by 2 × cost."
+  agent_4_backtest_operator:
+    artifact: outputs/backtest_results_batch_0005.md
+    handoff: working/handoff_4_to_5_r5.json
+    outcome: 0/8 G3+G4 pass; G5 FAIL (no survivors); 4/8 G4 pass but G3 fails on either turnover (E1, E6) or non_zero_frac (E4, E8)
+    audits:
+      audit_1_execution_delay: PASS (all R5 factors)
+      audit_2_lookahead: PASS
+    notable_findings:
+      - "Mirror-gate construction CONFIRMED: R5 IC signs are exact negatives of R4 (R5 E1 IC = +0.206 vs R4 E1 -0.206; R5 E2 +0.217 vs R4 E2 -0.217)"
+      - "G3 fails universally: gate compression × deadband leaves only 18-27% non-zero days for E4/E8 or 24-25 turnover for E1/E6"
+      - "E8 (combo: reverse gate × monthly rebalance) is the strongest TVT-eligible candidate by score (1.39) — train +0.95, val +1.58. Fails G3 (non-zero 0.27 < 0.30)"
+      - "DEEPEST FINDING: R5 E6 diagnostic has test Sh +0.78 with all 3 test years positive (2024 +1.05, 2025 +0.30, 2026 +1.27) — calm-regime gate RESCUES 2025. But val Sh -1.13 → not TVT eligible. VAL and TEST are OPPOSITE regimes for the M3 mechanism."
+  agent_5_evaluator:
+    artifact: outputs/alpha_ranking_r5.md
+    decision: RESEARCH-ONLY (R5 mirror direction confirmed but G3 blocks all)
+    tvt_winner: null
+    audits:
+      audit_3_not_evaluated: no winner
+      audit_4_not_evaluated: no winner
+      audit_5_falsification_completed: true
+      audit_5_finding: "VAL/TEST regime opposition is structural. No single-gate factor can navigate it. R6 would need dynamic regime classification (overfitting risk on small test window)."
+    pre_registered_bars_outcome:
+      r5_winner_test_sharpe_ge_0_78: NOT_MET (no eligible winner; best diagnostic E6 = +0.78 but fails val and G3)
+      test_ic_t_stat_4_5: NOT_MET (no eligible candidate)
+      worst_year_sharpe_0_7: NOT_MET (best diagnostic E6 worst = 2025 +0.30)
+
+decision: RESEARCH-ONLY (R5 mirror DIRECTIONALLY confirmed; G3 blocks)
+continue_research: stop_recommended
+session_winner_unchanged: r3_e4_amt_accel_5_120_neg
+
+session_level_strong_recommendation: |
+  STOP this session. After 5 rounds × 8 = 40 expressions on the same
+  test window, the val/test regime opposition is structurally
+  inescapable for any single-gate refinement. R3 E4 remains the
+  session-best (test Sharpe +0.58, near-PROMOTE blocked by 2025).
+  Continuing within this universe will likely overfit. Strong R6+
+  options (in priority): (1) WAIT for more 2026/2027 data, (2)
+  EXPAND to constituent stocks (NEW session), (3) PAPER-TRADE R3 E4
+  as RESEARCH-ONLY for 6-12mo OOS confirmation. Option (4) ABANDON
+  the universe is also valid given the +0.6 Sharpe ceiling.
+
+notable_findings:
+  - "R5 mirror-gate construction CONFIRMS R4 falsification: gate direction in R4 was wrong; reverse direction gives positive IC"
+  - "TEST 2024-2026 favors calm-regime amplification (R5 E6 test Sh +0.78, all 3 years positive)"
+  - "VAL 2022-2023 favors vol-amplification (i.e., opposite of TEST direction). R5 E6 val Sh -1.13"
+  - "VAL/TEST regime opposition prevents any single-gate factor from being TVT-eligible AND test-strong simultaneously"
+  - "G3 non_zero_frac threshold (0.30) and turnover ceiling (20.0) act as strict barriers; 4 of 8 R5 expressions pass G4 but all fail G3"
+  - "Session winner is unchanged at R3 E4: it remains the only TVT-eligible all-gates-pass expression across 40 tested"

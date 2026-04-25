@@ -1,14 +1,15 @@
-# Final Summary — A-share broad-base ETF style-timing factor (R1 + R2 + R3 + R4)
+# Final Summary — A-share broad-base ETF style-timing factor (R1 + R2 + R3 + R4 + R5)
 
 Session: `20260425_a_share_style_timing_csi300_csi1000`
-Run mode: four rounds executed.
+Run mode: five rounds executed. **Session terminates at R5** with strong recommendation to STOP further rounds within this universe.
 
 | Round | Mechanism | Decision | Session winner |
 |---|---|---|---|
 | R1 | M1 vol-regime → contrarian after sign-flip | RESEARCH-ONLY | (none) |
 | R2 | M2 turnover divergence | RESEARCH-ONLY | (none) |
 | R3 | **M3 turnover-acceleration MOMENTUM** (Agent-2 v2 horizon 5→20) | RESEARCH-ONLY (near-PROMOTE) | **r3_e4_amt_accel_5_120_neg** |
-| R4 | M3 regime-conditioned refinement | RESEARCH-ONLY (hypothesis FALSIFIED) | unchanged (R3 E4) |
+| R4 | M3 regime-conditioned refinement (vol-amplified gate) | RESEARCH-ONLY (hypothesis FALSIFIED) | unchanged (R3 E4) |
+| R5 | M3 calm-regime amplified (mirror of R4 gates) | RESEARCH-ONLY (G3 blocks all) | unchanged (R3 E4) |
 
 ## TL;DR
 
@@ -278,12 +279,55 @@ E7 (R3 E4 with 20d signal-discretization, no gate, no other change):
 Lower turnover (5×/yr vs 15×/yr) does not rescue out-of-sample
 performance. Cost was not the binding issue.
 
+## Round 5 — M3 calm-regime amplified (executed; mirror gates of R4)
+
+R5 tested R4's hypothesis with the gate direction REVERSED: amplify M3
+in CALM regimes (where R4's TRAIN sign-flip diagnostic implied M3
+actually worked). 7 mirror gates of R4 + 1 combo (mirror gate × monthly
+rebalance).
+
+| Stage | Outcome |
+|---|---|
+| Stage 4 | Mirror-gate construction CONFIRMED — R5 IC signs are exact negatives of R4 (R5 E1 IC = +0.206 vs R4 E1 −0.206; R5 E2 +0.217 vs R4 E2 −0.217). 4/8 G4 PASS but **all 8 fail G3** (turnover ceiling for E1/E6, non-zero-fraction floor for E4/E8). G5 fails (no survivors). |
+| Stage 5 | RESEARCH-ONLY. Session winner unchanged. **DEEPEST FINDING discovered (see below).** |
+
+### R5 deepest finding: VAL and TEST are OPPOSITE regimes for M3
+
+R5 E6 (R3 E2 base × tanh(−vol_spread_z)) is the most informative
+diagnostic of the entire 5-round session:
+
+| Window | E6 Sharpe | Per-year |
+|---|---:|---|
+| Train [2018,2022) | +0.85 | favorable to calm-regime gate |
+| **Val [2022,2024)** | **−1.13** | gate FAILS in 2022-2023 |
+| **Test [2024,2026]** | **+0.78** | **all 3 years POSITIVE** (2024 +1.05, 2025 +0.30, 2026 +1.27) |
+
+**The calm-regime gate rescues 2025** (R3 E4's audit-3 failure year)
+but **destroys val 2022-2023**. R4 E1 (vol-amplified) had the inverse
+picture. There is **no single regime gate** that helps both VAL and
+TEST simultaneously.
+
+This is a structural result: the 4y/2y/2.3y TVT split contains regime
+shifts within each window that no static regime gate can navigate.
+The M3 mechanism is real (R3 + R5 both show TRAIN IC ≈ +0.27, t > 8)
+but the regime structure is too unstable for an unconditional gate.
+
+A 2-regime classifier that switches gate direction dynamically COULD
+in principle work, but it would introduce 2-3 new degrees of freedom
+on top of an already 5-round-tested test window — multiple-comparisons
+overfitting risk would be severe.
+
 ## Session-level decision
 
-**RESEARCH-ONLY across all 4 rounds.** The strict TVT + 5-audit
-framework correctly rejected M1 (R1), M2-level (R2), conditionally
-rejected M3 (R3, near-PROMOTE), and **falsified M3 regime-conditioning**
-(R4). The framework worked as designed.
+**RESEARCH-ONLY across all 5 rounds.** The strict TVT + 5-audit
+framework correctly:
+- rejected M1 (R1: train-falsified after sign flip);
+- rejected M2-level (R2: val-favorable but test-failed = regime artifact);
+- conditionally rejected M3 (R3, near-PROMOTE; blocked by 2025);
+- **falsified** M3 regime-conditioning in vol-amplified direction (R4);
+- **directionally confirmed** R4 falsification with R5 mirror, but
+  G3 thresholds block all candidates AND val/test are opposite
+  regimes for the working gate.
 
 **Session winner: `r3_e4_amt_accel_5_120_neg`** — test Sharpe +0.58,
 calmar +0.50, ann return +6.32%, max DD −12.7%. Near-PROMOTE; blocked
@@ -291,26 +335,36 @@ only by audit-3 worst-year (2025 = −1.19). Audits 1, 2, 4 PASS. This
 is the strongest factor produced in 32 expression evaluations across
 4 rounds on the 3-ETF broad-base universe.
 
-## R5 hand-off (calibrated honesty — diminishing returns at 4 rounds)
+## R6+ recommendation (STOP this session)
 
-After 32 expressions on the same test window, multiple-comparisons risk
-is material. R5 options ranked by expected info gain per cost:
+After **5 rounds × 8 = 40 expressions on the same test window**, R5
+proved that the val/test regime opposition is structural — no
+single-gate factor will resolve it. **Continuing further rounds within
+this 3-ETF universe will likely just overfit.**
 
-1. **Reverse-direction gate** (cheap, 1 expression): build
-   `tanh(-vol_spread_z) × R3 E4`. If TRAIN IC ≈ +0.21 (mirror of R4 E1's
-   −0.21), the calm-regime-amplification framing is correct; if 2025
-   also rescues, near-PROMOTE achievable.
-2. **Cross-sectional expansion** (highest expected value, NEW SESSION):
-   pull CSI300 + CSI1000 constituent stocks; build the same
-   MA5/MA120 turnover-acceleration signal at stock level; form L/S
-   baskets cross-sectionally. Information capacity ≥ 1000× higher.
-3. **STOP & DEPLOY R3 E4 as RESEARCH-ONLY paper-trade**: 6-12 months
-   of paper-trading alongside production. Re-evaluate when 2026 fills
-   in and 2027 begins. **Most TVT-honest option** at this point.
-4. **ABANDON**: 3-asset universe ceiling reached. The information-theoretic
-   limit of timing-only signals on broad indices appears to be ~+0.6
-   Sharpe with this data.
+Strong recommendation: **archive this session and pursue one of**
 
-Recommendation: archive R3 E4 as session winner; if doing one more
-cheap round, run R5 #1 (single expression); otherwise pivot to #2
-(constituents) or #3 (paper-trade as-is).
+1. **WAIT**: extend test window organically. 2026/2027 data will
+   dilute the val/test regime opposition; re-run R3 E4 with same
+   TVT split shifted forward when 4y+ of post-2024 data exists.
+   **Zero coding required.**
+
+2. **EXPAND DATA (NEW session)**: pull CSI300 + CSI1000 constituent
+   stocks; build MA5/MA120 turnover-acceleration as a *cross-sectional*
+   factor (long top-quintile-acceleration small-caps, short
+   bottom-quintile). Information capacity ≥ 1000× higher than the
+   3-ETF version. The M3 mechanism is real on TRAIN; cross-sectional
+   should amplify it dramatically. **This is a new session, not a
+   continuation.**
+
+3. **PAPER-TRADE R3 E4** as the session winner with full RESEARCH-ONLY
+   disclosure. 6-12 months of OOS data alongside production should
+   either confirm or refute the +0.58 test Sharpe.
+
+4. **ABANDON** this universe. The 3-ETF ceiling appears to be ~+0.6
+   Sharpe; if that's not deployable for the user's purposes,
+   abandoning is more honest than continuing to grind.
+
+**Best ratio of expected value to cost: option 2 (cross-sectional
+expansion in a new session).** Best for TVT-honesty: option 3
+(paper-trade R3 E4 as is). Best if patience is acceptable: option 1.

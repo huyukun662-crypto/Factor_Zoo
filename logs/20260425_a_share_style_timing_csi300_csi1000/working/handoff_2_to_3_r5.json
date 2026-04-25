@@ -1,0 +1,26 @@
+{
+  "round": 5,
+  "selected_mechanism": "M3_calm_regime_amplified",
+  "pivot_from": "M3_regime_conditioned (R4 RESEARCH-ONLY, hypothesis falsified — gate direction was wrong)",
+  "tvt_compliance": "R5 design uses ONLY R4 TRAIN IC sign-flip diagnostic (R4 E1 IC=-0.21 t=-6.13). No R4 test result informs R5 design; mirror-gate construction is mathematical inversion of R4.",
+  "honesty_caveat": "FIFTH round on the same test window. Tighter PROMOTE bars pre-registered: test IC t-stat >= 4.5, worst-year >= 0.7, winner test Sh >= +0.78 (= R3 E4 +0.58 + 0.2 material improvement). Recognition that further rounds on this dataset have diminishing returns.",
+  "causal_chain": [
+    "small-cap turnover acceleration is bullish for small-cap continuation in CALM regimes (low vol-spread z)",
+    "in elevated-vol regimes, M3 weakens or partially inverts",
+    "tanh(-vol_spread_z) gate amplifies M3 in calm and dampens in elevated-vol days",
+    "weighted score is high when M3 says small-cap weak in calm regime → favour 300"
+  ],
+  "time_horizon": "20 trading days",
+  "thesis_sign": 1,
+  "primary_horizon_days": 20,
+  "constraints": {
+    "delay": 1,
+    "turnover_range": [0.10, 20.0],
+    "sharpe_target_test_must_exceed_r3_winner_by": 0.20,
+    "prod_corr_max_vs_r1": 0.85,
+    "prod_corr_max_vs_r2": 0.85,
+    "cost_bps_per_side_per_leg": 5
+  },
+  "build_directive_for_agent_3": "8 expressions, 7 reverse-direction mirror gates of R4 + 1 combo (reverse gate × monthly rebalance). All thesis_sign=+1, declared_horizon=20.",
+  "if_falsified": "If R5 mirrors do NOT clear pre-registered bars, this is strong evidence that the M3 mechanism is genuinely 2025-year-specific, not capturable by any regime axis available in this 3-asset universe. Decision then: STOP & paper-trade R3 E4 OR pivot to cross-sectional expansion (new session)."
+}
