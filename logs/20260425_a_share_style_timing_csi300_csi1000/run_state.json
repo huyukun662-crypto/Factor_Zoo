@@ -1,12 +1,17 @@
 {
   "session_id": "20260425_a_share_style_timing_csi300_csi1000",
-  "current_round": 1,
+  "current_round": 2,
   "current_stage": "complete",
   "status": "complete",
-  "selected_mechanism": "M1_volatility_regime_contrarian (after Agent-2 revision)",
-  "best_alpha_id": "r1_e1_volspread_20d",
-  "continue_research": false,
-  "decision": "RESEARCH-ONLY",
+  "selected_mechanism_r1": "M1_volatility_regime_contrarian (R1 v2)",
+  "selected_mechanism_r2": "M2_turnover_divergence",
+  "best_alpha_id": "r2_e1_log_amount_ratio_20d",
+  "best_alpha_id_note": "Only G4-passing candidate with positive val Sharpe; FAILS test (-0.36).",
+  "continue_research": true,
+  "next_round_pivot": "M2 acceleration as MOMENTUM (negate E3-class)",
+  "decision_r1": "RESEARCH-ONLY",
+  "decision_r2": "RESEARCH-ONLY",
+  "session_decision": "RESEARCH-ONLY (both rounds); R3 has a clear lead but is not yet executed.",
   "history": [
     {
       "round": 1,
@@ -19,6 +24,20 @@
         "if retain M1: drop 20d expressions, keep faster 10d (E4) with vol-state conditioning",
         "revisit cost assumption (5 bps/side may be too aggressive for retail ETF execution)",
         "consider universe expansion to constituent stocks for true cross-sectional signals"
+      ]
+    },
+    {
+      "round": 2,
+      "decision": "RESEARCH-ONLY",
+      "best_expression_idx": 1,
+      "best_alpha_id": "r2_e1_log_amount_ratio_20d",
+      "why": "2/8 G4 PASS (E1, E8); val Sh +1.7 driven by 2022-2023 regime; test Sharpe -0.36 (out-of-sample disconfirmation); 0/8 TVT-eligible; G5 still fails (2 < 4).",
+      "notable_secondary_finding": "E3 (small-cap turnover acceleration) shows IC = -0.196 with t = -5.93 — strongly significant ANTI-thesis. Inverted, this is the strongest signal in the entire session.",
+      "next_round_focus": [
+        "PIVOT: small-cap turnover acceleration as MOMENTUM (negate E3-class), thesis_sign +1",
+        "COMBINE: regime-conditional combination of M1 vol + M2 turnover",
+        "DROP: M2-level cluster (E1/E8/E5) — does not survive test",
+        "EXPAND DATA: pull constituent stocks for true cross-sectional turnover signals"
       ]
     }
   ]

@@ -88,3 +88,49 @@ agent_2_revision_v2:
   revised_thesis_sign: +1   # kept +1 because Agent 3 negates at source per validation-gates.md:140
   implementation_change: "Each r1_e*.py negates its rolling z-score before returning. No new constructions; 8 expressions unchanged in math up to a sign flip."
   preserved_audit_trail: "v1 expression results stored in *_v1_falsified.{md,json} for falsification record."
+
+# ----------------------------------------------------------------------
+# Round 2 — mechanism pivot (per Agent-5 R1 next_round_focus #1)
+# ----------------------------------------------------------------------
+# R1 final decision (alpha_ranking.md): RESEARCH-ONLY for M1/M1'. Top
+# pivot recommendation was "M2 turnover divergence". M2 was identified
+# in Agent-1 research_brief.md mechanism_candidates BEFORE any R1 test
+# was executed, so picking M2 for R2 does NOT compromise the test
+# window per TVT discipline (`tvt-split-template.md` Rule 1).
+#
+# IMPORTANT: R2 retains the SAME TVT split (train [2018,2022) /
+# val [2022,2024) / test [2024,now)) and the SAME audit thresholds.
+# This is a MECHANISM pivot, not a parameter retune; it is allowed
+# under TVT because no test metric from R1 informs M2's design.
+#
+round_0002:
+  selected_mechanism: M2_turnover_divergence
+  pivot_reason: "R1 result + Agent-5 next_round_focus #1; M2 was Agent-1 candidate #2"
+  economic_thesis:
+    one_liner: |
+      Abnormally high turnover of CSI1000 relative to CSI300 flags retail
+      euphoria / over-trading on small-caps; over the next ~5 trading
+      days, the spread (idx300 − idx1000) earns positive return as
+      retail flow exhausts and the over-extended small-cap names give
+      back. Symmetrically, low relative small-cap turnover flags
+      under-attention and predicts small-cap rebound.
+    causal_chain:
+      - "tushare amount(idx1000)/amount(idx300) ratio rises sharply"
+      - "retail attention concentrates on small-caps; flow becomes one-sided"
+      - "no marginal buyer left → retail flow exhausts within 3-7 trading days"
+      - "spread (idx300 − idx1000) earns positive return over t+1..t+5"
+    thesis_sign: +1
+  primary_horizon_days: 5
+  build_directive_for_agent_3: |
+    Produce 8 expressions, all variants of the M2 mechanism. Cover
+    (a) raw amount-ratio vs log vs spread, (b) windows {5,10,20},
+    (c) regime-relative z-score, (d) abnormal-amount = current
+    vs trailing-MA, (e) relative-to-vol normalization (turnover net
+    of mechanical vol-driven trading). All thesis_sign=+1, declared
+    horizon=5. Avoid trivial collinearity with R1 vol-spread by
+    explicitly checking |corr| with realized-vol-spread on TRAIN.
+  falsification_conditions:
+    - "TRAIN-window IC of turnover-spread vs forward 5d spread return is not positive"
+    - "G5 fails: < 4 of 8 expressions peak |IC| at h=5"
+    - "M2 turnover signal has |corr| > 0.85 with R1 vol-spread (M2 is just M1 in disguise)"
+    - "Best-year-out test Sharpe < 50% × headline → factor is one-regime"

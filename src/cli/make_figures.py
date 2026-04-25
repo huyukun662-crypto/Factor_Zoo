@@ -84,9 +84,17 @@ def fig_ic_decay(name: str):
 
 
 def main():
+    import argparse
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--names", nargs="*", default=None,
+                    help="Factor names to plot. Default = R1 leads.")
+    args = ap.parse_args()
     FIG_DIR.mkdir(parents=True, exist_ok=True)
-    # E1 = only G4 survivor, E4 = best per-year stability
-    for name in ["r1_e1_volspread_20d", "r1_e4_volspread_10d"]:
+    names = args.names if args.names else ["r1_e1_volspread_20d", "r1_e4_volspread_10d"]
+    for name in names:
+        if name not in FACTORS:
+            print(f"[fig] skip {name}: not registered")
+            continue
         print(f"[fig] {name} ...")
         fig_cumulative_pnl(name)
         fig_per_year_sharpe(name)

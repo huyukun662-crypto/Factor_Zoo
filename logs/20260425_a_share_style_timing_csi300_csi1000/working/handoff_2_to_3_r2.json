@@ -1,0 +1,30 @@
+{
+  "round": 2,
+  "selected_mechanism": "M2_turnover_divergence",
+  "pivot_from": "M1_volatility_regime (R1 RESEARCH-ONLY)",
+  "tvt_compliance": "M2 was Agent-1 candidate #2 in research_brief.md, identified BEFORE any test metric; same TVT split [2018,2022)/[2022,2024)/[2024,now); test still pristine for M2.",
+  "causal_chain": [
+    "amount(idx1000)/amount(idx300) ratio rises sharply (or its z-score does)",
+    "retail attention concentrates on small-caps; one-sided flow",
+    "marginal buyer exhausts within 3-7 trading days",
+    "spread (idx300 - idx1000) earns positive return over t+1..t+5"
+  ],
+  "time_horizon": "5 trading days",
+  "market_regime": "applies in all regimes; expected to fail in extended low-turnover calm and during sustained micro-cap rallies (where the over-extension takes weeks to unwind)",
+  "risk_premium_sources": ["retail liquidity exhaustion", "limits-of-arbitrage on small-cap"],
+  "constraints": {
+    "dataset_id": "tushare_index_daily_amount_300_500_1000",
+    "region": "CN-A",
+    "universe": "broad_base_etf_300_vs_1000",
+    "delay": 1,
+    "turnover_range": [0.10, 20.0],
+    "sharpe_target": 1.0,
+    "fitness_target": null,
+    "prod_corr_max": 0.85,
+    "cost_bps_per_side_per_leg": 5
+  },
+  "thesis_sign": 1,
+  "primary_horizon_days": 5,
+  "neutralization_candidates": [],
+  "build_directive_for_agent_3": "Produce exactly 8 expressions, all variants of M2 turnover-divergence. Cover (a) raw amount-ratio, (b) log amount-ratio, (c) spread of normalized amounts, (d) windows {5,10,20}, (e) regime-relative z-score, (f) abnormal-amount = current vs trailing-MA, (g) turnover-residualized-by-vol (subtract vol-spread component to ensure M2 is not just M1). All thesis_sign=+1, declared_horizon=5. Each expression must compute |corr| with R1 vol-spread on TRAIN; if any |corr| > 0.85, redesign that variant."
+}

@@ -33,11 +33,12 @@ def _fmt_pct(x):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--round", type=int, default=1)
+    ap.add_argument("--round", dest="round_num", type=int, default=1)
     ap.add_argument("--deadband", type=float, default=0.5)
     args = ap.parse_args()
 
-    handoff_path = SESSION_DIR / "working" / "handoff_4_to_5.json"
+    suffix = "" if args.round_num == 1 else f"_r{args.round_num}"
+    handoff_path = SESSION_DIR / "working" / f"handoff_4_to_5{suffix}.json"
     handoff = json.loads(handoff_path.read_text(encoding="utf-8"))
     panel = load_panel()
 
@@ -182,7 +183,7 @@ def main():
     lines.append("- **Next-round focus** (if continue/refine): …  ← Agent 5 fills")
     lines.append("")
 
-    out = SESSION_DIR / "outputs" / "alpha_ranking.md"
+    out = SESSION_DIR / "outputs" / f"alpha_ranking{suffix}.md"
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text("\n".join(lines), encoding="utf-8")
     print(f"[summarize_round] wrote {out}")
@@ -190,7 +191,7 @@ def main():
     # Persist computed structures for Agent 5 narrative
     diagnostic = {"selection_table": tbl.to_dict(orient="records"),
                   "winner": winner, "test_blocks": test_blocks}
-    diag = SESSION_DIR / "working" / "agent5_diagnostic.json"
+    diag = SESSION_DIR / "working" / f"agent5_diagnostic{suffix}.json"
     diag.write_text(json.dumps(diagnostic, indent=2, default=str), encoding="utf-8")
     print(f"[summarize_round] wrote {diag}")
 

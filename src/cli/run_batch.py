@@ -148,21 +148,27 @@ def render_handoff(reports, g5, batch_id: str) -> dict:
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--batch", type=int, default=1)
+    ap.add_argument("--round", dest="round_num", type=int, default=1,
+                    help="Round number; filters factors by name prefix r{round}_ and suffixes handoff/output files when >1.")
     ap.add_argument("--horizon", type=int, default=5,
                     help="Declared primary horizon for G5; should match session_metadata.yml")
     ap.add_argument("--deadband", type=float, default=0.5,
                     help="|z|>deadband → take a position; else flat. 0.5 matches Stage 3 z-score convention.")
     args = ap.parse_args()
 
+    prefix = f"r{args.round_num}_"
+    suffix = "" if args.round_num == 1 else f"_r{args.round_num}"
+
     panel = load_panel()
     if not FACTORS:
         raise RuntimeError("No factors registered. Did you create files in src/factors/expressions/?")
-    print(f"[run_batch] discovered {len(FACTORS)} factors: {list(FACTORS)}")
-    if len(FACTORS) != 8:
-        print(f"[run_batch] WARNING: Rule of 8 violation — got {len(FACTORS)} expressions")
+    selected = {n: f for n, f in FACTORS.items() if n.startswith(prefix)}
+    print(f"[run_batch] round={args.round_num}  prefix='{prefix}'  selected {len(selected)} of {len(FACTORS)} discovered factors")
+    if len(selected) != 8:
+        print(f"[run_batch] WARNING: Rule of 8 violation — got {len(selected)} expressions")
 
     reports = []
-    for name, f in FACTORS.items():
+    for name, f in selected.items():
         print(f"[run_batch] evaluating {name} ...")
         rep = evaluate_expression(f, panel, deadband=args.deadband)
         reports.append(rep)
@@ -176,7 +182,7 @@ def main():
     out_md.write_text(md, encoding="utf-8")
     print(f"[run_batch] wrote {out_md}")
 
-    handoff_path = SESSION_DIR / "working" / "handoff_4_to_5.json"
+    handoff_path = SESSION_DIR / "working" / f"handoff_4_to_5{suffix}.json"
     handoff_path.parent.mkdir(parents=True, exist_ok=True)
     handoff_path.write_text(json.dumps(handoff, indent=2, default=str), encoding="utf-8")
     print(f"[run_batch] wrote {handoff_path}")

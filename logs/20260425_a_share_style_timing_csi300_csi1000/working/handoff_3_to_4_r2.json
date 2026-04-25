@@ -1,0 +1,17 @@
+{
+  "batch_id": "batch_0002",
+  "round": 2,
+  "selected_mechanism": "M2_turnover_divergence",
+  "anti_clone_vs_r1_passed": true,
+  "anti_clone_max_corr": 0.48,
+  "expressions": [
+    {"idx": 1, "code": "src/factors/expressions/r2_e1.py", "rationale": "z(MA20(log(amt1000/amt300)))",                                            "expected_turnover_direction": "neutral", "fragility_notes": ["shares numerator with E5, E8"]},
+    {"idx": 2, "code": "src/factors/expressions/r2_e2.py", "rationale": "z(MA5(log(amt1000/amt300)))",                                             "expected_turnover_direction": "higher",  "fragility_notes": ["faster window noisier; turnover may approach upper edge"]},
+    {"idx": 3, "code": "src/factors/expressions/r2_e3.py", "rationale": "z(log(MA5(amt1000)/MA60(amt1000)))",                                      "expected_turnover_direction": "neutral", "fragility_notes": ["single-leg signal; ignores large-cap entirely"]},
+    {"idx": 4, "code": "src/factors/expressions/r2_e4.py", "rationale": "z(abnormal_amount(1000) - abnormal_amount(300))",                         "expected_turnover_direction": "neutral", "fragility_notes": ["sensitive to MA5 single-day spikes"]},
+    {"idx": 5, "code": "src/factors/expressions/r2_e5.py", "rationale": "z504 of log_amount_ratio_20d",                                            "expected_turnover_direction": "lower",   "fragility_notes": ["longer baseline loses ~252 more start-of-train days"]},
+    {"idx": 6, "code": "src/factors/expressions/r2_e6.py", "rationale": "z(MA20(resid log_amt | log_vol))_1000 - same_300",                       "expected_turnover_direction": "neutral", "fragility_notes": ["residualization regression near-singular in low-vol periods"]},
+    {"idx": 7, "code": "src/factors/expressions/r2_e7.py", "rationale": "z((MA5-MA20)(log_amt_1000) - (MA5-MA20)(log_amt_300))",                  "expected_turnover_direction": "higher",  "fragility_notes": ["acceleration signal may peak at h<5"]},
+    {"idx": 8, "code": "src/factors/expressions/r2_e8.py", "rationale": "z(MA20(amt1000/(amt1000+amt300)))",                                      "expected_turnover_direction": "neutral", "fragility_notes": ["near-identical response to E1 by construction"]}
+  ]
+}
