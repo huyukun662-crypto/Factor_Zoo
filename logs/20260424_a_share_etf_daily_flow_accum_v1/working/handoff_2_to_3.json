@@ -1,0 +1,34 @@
+{
+  "from": "agent_2_hypothesis_architect",
+  "to": "agent_3_alpha_builder",
+  "session_id": "20260424_a_share_etf_daily_flow_accum_v1",
+  "selected_mechanism": "amount_based_stealth_accumulation_pvo",
+  "causal_chain": [
+    "institutional desk accumulates position across sessions with spread MOC/VWAP orders",
+    "high daily amount z-score + low daily return magnitude = quiet-day stealth pattern",
+    "residual demand resolves into positive 5-20d forward returns"
+  ],
+  "time_horizon": "10d primary, evaluated at {5, 10, 20}",
+  "market_regime": "a_share_onshore_etf_2019_2026",
+  "risk_premium_sources": [
+    "informed_trading_premium",
+    "patience_discount",
+    "non_price_information"
+  ],
+  "constraints": {
+    "dataset_id": "inputs/etf_daily.parquet",
+    "region": "CN_A_SHARE",
+    "universe": "ONSHORE_ETF_34",
+    "delay": 1,
+    "target_shift": -2,
+    "turnover_range_pct_per_year": [50, 600],
+    "sharpe_target_long_only": 1.0,
+    "ic_tstat_target": 3.0,
+    "prod_corr_max": 0.85,
+    "cost_bps_per_side_primary": 5,
+    "rebalance_period_days": 5,
+    "top_n": 6
+  },
+  "neutralization_candidates": ["xs_demean"],
+  "instruction_to_agent_3": "Build exactly 8 distinct expressions (Rule of 8) that together span the PVO motif space. All expressions must be strictly backward-looking (no shift(-k) with k>0). Each expression must have a one-paragraph economic rationale and an expected turnover direction. Signals are cross-sectionally demeaned before ranking for portfolio construction. Sign convention: higher signal value = more bullish forward return."
+}
