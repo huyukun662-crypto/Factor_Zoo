@@ -1,0 +1,221 @@
+{
+  "batch_id": "batch_0004",
+  "validation_passed": false,
+  "submission_made": true,
+  "results": [
+    {
+      "expression_idx": 1,
+      "alpha_id": "r4_e1_e4_x_volgate_tanh_t1",
+      "sharpe": -1.16998479221232,
+      "fitness": null,
+      "turnover": 24.888888888888886,
+      "ic": -0.20576232530571503,
+      "status": "failed",
+      "error": "failed gates: ['G3_non_degenerate', 'G4_behavioral_fidelity']",
+      "val_sharpe": -0.5444489216681294,
+      "horizon": 20,
+      "thesis_sign": 1
+    },
+    {
+      "expression_idx": 2,
+      "alpha_id": "r4_e2_e4_x_volgate_tanh_t2",
+      "sharpe": -1.7184365430445305,
+      "fitness": null,
+      "turnover": 15.555555555555555,
+      "ic": -0.2167865685616394,
+      "status": "failed",
+      "error": "failed gates: ['G3_non_degenerate', 'G4_behavioral_fidelity']",
+      "val_sharpe": -0.8342289770896695,
+      "horizon": 20,
+      "thesis_sign": 1
+    },
+    {
+      "expression_idx": 3,
+      "alpha_id": "r4_e3_e4_x_turnoverlevel_tanh",
+      "sharpe": -0.11139274339125728,
+      "fitness": null,
+      "turnover": 14.777777777777777,
+      "ic": -0.05602031970664885,
+      "status": "failed",
+      "error": "failed gates: ['G3_non_degenerate', 'G4_behavioral_fidelity']",
+      "val_sharpe": 0.06499631961657562,
+      "horizon": 20,
+      "thesis_sign": 1
+    },
+    {
+      "expression_idx": 4,
+      "alpha_id": "r4_e4_e4_x_volgate_oneside",
+      "sharpe": -0.2622709111833245,
+      "fitness": null,
+      "turnover": 11.925925925925926,
+      "ic": 0.04379179650583195,
+      "status": "failed",
+      "error": "failed gates: ['G3_non_degenerate', 'G4_behavioral_fidelity']",
+      "val_sharpe": 0.5734643266682995,
+      "horizon": 20,
+      "thesis_sign": 1
+    },
+    {
+      "expression_idx": 5,
+      "alpha_id": "r4_e5_e4_x_composite_regime",
+      "sharpe": -1.0444439756035024,
+      "fitness": null,
+      "turnover": 18.14814814814815,
+      "ic": -0.19039297617678566,
+      "status": "failed",
+      "error": "failed gates: ['G3_non_degenerate', 'G4_behavioral_fidelity']",
+      "val_sharpe": 0.15481237314646135,
+      "horizon": 20,
+      "thesis_sign": 1
+    },
+    {
+      "expression_idx": 6,
+      "alpha_id": "r4_e6_e2_x_volgate_tanh_t1",
+      "sharpe": -1.3937521409482723,
+      "fitness": null,
+      "turnover": 24.37037037037037,
+      "ic": -0.16222705863345407,
+      "status": "failed",
+      "error": "failed gates: ['G3_non_degenerate', 'G4_behavioral_fidelity']",
+      "val_sharpe": 0.42665889619352376,
+      "horizon": 20,
+      "thesis_sign": 1
+    },
+    {
+      "expression_idx": 7,
+      "alpha_id": "r4_e7_e4_monthly_rebalance",
+      "sharpe": 1.2450455376215095,
+      "fitness": null,
+      "turnover": 6.222222222222221,
+      "ic": 0.24556616412723478,
+      "status": "failed",
+      "error": "failed gates: ['G4_behavioral_fidelity']",
+      "val_sharpe": -0.008719167834272002,
+      "horizon": 20,
+      "thesis_sign": 1
+    },
+    {
+      "expression_idx": 8,
+      "alpha_id": "r4_e8_e4_x_market_60d_gate",
+      "sharpe": -0.08171012728297107,
+      "fitness": null,
+      "turnover": 15.037037037037036,
+      "ic": 0.018583272810718122,
+      "status": "failed",
+      "error": "failed gates: ['G4_behavioral_fidelity']",
+      "val_sharpe": 0.05225704846140594,
+      "horizon": 20,
+      "thesis_sign": 1
+    }
+  ],
+  "expressions": [
+    {
+      "id": "r4_e1_e4_x_volgate_tanh_t1",
+      "gates": {
+        "G1_importable": "pass",
+        "G2_runs_e2e": "pass",
+        "G3_non_degenerate": "fail",
+        "G4_behavioral_fidelity": "fail"
+      },
+      "retry_count": 0,
+      "notes": ""
+    },
+    {
+      "id": "r4_e2_e4_x_volgate_tanh_t2",
+      "gates": {
+        "G1_importable": "pass",
+        "G2_runs_e2e": "pass",
+        "G3_non_degenerate": "fail",
+        "G4_behavioral_fidelity": "fail"
+      },
+      "retry_count": 0,
+      "notes": ""
+    },
+    {
+      "id": "r4_e3_e4_x_turnoverlevel_tanh",
+      "gates": {
+        "G1_importable": "pass",
+        "G2_runs_e2e": "pass",
+        "G3_non_degenerate": "fail",
+        "G4_behavioral_fidelity": "fail"
+      },
+      "retry_count": 0,
+      "notes": ""
+    },
+    {
+      "id": "r4_e4_e4_x_volgate_oneside",
+      "gates": {
+        "G1_importable": "pass",
+        "G2_runs_e2e": "pass",
+        "G3_non_degenerate": "fail",
+        "G4_behavioral_fidelity": "fail"
+      },
+      "retry_count": 0,
+      "notes": ""
+    },
+    {
+      "id": "r4_e5_e4_x_composite_regime",
+      "gates": {
+        "G1_importable": "pass",
+        "G2_runs_e2e": "pass",
+        "G3_non_degenerate": "fail",
+        "G4_behavioral_fidelity": "fail"
+      },
+      "retry_count": 0,
+      "notes": ""
+    },
+    {
+      "id": "r4_e6_e2_x_volgate_tanh_t1",
+      "gates": {
+        "G1_importable": "pass",
+        "G2_runs_e2e": "pass",
+        "G3_non_degenerate": "fail",
+        "G4_behavioral_fidelity": "fail"
+      },
+      "retry_count": 0,
+      "notes": ""
+    },
+    {
+      "id": "r4_e7_e4_monthly_rebalance",
+      "gates": {
+        "G1_importable": "pass",
+        "G2_runs_e2e": "pass",
+        "G3_non_degenerate": "pass",
+        "G4_behavioral_fidelity": "fail"
+      },
+      "retry_count": 0,
+      "notes": ""
+    },
+    {
+      "id": "r4_e8_e4_x_market_60d_gate",
+      "gates": {
+        "G1_importable": "pass",
+        "G2_runs_e2e": "pass",
+        "G3_non_degenerate": "pass",
+        "G4_behavioral_fidelity": "fail"
+      },
+      "retry_count": 0,
+      "notes": ""
+    }
+  ],
+  "g5": {
+    "passed": false,
+    "detail": {
+      "survivors": 0,
+      "peak_horizons": [],
+      "n_at_declared": 0,
+      "fraction_at_declared": 0.0,
+      "declared": 20
+    }
+  },
+  "anomalies": [
+    "r4_e1_e4_x_volgate_tanh_t1",
+    "r4_e2_e4_x_volgate_tanh_t2",
+    "r4_e3_e4_x_turnoverlevel_tanh",
+    "r4_e4_e4_x_volgate_oneside",
+    "r4_e5_e4_x_composite_regime",
+    "r4_e6_e2_x_volgate_tanh_t1",
+    "r4_e7_e4_monthly_rebalance",
+    "r4_e8_e4_x_market_60d_gate"
+  ]
+}

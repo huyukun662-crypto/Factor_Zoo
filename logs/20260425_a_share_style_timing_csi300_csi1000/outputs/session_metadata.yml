@@ -220,3 +220,72 @@ round_0003:
       Daily-rebalance Sharpe is what is measured; a 20d-rebalance
       version may have higher Sharpe and lower turnover. Reported
       Sharpe is the as-tested daily-rebalance result.
+
+# ----------------------------------------------------------------------
+# Round 4 — refine R3 winner via regime-conditioning and rebalance frequency
+# ----------------------------------------------------------------------
+# R3 surfaced a real M3 mechanism (single-leg small-cap turnover
+# acceleration → 20d-horizon momentum on style spread). Winner E4
+# (5/120 amount accel, negated) had test Sharpe +0.58, calmar +0.50,
+# but FAILED audit-3 (worst-year) because 2025 was a regime-flip
+# year. R4 hypothesis: regime-conditioning the same M3 signal with
+# a smooth gate based on R1 vol-state OR R2 turnover-level should
+# filter out the 2025-style mean-reversion regime and recover the
+# audit-3 floor.
+#
+# Honesty caveat: this is the FOURTH round on the same test window.
+# Multiple-comparisons risk continues to compound. R4 PROMOTE bar
+# is pre-registered TIGHTER than R3:
+#   - test IC t-stat >= 4.0 (vs R3's 3.5)
+#   - worst-year Sharpe >= 0.7 (same as R3)
+#   - economic story coherent with R1+R2+R3 findings (regime-conditional momentum)
+#   - R4 winner test Sharpe must EXCEED R3 winner E4's +0.58 (raw improvement, not just survive audits)
+#
+round_0004:
+  selected_mechanism: M3_regime_conditioned
+  pivot_reason: "R3 alpha_ranking_r3.md R4#1: smooth regime-conditioning of E4 with vol-state gate"
+  economic_thesis:
+    one_liner: |
+      The M3 momentum mechanism (small-cap turnover acceleration →
+      small-cap continuation) is REGIME-DEPENDENT. It operates in
+      elevated-vol / high-attention regimes and can invert in calm
+      regimes (cf. 2025). Smoothly weighting the M3 signal by a
+      regime indicator (vol-spread tanh, or trailing market return,
+      or turnover-level) should recover the floor failed by R3 E4.
+    causal_chain:
+      - "small-cap turnover acceleration is bullish for small-cap continuation in HIGH-vol regimes"
+      - "in LOW-vol regimes, the same signal weakens or inverts (mean-reverts)"
+      - "smooth regime gate weights the signal by current regime state"
+      - "weighted score is high when both M3 signal AND regime indicate continuation → favour 1000 (negate to favour 300 in score convention)"
+    thesis_sign: +1
+  primary_horizon_days: 20
+  build_directive_for_agent_3: |
+    Produce 8 R4 expressions exploring REGIME-CONDITIONED variants of
+    R3 E4 (and one R3 E2 sibling) plus a rebalance-frequency variant.
+    Cover:
+      (a) tanh(R1 vol-spread z) gates with multiple temperatures {1.0, 2.0}
+      (b) one-sided gate (max(0, ·)) — only amplifies, never flips
+      (c) R2-level (turnover-ratio z) as alternative regime gate
+      (d) composite regime: avg of vol + turnover gates
+      (e) trailing 60d market return as bull/bear gate
+      (f) base-signal swap: gate on R3 E2 instead of E4
+      (g) rebalance-frequency: E4 with 20d signal-discretization (matches peak-IC horizon, reduces turnover ~5×)
+    Anti-clone:
+      - vs R1 vol-spread raw: |corr| < 0.85 on TRAIN
+      - vs R2 E1 (level): |corr| < 0.85 on TRAIN
+      - vs R3 E4 (M3 base): EXPECTED to be high (regime-conditioned variants by definition).
+        Constraint relaxed here; the test of value-add is whether R4 winner has BETTER worst-year-Sharpe than R3 E4's -1.19 in 2025.
+    All thesis_sign=+1, declared_horizon=20.
+  falsification_conditions:
+    - "TRAIN IC of regime-conditioned variants is lower than the unconditional R3 E4 IC (+0.31)"
+    - "test 2025 Sharpe is not improved vs R3 E4's -1.19 — regime gate doesn't help"
+    - "any expression's |corr| with R3 E4 is exactly 1.0 (gate has no effect)"
+  pre_registered_tighter_bars: |
+    With 4 rounds × 8 expressions = 32 expressions on the same test
+    window, multiple-comparisons risk compounds. R4 PROMOTE eligibility
+    requires:
+      - test IC t-stat ≥ 4.0 (vs R3's 3.5)
+      - worst-year Sharpe ≥ 0.7 (same as R3)
+      - economic story coherent with R1+R2+R3 findings
+      - R4 winner test Sharpe > R3 winner E4's +0.58 (raw improvement, not just survive audits)
+    These bars are committed BEFORE Stage 4 runs.

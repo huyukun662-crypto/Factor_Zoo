@@ -1,0 +1,71 @@
+round: 4
+session_id: 20260425_a_share_style_timing_csi300_csi1000
+mechanism_family: M3_regime_conditioned (refinement of R3 E4)
+pivot_from: M3_turnover_acceleration_momentum (R3 RESEARCH-ONLY near-PROMOTE)
+
+agents:
+  agent_2_hypothesis_architect:
+    artifact_block: outputs/session_metadata.yml#round_0004
+    handoff: working/handoff_2_to_3_r4.json
+    decision: |
+      R4 hypothesis: smooth regime-conditioning of R3 E4 should rescue
+      audit-3 worst-year (2025 = -1.19). Tested 6 gate variants + 1
+      rebalance-frequency variant. Pre-registered tighter PROMOTE bars
+      (test IC t-stat >= 4.0, worst-year >= 0.7, R4 winner must exceed
+      R3 E4 +0.58 test Sharpe).
+  agent_3_alpha_builder:
+    artifact: outputs/expressions_batch_0004.md
+    handoff: working/handoff_3_to_4_r4.json
+    expressions:
+      - r4_e1_e4_x_volgate_tanh_t1
+      - r4_e2_e4_x_volgate_tanh_t2
+      - r4_e3_e4_x_turnoverlevel_tanh
+      - r4_e4_e4_x_volgate_oneside
+      - r4_e5_e4_x_composite_regime
+      - r4_e6_e2_x_volgate_tanh_t1
+      - r4_e7_e4_monthly_rebalance
+      - r4_e8_e4_x_market_60d_gate
+    rule_of_8_compliance: true
+    anti_clone_vs_r1_max_corr: 0.21
+    anti_clone_vs_r2_max_corr: 0.39
+  agent_4_backtest_operator:
+    artifact: outputs/backtest_results_batch_0004.md
+    handoff: working/handoff_4_to_5_r4.json
+    outcome: 0/8 G4 PASS; G5 FAIL (no survivors); 0/8 TVT-eligible
+    audits:
+      audit_1_execution_delay: PASS (all R4 factors)
+      audit_2_lookahead: PASS (rolling/MA only, no forward access)
+    notable_findings:
+      - "Smooth-tanh gates (E1, E2, E5, E6) produce TRAIN IC strongly NEGATIVE (t = -4.85 to -6.47); gate flips signal in WRONG direction"
+      - "M3 worked PRIMARILY in CALM regimes (low vol-spread) on TRAIN, NOT elevated-vol regimes — opposite of R4 hypothesis"
+      - "E7 monthly-rebalance has TRAIN IC t = +7.30 (strongest of batch), confirming peak-IC at h=20, but val Sh ≈ 0 and test Sh = -0.24 — cost was not the binding constraint"
+      - "All 8 R4 variants have WORSE test Sharpe than R3 E4 (+0.58); regime-conditioning made things uniformly worse"
+  agent_5_evaluator:
+    artifact: outputs/alpha_ranking_r4.md
+    decision: RESEARCH-ONLY (R4 hypothesis falsified)
+    tvt_winner: null
+    audits:
+      audit_3_worst_year_sharpe_ge_0_5: not_evaluated (no winner)
+      audit_4_best_year_out_ge_half_headline: not_evaluated (no winner)
+      audit_5_falsification_completed: true
+      audit_5_finding: "Most likely cause of R4 null: gate direction is reversed for TRAIN. M3 worked in calm regimes on TRAIN, not vol regimes. R5 should test tanh(-vol_spread_z) for the inverse hypothesis."
+    pre_registered_bars_outcome:
+      r4_winner_test_sharpe_must_exceed_r3_e4_plus_0_58: NOT_MET (no winner; best R4 test is +0.22 from E8)
+      test_ic_t_stat_4_0: NOT_MET (no eligible candidate)
+      worst_year_sharpe_0_7: NOT_MET (no eligible candidate)
+
+decision: RESEARCH-ONLY (R4 hypothesis CLEANLY FALSIFIED)
+continue_research: maybe_one_more_round
+session_winner_unchanged: r3_e4_amt_accel_5_120_neg
+notable_findings:
+  - "R4 hypothesis (smooth regime-conditioning rescues audit-3) is FALSIFIED on TRAIN — gates flip M3 in WRONG direction. M3 worked in calm regimes, not vol regimes."
+  - "Monthly-rebalance variant E7 has TRAIN IC t=+7.30 but val/test don't generalize — cost was NOT the binding constraint"
+  - "All 8 R4 variants have WORSE test Sharpe than R3 E4 — regime-conditioning is harmful in tested directions"
+  - "R3 E4 remains session-best: test Sharpe +0.58, calmar +0.50, near-PROMOTE blocked only by 2025 single-year regime"
+  - "After 4 rounds × 8 = 32 expressions on same test window, multiple-comparisons risk material; further M3 refinements have diminishing returns"
+
+r5_recommendations_priority:
+  - "1. REVERSE-DIRECTION test: tanh(-vol_spread_z) gate (1 expression, cheap) — confirms calm-regime amplification framing"
+  - "2. CROSS-SECTIONAL EXPANSION: pull constituent stocks; build M3 acceleration as cross-sectional alpha (much higher info capacity, new session needed)"
+  - "3. STOP & DEPLOY R3 E4 as RESEARCH-ONLY; paper-trade alongside production for 6-12mo OOS confirmation"
+  - "4. ABANDON: 3-asset universe ceiling reached; max achievable Sharpe ~+0.6"
