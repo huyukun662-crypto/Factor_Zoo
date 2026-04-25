@@ -1,0 +1,25 @@
+{
+  "session_id": "20260425_a_share_style_timing_csi300_csi1000",
+  "current_round": 1,
+  "current_stage": "complete",
+  "status": "complete",
+  "selected_mechanism": "M1_volatility_regime_contrarian (after Agent-2 revision)",
+  "best_alpha_id": "r1_e1_volspread_20d",
+  "continue_research": false,
+  "decision": "RESEARCH-ONLY",
+  "history": [
+    {
+      "round": 1,
+      "decision": "RESEARCH-ONLY",
+      "best_expression_idx": 1,
+      "best_alpha_id": "r1_e1_volspread_20d",
+      "why": "Only G4 survivor of v2 batch; train Sharpe +0.14 < 0.5 eligibility floor; test Sharpe +0.14 carried by single year (2025 = +0.75); fails worst-year and best-year-out audits.",
+      "next_round_focus": [
+        "pivot to M2 turnover divergence",
+        "if retain M1: drop 20d expressions, keep faster 10d (E4) with vol-state conditioning",
+        "revisit cost assumption (5 bps/side may be too aggressive for retail ETF execution)",
+        "consider universe expansion to constituent stocks for true cross-sectional signals"
+      ]
+    }
+  ]
+}

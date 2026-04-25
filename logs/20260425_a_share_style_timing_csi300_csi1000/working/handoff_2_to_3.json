@@ -1,0 +1,27 @@
+{
+  "selected_mechanism": "M1_volatility_regime",
+  "causal_chain": [
+    "vol(idx1000) − vol(idx300) rises sharply",
+    "institutional vol-targeting / risk-parity cut small-cap exposure",
+    "small-cap selling persists 3-7 trading days after the trigger",
+    "spread (idx300 − idx1000) earns positive return over t+1..t+5"
+  ],
+  "time_horizon": "5 trading days (primary); audit at {1, 5, 10, 20}",
+  "market_regime": "all regimes; expected to fail in extended low-vol calm and in trending bull markets",
+  "risk_premium_sources": ["vol-targeting rebalance flow", "retail-vs-institutional liquidity asymmetry"],
+  "constraints": {
+    "dataset_id": "tushare_index_daily_300_500_1000",
+    "region": "CN-A",
+    "universe": "broad_base_etf_300_vs_1000",
+    "delay": 1,
+    "turnover_range": [0.10, 20.0],
+    "sharpe_target": 1.0,
+    "fitness_target": null,
+    "prod_corr_max": 0.85,
+    "cost_bps_per_side_per_leg": 5
+  },
+  "thesis_sign": 1,
+  "primary_horizon_days": 5,
+  "neutralization_candidates": [],
+  "build_directive_for_agent_3": "Produce exactly 8 expressions, all variants of the same M1 mechanism, all with thesis_sign=+1 and declared_horizon=5. Variants should explore: (a) vol window length {5,10,20,60}, (b) spread vs ratio vs log, (c) total vol vs downside semivariance, (d) raw vs regime-relative z-score, (e) acceleration (fast minus slow). Avoid trivial linear combinations across variants — keep 8 distinct constructions."
+}

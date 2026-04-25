@@ -1,0 +1,14 @@
+{
+  "batch_id": "batch_0001",
+  "selected_mechanism": "M1_volatility_regime",
+  "expressions": [
+    {"idx": 1, "code": "src/factors/expressions/r1_e1.py", "rationale": "z(sigma20(r1000) - sigma20(r300))",                                              "expected_turnover_direction": "neutral", "fragility_notes": ["shares raw signal with E5, E8"]},
+    {"idx": 2, "code": "src/factors/expressions/r1_e2.py", "rationale": "z(sigma20(r1000)/sigma20(r300) - 1)",                                            "expected_turnover_direction": "neutral", "fragility_notes": ["shares ratio numerator with E3"]},
+    {"idx": 3, "code": "src/factors/expressions/r1_e3.py", "rationale": "z(log(sigma20(r1000)/sigma20(r300)))",                                           "expected_turnover_direction": "neutral", "fragility_notes": ["shares ratio numerator with E2"]},
+    {"idx": 4, "code": "src/factors/expressions/r1_e4.py", "rationale": "z(sigma10(r1000) - sigma10(r300))",                                              "expected_turnover_direction": "higher",  "fragility_notes": ["faster window means more noise; turnover may approach G3 upper edge"]},
+    {"idx": 5, "code": "src/factors/expressions/r1_e5.py", "rationale": "z504 of (sigma20(r1000) - sigma20(r300))",                                       "expected_turnover_direction": "lower",   "fragility_notes": ["longer baseline window loses ~252 more start-of-train days"]},
+    {"idx": 6, "code": "src/factors/expressions/r1_e6.py", "rationale": "z(sigma_down20(r1000) - sigma_down20(r300))",                                    "expected_turnover_direction": "neutral", "fragility_notes": ["sample of negative returns is smaller; estimator noisier in calm regimes"]},
+    {"idx": 7, "code": "src/factors/expressions/r1_e7.py", "rationale": "z((sigma5 - sigma20)(r1000) - (sigma5 - sigma20)(r300))",                       "expected_turnover_direction": "higher",  "fragility_notes": ["acceleration signal may peak at h=1 not h=5; G5 may flag"]},
+    {"idx": 8, "code": "src/factors/expressions/r1_e8.py", "rationale": "z((sigma20(r1000) - sigma20(r300)) / mean252(sigma20(r300)))",                  "expected_turnover_direction": "neutral", "fragility_notes": ["shares numerator with E1, E5"]}
+  ]
+}

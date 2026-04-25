@@ -1,0 +1,90 @@
+session_id: 20260425_a_share_style_timing_csi300_csi1000
+round: 1
+agent_2_decision: |
+  M1 (volatility-regime / risk-off rotation) selected as the dominant
+  mechanism for batch 1. Rationale: cleanest separation from classic
+  size/momentum factors, falsifiable via IC sign on TRAIN, mechanism is
+  asymmetric in a way that matches A-share retail-driven small-cap
+  behaviour.
+
+selected_mechanism: M1_volatility_regime
+
+economic_thesis:
+  one_liner: |
+    When realized volatility of CSI1000 spikes relative to CSI300, risk-off
+    rebalancing pressures small-caps for the next ~5 trading days; favour
+    CSI300 over CSI1000.
+  causal_chain:
+    - "vol(idx1000) − vol(idx300) rises sharply (state)"
+    - "institutional risk-parity / vol-targeting books cut small-cap exposure"
+    - "small-cap selling continues for 3-7 trading days after the trigger"
+    - "spread (idx300 − idx1000) earns positive return over t+1..t+5"
+  thesis_sign: +1   # positive score → long 300 / short 1000 → positive forward spread return
+
+primary_horizon_days: 5
+secondary_horizons_days: [1, 10, 20]   # for G4 peak-IC check
+
+market_regime:
+  applies_in: "all market regimes; mechanism is regime-conditional, not regime-replacing"
+  expected_failure_modes:
+    - "extended low-vol calm regime (e.g. mid-2019, mid-2021): signal magnitudes are tiny, cost dominates"
+    - "trending bull regime that lasts > 60d: vol-spread becomes collinear with momentum (G4 anti-clone risk)"
+
+risk_premium_sources:
+  - "vol-targeting rebalance flow"
+  - "retail-vs-institutional liquidity asymmetry on small caps"
+
+constraints:
+  dataset_id: "tushare:index_daily(000300.SH,000852.SH,000905.SH) + fund_daily(510300.SH,510500.SH,512100.SH)"
+  region: "CN-A"
+  universe: "broad_base_etf_300_vs_1000"
+  delay: 1                          # signal at close(t) → traded close(t+1) → close(t+2) ... per audit invariant
+  cost_bps_per_side_per_leg: 5
+  legs_per_side: 2                  # we trade both 300 and 1000 → cost is doubled in engine
+  turnover_budget_annual: [0.10, 20.0]   # 10% to 2000% per validation-gates G3
+  sharpe_target_test: 1.0
+  worst_year_sharpe_floor: 0.5
+  best_year_out_ratio_floor: 0.5
+  prod_corr_max_with_classic: 0.85   # G4 anti-clone
+
+neutralization_candidates: []        # N/A on a 3-asset universe; documented in plan §"Acknowledged deviations" #3
+
+evaluation_targets:
+  primary: "TVT selection score = val_sharpe − 0.3·|train_sharpe − val_sharpe|"
+  eligibility: "train_sharpe > 0.5 AND val_sharpe > 0"
+  promote_floors_ref: "worldquant-5-agent-workflow/references/tvt-split-template.md:138"
+
+falsification_conditions:
+  - "TRAIN-window IC of vol-spread vs forward 5d spread return is not positive (any direction-neutral or negative)"
+  - "G5 fails: < 4 of 8 expressions peak |IC| at h=5 (mechanism is at wrong horizon, not implementation)"
+  - "after audit-1/2, IC sign flips → expression has look-ahead, not signal"
+  - "Best-year-out test Sharpe < 50% × headline → factor is one-regime"
+
+research_only_thresholds:
+  - "any of the 5 mandatory pre-PROMOTE audits in SKILL.md:198 fails"
+  - "test window < 3 years AND any audit fails (current case: 2.3y test → expect RESEARCH-ONLY likely)"
+
+# ----------------------------------------------------------------------
+# Agent 2 hypothesis revision after Stage-4 v1 batch failure
+# ----------------------------------------------------------------------
+# Stage 4 v1 (see outputs/backtest_results_batch_0001_v1_falsified.md and
+# working/handoff_4_to_5_v1_falsified.json) reported all 8 expressions
+# failed G4 with CONSISTENT NEGATIVE IC sign on TRAIN. This is a
+# batch-level hypothesis failure, not an Agent-3 implementation bug —
+# the same construction with the OPPOSITE thesis sign would pass G4.
+#
+# Per validation-gates.md G5 spirit ("the failure is at Agent 2, not
+# Agent 3 — return batch to Agent 2 for hypothesis revision"), Agent 2
+# revises the mechanism direction:
+#
+agent_2_revision_v2:
+  trigger: "Stage 4 v1 reported IC sign opposite to thesis on 8/8 expressions; G5 implicitly failed (0 survivors at declared horizon)."
+  revised_mechanism: M1_volatility_regime_contrarian
+  revised_thesis_one_liner: |
+    When realized vol of CSI1000 spikes relative to CSI300, the small-cap
+    panic is followed by a SHORT-TERM (~5d) mean-reversion in which CSI1000
+    OUTPERFORMS — i.e. the vol-spike marks a capitulation low, not a
+    flight-to-quality trigger. Direction inverted from M1 v1.
+  revised_thesis_sign: +1   # kept +1 because Agent 3 negates at source per validation-gates.md:140
+  implementation_change: "Each r1_e*.py negates its rolling z-score before returning. No new constructions; 8 expressions unchanged in math up to a sign flip."
+  preserved_audit_trail: "v1 expression results stored in *_v1_falsified.{md,json} for falsification record."
