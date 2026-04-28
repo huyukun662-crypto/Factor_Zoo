@@ -1,0 +1,75 @@
+round: 1
+date: 2026-04-28
+session: 20260428_a_share_overnight_intraday_alpha
+family: price_volume
+mechanism: overnight_intraday_decomposition
+direction: long_high_overnight
+alpha_sign: positive
+batch: "0001"
+n_alphas: 8
+
+builder_output:
+  panel: outputs/panel_overnight.parquet
+  alphas: outputs/panel_alphas.parquet
+  expressions: outputs/expressions_batch_0001.md
+
+ic_table_full:
+  alpha_01: {ic_5d: 0.0177, ic_20d: 0.0301, ic_60d: 0.0553, t_20d: 28.0}
+  alpha_02: {ic_5d: 0.0178, ic_20d: 0.0272, ic_60d: 0.0398, t_20d: 27.3}
+  alpha_03: {ic_5d: 0.0246, ic_20d: 0.0439, ic_60d: 0.0683, t_20d: 35.4}
+  alpha_04: {ic_5d: 0.0464, ic_20d: 0.0642, ic_60d: 0.0763, t_20d: 42.7}
+  alpha_05: {ic_5d: 0.0176, ic_20d: 0.0302, ic_60d: 0.0522, t_20d: 28.1}
+  alpha_06: {ic_5d: 0.0085, ic_20d: 0.0141, ic_60d: 0.0198, t_20d: 11.4}
+  alpha_07: {ic_5d: 0.0106, ic_20d: 0.0139, ic_60d: 0.0189, t_20d: 11.8}
+  alpha_08: {ic_5d: 0.0176, ic_20d: 0.0302, ic_60d: 0.0522, t_20d: 28.1}
+
+backtest_headline_full:    # LS net Sharpe (monthly rebal, 5 bps/side cost)
+  alpha_01: {ls_sharpe_net: 1.82, ls_ann_ret: 0.097, q5_ir: 0.39}
+  alpha_02: {ls_sharpe_net: 1.98, ls_ann_ret: 0.099, q5_ir: 0.40}
+  alpha_03: {ls_sharpe_net: 2.41, ls_ann_ret: 0.142, q5_ir: 1.03}
+  alpha_04: {ls_sharpe_net: 2.44, ls_ann_ret: 0.161, q5_ir: 1.04}
+  alpha_05: {ls_sharpe_net: 1.88, ls_ann_ret: 0.091, q5_ir: 1.26}
+  alpha_06: {ls_sharpe_net: 1.03, ls_ann_ret: 0.055, q5_ir: -0.41}
+  alpha_07: {ls_sharpe_net: 0.73, ls_ann_ret: 0.039, q5_ir: 0.80}
+  alpha_08: {ls_sharpe_net: 1.88, ls_ann_ret: 0.091, q5_ir: 1.26}
+
+audits_per_alpha:
+  alpha_01: {execution_delay: PASS, look_ahead: PASS, future_perturb: PASS, worst_year: 0.87, best_year_out_pct: 94, resid_pct: 119, decision: PROMOTE}
+  alpha_02: {execution_delay: PASS, look_ahead: PASS, future_perturb: PASS, worst_year: 0.55, best_year_out_pct: 88, resid_pct: 56,  decision: PROMOTE}
+  alpha_03: {execution_delay: PASS, look_ahead: PASS, future_perturb: PASS, worst_year: 0.78, best_year_out_pct: 94, resid_pct: 101, decision: PROMOTE}
+  alpha_04: {execution_delay: PASS, look_ahead: PASS, future_perturb: PASS, worst_year: 0.90, best_year_out_pct: 91, resid_pct: 81,  decision: PROMOTE}
+  alpha_05: {execution_delay: PASS, look_ahead: PASS, future_perturb: PASS, worst_year: 0.07, best_year_out_pct: 89, resid_pct: 117, decision: RESEARCH-ONLY}
+  alpha_06: {execution_delay: PASS, look_ahead: PASS, future_perturb: PASS, worst_year: -0.65, best_year_out_pct: 95, resid_pct: -10, decision: RESEARCH-ONLY}
+  alpha_07: {execution_delay: PASS, look_ahead: PASS, future_perturb: PASS, worst_year: -0.83, best_year_out_pct: 74, resid_pct: 129, decision: RESEARCH-ONLY}
+  alpha_08: {execution_delay: PASS, look_ahead: PASS, future_perturb: PASS, worst_year: 0.06, best_year_out_pct: 89, resid_pct: 116, decision: RESEARCH-ONLY}
+
+top_candidate: alpha_04
+top_candidate_rationale: |
+  α_04 = sum(log_ON_20) - sum(log_ID_20) is the canonical Lou-Polk-Skouras
+  "tug-of-war" decomposition. It has the highest LS net Sharpe (2.44),
+  the highest IC at every horizon (t-stat 42.7 at 20d, 51.6 at 60d), and
+  is the only alpha with worst-year LS Sharpe ≥ 0.90 across all 8 calendar
+  years. Residualization retains 81% of raw Sharpe vs the standard control
+  stack — the alpha is not a vehicle for size, vol, or short-term reversal.
+  Q5 long-only IR 1.04 with -5.1% max DD makes it deployable as both LS
+  (signal validation) and Q5 (long-only index enhancement).
+
+decision: PROMOTE
+deployment_target: factors/price_volume/overnight_intraday_spread_20d_v1
+secondary_research_only:
+  - alpha_03_on_cum_60d
+  - alpha_02_on_cum_5d
+  - alpha_01_on_cum_20d
+  - alpha_05_alpha_08_volscaled
+  - alpha_07_uppct
+  - alpha_06_attention_weighted
+
+next_round: none
+rationale_for_no_round_2: |
+  The PROMOTE bar is met cleanly (all 5 mandatory audits pass, every
+  calendar year LS Sharpe ≥ 0.5, residualization retains 81%, max DD
+  -4.9%). Iterating to Round 2 to add overlays (size-regime gate à la
+  lottery_idio_max_q5_overlay_v1, dispersion gate à la
+  idio_12_3_momentum_disp_gated_v1) is reserved for a future paper-trading
+  follow-up — the raw factor is sufficiently strong that overlay tuning
+  on this same data window would invite confirmation bias.

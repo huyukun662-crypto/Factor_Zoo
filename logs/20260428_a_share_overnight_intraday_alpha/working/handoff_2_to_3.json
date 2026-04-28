@@ -1,0 +1,44 @@
+{
+  "session": "20260428_a_share_overnight_intraday_alpha",
+  "from": "agent_2_hypothesis_architect",
+  "to": "agent_3_alpha_builder",
+  "mechanism": "overnight_intraday_decomposition",
+  "primitive": {
+    "ret_overnight": "(open_t * adj_factor_t) / (close_{t-1} * adj_factor_{t-1}) - 1",
+    "ret_intraday":  "close_t / open_t - 1"
+  },
+  "expected_ic_sign": "+",
+  "rule_of_8": true,
+  "must_differ_along": ["window_length", "normalization", "attention_weighting", "frequency_vs_magnitude"],
+  "per_expression_required_fields": [
+    "name", "formula_pseudo", "primary_window_d", "expected_turnover_direction",
+    "expected_ic_horizon_d", "economic_explanation_one_paragraph"
+  ],
+  "construction_pipeline": [
+    "compute primitive(s) per (ts_code, trade_date) using only past bars",
+    "winsorize raw alpha at [1%, 99%] per trade_date",
+    "subtract industry mean per trade_date (CITIC L1 from stock_basic.industry)",
+    "cross-sectional zscore per trade_date"
+  ],
+  "delay": 1,
+  "target_shift_invariant": -2,
+  "rebalance_days": 20,
+  "tvt_split": {
+    "train":    ["2018-01-02", "2022-12-31"],
+    "validate": ["2023-01-01", "2023-12-31"],
+    "test":     ["2024-01-01", "2026-04-28"]
+  },
+  "agent_4_will_evaluate": {
+    "ic_horizons_d": [1, 5, 10, 20, 60],
+    "ls_form": "Q5-Q1 equal-weight, dollar-neutral",
+    "long_only_form": "Q5 equal-weight, excess vs EW universe",
+    "cost_bps_per_side": 5,
+    "must_pass": [
+      "G1_importable",
+      "G2_runs_end_to_end",
+      "G3_non_degenerate",
+      "G4_fidelity_ic_sign_matches",
+      "G5_horizon_consistency"
+    ]
+  }
+}

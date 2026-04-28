@@ -1,0 +1,58 @@
+{
+  "session": "20260428_a_share_overnight_intraday_alpha",
+  "from": "agent_1_research_librarian",
+  "to": "agent_2_hypothesis_architect",
+  "date": "2026-04-28",
+  "mechanism": {
+    "name": "overnight_intraday_decomposition",
+    "primitive": "ret_overnight = open_t * adj_t / (close_{t-1} * adj_{t-1}) - 1",
+    "direction": "long high cum-overnight, short low",
+    "expected_ic_sign": "+",
+    "anchor_paper": "Lou-Polk-Skouras 2019 JFE",
+    "a_share_specific_lift": [
+      "T+1 settlement sharpens informed-vs-noise overnight/intraday split",
+      "single open auction concentrates information jump",
+      "retail >80% intraday turnover concentrates noise in intraday leg",
+      "+/-10% limit-up days push price discovery into next overnight"
+    ]
+  },
+  "constraints": {
+    "neutralization_required": ["industry"],
+    "residualization_for_audit": ["log_mv", "sigma_20", "ret_5", "ret_20", "turnover_20"],
+    "delay": 1,
+    "execution_invariant": "target_shift == -(1+delay) == -2",
+    "rebalance_days_primary": 20,
+    "rebalance_days_robustness": 5,
+    "cost_bps_per_side": 5,
+    "universe_filter": ["exclude_st", "exclude_suspended", "exclude_beijing", "min_history_252d"],
+    "no_efficient_shorting": true,
+    "report_long_only_excess": true
+  },
+  "ruled_out": {
+    "max_lottery": "already deployed as lottery_idio_max_q5_overlay_v1",
+    "idio_12_3_momentum": "already deployed as idio_12_3_momentum_disp_gated_v1",
+    "amihud_illiquidity": "weak alpha component in A-share, treated as risk premium"
+  },
+  "data_dependencies": [
+    ".cache/daily.parquet",
+    ".cache/adj_factor.parquet",
+    ".cache/daily_basic.parquet",
+    ".cache/stock_basic.parquet",
+    ".cache/trade_cal.parquet"
+  ],
+  "tvt_split": {
+    "train": ["2018-01-02", "2022-12-31"],
+    "validate": ["2023-01-01", "2023-12-31"],
+    "test": ["2024-01-01", "2026-04-28"]
+  },
+  "expected_sharpe_prior": {"ls_full": [0.7, 1.3], "q5_long_only_ir": [0.4, 0.8]},
+  "pitfall_checklist": [
+    "look_ahead_via_shift_neg_k",
+    "mislabeled_delay",
+    "survivorship",
+    "industry_noise",
+    "limit_truncation",
+    "adj_factor_mismatch_overnight",
+    "stale_zero_volume_rows"
+  ]
+}

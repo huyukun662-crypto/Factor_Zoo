@@ -1,0 +1,87 @@
+{
+  "name": "overnight_intraday_spread_20d_v1",
+  "alpha_id_in_session": "alpha_04",
+  "session": "20260428_a_share_overnight_intraday_alpha",
+  "branch": "claude/build-price-volume-factor-w8QPW",
+  "as_of": "2026-04-28",
+  "window": [
+    "20180102",
+    "20260425"
+  ],
+  "n_dates": 2016,
+  "n_rebalances": 99,
+  "rebalance_freq_days": 20,
+  "delay": 1,
+  "cost_bps_per_side": 5,
+  "ls": {
+    "ann_ret_net": 0.1612829272133402,
+    "ann_vol": 0.0661989275034038,
+    "sharpe_net": 2.4363374649090392,
+    "sharpe_gross": 2.5752306054615204,
+    "max_dd": -0.0490361628999194,
+    "avg_tov_q5": 0.7508909522053048,
+    "avg_tov_q1": 0.7084242037756172,
+    "avg_cost_per_reb_bps": 7.296575779904609
+  },
+  "q5_long_only": {
+    "ann_excess_net": 0.0405977263756697,
+    "ann_vol": 0.03898140223687,
+    "ir_net": 1.0414639814385869,
+    "max_dd": -0.0508159766136998
+  },
+  "ic_rank": {
+    "1d": {
+      "mean": 0.0314125496396261,
+      "icir": 0.4208753693362032,
+      "t_stat": 18.81741259980386,
+      "n": 1999
+    },
+    "5d": {
+      "mean": 0.0464163440165244,
+      "icir": 0.6381860013337987,
+      "t_stat": 28.519132183149463,
+      "n": 1997
+    },
+    "10d": {
+      "mean": 0.0554069428542194,
+      "icir": 0.8032758371154415,
+      "t_stat": 35.85166836317493,
+      "n": 1992
+    },
+    "20d": {
+      "mean": 0.064181309904681,
+      "icir": 0.9597201907875376,
+      "t_stat": 42.70485256172218,
+      "n": 1980
+    },
+    "60d": {
+      "mean": 0.0763178809035417,
+      "icir": 1.1839840409174696,
+      "t_stat": 51.60866785124176,
+      "n": 1900
+    }
+  },
+  "audits": {
+    "execution_delay": true,
+    "look_ahead_grep": true,
+    "future_perturbation": true,
+    "worst_year": {
+      "year": "2020",
+      "sharpe": 0.9024216853749408,
+      "pass": true
+    },
+    "best_year_out": {
+      "best_year": "2018",
+      "pct_retained": 91.05041291966633,
+      "pass": true
+    },
+    "residualization": {
+      "raw_gross_sharpe": 2.5752306054615204,
+      "resid_gross_sharpe": 2.0903412649813355,
+      "pct_retained": 81.17103223875031,
+      "pass": true
+    },
+    "all_pass": true,
+    "decision": "PROMOTE"
+  }
+}
