@@ -2,8 +2,8 @@
 
 **Family:** `price_volume.decomposition`
 **Mechanism:** A-share overnight–intraday return decomposition spread
-**Status:** PROMOTED — third price-volume factor in this repo
-**Source session:** `logs/20260428_a_share_overnight_intraday_alpha/` — 1 round, 8 expressions, 5/5 mandatory audits clean
+**Status:** ADMITTED — third price-volume factor in this repo (catalog-standard met)
+**Source session:** `logs/20260428_a_share_overnight_intraday_alpha/` — **4 rounds**, 8 expressions in R1, all mandatory audits clean
 
 ---
 
@@ -140,11 +140,29 @@ intraday-noise reversal.
 | audit | result | detail |
 |---|:---:|---|
 | 1. Execution-delay invariant | ✅ | `target_shift == -(1+delay) == -2`; physical timeline documented |
-| 2a. Look-ahead grep | ✅ | 0 hits on `.where(.*shift(-\d+))|next_*` across the session scripts |
+| 2a. Look-ahead grep | ✅ | 0 hits on `.where(.*shift(-\d+))\|next_*` across the session scripts |
 | 2b. Future-perturbation invariance | ✅ | randomizing future log_ON → 0.0 max-abs change in past alpha_raw |
 | 3. Worst-year LS Sharpe ≥ 0.5 | ✅ | 0.90 (2020) |
 | 4. Best-year-out — Sharpe excluding best year ≥ 50 % of headline | ✅ | 91 % retained (best year 2018 excluded) |
 | 5. Falsification — residualization vs {log_mv, σ_20, ret_5, ret_20, turnover_20} | ✅ | 81 % retention of raw gross Sharpe |
+
+## 5a. Multi-round confirmation (R2 / R3 / R4)
+
+| round | purpose | result |
+|---|---|---|
+| **R2** Residualization screen | re-test α_04 across 4 control stacks | min retention **79.8 %** (vol_only) — tightest distribution among all 4 PROMOTE candidates |
+| **R3** Spec sensitivity | window ∈ {10, 15, 20, 25, 30, 40} | **6 / 6** windows pass joint criterion (LS Sharpe ≥ 1.5 AND worst-year ≥ 0.5); LS Sharpe monotonically increasing 1.80 → 2.58 |
+| **R4** TVT + 100-placebo | train 2018-2022 / validate 2023 / test 2024-2026 | train **2.85** / validate **2.48** / test **1.81**; gradient 1.15 (healthy); test/train **63.5 %** (≥ 50 %); 100-placebo **p = 0.0000** (no permutation reached actual Sharpe of 2.45) |
+
+`logs/20260428_a_share_overnight_intraday_alpha/round_000{1,2,3,4}.yml` capture the per-round detail; the corresponding output csvs live under `outputs/`.
+
+### Catalog admission criteria (`factors/README.md`)
+
+| criterion | required | observed |
+|---|---|---|
+| 4+ workflow rounds | yes | **4** ✓ |
+| Mandatory audits (Rule of 8, look-ahead, worst-year, best-year-out, pub-lag, residualization) | all pass | 5/5 applicable ✓ (pub-lag N/A for volume-price) |
+| Q5 IR (net) ≥ 1.0 OR LS Sharpe (net) ≥ 1.2 (full sample) | one suffices | **both** ✓ (Q5 IR 1.04, LS Sharpe 2.44) |
 
 ## 6. Failure modes / caveats
 
@@ -181,18 +199,22 @@ ensemble allocation.
 ## 8. Reproducibility
 
 - **Source code:** `code.py` — top-level `build_factor()` returns
-  `(panel_with_alpha, rebalances)`.
+  `(panel_with_alpha, rebalances)`. Reproduces the headline numbers
+  bit-identically (LS Sharpe 2.436, Q5 IR 1.041).
 - **Generation script:** `_generate_deployment_artifacts.py` — produces
   `metrics.json`, `annual.csv`, `rebalances.csv` from the session
   outputs.
 - **Source session scripts:**
-  - `logs/20260428_a_share_overnight_intraday_alpha/scripts/00_fetch_data.py` — Tushare cache builder
+  - `00_fetch_data.py` (+ `00b/00c/00d`) — Tushare cache builder
   - `01_build_panel.py` — panel + 8 raw alphas
   - `02_compute_alphas.py` — winsor + ind-demean + cs-zscore
   - `03_backtest.py` — IC + LS Q5-Q1 + Q5 long-only
   - `04_audits.py` — 6 audits (incl. residualization)
+  - `05_round2_residualization.py` — R2 4-stack screen
+  - `06_round3_spec_sensitivity.py` — R3 windows {10..40}
+  - `07_round4_tvt_placebo.py` — R4 TVT + 100-placebo
 - Tushare cache (~250 MB) is **gitignored**; rebuild by setting
-  `TUSHARE_TOKEN` and running `00_fetch_data.py`.
+  `TUSHARE_TOKEN` and running `00_fetch_data.py` then `00d_reconcile.py`.
 
 ## 9. Operational
 

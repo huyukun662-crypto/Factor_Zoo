@@ -1,0 +1,31 @@
+round: 2
+date: 2026-04-28
+session: 20260428_a_share_overnight_intraday_alpha
+purpose: residualization_screen
+input_candidates: [alpha_01, alpha_02, alpha_03, alpha_04]
+
+control_stacks:
+  full:     [log_mv, sigma_20, ret_5, ret_20, turnover_20]
+  vol_only: [sigma_20]
+  rev_only: [ret_5, ret_20]
+  vol_rev:  [sigma_20, ret_5, ret_20]
+
+results_pct_of_raw_gross_sharpe:
+  alpha_01: {full: 118.9, vol_only: 87.1,  rev_only: 139.1, vol_rev: 121.5, min: 87.1}
+  alpha_02: {full:  55.8, vol_only: 59.5,  rev_only:  69.1, vol_rev:  63.9, min: 55.8}
+  alpha_03: {full: 101.2, vol_only: 74.2,  rev_only: 117.6, vol_rev:  99.6, min: 74.2}
+  alpha_04: {full:  81.2, vol_only: 79.8,  rev_only:  93.5, vol_rev:  82.5, min: 79.8}
+
+decision: alpha_04_most_robust
+rationale: |
+  All four PROMOTE candidates clear the 50% floor on every control stack.
+  α_04 has the tightest distribution (79.8%-93.5%, range 13.7pp); α_03 has
+  a wider spread (74.2%-117.6%, range 43.4pp); α_01 and α_02 are more
+  variable still. Tighter = more robust = lower risk that the alpha is a
+  vehicle for any single classic exposure. Combined with α_04's highest
+  Round-1 LS net Sharpe (2.44), this confirms α_04 as the winner.
+
+audits_pass: true
+files:
+  output: outputs/round2_residualization_screen.csv
+  script: scripts/05_round2_residualization.py

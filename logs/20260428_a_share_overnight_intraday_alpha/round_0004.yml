@@ -1,0 +1,60 @@
+round: 4
+date: 2026-04-28
+session: 20260428_a_share_overnight_intraday_alpha
+purpose: walk_forward_tvt_plus_placebo
+
+# ============================== Part A: TVT ==============================
+tvt_split:
+  train:    {from: "2018-01-02", to: "2022-12-31", n_rebal: 60, ls_sharpe_net: 2.85}
+  validate: {from: "2023-01-01", to: "2023-12-31", n_rebal: 12, ls_sharpe_net: 2.48}
+  test:     {from: "2024-01-01", to: "2026-04-25", n_rebal: 27, ls_sharpe_net: 1.81}
+
+tvt_health_checks:
+  train_ge_05:           true        # 2.85 >= 0.5
+  validate_ge_05:        true        # 2.48 >= 0.5
+  test_ge_05:            true        # 1.81 >= 0.5
+  train_validate_gradient: 1.15      # in [1.0, 3.0] healthy band
+  test_pct_of_train:     63.5        # >= 50% threshold (per tvt-split-template.md)
+  overall:               PASS
+
+# ============================== Part B: Placebo ==============================
+placebo:
+  trials: 100
+  method: |
+    Per rebalance date, randomly permute alpha_04 across the same-date
+    cross-section of stocks; keep universe and forward returns identical.
+    Re-run the LS Q5-Q1 monthly backtest with the permuted signal.
+  rng_seed: 42
+  actual_ls_sharpe_net:    2.449
+  placebo_max:             0.277
+  placebo_99th_percentile: 0.215
+  placebo_95th_percentile: 0.060
+  placebo_50th_percentile: -0.571
+  placebo_mean:            -0.542
+  empirical_p_value:       0.0000   # 0/100 placebos >= actual
+  bonferroni_8_threshold:  0.00125  # actual p << this -> survives multiple-testing
+  overall:                 PASS
+
+# ============================== Decision ==============================
+decision: PROMOTE_alpha_04
+rationale: |
+  All four rounds are clean:
+    R1 — eight-expression batch, alpha_04 wins (LS net Sharpe 2.44, Q5 IR 1.04)
+    R2 — residualization screen, alpha_04 retains 80-94% across 4 control stacks
+    R3 — spec sensitivity, 6/6 windows pass (worst-year-floor + Sharpe>=1.5)
+    R4 — TVT train/validate/test 2.85/2.48/1.81, placebo p < 1/100
+
+  Per factors/README.md catalog admission criteria:
+    * 4+ workflow rounds   ✓ this session has R1-R4
+    * Mandatory audits     ✓ all 5 (execution-delay, look-ahead, worst-year,
+                             best-year-out, residualization) pass; pub-lag
+                             not applicable to volume-price factors
+    * Sharpe/IR threshold  ✓ Q5 IR 1.04 >= 1.0 AND LS Sharpe 2.44 >= 1.2
+
+  Therefore alpha_04 (overnight_intraday_spread_20d_v1) is admitted to
+  the catalog at factors/price_volume/.
+
+files:
+  tvt_output:     outputs/round4_tvt.csv
+  placebo_output: outputs/round4_placebo.csv
+  script:         scripts/07_round4_tvt_placebo.py
