@@ -1,0 +1,261 @@
+{
+  "execution_delay": {
+    "delay": 1,
+    "target_shift_expected": -2,
+    "target_shift_actual_in_panel_builder": -2,
+    "pass": true,
+    "note": "Forward returns built as g['log_CC'].shift(-(1+delay)).rolling(k).sum().shift(-(k-1)). Signal at close T executes at close T+1; first realized return is from T+1 to T+2."
+  },
+  "look_ahead_grep": {
+    "pattern": "\\.where\\([^)]*\\.shift\\(-\\d+\\)|next_[A-Za-z_]",
+    "hits": [],
+    "pass": true
+  },
+  "future_perturbation": {
+    "anchor_date": "20260327",
+    "perturbed_dates_count": 5,
+    "max_abs_diff_in_past_alpha": 0.0,
+    "pass": true,
+    "note": "Perturbing future log_ON bars must not change past alpha_01_raw values."
+  },
+  "worst_year_floor": {
+    "alpha_01": {
+      "worst_year": "2025",
+      "worst_year_sharpe": 0.8660080597710312,
+      "pass": "True"
+    },
+    "alpha_02": {
+      "worst_year": "2025",
+      "worst_year_sharpe": 0.5546365753272349,
+      "pass": "True"
+    },
+    "alpha_03": {
+      "worst_year": "2024",
+      "worst_year_sharpe": 0.7843207464875127,
+      "pass": "True"
+    },
+    "alpha_04": {
+      "worst_year": "2020",
+      "worst_year_sharpe": 0.9024216853749408,
+      "pass": "True"
+    },
+    "alpha_05": {
+      "worst_year": "2024",
+      "worst_year_sharpe": 0.0668682792203992,
+      "pass": "False"
+    },
+    "alpha_06": {
+      "worst_year": "2022",
+      "worst_year_sharpe": -0.6487405521088921,
+      "pass": "False"
+    },
+    "alpha_07": {
+      "worst_year": "2024",
+      "worst_year_sharpe": -0.8249030621682059,
+      "pass": "False"
+    },
+    "alpha_08": {
+      "worst_year": "2024",
+      "worst_year_sharpe": 0.0573468676779585,
+      "pass": "False"
+    }
+  },
+  "best_year_out": {
+    "alpha_01": {
+      "best_year": "2023",
+      "headline_sharpe": 1.8164574519048065,
+      "sharpe_without_best": 1.7060093000665983,
+      "pct_retained": 93.91958497445741,
+      "pass": "True"
+    },
+    "alpha_02": {
+      "best_year": "2020",
+      "headline_sharpe": 1.9802009460646564,
+      "sharpe_without_best": 1.7384535231544915,
+      "pct_retained": 87.79177318389831,
+      "pass": "True"
+    },
+    "alpha_03": {
+      "best_year": "2018",
+      "headline_sharpe": 2.413532578683188,
+      "sharpe_without_best": 2.265765433039413,
+      "pct_retained": 93.87755744633884,
+      "pass": "True"
+    },
+    "alpha_04": {
+      "best_year": "2018",
+      "headline_sharpe": 2.4363374649090392,
+      "sharpe_without_best": 2.218295321916211,
+      "pct_retained": 91.05041291966633,
+      "pass": "True"
+    },
+    "alpha_05": {
+      "best_year": "2023",
+      "headline_sharpe": 1.876364393194946,
+      "sharpe_without_best": 1.6729439390012593,
+      "pct_retained": 89.15879799619752,
+      "pass": "True"
+    },
+    "alpha_06": {
+      "best_year": "2021",
+      "headline_sharpe": 1.0330130600846297,
+      "sharpe_without_best": 0.9765781000141484,
+      "pct_retained": 94.53685899519432,
+      "pass": "True"
+    },
+    "alpha_07": {
+      "best_year": "2025",
+      "headline_sharpe": 0.7288321070483915,
+      "sharpe_without_best": 0.5402696717627795,
+      "pct_retained": 74.12813822798668,
+      "pass": "True"
+    },
+    "alpha_08": {
+      "best_year": "2023",
+      "headline_sharpe": 1.8770817360484693,
+      "sharpe_without_best": 1.672696658498499,
+      "pct_retained": 89.11155153103611,
+      "pass": "True"
+    }
+  },
+  "residualization": [
+    {
+      "alpha": "alpha_01",
+      "raw_gross_sharpe": 1.9832245602212748,
+      "resid_gross_sharpe": 2.3583863125301736,
+      "pct_retained": 118.91675606654653,
+      "pass": "True"
+    },
+    {
+      "alpha": "alpha_02",
+      "raw_gross_sharpe": 2.169936324234734,
+      "resid_gross_sharpe": 1.211198753304286,
+      "pct_retained": 55.81724863430896,
+      "pass": "True"
+    },
+    {
+      "alpha": "alpha_03",
+      "raw_gross_sharpe": 2.4940889303505163,
+      "resid_gross_sharpe": 2.525094334989665,
+      "pct_retained": 101.24315553715205,
+      "pass": "True"
+    },
+    {
+      "alpha": "alpha_04",
+      "raw_gross_sharpe": 2.5752306054615204,
+      "resid_gross_sharpe": 2.0903412649813355,
+      "pct_retained": 81.17103223875031,
+      "pass": "True"
+    },
+    {
+      "alpha": "alpha_05",
+      "raw_gross_sharpe": 2.0642571299158554,
+      "resid_gross_sharpe": 2.4067370582000738,
+      "pct_retained": 116.59095290605481,
+      "pass": "True"
+    },
+    {
+      "alpha": "alpha_06",
+      "raw_gross_sharpe": 1.1894190783006182,
+      "resid_gross_sharpe": -0.11425606469525852,
+      "pct_retained": -9.60603934977248,
+      "pass": "False"
+    },
+    {
+      "alpha": "alpha_07",
+      "raw_gross_sharpe": 0.8968628516651681,
+      "resid_gross_sharpe": 1.16046274304105,
+      "pct_retained": 129.39132676601187,
+      "pass": "True"
+    },
+    {
+      "alpha": "alpha_08",
+      "raw_gross_sharpe": 2.064898573816667,
+      "resid_gross_sharpe": 2.4039899733661545,
+      "pct_retained": 116.42169760051343,
+      "pass": "True"
+    }
+  ],
+  "decision_per_alpha": {
+    "alpha_01": {
+      "execution_delay": true,
+      "look_ahead_grep": true,
+      "future_perturb": true,
+      "worst_year": "True",
+      "best_year_out": "True",
+      "residualization": "True",
+      "all_pass": true,
+      "recommendation": "PROMOTE"
+    },
+    "alpha_02": {
+      "execution_delay": true,
+      "look_ahead_grep": true,
+      "future_perturb": true,
+      "worst_year": "True",
+      "best_year_out": "True",
+      "residualization": "True",
+      "all_pass": true,
+      "recommendation": "PROMOTE"
+    },
+    "alpha_03": {
+      "execution_delay": true,
+      "look_ahead_grep": true,
+      "future_perturb": true,
+      "worst_year": "True",
+      "best_year_out": "True",
+      "residualization": "True",
+      "all_pass": true,
+      "recommendation": "PROMOTE"
+    },
+    "alpha_04": {
+      "execution_delay": true,
+      "look_ahead_grep": true,
+      "future_perturb": true,
+      "worst_year": "True",
+      "best_year_out": "True",
+      "residualization": "True",
+      "all_pass": true,
+      "recommendation": "PROMOTE"
+    },
+    "alpha_05": {
+      "execution_delay": true,
+      "look_ahead_grep": true,
+      "future_perturb": true,
+      "worst_year": "False",
+      "best_year_out": "True",
+      "residualization": "True",
+      "all_pass": false,
+      "recommendation": "RESEARCH-ONLY"
+    },
+    "alpha_06": {
+      "execution_delay": true,
+      "look_ahead_grep": true,
+      "future_perturb": true,
+      "worst_year": "False",
+      "best_year_out": "True",
+      "residualization": "False",
+      "all_pass": false,
+      "recommendation": "RESEARCH-ONLY"
+    },
+    "alpha_07": {
+      "execution_delay": true,
+      "look_ahead_grep": true,
+      "future_perturb": true,
+      "worst_year": "False",
+      "best_year_out": "True",
+      "residualization": "True",
+      "all_pass": false,
+      "recommendation": "RESEARCH-ONLY"
+    },
+    "alpha_08": {
+      "execution_delay": true,
+      "look_ahead_grep": true,
+      "future_perturb": true,
+      "worst_year": "False",
+      "best_year_out": "True",
+      "residualization": "True",
+      "all_pass": false,
+      "recommendation": "RESEARCH-ONLY"
+    }
+  }
+}

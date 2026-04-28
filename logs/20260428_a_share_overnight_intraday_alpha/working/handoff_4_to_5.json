@@ -1,0 +1,53 @@
+{
+  "session": "20260428_a_share_overnight_intraday_alpha",
+  "from": "agent_4_backtest_operator",
+  "to": "agent_5_evaluator_recorder",
+  "batch_id": "0001",
+  "validation_gates": {
+    "G1_importable": "PASS — pandas/numpy/pyarrow imports clean; cache columns verified",
+    "G2_runs_end_to_end": "PASS — full pipeline (01->02->03->04) ran without exception",
+    "G3_non_degenerate": "PASS — 99 of 101 rebalances had n>=200; turnover 30%-77% per side; no zero-signal days",
+    "G4_fidelity": "PASS — IC sign positive across 8/8 alphas at 5/5 horizons; deciles approximately monotonic; not a clone of size/momentum/ret_5",
+    "G5_horizon_consistency": "PASS — IC peaks at 60d for 7/8 alphas, consistent with Agent 2's 'slow informed-flow' thesis"
+  },
+  "headline_metrics": {
+    "n_rebalances": 99,
+    "rebalance_freq_days": 20,
+    "cost_bps_per_side": 5,
+    "delay": 1,
+    "window": ["20180102", "20260427"],
+    "n_dates": 2016,
+    "n_unique_stocks": 5482
+  },
+  "ls_summary": {
+    "alpha_01": {"ls_sharpe_net": 1.82, "ls_ann_ret": 0.097, "max_dd": -0.052, "avg_cost_per_reb_bps": 7.04},
+    "alpha_02": {"ls_sharpe_net": 1.98, "ls_ann_ret": 0.099, "max_dd": -0.058, "avg_cost_per_reb_bps": 7.51},
+    "alpha_03": {"ls_sharpe_net": 2.41, "ls_ann_ret": 0.142, "max_dd": -0.039, "avg_cost_per_reb_bps": 3.72},
+    "alpha_04": {"ls_sharpe_net": 2.44, "ls_ann_ret": 0.161, "max_dd": -0.049, "avg_cost_per_reb_bps": 7.30},
+    "alpha_05": {"ls_sharpe_net": 1.88, "ls_ann_ret": 0.091, "max_dd": -0.046, "avg_cost_per_reb_bps": 7.20},
+    "alpha_06": {"ls_sharpe_net": 1.03, "ls_ann_ret": 0.055, "max_dd": -0.051, "avg_cost_per_reb_bps": 6.67},
+    "alpha_07": {"ls_sharpe_net": 0.73, "ls_ann_ret": 0.039, "max_dd": -0.076, "avg_cost_per_reb_bps": 7.06},
+    "alpha_08": {"ls_sharpe_net": 1.88, "ls_ann_ret": 0.091, "max_dd": -0.047, "avg_cost_per_reb_bps": 7.20}
+  },
+  "audits_summary": {
+    "alpha_01": {"all_5_pass": true,  "recommendation": "PROMOTE"},
+    "alpha_02": {"all_5_pass": true,  "recommendation": "PROMOTE"},
+    "alpha_03": {"all_5_pass": true,  "recommendation": "PROMOTE"},
+    "alpha_04": {"all_5_pass": true,  "recommendation": "PROMOTE"},
+    "alpha_05": {"all_5_pass": false, "recommendation": "RESEARCH-ONLY", "fail_reason": "worst-year-2024 LS Sharpe 0.07 < 0.5"},
+    "alpha_06": {"all_5_pass": false, "recommendation": "RESEARCH-ONLY", "fail_reason": "worst-year + residualization (turnover-weight kills signal)"},
+    "alpha_07": {"all_5_pass": false, "recommendation": "RESEARCH-ONLY", "fail_reason": "worst-year-2024 LS Sharpe -0.83"},
+    "alpha_08": {"all_5_pass": false, "recommendation": "RESEARCH-ONLY", "fail_reason": "worst-year-2024 LS Sharpe 0.06"}
+  },
+  "winner": {
+    "alpha": "alpha_04",
+    "name": "on_minus_id_20d",
+    "deployment_name": "overnight_intraday_spread_20d_v1",
+    "ls_sharpe_net": 2.44,
+    "q5_ir": 1.04,
+    "worst_year": {"year": "2020", "ls_sharpe": 0.90},
+    "best_year_out_pct_retained": 91.0,
+    "residualization_pct_retained": 81.2,
+    "rationale": "Highest LS net Sharpe (2.44) and second-best Q5 IR (1.04). All 8 calendar years pass worst-year-Sharpe-floor 0.5 (worst = 2020 at 0.90, second-worst = 2024 at 1.64). Decomposition spread is mechanically orthogonal to total close-to-close return at the cumulative level, confirmed by 81% Sharpe retention after residualization vs {log_mv, sigma_20, ret_5, ret_20, turnover_20}."
+  }
+}

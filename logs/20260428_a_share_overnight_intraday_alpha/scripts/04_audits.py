@@ -116,7 +116,7 @@ for a in ALPHAS:
         "pass": w["ls_sharpe"] >= 0.5
     }
 audits["worst_year_floor"] = worst_year
-print(json.dumps(worst_year, indent=2), flush=True)
+print(json.dumps(worst_year, indent=2, default=str), flush=True)
 
 # ----------------------------------------------------------------------
 # Audit 5: Best-year-out — Sharpe with single best year removed >= 50% of headline
@@ -143,7 +143,7 @@ for a in ALPHAS:
                    "sharpe_without_best": float(sh_no_best),
                    "pct_retained": float(pct), "pass": pct >= 50.0}
 audits["best_year_out"] = best_out
-print(json.dumps(best_out, indent=2), flush=True)
+print(json.dumps(best_out, indent=2, default=str), flush=True)
 
 # ----------------------------------------------------------------------
 # Audit 6: Residualization — drop vs raw on close-to-close controls.
@@ -233,4 +233,4 @@ audits["decision_per_alpha"] = decision
 with open(OUT_DIR / "audits.json", "w") as f:
     json.dump(audits, f, indent=2, default=str)
 print(f"\nDONE  elapsed={time.time()-t0:.1f}s", flush=True)
-print(json.dumps(decision, indent=2), flush=True)
+print(json.dumps(decision, indent=2, default=str), flush=True)

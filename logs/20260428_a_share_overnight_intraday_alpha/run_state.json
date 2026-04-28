@@ -1,0 +1,12 @@
+{
+  "session": "20260428_a_share_overnight_intraday_alpha",
+  "started": "2026-04-28",
+  "branch": "claude/build-price-volume-factor-w8QPW",
+  "stage": "complete",
+  "current_round": 1,
+  "agents_completed": ["1", "2", "3", "4", "5"],
+  "decision": "PROMOTE",
+  "winner_alpha": "alpha_04",
+  "winner_deployment_name": "overnight_intraday_spread_20d_v1",
+  "deployment_target_dir": "factors/price_volume/overnight_intraday_spread_20d_v1"
+}
