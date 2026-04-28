@@ -1,0 +1,42 @@
+{
+  "session": "20260428_a_share_overnight_intraday_alpha",
+  "from": "agent_3_alpha_builder",
+  "to": "agent_4_backtest_operator",
+  "batch_id": "0001",
+  "mechanism": "overnight_intraday_decomposition",
+  "rule_of_8_compliant": true,
+  "expressions": [
+    {"id": "alpha_01", "name": "on_cum_20d",          "window_d": 20, "form": "sum(log_ON, 20)",                                       "expected_dir": "+", "primary_axis": "canonical"},
+    {"id": "alpha_02", "name": "on_cum_5d",           "window_d":  5, "form": "sum(log_ON, 5)",                                        "expected_dir": "+", "primary_axis": "short_horizon"},
+    {"id": "alpha_03", "name": "on_cum_60d",          "window_d": 60, "form": "sum(log_ON, 60)",                                       "expected_dir": "+", "primary_axis": "long_horizon"},
+    {"id": "alpha_04", "name": "on_minus_id_20d",     "window_d": 20, "form": "sum(log_ON, 20) - sum(log_ID, 20)",                     "expected_dir": "+", "primary_axis": "decomposition_spread"},
+    {"id": "alpha_05", "name": "on_cum_20d_volsc",    "window_d": 20, "form": "sum(log_ON, 20) / std(log_ON, 20)",                     "expected_dir": "+", "primary_axis": "vol_scaled"},
+    {"id": "alpha_06", "name": "on_cum_20d_x_tovz",   "window_d": 20, "form": "sum(log_ON, 20) * cs_zscore(mean(turnover, 20))",       "expected_dir": "+", "primary_axis": "attention"},
+    {"id": "alpha_07", "name": "on_uppct_20d",        "window_d": 20, "form": "mean(1[log_ON > 0], 20)",                               "expected_dir": "+", "primary_axis": "frequency"},
+    {"id": "alpha_08", "name": "on_sharpe_20d",       "window_d": 20, "form": "mean(log_ON, 20) / std(log_ON, 20)",                    "expected_dir": "+", "primary_axis": "risk_adjusted"}
+  ],
+  "per_date_pipeline": [
+    "drop rows where vol == 0",
+    "winsorize raw alpha at [1%, 99%] per trade_date",
+    "subtract industry mean per trade_date (CITIC L1)",
+    "cross-sectional zscore per trade_date"
+  ],
+  "delay": 1,
+  "target_shift_invariant": -2,
+  "rebalance_days_primary": 20,
+  "rebalance_days_robustness": 5,
+  "ic_horizons_d": [1, 5, 10, 20, 60],
+  "cost_bps_per_side": 5,
+  "validation_gates_required": ["G1", "G2", "G3", "G4", "G5"],
+  "tvt_split": {
+    "train":    ["2018-01-02", "2022-12-31"],
+    "validate": ["2023-01-01", "2023-12-31"],
+    "test":     ["2024-01-01", "2026-04-28"]
+  },
+  "expected_pairwise_rankcorr": {
+    "alpha_05_vs_alpha_08": 0.95,
+    "alpha_01_vs_alpha_06": 0.85,
+    "alpha_04_vs_alpha_07": 0.30
+  },
+  "deviations_allowed": "none — Agent 4 must NOT modify expressions; on G1-G2 failure, return structured error to Agent 3 (5-round budget)"
+}

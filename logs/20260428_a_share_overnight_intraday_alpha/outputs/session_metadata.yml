@@ -1,0 +1,154 @@
+session: 20260428_a_share_overnight_intraday_alpha
+agent: 2_hypothesis_architect
+date: 2026-04-28
+branch: claude/build-price-volume-factor-w8QPW
+
+# ---------------------------------------------------------------------------
+# Primary mechanism (single, dominant) — passed from Agent 1
+# ---------------------------------------------------------------------------
+mechanism:
+  name: overnight_intraday_decomposition
+  primitive: |
+    ret_overnight_t = (open_t * adj_factor_t) / (close_{t-1} * adj_factor_{t-1}) - 1
+    ret_intraday_t  = close_t / open_t - 1
+    ret_close_t     = (close_t * adj_factor_t) / (close_{t-1} * adj_factor_{t-1}) - 1
+    # close-to-close decomposes as ret_close ≈ ret_overnight + ret_intraday (log)
+  thesis: |
+    Under A-share T+1 settlement and a single open auction, overnight returns
+    are dominated by *informed flow* (regulatory news, foreign markets, fund
+    flows) while intraday returns are dominated by retail noise (>80% of
+    intraday turnover). The cumulative overnight return therefore predicts
+    forward returns positively, and the overnight-minus-intraday spread
+    isolates the informed-flow signal from short-term reversal contamination.
+  expected_ic_sign: +1
+  anchor_papers:
+    - Lou-Polk-Skouras 2019 JFE
+    - Aboody-Even-Tov-Lehavy-Trueman 2018 RFS
+    - Berkman-Koch-Tuttle-Zhang 2012 JFQA
+
+# ---------------------------------------------------------------------------
+# Hypothesis — testable, falsifiable
+# ---------------------------------------------------------------------------
+hypothesis:
+  null_h0: "Cumulative overnight return has zero rank-IC vs forward 5/20/60-d returns
+            after industry neutralization and cross-sectional zscore."
+  alt_h1: "Cumulative 20-d overnight return earns positive rank-IC at horizons
+           {5, 10, 20} with t-stat > 3, and the LS Q5-Q1 portfolio (industry-neutral,
+           equal-weight) earns net Sharpe > 0.7 over 2018-2025 after 5 bps/side cost
+           with monthly rebalance."
+  failure_conditions_for_promote:
+    - any of the 5 mandatory audits in CLAUDE.md fails
+    - test-period (2024-2026) Sharpe < train Sharpe by > 50%
+    - residualization vs {log_mv, sigma_20, ret_5, ret_20, turnover_20} drops LS
+      Sharpe below 50% of raw  ->  factor is a vehicle for a classic factor
+    - worst calendar year LS Sharpe < 0.5 (active-year basis)
+
+# ---------------------------------------------------------------------------
+# Universe + sample
+# ---------------------------------------------------------------------------
+universe:
+  exchanges: [SSE, SZSE]                 # 主板 + 创业板 + 科创板; exclude 北交所
+  list_status: ["L", "D"]                # delisted retained for survivorship-clean panel
+  exclusions:
+    - st_or_xst_in_name                  # filter on `name` containing "ST" / "*ST"
+    - suspended_today                    # vol == 0 for that bar
+    - listed_less_than_252d
+  expected_n_per_date: 4500              # rough average over the 8-year window
+
+window:
+  start: "2018-01-02"
+  end:   "2026-04-28"
+  rebalance_frequency_days: 20           # monthly
+  robustness_frequency_days: 5           # weekly variant for sensitivity
+
+tvt_split:
+  train:    ["2018-01-02", "2022-12-31"]
+  validate: ["2023-01-01", "2023-12-31"]
+  test:     ["2024-01-01", "2026-04-28"]
+
+# ---------------------------------------------------------------------------
+# Construction protocol — load-bearing for Agent 3
+# ---------------------------------------------------------------------------
+construction:
+  delay: 1                                # signal at close T, execute at close T+1
+  target_shift_invariant: -2              # -(1 + delay), enforced
+  log_return_winsor: [-0.105, 0.105]      # A-share daily price-limit clipping
+  drop_zero_volume_rows: true             # vol == 0 rows excluded from factor inputs
+  per_date_pipeline:
+    - winsorize raw alpha at [1%, 99%]
+    - subtract industry mean (CITIC L1 via stock_basic.industry)
+    - cross-sectional zscore (mean 0, std 1) per trade_date
+  no_time_series_fitted_models: true      # all CS regressions are per-date
+
+# ---------------------------------------------------------------------------
+# Evaluation contract — what Agent 5 will require
+# ---------------------------------------------------------------------------
+evaluation:
+  ic_horizons_d: [1, 5, 10, 20, 60]
+  ls_form: "Q5 - Q1 equal-weight, dollar-neutral"
+  long_only_form: "Q5 equal-weight, excess vs equal-weight universe"
+  cost_bps_per_side: 5
+  ic_threshold_pass: 3.0                  # |t-stat| of rank-IC mean
+  ls_sharpe_threshold_pass: 0.7
+  worst_year_sharpe_floor: 0.5
+  best_year_out_min_pct_of_headline: 50
+  residualization_audit:
+    controls: [log_mv, sigma_20, ret_5, ret_20, turnover_20]
+    min_residual_sharpe_pct_of_raw: 50
+
+# ---------------------------------------------------------------------------
+# Audits Agent 5 must run before any PROMOTE
+# ---------------------------------------------------------------------------
+mandatory_audits:
+  - execution_delay:           # see references/execution-delay-audit.md
+      check: "target_shift == -(1+delay) == -2"
+      future_perturbation: true
+  - look_ahead_grep:
+      pattern: '\.where\(.*shift\(-\d+\)\)|next_'
+      must_be_empty: true
+  - worst_year_sharpe_floor: 0.5
+  - best_year_out:
+      threshold_pct_of_headline: 50
+  - falsification_first:
+      question: "If this Sharpe is wrong by 50%, what is the most likely single cause?"
+      mandatory_test: residualization_drop_below_50pct
+
+# ---------------------------------------------------------------------------
+# Pitfall checklist — Agent 4 must answer each before submitting to Agent 5
+# ---------------------------------------------------------------------------
+pitfall_checklist:
+  - id: lookahead_shift_neg_k
+    pre_submit_test: shuffle future bars and confirm factor unchanged
+  - id: mislabeled_delay
+    pre_submit_test: physical timeline + future-perturbation invariance
+  - id: survivorship
+    pre_submit_test: panel includes delisted (`list_status='D'`) firms
+  - id: industry_noise
+    pre_submit_test: report IC and LS both with and without industry-demean; demean must improve
+  - id: limit_truncation
+    pre_submit_test: count rows where `pct_chg in {10.0, -10.0}`; verify factor not dominated by them
+  - id: adj_factor_overnight
+    pre_submit_test: confirm `(open*adj_t)/(close_{t-1}*adj_{t-1})` not `open/close_{t-1}`
+  - id: stale_zero_volume
+    pre_submit_test: drop rows with `vol == 0`; confirm panel size unchanged in liquid universe
+  - id: ic_dispersion_trap
+    pre_submit_test: compare LS Sharpe vs IC IR on same dates; flag mismatch > 30%
+  - id: bull_market_short_leg
+    pre_submit_test: report Q5 long-only excess separately from LS for every year
+
+# ---------------------------------------------------------------------------
+# Cost model
+# ---------------------------------------------------------------------------
+cost:
+  bps_per_side: 5
+  per_rebalance: cost = (5 / 1e4) * (turnover_q5 + turnover_q1)         # LS
+  long_only_cost: cost = (5 / 1e4) * turnover_q5                         # Q5
+
+# ---------------------------------------------------------------------------
+# Deliverables Agent 3 must produce
+# ---------------------------------------------------------------------------
+agent_3_deliverable:
+  expressions_count: 8                    # Rule of 8, hard contract
+  must_share_mechanism: overnight_intraday_decomposition
+  must_differ_along: [window_length, normalization, attention_weighting, frequency_vs_magnitude]
+  per_expression_metadata: [name, formula, window, expected_turnover_direction, economic_explanation]
