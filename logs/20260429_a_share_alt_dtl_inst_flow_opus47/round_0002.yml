@@ -1,0 +1,39 @@
+round: 2
+session_id: 20260429_a_share_alt_dtl_inst_flow_opus47
+expressions_count: 8
+expressions_path: outputs/expressions_batch_0002.md
+agent_3_status: COMPLETE
+agent_4_status: COMPLETE
+agent_5_status: COMPLETE
+mechanism_directions:
+  A_post_dtl_window: [alpha_09, alpha_10, alpha_11, alpha_12]
+  B_northbound_overlay: [alpha_13, alpha_14, alpha_15]
+  ensemble: [alpha_16]
+headline_h10:
+  best_raw_ic_t: {alpha: alpha_10, t: 3.87, ir: 0.145}
+  best_per_year_stability: {alpha: alpha_09, ls_2023: 2.36, ls_2024: 2.34, ls_2025: 0.70}
+  best_residualized_survival: {alpha: alpha_09, ratio: 0.60}
+audit_pass_per_alpha:
+  alpha_09: {worst_year_ls: PASS, worst_year_q5e: FAIL, best_year_out: PASS, residualized: PASS}
+  alpha_10: {worst_year_ls: FAIL, worst_year_q5e: FAIL, best_year_out: FAIL, residualized: FAIL}
+  alpha_11: {worst_year_ls: PASS, worst_year_q5e: FAIL, best_year_out: PASS, residualized: FAIL}
+  alpha_12: {worst_year_ls: FAIL, worst_year_q5e: FAIL, best_year_out: PASS, residualized: PASS}
+  alpha_13: {worst_year_ls: FAIL, worst_year_q5e: FAIL, best_year_out: PASS, residualized: PASS}
+  alpha_14: {worst_year_ls: FAIL, worst_year_q5e: FAIL, best_year_out: PASS, residualized: PASS}
+  alpha_15: {worst_year_ls: FAIL, worst_year_q5e: FAIL, best_year_out: PASS, residualized: PASS}
+  alpha_16: {worst_year_ls: PASS, worst_year_q5e: FAIL, best_year_out: PASS, residualized: FAIL}
+decision_per_alpha:  # all RESEARCH_ONLY (4-of-4 rule)
+  promote_candidates: []
+  near_miss_candidates: [alpha_09]   # 3 of 4 floors, only fails long-only Q5e
+finding: |
+  Institutional information persists 5-10d AFTER the DTL trigger.
+  R1 alpha_05 collapsed under residualization because the trigger-day
+  window was contaminated by the limit-up regime. Skipping 2 days
+  (alpha_09) recovers a stable signal with all three per-year LS
+  Sharpes positive and 60% residual survival. Skipping 7 days
+  (alpha_10) over-arbitrages and dies post-2023.
+next_round_recommendation:
+  - cap_residualize_or_top_half_cap_mask_for_q5_long_leg
+  - extend_window_to_2018_2025_for_robust_q5e_audit
+  - cost_test_alpha_09_at_30bp_daily_and_monthly
+  - falsification_shuffle_inst_seat_tag
