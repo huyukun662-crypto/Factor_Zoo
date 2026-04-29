@@ -1,2 +1,4 @@
 fetch.log
 inputs/cache/
+outputs/panel.parquet
+outputs/factors_panel.parquet

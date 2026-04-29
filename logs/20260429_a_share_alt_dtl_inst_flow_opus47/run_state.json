@@ -3,10 +3,13 @@
   "topic": "a_share_alternative_data_dragon_tiger_list_institutional_flow",
   "model": "claude-opus-4-7",
   "current_round": 1,
-  "stage": "agent_4_blocked_on_data_access",
-  "agents_complete": ["1_research_librarian", "2_hypothesis_architect", "3_alpha_builder"],
-  "agents_pending": ["4_backtest_operator", "5_evaluator_recorder"],
-  "decision_so_far": "CONTINUE_AT_NEXT_RUNTIME_WITH_TUSHARE",
+  "stage": "round_1_complete_research_only",
+  "agents_complete": ["1_research_librarian", "2_hypothesis_architect", "3_alpha_builder", "4_backtest_operator", "5_evaluator_recorder"],
+  "decision": "RESEARCH_ONLY_ALL_8",
   "promote_eligible": false,
-  "reason_not_promote_eligible": "no audit floors verified yet (worst-year, best-year-out, residualization, falsification) — research-only by default per SKILL.md mandatory audit rules"
+  "best_raw_signal_alpha": "alpha_05",
+  "best_raw_signal_ic_t": 3.14,
+  "falsification_outcome": "CONFIRMED_classic_factor_vehicle",
+  "alpha_05_residual_to_raw_ls_ratio": -0.50,
+  "next_round_recommendation": "switch_mechanism_not_tune_window"
 }

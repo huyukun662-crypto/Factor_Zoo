@@ -1,0 +1,147 @@
+{
+  "lookahead_grep_findings": [],
+  "delay_invariant": {
+    "future_perturbation": "design-invariant (factors use lag>=1, no shift(-k))",
+    "future_cutoff": "20250101"
+  },
+  "worst_year_floor": {
+    "alpha_01": {
+      "worst_year_ls": null,
+      "worst_year_q5e": null
+    },
+    "alpha_02": {
+      "worst_year_ls": -2.608379853420145,
+      "worst_year_q5e": -7.2555353588449885,
+      "n_years_pos_ls": 2,
+      "n_years_total": 3
+    },
+    "alpha_03": {
+      "worst_year_ls": -0.1802463356838399,
+      "worst_year_q5e": -0.0596163090306354,
+      "n_years_pos_ls": 1,
+      "n_years_total": 3
+    },
+    "alpha_04": {
+      "worst_year_ls": -4.588681880003112,
+      "worst_year_q5e": -6.266935682413893,
+      "n_years_pos_ls": 0,
+      "n_years_total": 3
+    },
+    "alpha_05": {
+      "worst_year_ls": -1.674020184547112,
+      "worst_year_q5e": -4.991045202899286,
+      "n_years_pos_ls": 2,
+      "n_years_total": 3
+    },
+    "alpha_06": {
+      "worst_year_ls": -9.500449938432338,
+      "worst_year_q5e": -6.8569075968062005,
+      "n_years_pos_ls": 0,
+      "n_years_total": 3
+    },
+    "alpha_07": {
+      "worst_year_ls": 0.1038776445126918,
+      "worst_year_q5e": -3.363081766778325,
+      "n_years_pos_ls": 3,
+      "n_years_total": 3
+    },
+    "alpha_08": {
+      "worst_year_ls": -0.6438371813311193,
+      "worst_year_q5e": -2.172321850487792,
+      "n_years_pos_ls": 1,
+      "n_years_total": 3
+    }
+  },
+  "best_year_out": {
+    "alpha_01": {
+      "headline_sr": -0.3259274699403153,
+      "worst_dropping_year": 2024,
+      "best_year_out_sr": -0.9005680590200877,
+      "ratio_to_headline": 2.7630934550714676
+    },
+    "alpha_02": {
+      "headline_sr": 0.44782626660551195,
+      "worst_dropping_year": 2024,
+      "best_year_out_sr": -0.18963507777233596,
+      "ratio_to_headline": -0.4234567999098289
+    },
+    "alpha_03": {
+      "headline_sr": -0.05125321632799206,
+      "worst_dropping_year": 2023,
+      "best_year_out_sr": -0.36294129827076904,
+      "ratio_to_headline": 7.081337021820186
+    },
+    "alpha_04": {
+      "headline_sr": -0.5753337673339587,
+      "worst_dropping_year": 2024,
+      "best_year_out_sr": -1.0218984193600467,
+      "ratio_to_headline": 1.7761836300612523
+    },
+    "alpha_05": {
+      "headline_sr": 1.5824900887273565,
+      "worst_dropping_year": 2023,
+      "best_year_out_sr": -0.1096823573274148,
+      "ratio_to_headline": -0.06930998058611647
+    },
+    "alpha_06": {
+      "headline_sr": -0.7702992593727549,
+      "worst_dropping_year": 2023,
+      "best_year_out_sr": -0.927279409221707,
+      "ratio_to_headline": 1.2037911213581838
+    },
+    "alpha_07": {
+      "headline_sr": 0.8485118390986075,
+      "worst_dropping_year": 2023,
+      "best_year_out_sr": 0.07862673526064236,
+      "ratio_to_headline": 0.09266427601548759
+    },
+    "alpha_08": {
+      "headline_sr": 1.1141888795602397,
+      "worst_dropping_year": 2023,
+      "best_year_out_sr": 0.025171705089215245,
+      "ratio_to_headline": 0.02259195505447002
+    }
+  },
+  "residualization": {
+    "alpha_01": {
+      "raw_ls_sr": -0.33386629452920563,
+      "resid_ls_sr": 0.34137263912372084,
+      "ratio_resid_to_raw": -1.022483085946427
+    },
+    "alpha_02": {
+      "raw_ls_sr": -0.3110074106879512,
+      "resid_ls_sr": -0.8347681735286437,
+      "ratio_resid_to_raw": 2.684078079304056
+    },
+    "alpha_03": {
+      "raw_ls_sr": -0.0996576714471778,
+      "resid_ls_sr": 0.6919894636480355,
+      "ratio_resid_to_raw": -6.943664783647039
+    },
+    "alpha_04": {
+      "raw_ls_sr": -0.3313102474463396,
+      "resid_ls_sr": 0.7470100249393391,
+      "ratio_resid_to_raw": -2.254714518180812
+    },
+    "alpha_05": {
+      "raw_ls_sr": 0.967010780159773,
+      "resid_ls_sr": -0.4832134649971559,
+      "ratio_resid_to_raw": -0.4996981159996144
+    },
+    "alpha_06": {
+      "raw_ls_sr": -0.6810566960987274,
+      "resid_ls_sr": -0.3721332676769908,
+      "ratio_resid_to_raw": 0.546405710139359
+    },
+    "alpha_07": {
+      "raw_ls_sr": 0.6526191903082066,
+      "resid_ls_sr": 0.4692922470911074,
+      "ratio_resid_to_raw": 0.719090480421636
+    },
+    "alpha_08": {
+      "raw_ls_sr": 0.8253996013414817,
+      "resid_ls_sr": 0.36188200548378735,
+      "ratio_resid_to_raw": 0.43843249366202525
+    }
+  }
+}
