@@ -1,0 +1,19 @@
+{
+  "from_agent": "2_hypothesis_architect",
+  "to_agent": "3_alpha_builder",
+  "session_id": "20260429_a_share_alt_dtl_inst_flow_opus47",
+  "session_metadata_path": "outputs/session_metadata.yml",
+  "primary_horizon_days": 10,
+  "execution_delay_days": 1,
+  "rebalance_default_for_decision": "monthly",
+  "neutralization": ["industry_demean", "cap_residualize"],
+  "budget_8_split": {"M3": 4, "M4": 2, "M2": 2},
+  "must_pass_gates": ["G1_importable", "G2_runs_e2e", "G3_non_degenerate", "G4_fidelity"],
+  "audit_floors": {
+    "worst_year_LS_sharpe_min": 0.5,
+    "worst_year_Q5_excess_sharpe_min": 0.4,
+    "best_year_out_LS_sharpe_pct_of_headline_min": 0.50,
+    "residualization_LS_sharpe_pct_of_raw_min": 0.50,
+    "q5_size_min_pct_days": 0.95
+  }
+}

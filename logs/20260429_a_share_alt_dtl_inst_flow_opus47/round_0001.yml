@@ -1,0 +1,51 @@
+round: 1
+session_id: 20260429_a_share_alt_dtl_inst_flow_opus47
+mechanism_family: a_share_dtl_institutional_flow
+expressions_count: 8
+expressions_path: outputs/expressions_batch_0001.md
+agent_3_status: COMPLETE
+agent_4_status: AWAITING_BACKTEST_EXECUTION
+agent_5_status: BLOCKED
+blockers:
+  - tushare_pro_token_required_for_top_list_top_inst
+  - python_env_missing_pandas_numpy_pyarrow_tushare
+gates_pre_submission:
+  G1_importable: PASS_BY_DESIGN     # syntax-clean, column names declared
+  G2_runs_e2e:    UNVERIFIED        # requires actual execution
+  G3_non_degenerate: UNVERIFIED
+  G4_fidelity:    UNVERIFIED
+  G5_batch_horizon_consistency: UNVERIFIED
+audit_pre_submission:
+  execution_delay_audit:
+    physical_timeline: |
+      DTL published 17:00 t+0 -> factor uses lag(1) -> trade at t+1 close ->
+      forward return measured t+1 close to t+1+h close. Implies
+      target_shift == -(1+delay) with delay=1, so shift = -(1+h).
+    invariant_string: "target_shift == -(1+delay) for h in {1,5,10,20}"
+    future_perturbation_test: PENDING_EXECUTION
+  lookahead_audit:
+    grep_factor_for_shift_minus_k: PASS  # no factor uses shift(-k)
+    where_mask_review: PASS  # alpha_04 mask uses past-only inputs
+  worst_year_floor: PENDING
+  best_year_out: PENDING
+  falsification_first_question: |
+    "If a positive Q5-excess Sharpe shows up, the most likely single
+     non-causal explanation is that DTL trigger days are ±10% limit-up
+     days clustered in momentum regimes; the factor would then be a
+     vehicle for the momentum factor with extra survivorship from the
+     trigger filter."
+    Test: residualize each alpha against {size, 20d-mom, 5d-rev, MAX10}
+    and re-run the LS backtest. Floor: residualized LS Sharpe ≥ 50% of raw.
+decision: CONTINUE_AT_NEXT_RUNTIME
+next_action_for_user: |
+  1. export TUSHARE_TOKEN=...
+  2. python -m pip install tushare pandas pyarrow scipy statsmodels
+  3. cd logs/20260429_a_share_alt_dtl_inst_flow_opus47
+  4. python scripts/00_fetch_data.py            # ~10-20 min, cacheable
+  5. python scripts/00b_fetch_ohlcv.py          # full OHLCV per stock
+  6. python scripts/01_build_panel.py
+  7. python scripts/02_compute_alphas.py
+  8. python scripts/03_backtest.py
+  9. python scripts/04_audits.py
+  Then re-engage Agent 5 to read outputs/{ic_table,ls_summary,q5_excess,
+  audits}.csv and produce alpha_ranking.md + final_summary.md.
