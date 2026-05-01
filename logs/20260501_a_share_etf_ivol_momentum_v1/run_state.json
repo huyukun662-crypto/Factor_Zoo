@@ -1,0 +1,53 @@
+{
+  "session_id": "20260501_a_share_etf_ivol_momentum_v1",
+  "current_round": 1,
+  "current_stage": "evaluation_complete",
+  "status": "research_only_standalone_promote_candidate_ensemble",
+  "selected_mechanism": "inverted_ivol_long_high_vol_etf_with_regime_gate",
+  "best_alpha_id_standalone": "m1_ivol_LS_no_gate_RESEARCH_ONLY",
+  "best_alpha_id_deployable": "ensemble_5050_m1_x_v7_gold_PROMOTE_CANDIDATE",
+  "best_alpha_metrics_standalone": {
+    "ls_sharpe_gross": 0.66,
+    "ls_sharpe_net_5bps": 0.63,
+    "ann_turnover_pct": 431,
+    "worst_year_sharpe": 0.04,
+    "worst_year_pass": false,
+    "best_year_out_avg": 0.65,
+    "v7_gold_corr_weekly": 0.053,
+    "n_years_positive_of_7": 7
+  },
+  "best_alpha_metrics_ensemble_v7": {
+    "weights": "0.5 * inverted_ivol_m1 + 0.5 * v7_gold",
+    "sharpe_weekly_full_window": 2.18,
+    "v7_gold_alone_sharpe_weekly": 1.73,
+    "lift_pct": 26,
+    "worst_year_sharpe": 0.83,
+    "worst_year_year": 2022,
+    "n_years_positive_of_7": 7,
+    "all_floors_pass": true
+  },
+  "best_alpha_metrics_ensemble_v25_dominant": {
+    "weights": "0.5 * inverted_ivol_m1 + 0.5 * v25",
+    "sharpe_weekly_full_window": 2.30,
+    "ann_ret_full": 0.195,
+    "max_dd_full": -0.089,
+    "v25_alone_sharpe_weekly": 1.87,
+    "v25_v7_corr_weekly": 0.977,
+    "lift_pct_over_v25_alone": 23,
+    "lift_pct_over_v7_ensemble": 5.5,
+    "worst_year_sharpe": 0.82,
+    "worst_year_year": 2022,
+    "n_years_positive_of_7": 7,
+    "weekly_corr_ivol_v25": 0.053,
+    "all_floors_pass": true,
+    "alternative_weights": {
+      "0.4_0.6_sharpe": 2.27,
+      "0.3_0.7_max_calmar_2.96": 2.19,
+      "0.2_0.8_max_calmar_3.15_least_disruptive": 2.09
+    }
+  },
+  "continue_research": true,
+  "next_action": "paper_trade_verify_5050_m1_v25_2024_2026_then_promote",
+  "branch": "claude/build-etf-factor-model-O6yXK",
+  "parent_session": "20260501_a_share_etf_ivol_reversal_v1"
+}

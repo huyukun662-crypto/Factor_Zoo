@@ -1,0 +1,8 @@
+{
+  "delay": 1,
+  "primary_k": 1,
+  "target_shift_used": -2,
+  "invariant": "target_shift == -(1 + delay) for k=1; here -(1+1)=-2",
+  "physical_timeline_prose": "Signal observed at close(t) using leader return at t-1 (already past). Position established at close(t+1), held to close(t+1+k-1). For k=1, fwd-target uses cum.shift(-(1+1))=cum.shift(-2) i.e. one-period return from close(t+1) to close(t+2).",
+  "pass": true
+}

@@ -1,0 +1,58 @@
+{
+  "f1_ivol_resid_20d": {
+    "worst_year_sharpe": -1.502649464953562,
+    "best_year_out_avg_sharpe": -0.8775214095061302,
+    "headline_sharpe_full": -0.6097473268031933,
+    "wy_pass": false,
+    "byo_pass": false
+  },
+  "f2_total_vol_20d": {
+    "worst_year_sharpe": -1.5919445992558634,
+    "best_year_out_avg_sharpe": -0.9101506440971405,
+    "headline_sharpe_full": -0.6736177516424551,
+    "wy_pass": false,
+    "byo_pass": false
+  },
+  "f3_ivol_resid_10d": {
+    "worst_year_sharpe": -1.9675671114977962,
+    "best_year_out_avg_sharpe": -0.6831049226002387,
+    "headline_sharpe_full": -0.5884549822862823,
+    "wy_pass": false,
+    "byo_pass": false
+  },
+  "f4_ivol_resid_40d": {
+    "worst_year_sharpe": -1.8334061721013417,
+    "best_year_out_avg_sharpe": -0.9878270012699458,
+    "headline_sharpe_full": -0.6641648460637738,
+    "wy_pass": false,
+    "byo_pass": false
+  },
+  "f5_ivol_resid_amp_20d": {
+    "worst_year_sharpe": -1.4866397226068118,
+    "best_year_out_avg_sharpe": -0.8335566111637899,
+    "headline_sharpe_full": -0.668384812859633,
+    "wy_pass": false,
+    "byo_pass": false
+  },
+  "f6_ivol_lag5_20d": {
+    "worst_year_sharpe": -1.401582313050975,
+    "best_year_out_avg_sharpe": -0.9147244751889305,
+    "headline_sharpe_full": -0.6701020319002636,
+    "wy_pass": false,
+    "byo_pass": false
+  },
+  "f7_vol_of_vol_20m40": {
+    "worst_year_sharpe": -1.962177461536205,
+    "best_year_out_avg_sharpe": -0.233020847928743,
+    "headline_sharpe_full": -0.2884807187310486,
+    "wy_pass": false,
+    "byo_pass": false
+  },
+  "f8_kitchen_sink_rank": {
+    "worst_year_sharpe": -1.255841502326225,
+    "best_year_out_avg_sharpe": -0.7343599298546134,
+    "headline_sharpe_full": -0.6466533646481236,
+    "wy_pass": false,
+    "byo_pass": false
+  }
+}

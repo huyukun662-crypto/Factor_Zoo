@@ -1,0 +1,80 @@
+session_id: 20260501_a_share_etf_ivol_momentum_v1
+generated_by: agent_2_hypothesis_architect
+generated_at: 2026-05-01
+parent_session: 20260501_a_share_etf_ivol_reversal_v1
+
+mechanism:
+  family: inverted_idiosyncratic_volatility_momentum
+  primary: long_high_ivol_with_regime_gate
+  expected_sign: positive_long_only_excess
+  thesis: |
+    A-share thematic ETFs are narrative buckets. High-IVOL ETFs
+    receive the marginal retail bid (lottery-preference channel
+    manifesting as narrative momentum at the basket level), so a
+    long-only top-N portfolio of high-IVOL ETFs outperforms the
+    EW universe — provided it is gated to risk-on regimes by an
+    MA50 broad-market filter.
+
+universe:
+  source: /home/user/Factor_Zoo/logs/_shared_cache/etf_daily.parquet
+  size: 30
+  benchmark_for_beta: 510300.SS
+  benchmark_for_regime_gate: 510300.SS
+
+window:
+  start: 2019-01-02
+  end:   2026-04-30
+  train:    [2019-01-02, 2021-12-31]
+  validate: [2022-01-01, 2022-12-31]
+  test:     [2023-01-01, 2026-04-30]
+
+bar_grain: daily
+execution:
+  delay_days: 1
+  cost_bps_per_side: 5
+  invariant: "target_shift == -(1 + delay) for k=1; -(delay+k) generally"
+
+primary_horizon_days: 20
+rebalance_days: 21          # ~ monthly
+
+beta_window_days: 60
+ivol_window_days: 20
+regime_gate:
+  ma_window_days: 50        # primary
+  alt_ma_window_days: 200   # secondary in m6
+  rule: "long_only_when_510300_close_t > MA(close_510300, ma_window) at close_t-1; cash otherwise"
+
+selection:
+  variants:
+    - top3_long_only
+    - top5_long_only
+    - LS_q5_q1   # control to compare against parent session
+
+floors:
+  longonly_sharpe_gross: 1.0
+  longonly_sharpe_net_5bps: 0.7
+  excess_vs_ew_sharpe: 0.6
+  worst_year_sharpe: 0.5
+  best_year_out_pct_of_headline: 0.5
+  annual_turnover_max_pct: 600
+  net_sharpe_at_cost_min: 0.0
+
+orthogonality:
+  vs_v7_gold:
+    data: logs/20260422_industry_rotation_cn/outputs/round8_equity_curves.csv
+    column: V7_gold
+    max_abs_correlation: 0.5
+
+mandatory_audits:
+  - execution_delay_audit
+  - look_ahead_audit
+  - worst_year_floor
+  - best_year_out
+  - falsification_first
+  - regime_gate_lookahead_check     # extra: gate uses only past close
+  - v7_gold_correlation_check       # extra: orthogonality
+
+decision_rules:
+  promote: "all floors + corr<=0.5 + regime gate doesn't kill any good year"
+  research_only: "headline pass but worst-year fail OR corr>0.5 (not orthogonal)"
+  stop: "headline negative OR mechanism evidence inconclusive"

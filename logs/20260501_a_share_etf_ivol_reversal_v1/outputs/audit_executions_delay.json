@@ -1,0 +1,8 @@
+{
+  "delay": 1,
+  "primary_k": 5,
+  "target_shift_used": -6,
+  "invariant": "target_shift == -(1 + delay) for k=1; for k=PRIMARY_K it generalizes to -(delay+k)",
+  "physical_timeline_prose": "Signal observed at close(t). With delay=1, position established by close(t+1) and held to close(t+1+k-1)=close(t+k). Target return is sum of one-period returns over (t+1, ..., t+k] which in cum-rolling form is `cum.shift(-(delay+k))` evaluated at t.",
+  "pass": true
+}

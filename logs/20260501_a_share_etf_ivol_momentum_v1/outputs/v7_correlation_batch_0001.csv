@@ -1,0 +1,9 @@
+expr,corr_v7_gold,n_weeks,abs_corr_le_0p5
+m1_ivol_LS_no_gate,0.052966230364465364,339,True
+m3_ivol_LS_ma50_gate,0.06781246073601285,339,True
+m2_ivol_top3_no_gate,0.07129636107635348,339,True
+m4_ivol_top3_ma50_gate,0.09807384881475144,339,True
+m5_ivol_top5_ma50_gate,0.09125024620059552,339,True
+m6_ivol_top5_ma200_gate,0.0675601297950418,339,True
+m7_ivol_top5_ma50_lag5,0.08770789201421358,339,True
+m8_total_vol_top5_ma50,0.10050956421036662,339,True

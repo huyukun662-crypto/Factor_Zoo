@@ -1,0 +1,58 @@
+{
+  "m1_ivol_LS_no_gate": {
+    "worst_year_sharpe": 0.03575581741742652,
+    "best_year_out_avg_sharpe": 0.6226938644461335,
+    "headline_sharpe_gross": 0.6598369030759412,
+    "wy_pass": false,
+    "byo_pass": true
+  },
+  "m3_ivol_LS_ma50_gate": {
+    "worst_year_sharpe": -0.34368004760258797,
+    "best_year_out_avg_sharpe": 0.32536724436177994,
+    "headline_sharpe_gross": 0.4378595806394144,
+    "wy_pass": false,
+    "byo_pass": true
+  },
+  "m2_ivol_top3_no_gate": {
+    "worst_year_sharpe": -0.7965335240014201,
+    "best_year_out_avg_sharpe": 0.5128812958899622,
+    "headline_sharpe_gross": 0.5769917916265261,
+    "wy_pass": false,
+    "byo_pass": true
+  },
+  "m4_ivol_top3_ma50_gate": {
+    "worst_year_sharpe": -1.2106651775218984,
+    "best_year_out_avg_sharpe": 0.14875537751679063,
+    "headline_sharpe_gross": 0.44331437889040093,
+    "wy_pass": false,
+    "byo_pass": false
+  },
+  "m5_ivol_top5_ma50_gate": {
+    "worst_year_sharpe": -1.2036810806357061,
+    "best_year_out_avg_sharpe": 0.19333644451045043,
+    "headline_sharpe_gross": 0.5064185090963539,
+    "wy_pass": false,
+    "byo_pass": false
+  },
+  "m6_ivol_top5_ma200_gate": {
+    "worst_year_sharpe": -0.5535628354613796,
+    "best_year_out_avg_sharpe": 0.7422302852281231,
+    "headline_sharpe_gross": 0.8336842160291232,
+    "wy_pass": false,
+    "byo_pass": true
+  },
+  "m7_ivol_top5_ma50_lag5": {
+    "worst_year_sharpe": -0.7111976775689114,
+    "best_year_out_avg_sharpe": 0.25387320354341664,
+    "headline_sharpe_gross": 0.49402180489122494,
+    "wy_pass": false,
+    "byo_pass": true
+  },
+  "m8_total_vol_top5_ma50": {
+    "worst_year_sharpe": -2.0787003374340336,
+    "best_year_out_avg_sharpe": -0.2869304162660497,
+    "headline_sharpe_gross": 0.19491145259126622,
+    "wy_pass": false,
+    "byo_pass": false
+  }
+}

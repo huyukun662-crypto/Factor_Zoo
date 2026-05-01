@@ -1,0 +1,6 @@
+{
+  "method": "randomize bench return on last 30 days, recompute signal, compare past values",
+  "cutoff_date": "2026-01-13",
+  "diff_max_for_dates_below_cutoff": 0.0,
+  "pass": true
+}

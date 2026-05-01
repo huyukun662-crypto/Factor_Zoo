@@ -1,0 +1,31 @@
+round: 1
+session_id: 20260501_a_share_etf_ivol_reversal_v1
+agent_outputs:
+  research_brief:        outputs/research_brief.md
+  session_metadata:      outputs/session_metadata.yml
+  session_metadata_round2: outputs/session_metadata_round2.yml
+  expressions_batch:     outputs/expressions_batch_0001.md
+  backtest_results:      outputs/backtest_results_batch_0001.md
+  backtest_results_round2: outputs/backtest_results_batch_0001_round2.md
+  alpha_ranking:         outputs/alpha_ranking.md
+  final_summary:         outputs/final_summary.md
+
+g_funnel:
+  G1: pass_for_all_8
+  G2: pass_for_all_8
+  G3: pass_for_all_8        # ETF-adapted thresholds met
+  G4: fail_on_decile_monotonicity_for_most  # Q1 highest, not Q5
+  G5: fail_in_round1_at_k=5  # all 8 peaked at k=1; metadata revised to k=1 in round 2
+
+audits:
+  execution_delay: pass
+  look_ahead:      pass
+  worst_year_floor: fail   # all 8, both sign conventions
+  best_year_out:   n_a_or_borderline
+  falsification_first: pass  # the falsification hypothesis (bull-market high-IVOL winners) was confirmed by data
+
+best_alpha_id_round_1_original_sign: f6_ivol_lag5_20d_RESEARCH_ONLY
+best_alpha_id_round_1_inverted_sign: f1_ivol_resid_20d_inverted_k20_monthly_RESEARCH_ONLY
+
+continue_research: false_for_this_mechanism
+next_action: stop_original_hypothesis_open_thread_for_inverted_ivol_momentum

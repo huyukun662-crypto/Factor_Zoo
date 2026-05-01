@@ -1,0 +1,25 @@
+{
+  "session_id": "20260501_a_share_etf_ivol_reversal_v1",
+  "from_agent": 3,
+  "to_agent": 4,
+  "batch_id": "0001",
+  "n_expressions": 8,
+  "expressions": [
+    {"id": "f1_ivol_resid_20d",        "type": "ivol",        "window": 20, "beta_window": 60, "lag": 0,  "transform": "std"},
+    {"id": "f2_total_vol_20d",         "type": "total_vol",   "window": 20, "beta_window": null, "lag": 0, "transform": "std"},
+    {"id": "f3_ivol_resid_10d",        "type": "ivol",        "window": 10, "beta_window": 60, "lag": 0,  "transform": "std"},
+    {"id": "f4_ivol_resid_40d",        "type": "ivol",        "window": 40, "beta_window": 60, "lag": 0,  "transform": "std"},
+    {"id": "f5_ivol_resid_amp_20d",    "type": "ivol",        "window": 20, "beta_window": 60, "lag": 0,  "transform": "mean_abs"},
+    {"id": "f6_ivol_lag5_20d",         "type": "ivol",        "window": 20, "beta_window": 60, "lag": 5,  "transform": "std"},
+    {"id": "f7_vol_of_vol_20m40",      "type": "vol_of_vol",  "window_short": 20, "window_long": 40, "beta_window": 60, "lag": 0, "transform": "std_diff"},
+    {"id": "f8_kitchen_sink_rank",     "type": "composite",   "components": ["f1_ivol_resid_20d", "f2_total_vol_20d", "f5_ivol_resid_amp_20d", "f7_vol_of_vol_20m40"], "transform": "mean_rank"}
+  ],
+  "directional_convention": "high signal = long; negation at source",
+  "primary_horizon_days": 5,
+  "secondary_horizons_days": [1, 10, 20],
+  "execution_delay": 1,
+  "execution_invariant_required": "target_shift == -(1 + delay)",
+  "cost_bps_per_side": 5,
+  "rebalance_freq_days": 5,
+  "validation_gates_required": ["G1", "G2", "G3", "G4", "G5"]
+}

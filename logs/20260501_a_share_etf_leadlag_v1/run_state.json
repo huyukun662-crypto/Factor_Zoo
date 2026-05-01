@@ -1,0 +1,21 @@
+{
+  "session_id": "20260501_a_share_etf_leadlag_v1",
+  "current_round": 1,
+  "current_stage": "evaluation_complete",
+  "status": "stopped",
+  "selected_mechanism": "broad_etf_leadlag_spillover_beta_projected",
+  "round_1_result": "g3_fail_cost_wall_g4_fail_decile_clone_g5_pass",
+  "best_alpha_id": "g2_spillover_510300only_lag1_RESEARCH_ONLY",
+  "best_alpha_metrics": {
+    "ic_t_at_primary_k": 2.09,
+    "ic_t_at_k0_contemporaneous": -4.10,
+    "ls_sharpe_gross": 0.45,
+    "ls_sharpe_net_5bps": -0.49,
+    "ann_turnover_pct": 12468,
+    "worst_year_sharpe_2026_partial": -3.53,
+    "worst_year_pass": false
+  },
+  "continue_research": false,
+  "open_thread": "20260502_a_share_etf_intraday_overreaction_v1 — contemporaneous overreaction (intraday data required)",
+  "branch": "claude/build-etf-factor-model-O6yXK"
+}

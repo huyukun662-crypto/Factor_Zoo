@@ -1,0 +1,8 @@
+{
+  "delay": 1,
+  "primary_k": 20,
+  "target_shift_used": -21,
+  "invariant": "target_shift == -(delay+k); for k=20 -> -21",
+  "physical_timeline_prose": "IVOL signal observed at close(t). Regime gate evaluated at close(t) using MA50 of past 50 closes. Position established at close(t+1). Held to close(t+1+19) = close(t+20). Forward k=20 cumulative return uses cum.shift(-21).",
+  "pass": true
+}

@@ -1,0 +1,23 @@
+{
+  "session_id": "20260501_a_share_etf_ivol_reversal_v1",
+  "current_round": 2,
+  "current_stage": "evaluation_complete",
+  "status": "stopped",
+  "selected_mechanism": "ivol_reversal_residualized_to_510300",
+  "round_1_result": "g5_fail_at_k=5",
+  "round_2_result": "stop_original_sign_research_only_inverted_sign",
+  "best_alpha_id": "f1_ivol_resid_20d_inverted_k20_monthly_RESEARCH_ONLY",
+  "best_alpha_metrics": {
+    "ls_sharpe_gross": 0.66,
+    "ls_sharpe_net_5bps": 0.66,
+    "longonly_sharpe": 0.75,
+    "excess_sharpe": 0.35,
+    "ann_turnover_pct": 436,
+    "worst_year_sharpe": 0.04,
+    "worst_year_pass": false,
+    "best_year_out_avg": 0.61
+  },
+  "continue_research": false,
+  "open_thread": "20260502_a_share_etf_ivol_momentum_v1 — inverted IVOL with regime gate",
+  "branch": "claude/build-etf-factor-model-O6yXK"
+}

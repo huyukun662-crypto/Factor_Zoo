@@ -1,0 +1,58 @@
+{
+  "g1_spillover_3leader_lag1": {
+    "worst_year_sharpe": -1.2187008352215891,
+    "best_year_out_avg_remaining_years_sharpe": -0.2973883233742546,
+    "headline_sharpe_full": -0.2119070634712965,
+    "wy_pass": false,
+    "byo_pass": false
+  },
+  "g2_spillover_510300only_lag1": {
+    "worst_year_sharpe": -3.5309107639638455,
+    "best_year_out_avg_remaining_years_sharpe": 0.0038570303950429896,
+    "headline_sharpe_full": 0.4538760619302187,
+    "wy_pass": false,
+    "byo_pass": false
+  },
+  "g3_spillover_3leader_lag1to2_decay": {
+    "worst_year_sharpe": -1.728914460864947,
+    "best_year_out_avg_remaining_years_sharpe": -0.08763491192726629,
+    "headline_sharpe_full": 0.012971749707263162,
+    "wy_pass": false,
+    "byo_pass": false
+  },
+  "g4_spillover_residual_leader_lag1": {
+    "worst_year_sharpe": -1.214063806902762,
+    "best_year_out_avg_remaining_years_sharpe": -0.08669795117468733,
+    "headline_sharpe_full": -0.0072745233345012875,
+    "wy_pass": false,
+    "byo_pass": false
+  },
+  "g5_spillover_3leader_lag1_volscaled": {
+    "worst_year_sharpe": -2.244700131499335,
+    "best_year_out_avg_remaining_years_sharpe": -0.15582121982386285,
+    "headline_sharpe_full": 0.10395092960370247,
+    "wy_pass": false,
+    "byo_pass": false
+  },
+  "g6_spillover_3leader_orthogonalized": {
+    "worst_year_sharpe": -1.9958973898469146,
+    "best_year_out_avg_remaining_years_sharpe": -0.5937722074385045,
+    "headline_sharpe_full": -0.4216867217250693,
+    "wy_pass": false,
+    "byo_pass": false
+  },
+  "g7_spillover_signonly_3leader": {
+    "worst_year_sharpe": -0.9507437390992398,
+    "best_year_out_avg_remaining_years_sharpe": -0.20686105672902752,
+    "headline_sharpe_full": -0.04826693183500828,
+    "wy_pass": false,
+    "byo_pass": false
+  },
+  "g8_kitchen_sink_rank": {
+    "worst_year_sharpe": -0.6195053261746574,
+    "best_year_out_avg_remaining_years_sharpe": 0.03632983602654592,
+    "headline_sharpe_full": 0.1687579736724343,
+    "wy_pass": false,
+    "byo_pass": false
+  }
+}

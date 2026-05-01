@@ -1,0 +1,23 @@
+{
+  "session_id": "20260501_a_share_etf_ivol_momentum_v1",
+  "from_agent": 1, "to_agent": 2,
+  "primary_mechanism": "inverted_ivol_long_high_vol_etf",
+  "directional_convention": "high_signal_eq_long; signal = +IVOL (NOT negated)",
+  "recommended_primary_horizon_days": 20,
+  "rebalance_freq_days": 21,
+  "deployable_form": "long_only_top_N_excess_vs_ew_universe",
+  "regime_gate": "ma50_of_510300_close",
+  "v7_gold_orthogonality_required": true,
+  "v7_gold_data": "logs/20260422_industry_rotation_cn/outputs/round8_equity_curves.csv column V7_gold",
+  "open_questions": [
+    "does ma50 gate rescue worst-year 2024?",
+    "long-only top-3 vs top-5 vs LS — which deploys best?",
+    "is inverted-IVOL orthogonal to V7_gold (|corr| <= 0.5)?"
+  ],
+  "datasets": ["/home/user/Factor_Zoo/logs/_shared_cache/etf_daily.parquet"],
+  "caveats": [
+    "MA50 must use only data <= t to avoid look-ahead",
+    "30-ETF universe; cross-section grows from ~22 to 30",
+    "Risk of over-fitting MA50 specifically because it rescues 2024"
+  ]
+}

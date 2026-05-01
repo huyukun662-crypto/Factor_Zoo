@@ -1,0 +1,24 @@
+{
+  "session_id": "20260501_a_share_etf_ivol_momentum_v1",
+  "from_agent": 3, "to_agent": 4,
+  "batch_id": "0001",
+  "n_expressions": 8,
+  "expressions": [
+    {"id": "m1_ivol_LS_no_gate",        "selection": "LS_q5_q1",     "gate": null,    "ivol_window": 20, "beta_window": 60, "lag": 0, "residualize": true},
+    {"id": "m2_ivol_top3_no_gate",      "selection": "top3_lo",      "gate": null,    "ivol_window": 20, "beta_window": 60, "lag": 0, "residualize": true},
+    {"id": "m3_ivol_LS_ma50_gate",      "selection": "LS_q5_q1",     "gate": "ma50",  "ivol_window": 20, "beta_window": 60, "lag": 0, "residualize": true},
+    {"id": "m4_ivol_top3_ma50_gate",    "selection": "top3_lo",      "gate": "ma50",  "ivol_window": 20, "beta_window": 60, "lag": 0, "residualize": true},
+    {"id": "m5_ivol_top5_ma50_gate",    "selection": "top5_lo",      "gate": "ma50",  "ivol_window": 20, "beta_window": 60, "lag": 0, "residualize": true},
+    {"id": "m6_ivol_top5_ma200_gate",   "selection": "top5_lo",      "gate": "ma200", "ivol_window": 20, "beta_window": 60, "lag": 0, "residualize": true},
+    {"id": "m7_ivol_top5_ma50_lag5",    "selection": "top5_lo",      "gate": "ma50",  "ivol_window": 20, "beta_window": 60, "lag": 5, "residualize": true},
+    {"id": "m8_total_vol_top5_ma50",    "selection": "top5_lo",      "gate": "ma50",  "ivol_window": 20, "beta_window": null, "lag": 0, "residualize": false}
+  ],
+  "directional_convention": "high signal = long, signal = +IVOL",
+  "primary_horizon_days": 20,
+  "rebalance_days": 21,
+  "execution_delay": 1,
+  "cost_bps_per_side": 5,
+  "v7_gold_corr_check_required": true,
+  "validation_gates_required": ["G1", "G2", "G3", "G4", "G5"],
+  "extra_audit_required": ["regime_gate_lookahead_check"]
+}
