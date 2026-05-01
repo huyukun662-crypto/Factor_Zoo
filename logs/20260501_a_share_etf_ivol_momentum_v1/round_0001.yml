@@ -28,9 +28,10 @@ audits:
   v7_orthogonality: pass               # all 8 expr corr <= 0.10
 
 best_alpha_id_round_1_standalone: m1_ivol_LS_no_gate_RESEARCH_ONLY
-best_alpha_id_round_1_deployable: ensemble_5050_m1_v7_gold_PROMOTE_CANDIDATE
+best_alpha_id_round_1_deployable_v7:  ensemble_5050_m1_v7_gold_PROMOTE_CANDIDATE
+best_alpha_id_round_1_deployable_v25: ensemble_5050_m1_v25_PROMOTE_CANDIDATE_DOMINANT
 
-ensemble_metrics:
+ensemble_metrics_v7:
   weights: [0.5, 0.5]
   sharpe_weekly_full: 2.18
   worst_year_sharpe: 0.83
@@ -39,5 +40,26 @@ ensemble_metrics:
   weekly_corr_to_v7: 0.052
   lift_pct_over_v7_alone: 26
 
+ensemble_metrics_v25:
+  weights: [0.5, 0.5]
+  sharpe_weekly_full: 2.30
+  ann_ret: 0.195
+  max_dd: -0.089
+  worst_year_sharpe: 0.82
+  worst_year_year: 2022
+  years_positive: 7
+  weekly_corr_to_v25: 0.053
+  weekly_corr_v25_to_v7: 0.977
+  lift_pct_over_v25_alone: 23
+  alternative_weights:
+    "0.4_0.6": {sharpe: 2.27, ann_ret: 0.206, max_dd: -0.081, worst_year: 0.84, calmar: 2.54}
+    "0.3_0.7": {sharpe: 2.19, ann_ret: 0.216, max_dd: -0.073, worst_year: 0.83, calmar: 2.96}
+    "0.2_0.8": {sharpe: 2.09, ann_ret: 0.227, max_dd: -0.072, worst_year: 0.81, calmar: 3.15}
+
 continue_research: true
-next_action: "follow_up_paper_trade_verify_ensemble_2024_2026_then_promote"
+next_action: "paper_trade_verify_5050_m1_v25_2024_2026_then_promote"
+addendum_files:
+  - outputs/v25_addendum.md
+  - outputs/v25_combo_summary.json
+  - outputs/v25_combo_per_year.csv
+  - scripts/04_v25_combination.py
