@@ -1,0 +1,93 @@
+session_id: 20260501_a_share_etf_leadlag_v1
+generated_by: agent_2_hypothesis_architect
+generated_at: 2026-05-01
+
+mechanism:
+  family: cross_asset_leadlag
+  primary: broad_etf_leadlag_spillover_beta_projected
+  expected_sign: positive_long_short  # high beta-projected leader return -> top quintile
+  thesis: |
+    Broad-index ETFs (510300, 510500, 159915 as 中证1000 substitute) lead;
+    thematic ETFs follow with 1-2 day lag. Beta-projected lagged leader
+    return predicts cross-sectional follower return at k=1.
+
+universe:
+  source: /home/user/Factor_Zoo/logs/_shared_cache/etf_daily.parquet
+  size_after_drop: 30
+  dropped:
+    - 512100.SS
+    - 515050.SS
+    - 515170.SS
+    - 512800.SS
+  leaders:
+    - 510300.SS  # 沪深300 broad cap-weighted
+    - 510500.SS  # 中证500 mid-cap
+    - 159915.SZ  # 创业板 small-growth (substitute for 中证1000)
+  followers: 27_etfs_remaining
+
+window:
+  start: 2019-01-02
+  end:   2026-04-30
+
+  train:    [2019-01-02, 2021-12-31]
+  validate: [2022-01-01, 2022-12-31]
+  test:     [2023-01-01, 2026-04-30]
+
+bar_grain: daily
+execution:
+  delay_days: 1
+  cost_bps_per_side: 5
+  invariant: "target_shift == -(1 + delay)"
+
+primary_horizon_days: 1
+secondary_horizons_days: [2, 3, 5]
+rebalance: daily
+
+beta_window_days: 60
+spillover_aggregation: mean_over_3_leaders  # default; some variants use weighted
+
+quintile:
+  n_buckets: 5
+  q5_min_size: 6
+  long: top_quintile_high_spillover
+  short: bottom_quintile_low_spillover
+
+floors:
+  ic_t_stat_primary: 3.0
+  ls_sharpe_gross:   1.0
+  ls_sharpe_net_5bps: 0.5  # binding for daily rebalance
+  longonly_q5_excess_sharpe: 0.5
+  worst_year_sharpe: 0.5
+  best_year_out_sharpe_pct_of_headline: 0.5
+  annual_turnover_max_pct: 1500
+  net_sharpe_at_cost_min: 0.3  # tighter than IVOL because daily rebalance
+
+mandatory_audits:
+  - execution_delay_audit
+  - look_ahead_audit
+  - worst_year_floor
+  - best_year_out
+  - falsification_first
+  - contemporaneous_ic_check  # extra: rule out mechanical stale-price
+
+g3_etf_adapted_thresholds:
+  q5_size_min: 6
+  q5_size_pct_of_days: 0.95
+  signal_dispersion_pct_of_days: 0.99
+  unique_q5_names_min: 15  # daily rebalance churns membership
+  net_sharpe_at_cost_min: -0.5
+
+deployable_metric: net_sharpe_at_5bps_long_short_or_longonly_top_quintile
+
+self_signal_handling: zero_out_diagonal  # leader does not receive own signal
+
+risks:
+  - id: cost_wall
+    description: Daily rebalance + 5bps/side may erase signal
+    mitigation: net Sharpe @ 5bps is the headline; gross is informational only
+  - id: stale_price_mechanical
+    description: IC at k=0 high then k=1 low means non-synchronous stale prices
+    mitigation: IC@k=0 reported alongside; if IC@k=0 > 2 * IC@k=1 -> RESEARCH-ONLY only
+  - id: regime_asymmetry
+    description: 2020 small leads, 2024 large leads
+    mitigation: 3-leader equal-weight smooths

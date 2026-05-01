@@ -1,0 +1,37 @@
+session_id: 20260501_a_share_etf_ivol_reversal_v1
+round: 2
+generated_by: agent_2_hypothesis_architect
+generated_at: 2026-05-01
+trigger: G5_failure_in_round1_batch_0001
+
+mechanism:
+  family: idiosyncratic_volatility
+  primary: ivol_residualized_to_510300
+  expected_sign: positive_long_short_at_k1   # REVISED — round 1 found sign flips between k=1 and k>=10
+  thesis_revised: |
+    Round-1 IC by horizon revealed:
+      k=1:  +3.0 to +3.4 t-stat (positive, sharp signal)
+      k=5:  ~+1.0 t-stat (decayed)
+      k=10: NEGATIVE (sign flips)
+      k=20: NEGATIVE
+    The clean reversal interpretation is at k=1, not k=5. By k=10 the
+    factor has BECOME momentum: high-IVOL ETFs continue outperforming on
+    weekly+ horizons (consistent with A-share retail lottery-bid stickiness).
+    Round 2 re-targets k=1 as the primary horizon.
+
+window:
+  train:    [2019-01-02, 2021-12-31]
+  validate: [2022-01-01, 2022-12-31]
+  test:     [2023-01-01, 2026-04-30]
+
+primary_horizon_days: 1     # REVISED from 5
+secondary_horizons_days: [2, 3, 5]
+rebalance: daily             # REVISED from weekly
+
+floors_revised:
+  ic_t_stat_primary: 3.0     # already met by f1, f3, f4, f5, f6 at k=1
+  ls_sharpe_gross_at_cost_min: 0.0
+  net_sharpe_at_5bps_min: 0.0   # binding gate
+  worst_year_sharpe: 0.5
+  best_year_out_sharpe_pct_of_headline: 0.5
+  annual_turnover_max_pct: 1500

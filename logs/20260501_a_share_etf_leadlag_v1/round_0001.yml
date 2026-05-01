@@ -1,0 +1,28 @@
+round: 1
+session_id: 20260501_a_share_etf_leadlag_v1
+agent_outputs:
+  research_brief:    outputs/research_brief.md
+  session_metadata:  outputs/session_metadata.yml
+  expressions_batch: outputs/expressions_batch_0001.md
+  backtest_results:  outputs/backtest_results_batch_0001.md
+  alpha_ranking:     outputs/alpha_ranking.md
+  final_summary:     outputs/final_summary.md
+
+g_funnel:
+  G1: pass_for_all_8
+  G2: pass_for_all_8
+  G3: fail_for_all_8        # net Sharpe @ 5 bps below floor for all
+  G4: fail_for_all_except_g2  # decile non-monotonicity / clone checks
+  G5: pass                   # 7/8 peak at primary k=1
+
+audits:
+  execution_delay: pass
+  look_ahead:      pass
+  worst_year_floor: fail
+  best_year_out:   not_applicable_headline_near_zero
+  falsification_first: pass    # cost-wall confirmed
+  contemporaneous_ic_check: shows_overreaction_pattern   # |t|=3-4 negative
+
+best_alpha_id_round_1: g2_spillover_510300only_lag1_RESEARCH_ONLY
+continue_research: false
+next_action: stop_lead_lag_open_thread_for_contemporaneous_overreaction_intraday

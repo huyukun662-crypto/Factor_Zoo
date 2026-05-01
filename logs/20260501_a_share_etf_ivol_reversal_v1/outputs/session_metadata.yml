@@ -1,0 +1,90 @@
+session_id: 20260501_a_share_etf_ivol_reversal_v1
+generated_by: agent_2_hypothesis_architect
+generated_at: 2026-05-01
+
+mechanism:
+  family: idiosyncratic_volatility
+  primary: ivol_residualized_to_510300
+  expected_sign: positive_long_short  # low-IVOL long, high-IVOL short
+  thesis: |
+    The Ang-Hodrick-Xing-Zhang IVOL anomaly extends to A-share thematic
+    ETFs. After residualizing to the broad-market beta on 510300, the
+    remaining residual std (IVOL) ranks ETFs cross-sectionally. High IVOL
+    captures narrative-driven retail crowding; expected to mean-revert
+    relative to low-IVOL defensive themes over the next week.
+
+universe:
+  source: /home/user/Factor_Zoo/logs/_shared_cache/etf_daily.parquet
+  size_after_drop: 30
+  dropped:
+    - 512100.SS  # only 137 bars
+    - 515050.SS  # only 137 bars
+    - 515170.SS  # only 137 bars
+    - 512800.SS  # only 137 bars
+  benchmark_for_beta: 510300.SS
+
+window:
+  start: 2019-01-02
+  end:   2026-04-30
+  trading_days_approx: 1770
+
+  # Train / Validate / Test split (per tvt-split-template.md)
+  train:    [2019-01-02, 2021-12-31]   # 3 years, beta-warm-up first 60 bars discarded
+  validate: [2022-01-01, 2022-12-31]   # 1 year
+  test:     [2023-01-01, 2026-04-30]   # 3.3 years OOS (NEVER touched during tuning)
+
+bar_grain: daily
+execution:
+  delay_days: 1
+  cost_bps_per_side: 5
+  invariant: "target_shift == -(1 + delay)"
+
+primary_horizon_days: 5
+secondary_horizons_days: [1, 10, 20]
+rebalance: weekly  # every 5 trading days
+
+beta_window_days: 60
+ivol_window_days: 20
+
+quintile:
+  n_buckets: 5
+  q5_min_size: 6  # ETF-adapted floor; stock-universe G3 is 30
+  long: bottom_quintile_low_ivol
+  short: top_quintile_high_ivol
+
+floors:
+  ic_t_stat_primary: 3.0
+  ls_sharpe_gross:   1.0
+  ls_sharpe_net_5bps: 0.7
+  longonly_q5_excess_sharpe: 0.5
+  worst_year_sharpe: 0.5
+  best_year_out_sharpe_pct_of_headline: 0.5
+  annual_turnover_max_pct: 600
+  net_sharpe_at_cost_min: 0.0  # G3 floor
+
+mandatory_audits:
+  - execution_delay_audit
+  - look_ahead_audit
+  - worst_year_floor
+  - best_year_out
+  - falsification_first
+
+g3_etf_adapted_thresholds:
+  q5_size_min: 6
+  q5_size_pct_of_days: 0.95
+  signal_dispersion_pct_of_days: 0.99
+  unique_q5_names_min: 18  # 3x portfolio size
+  net_sharpe_at_cost_min: -0.5
+
+deployable_metric: longonly_q5_low_ivol_excess_vs_ew_universe
+
+risks:
+  - id: bull_short_leg
+    description: 2020 / 2024 narrative bull years where high-IVOL = winners
+    mitigation: report long-only excess as primary deployable metric
+  - id: beta_instability
+    description: 60d rolling beta noisy through 2020 COVID, 2022 deleveraging
+    mitigation: 90d sensitivity test in alpha_ranking
+  - id: cross_section_too_thin
+    description: Q5 = 6 ETFs is tight; one bad name dominates Q5 return
+    mitigation: report unique-Q5-names-over-window; downgrade if < 18

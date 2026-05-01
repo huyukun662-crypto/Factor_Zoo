@@ -1,0 +1,25 @@
+{
+  "session_id": "20260501_a_share_etf_leadlag_v1",
+  "from_agent": 2,
+  "to_agent": 3,
+  "primary_mechanism": "broad_etf_leadlag_spillover_beta_projected",
+  "primary_horizon_days": 1,
+  "rule_of_8": true,
+  "n_expressions_required": 8,
+  "must_share_dominant_mechanism": true,
+  "directional_convention": "high_signal_eq_long",
+  "leaders": ["510300.SS", "510500.SS", "159915.SZ"],
+  "expression_axes_to_vary": [
+    "single-leader vs multi-leader aggregation",
+    "leader lag (t-1, sum of t-1 + t-2, weighted exp decay)",
+    "raw leader return vs leader's residual to its own MA",
+    "vol-scaled (divide by follower 20d std)",
+    "sign-only vs magnitude",
+    "orthogonalize to follower's contemporaneous return"
+  ],
+  "do_not_vary_mechanism": true,
+  "do_not_swap_to_own_history_reversal": true,
+  "execution_invariant": "target_shift == -(1 + delay), delay=1",
+  "self_signal_handling": "zero diagonal so leader does not receive own signal",
+  "delivery_format": "expressions_batch_0001.md with 8 numbered expressions"
+}

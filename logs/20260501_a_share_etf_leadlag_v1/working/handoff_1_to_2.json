@@ -1,0 +1,35 @@
+{
+  "session_id": "20260501_a_share_etf_leadlag_v1",
+  "from_agent": 1,
+  "to_agent": 2,
+  "primary_mechanism": "broad_etf_leadlag_spillover_beta_projected",
+  "candidate_horizons_days": [1, 2, 3, 5],
+  "recommended_primary_horizon_days": 1,
+  "datasets": [
+    "/home/user/Factor_Zoo/logs/_shared_cache/etf_daily.parquet"
+  ],
+  "leaders": ["510300.SS", "510500.SS", "159915.SZ"],
+  "leader_substitution_note": "512100.SS (中证1000) was the original leader for small-cap, but Yahoo returned only 137 bars. Substitute 159915.SZ (创业板) which represents small-growth and has full history.",
+  "followers": "27 ETFs (the remaining after dropping 4 truncated tickers and 3 leaders)",
+  "operators": [
+    "rolling 60d cov(r_i, r_L) / var(r_L) for follower-leader beta",
+    "spillover = beta * r_L (per leader)",
+    "aggregate over 3 leaders (sum/mean)",
+    "groupby(date).rank(pct=True) cross-section",
+    "qcut(rank, 5) quintile"
+  ],
+  "neutralization": "self-projection diagonal zeroed out (a leader never receives its own signal)",
+  "universe_size": 30,
+  "expected_sign": "positive (top-quintile beta-projected leader return predicts top-quintile next-day follower return)",
+  "deployable_metric": "net-Sharpe-at-5bps long-short (cost-adjusted is the only honest metric for daily-rebalance)",
+  "caveats": [
+    "Cost wall is binding: net @ 5bps could be much smaller than gross",
+    "Mechanical stale-price lead-lag must be ruled out by IC@k=0 check",
+    "Bull-market regime asymmetry: 2020 small>large, 2024 large>small — multi-leader smooths"
+  ],
+  "mandatory_diagnostics": [
+    "IC at k=0 (contemporaneous) — if huge, mechanism is stale price not info diffusion",
+    "Net-Sharpe-at-5bps for headline",
+    "Turnover annualized must be < 1500%"
+  ]
+}

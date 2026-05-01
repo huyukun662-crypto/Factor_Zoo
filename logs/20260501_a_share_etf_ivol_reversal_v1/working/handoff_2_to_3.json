@@ -1,0 +1,22 @@
+{
+  "session_id": "20260501_a_share_etf_ivol_reversal_v1",
+  "from_agent": 2,
+  "to_agent": 3,
+  "primary_mechanism": "ivol_residualized_to_510300",
+  "primary_horizon_days": 5,
+  "rule_of_8": true,
+  "n_expressions_required": 8,
+  "must_share_dominant_mechanism": true,
+  "directional_convention": "high_signal_eq_long. Negate IVOL at source.",
+  "expression_axes_to_vary": [
+    "residualization (raw vol vs IVOL vs residual-amplitude)",
+    "estimation window (10d / 20d / 40d)",
+    "lag (t vs t-5)",
+    "vol-of-vol slope",
+    "kitchen-sink rank composite"
+  ],
+  "do_not_vary_mechanism": true,
+  "do_not_swap_to_momentum_or_flow": true,
+  "execution_invariant": "target_shift == -(1 + delay), delay=1",
+  "delivery_format": "expressions_batch_0001.md with 8 numbered expressions; each with id, formula, rationale, expected sign, expected turnover direction"
+}

@@ -1,0 +1,58 @@
+{
+  "f1_ivol_resid_20d": {
+    "worst_year_sharpe": -1.4899797932794274,
+    "best_year_out_avg_remaining_years_sharpe": -0.9087043895092825,
+    "headline_sharpe_full": -0.7605156538979932,
+    "wy_pass": false,
+    "byo_pass": false
+  },
+  "f2_total_vol_20d": {
+    "worst_year_sharpe": -1.3714133685497232,
+    "best_year_out_avg_remaining_years_sharpe": -0.8462258743163208,
+    "headline_sharpe_full": -0.6021254088192194,
+    "wy_pass": false,
+    "byo_pass": false
+  },
+  "f3_ivol_resid_10d": {
+    "worst_year_sharpe": -1.541737418968377,
+    "best_year_out_avg_remaining_years_sharpe": -0.7076508717891373,
+    "headline_sharpe_full": -0.6728454901941008,
+    "wy_pass": false,
+    "byo_pass": false
+  },
+  "f4_ivol_resid_40d": {
+    "worst_year_sharpe": -1.5839034212370315,
+    "best_year_out_avg_remaining_years_sharpe": -0.8594721269989205,
+    "headline_sharpe_full": -0.6325138617032001,
+    "wy_pass": false,
+    "byo_pass": false
+  },
+  "f5_ivol_resid_amp_20d": {
+    "worst_year_sharpe": -1.5354814068467253,
+    "best_year_out_avg_remaining_years_sharpe": -0.9191557858131053,
+    "headline_sharpe_full": -0.7959229759090505,
+    "wy_pass": false,
+    "byo_pass": false
+  },
+  "f6_ivol_lag5_20d": {
+    "worst_year_sharpe": -1.8420928771454321,
+    "best_year_out_avg_remaining_years_sharpe": -0.9034101135644651,
+    "headline_sharpe_full": -0.6500145489861597,
+    "wy_pass": false,
+    "byo_pass": false
+  },
+  "f7_vol_of_vol_20m40": {
+    "worst_year_sharpe": -2.156945873666054,
+    "best_year_out_avg_remaining_years_sharpe": -0.5641562252266404,
+    "headline_sharpe_full": -0.44504366518564464,
+    "wy_pass": false,
+    "byo_pass": false
+  },
+  "f8_kitchen_sink_rank": {
+    "worst_year_sharpe": -1.297697167626047,
+    "best_year_out_avg_remaining_years_sharpe": -0.8233335101254741,
+    "headline_sharpe_full": -0.682708042502084,
+    "wy_pass": false,
+    "byo_pass": false
+  }
+}

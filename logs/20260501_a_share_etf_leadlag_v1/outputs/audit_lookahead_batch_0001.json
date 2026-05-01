@@ -1,0 +1,6 @@
+{
+  "method": "permute leader 510300 last-30d, recompute signal, check past unchanged",
+  "cutoff_date": "2026-01-13",
+  "diff_max_for_dates_below_cutoff": 0.0,
+  "pass": true
+}

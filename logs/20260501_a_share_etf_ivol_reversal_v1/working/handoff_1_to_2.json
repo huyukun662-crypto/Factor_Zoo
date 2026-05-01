@@ -1,0 +1,30 @@
+{
+  "session_id": "20260501_a_share_etf_ivol_reversal_v1",
+  "from_agent": 1,
+  "to_agent": 2,
+  "primary_mechanism": "ivol_residualized_to_510300",
+  "candidate_horizons_days": [1, 5, 10, 20],
+  "recommended_primary_horizon_days": 5,
+  "datasets": [
+    "/home/user/Factor_Zoo/logs/_shared_cache/etf_daily.parquet"
+  ],
+  "operators": [
+    "rolling 60d cov/var for beta",
+    "residual = r_i - beta * r_M",
+    "rolling 20d std of residual = IVOL",
+    "groupby(date).rank(pct=True) for cross-section",
+    "qcut(rank, 5) for quintile membership"
+  ],
+  "neutralization": "none (ETF level; market beta residualization handles cross-asset risk)",
+  "universe_size": 30,
+  "dropped_tickers": ["512100.SS", "515050.SS", "515170.SS", "512800.SS"],
+  "dropped_reason": "Yahoo returned only 137 bars from 2025-10, not usable for 60d rolling beta on full window.",
+  "caveats": [
+    "Q5 size = 6 ETFs; below stock-universe G3 floor of 30 — adopt ETF-adapted floor of 6",
+    "Cross-section grows 20 -> 30 from 2019 to 2022+",
+    "Beta instability around 2020 COVID and 2022 deleveraging",
+    "Short-leg bull-market risk (Pitfall 7) — mandatory long-only Q5 excess reporting"
+  ],
+  "expected_sign": "positive long-short (low-IVOL outperforms high-IVOL)",
+  "deployable_metric": "long-only Q5(low-IVOL) excess vs equal-weighted universe"
+}

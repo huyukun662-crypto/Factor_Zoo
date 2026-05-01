@@ -1,0 +1,28 @@
+{
+  "session_id": "20260501_a_share_etf_leadlag_v1",
+  "from_agent": 3,
+  "to_agent": 4,
+  "batch_id": "0001",
+  "n_expressions": 8,
+  "leaders": ["510300.SS", "510500.SS", "159915.SZ"],
+  "expressions": [
+    {"id": "g1_spillover_3leader_lag1",            "type": "spillover_basic",         "leaders": "all3", "lag": 1},
+    {"id": "g2_spillover_510300only_lag1",         "type": "spillover_basic",         "leaders": ["510300.SS"], "lag": 1},
+    {"id": "g3_spillover_3leader_lag1to2_decay",   "type": "spillover_decay",         "leaders": "all3", "lags": [1, 2], "weights": [0.7, 0.3]},
+    {"id": "g4_spillover_residual_leader_lag1",    "type": "spillover_clean_leader",  "leaders": "all3", "lag": 1, "leader_ma_window": 20},
+    {"id": "g5_spillover_3leader_lag1_volscaled",  "type": "spillover_vol_scaled",    "leaders": "all3", "lag": 1, "vol_window": 20},
+    {"id": "g6_spillover_3leader_orthogonalized",  "type": "spillover_orth",          "leaders": "all3", "lag": 1},
+    {"id": "g7_spillover_signonly_3leader",        "type": "spillover_sign_only",     "leaders": "all3", "lag": 1},
+    {"id": "g8_kitchen_sink_rank",                 "type": "composite",               "components": ["g1_spillover_3leader_lag1", "g4_spillover_residual_leader_lag1", "g5_spillover_3leader_lag1_volscaled", "g7_spillover_signonly_3leader"], "transform": "mean_rank"}
+  ],
+  "directional_convention": "high signal = long",
+  "primary_horizon_days": 1,
+  "secondary_horizons_days": [2, 3, 5],
+  "execution_delay": 1,
+  "execution_invariant_required": "target_shift == -(1 + delay)",
+  "cost_bps_per_side": 5,
+  "rebalance_freq_days": 1,
+  "self_signal_masked": true,
+  "validation_gates_required": ["G1", "G2", "G3", "G4", "G5"],
+  "extra_diagnostic_required": "IC at k=0 to detect mechanical stale-price"
+}

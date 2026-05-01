@@ -1,0 +1,270 @@
+{
+  "session_id": "20260501_a_share_etf_ivol_reversal_v1",
+  "from_agent": 4,
+  "to_agent": 5,
+  "batch_id": "0001",
+  "primary_horizon_days": 5,
+  "rebalance_days": 5,
+  "cost_bps_per_side": 5.0,
+  "expressions": [
+    {
+      "id": "f1_ivol_resid_20d",
+      "gates": {
+        "G1": "pass",
+        "G2": "pass",
+        "G3": "fail",
+        "G4": "fail"
+      },
+      "retry_count": 0,
+      "diagnostics": {
+        "q5_ok_pct": 0.6583990980834273,
+        "q1_ok_pct": 0.0,
+        "signal_dispersion_ok_pct": 0.9103720405862458,
+        "unique_q5_names": 25,
+        "ann_turnover_pct": 493.4891293823224,
+        "net_sharpe_5bps": -0.7732117974134641,
+        "ic_mean_primary_k": 0.009016170157328756,
+        "ic_t_primary_k": 1.082017967519826,
+        "decile_inversions": 2,
+        "corr_to_size_rank": 0.43513702572549073,
+        "corr_to_mom20_rank": -0.17418643615683654
+      },
+      "floors": {
+        "worst_year_sharpe": -1.4899797932794274,
+        "best_year_out_avg_remaining_years_sharpe": -0.9087043895092825,
+        "headline_sharpe_full": -0.7605156538979932,
+        "wy_pass": false,
+        "byo_pass": false
+      }
+    },
+    {
+      "id": "f2_total_vol_20d",
+      "gates": {
+        "G1": "pass",
+        "G2": "pass",
+        "G3": "fail",
+        "G4": "fail"
+      },
+      "retry_count": 0,
+      "diagnostics": {
+        "q5_ok_pct": 0.7249154453213078,
+        "q1_ok_pct": 0.0,
+        "signal_dispersion_ok_pct": 0.9768883878241262,
+        "unique_q5_names": 28,
+        "ann_turnover_pct": 781.0565178303865,
+        "net_sharpe_5bps": -0.6174850017769997,
+        "ic_mean_primary_k": -0.014711682018555093,
+        "ic_t_primary_k": -1.5428454072679976,
+        "decile_inversions": 2,
+        "corr_to_size_rank": 0.3936241046978408,
+        "corr_to_mom20_rank": -0.17013909550756875
+      },
+      "floors": {
+        "worst_year_sharpe": -1.3714133685497232,
+        "best_year_out_avg_remaining_years_sharpe": -0.8462258743163208,
+        "headline_sharpe_full": -0.6021254088192194,
+        "wy_pass": false,
+        "byo_pass": false
+      }
+    },
+    {
+      "id": "f3_ivol_resid_10d",
+      "gates": {
+        "G1": "pass",
+        "G2": "pass",
+        "G3": "fail",
+        "G4": "fail"
+      },
+      "retry_count": 0,
+      "diagnostics": {
+        "q5_ok_pct": 0.6696730552423901,
+        "q1_ok_pct": 0.0,
+        "signal_dispersion_ok_pct": 0.9216459977452086,
+        "unique_q5_names": 30,
+        "ann_turnover_pct": 948.010086465863,
+        "net_sharpe_5bps": -0.6954737414359276,
+        "ic_mean_primary_k": 0.006938228755854629,
+        "ic_t_primary_k": 0.8471673399810884,
+        "decile_inversions": 2,
+        "corr_to_size_rank": 0.41730738583262106,
+        "corr_to_mom20_rank": -0.19537772879907478
+      },
+      "floors": {
+        "worst_year_sharpe": -1.541737418968377,
+        "best_year_out_avg_remaining_years_sharpe": -0.7076508717891373,
+        "headline_sharpe_full": -0.6728454901941008,
+        "wy_pass": false,
+        "byo_pass": false
+      }
+    },
+    {
+      "id": "f4_ivol_resid_40d",
+      "gates": {
+        "G1": "pass",
+        "G2": "pass",
+        "G3": "fail",
+        "G4": "fail"
+      },
+      "retry_count": 0,
+      "diagnostics": {
+        "q5_ok_pct": 0.6358511837655016,
+        "q1_ok_pct": 0.0,
+        "signal_dispersion_ok_pct": 0.8878241262683202,
+        "unique_q5_names": 23,
+        "ann_turnover_pct": 293.4747198180848,
+        "net_sharpe_5bps": -0.6399301967966718,
+        "ic_mean_primary_k": 0.0015063143410536134,
+        "ic_t_primary_k": 0.17543651659784615,
+        "decile_inversions": 3,
+        "corr_to_size_rank": 0.44271443048009795,
+        "corr_to_mom20_rank": -0.11170377289432354
+      },
+      "floors": {
+        "worst_year_sharpe": -1.5839034212370315,
+        "best_year_out_avg_remaining_years_sharpe": -0.8594721269989205,
+        "headline_sharpe_full": -0.6325138617032001,
+        "wy_pass": false,
+        "byo_pass": false
+      }
+    },
+    {
+      "id": "f5_ivol_resid_amp_20d",
+      "gates": {
+        "G1": "pass",
+        "G2": "pass",
+        "G3": "fail",
+        "G4": "fail"
+      },
+      "retry_count": 0,
+      "diagnostics": {
+        "q5_ok_pct": 0.6583990980834273,
+        "q1_ok_pct": 0.0,
+        "signal_dispersion_ok_pct": 0.9103720405862458,
+        "unique_q5_names": 27,
+        "ann_turnover_pct": 527.4392414774209,
+        "net_sharpe_5bps": -0.8081596108047046,
+        "ic_mean_primary_k": 0.009475102949136699,
+        "ic_t_primary_k": 1.1183565463273306,
+        "decile_inversions": 2,
+        "corr_to_size_rank": 0.4358574365614361,
+        "corr_to_mom20_rank": -0.16049148601561705
+      },
+      "floors": {
+        "worst_year_sharpe": -1.5354814068467253,
+        "best_year_out_avg_remaining_years_sharpe": -0.9191557858131053,
+        "headline_sharpe_full": -0.7959229759090505,
+        "wy_pass": false,
+        "byo_pass": false
+      }
+    },
+    {
+      "id": "f6_ivol_lag5_20d",
+      "gates": {
+        "G1": "pass",
+        "G2": "pass",
+        "G3": "fail",
+        "G4": "fail"
+      },
+      "retry_count": 0,
+      "diagnostics": {
+        "q5_ok_pct": 0.6561443066516347,
+        "q1_ok_pct": 0.0,
+        "signal_dispersion_ok_pct": 0.9081172491544532,
+        "unique_q5_names": 25,
+        "ann_turnover_pct": 493.78918094554587,
+        "net_sharpe_5bps": -0.6627058707261333,
+        "ic_mean_primary_k": 0.009361871175954798,
+        "ic_t_primary_k": 1.1175388463731857,
+        "decile_inversions": 2,
+        "corr_to_size_rank": 0.435771049575665,
+        "corr_to_mom20_rank": -0.11722769280290961
+      },
+      "floors": {
+        "worst_year_sharpe": -1.8420928771454321,
+        "best_year_out_avg_remaining_years_sharpe": -0.9034101135644651,
+        "headline_sharpe_full": -0.6500145489861597,
+        "wy_pass": false,
+        "byo_pass": false
+      }
+    },
+    {
+      "id": "f7_vol_of_vol_20m40",
+      "gates": {
+        "G1": "pass",
+        "G2": "pass",
+        "G3": "fail",
+        "G4": "fail"
+      },
+      "retry_count": 0,
+      "diagnostics": {
+        "q5_ok_pct": 0.6358511837655016,
+        "q1_ok_pct": 0.0,
+        "signal_dispersion_ok_pct": 0.8878241262683202,
+        "unique_q5_names": 30,
+        "ann_turnover_pct": 1838.2077638814771,
+        "net_sharpe_5bps": -0.4839117750355926,
+        "ic_mean_primary_k": -0.004256796905601536,
+        "ic_t_primary_k": -0.530152767174345,
+        "decile_inversions": 3,
+        "corr_to_size_rank": -0.011150013125869836,
+        "corr_to_mom20_rank": -0.2889523105205201
+      },
+      "floors": {
+        "worst_year_sharpe": -2.156945873666054,
+        "best_year_out_avg_remaining_years_sharpe": -0.5641562252266404,
+        "headline_sharpe_full": -0.44504366518564464,
+        "wy_pass": false,
+        "byo_pass": false
+      }
+    },
+    {
+      "id": "f8_kitchen_sink_rank",
+      "gates": {
+        "G1": "pass",
+        "G2": "pass",
+        "G3": "fail",
+        "G4": "fail"
+      },
+      "retry_count": 0,
+      "diagnostics": {
+        "q5_ok_pct": 0.6341600901916573,
+        "q1_ok_pct": 0.021984216459977453,
+        "signal_dispersion_ok_pct": 0.8878241262683202,
+        "unique_q5_names": 29,
+        "ann_turnover_pct": 970.4336912564496,
+        "net_sharpe_5bps": -0.7056039146677324,
+        "ic_mean_primary_k": 0.0023097362953448876,
+        "ic_t_primary_k": 0.26923371567430376,
+        "decile_inversions": 3,
+        "corr_to_size_rank": 0.4146144786754725,
+        "corr_to_mom20_rank": -0.22051250348926954
+      },
+      "floors": {
+        "worst_year_sharpe": -1.297697167626047,
+        "best_year_out_avg_remaining_years_sharpe": -0.8233335101254741,
+        "headline_sharpe_full": -0.682708042502084,
+        "wy_pass": false,
+        "byo_pass": false
+      }
+    }
+  ],
+  "G5": {
+    "primary_k": 5,
+    "n_expressions_peak_at_primary_k": 0,
+    "peak_horizons_per_expr": {
+      "f1_ivol_resid_20d": 1,
+      "f2_total_vol_20d": 1,
+      "f3_ivol_resid_10d": 1,
+      "f4_ivol_resid_40d": 1,
+      "f5_ivol_resid_amp_20d": 1,
+      "f6_ivol_lag5_20d": 1,
+      "f7_vol_of_vol_20m40": 20,
+      "f8_kitchen_sink_rank": 1
+    },
+    "G5": "fail"
+  },
+  "audits": {
+    "execution_delay": "pass",
+    "look_ahead": "pass"
+  }
+}
