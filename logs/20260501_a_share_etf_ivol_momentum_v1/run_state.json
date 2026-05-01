@@ -1,0 +1,33 @@
+{
+  "session_id": "20260501_a_share_etf_ivol_momentum_v1",
+  "current_round": 1,
+  "current_stage": "evaluation_complete",
+  "status": "research_only_standalone_promote_candidate_ensemble",
+  "selected_mechanism": "inverted_ivol_long_high_vol_etf_with_regime_gate",
+  "best_alpha_id_standalone": "m1_ivol_LS_no_gate_RESEARCH_ONLY",
+  "best_alpha_id_deployable": "ensemble_5050_m1_x_v7_gold_PROMOTE_CANDIDATE",
+  "best_alpha_metrics_standalone": {
+    "ls_sharpe_gross": 0.66,
+    "ls_sharpe_net_5bps": 0.63,
+    "ann_turnover_pct": 431,
+    "worst_year_sharpe": 0.04,
+    "worst_year_pass": false,
+    "best_year_out_avg": 0.65,
+    "v7_gold_corr_weekly": 0.053,
+    "n_years_positive_of_7": 7
+  },
+  "best_alpha_metrics_ensemble": {
+    "weights": "0.5 * inverted_ivol_m1 + 0.5 * v7_gold",
+    "sharpe_weekly_full_window": 2.18,
+    "v7_gold_alone_sharpe_weekly": 1.73,
+    "lift_pct": 26,
+    "worst_year_sharpe": 0.83,
+    "worst_year_year": 2022,
+    "n_years_positive_of_7": 7,
+    "all_floors_pass": true
+  },
+  "continue_research": true,
+  "next_action": "paper_trade_ensemble_2024_2026_then_promote",
+  "branch": "claude/build-etf-factor-model-O6yXK",
+  "parent_session": "20260501_a_share_etf_ivol_reversal_v1"
+}

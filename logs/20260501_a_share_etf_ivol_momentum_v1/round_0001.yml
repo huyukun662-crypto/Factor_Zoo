@@ -1,0 +1,43 @@
+round: 1
+session_id: 20260501_a_share_etf_ivol_momentum_v1
+parent_session: 20260501_a_share_etf_ivol_reversal_v1
+agent_outputs:
+  research_brief:    outputs/research_brief.md
+  session_metadata:  outputs/session_metadata.yml
+  expressions_batch: outputs/expressions_batch_0001.md
+  backtest_results:  outputs/backtest_results_batch_0001.md
+  alpha_ranking:     outputs/alpha_ranking.md
+  final_summary:     outputs/final_summary.md
+  v7_combo:          outputs/v7_combo_summary.json
+
+g_funnel:
+  G1: pass_for_all_8
+  G2: pass_for_all_8
+  G3: pass_for_all_8
+  G4: pass_for_4_of_8     # m1, m2, m3, m6 pass; m4/m5/m7/m8 fail (gated long-only excess negative)
+  G5: not_applicable      # single-horizon long-only deployment
+
+audits:
+  execution_delay: pass
+  look_ahead: pass         # max diff 0.0 for signal and gate
+  worst_year_floor_standalone: fail
+  worst_year_floor_ensemble: pass     # 0.83 in 2022
+  best_year_out_standalone: pass_for_m1
+  best_year_out_ensemble: pass        # 108% of headline
+  falsification_first: pass            # MA50 hypothesis falsified, ensemble fallback delivered
+  v7_orthogonality: pass               # all 8 expr corr <= 0.10
+
+best_alpha_id_round_1_standalone: m1_ivol_LS_no_gate_RESEARCH_ONLY
+best_alpha_id_round_1_deployable: ensemble_5050_m1_v7_gold_PROMOTE_CANDIDATE
+
+ensemble_metrics:
+  weights: [0.5, 0.5]
+  sharpe_weekly_full: 2.18
+  worst_year_sharpe: 0.83
+  worst_year_year: 2022
+  years_positive: 7
+  weekly_corr_to_v7: 0.052
+  lift_pct_over_v7_alone: 26
+
+continue_research: true
+next_action: "follow_up_paper_trade_verify_ensemble_2024_2026_then_promote"

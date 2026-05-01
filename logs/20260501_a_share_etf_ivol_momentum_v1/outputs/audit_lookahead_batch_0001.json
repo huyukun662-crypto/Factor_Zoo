@@ -1,0 +1,7 @@
+{
+  "method": "permute bench return + jitter bench close on last-30d, recompute signal and MA50 gate, compare past values",
+  "cutoff_date": "2025-12-24",
+  "signal_diff_max_for_past": 0.0,
+  "gate_diff_max_for_past": 0.0,
+  "pass": true
+}

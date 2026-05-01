@@ -1,0 +1,21 @@
+{
+  "session_id": "20260501_a_share_etf_ivol_momentum_v1",
+  "from_agent": 2, "to_agent": 3,
+  "primary_mechanism": "long_high_ivol_with_regime_gate",
+  "primary_horizon_days": 20,
+  "rebalance_days": 21,
+  "rule_of_8": true,
+  "n_expressions_required": 8,
+  "directional_convention": "high signal = long; signal = +IVOL (NO negation)",
+  "execution_invariant": "target_shift == -(delay+k); delay=1; k=20 -> -21",
+  "expression_axes_to_vary": [
+    "selection (LS Q5-Q1 / long-only top-3 / long-only top-5)",
+    "regime gate (none / MA50 / MA200)",
+    "lag (t / t-5)",
+    "residualization (IVOL on 510300 vs total vol)"
+  ],
+  "do_not_vary_mechanism": true,
+  "must_include_no_gate_baseline": true,
+  "must_include_LS_baseline": true,
+  "delivery_format": "expressions_batch_0001.md with 8 numbered expressions"
+}
