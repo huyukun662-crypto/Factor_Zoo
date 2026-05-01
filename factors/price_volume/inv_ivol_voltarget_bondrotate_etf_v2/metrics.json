@@ -1,0 +1,69 @@
+{
+  "factor_id": "inv_ivol_voltarget_bondrotate_etf_v2",
+  "supersedes": "inv_ivol_ls_voltarget_etf_v1",
+  "label": "Inverted-IVOL on equity-only A-share ETFs (61 names) + vol-target 10% + 12-week bond-rotation overlay (511010)",
+  "session_origin": "logs/20260501_a_share_etf_ivol_momentum_v1 round 3",
+  "universe_size_total": 70,
+  "universe_size_equity_only_for_LS": 61,
+  "bond_etf_for_rotation": "511010.SS",
+  "rebalance_days": 21,
+  "primary_k": 20,
+  "delay_days": 1,
+  "cost_bps_per_side": 5.0,
+  "vol_target_ann": 0.1,
+  "max_leverage": 2.0,
+  "ivol_window_days": 20,
+  "beta_window_days": 60,
+  "rotation_lookback_weeks": 12,
+  "rotation_threshold": -0.03,
+  "headline_sharpe_final_net5bps": 1.0246599406434347,
+  "headline_sharpe_final_gross": 1.0811253333787294,
+  "headline_sharpe_voltarget_no_rotation": 0.6352297380098676,
+  "headline_sharpe_raw_LS": 0.4273381243331827,
+  "ann_ret_final_net5bps": 0.11298904095620468,
+  "max_dd_final_net5bps": -0.06511040598131701,
+  "avg_exposure": 0.9174079089079086,
+  "bond_active_pct_of_days": 0.31623449830890643,
+  "tvt_split": {
+    "train": [
+      "2019-01-02",
+      "2021-12-31"
+    ],
+    "validate": [
+      "2022-01-01",
+      "2022-12-31"
+    ],
+    "test": [
+      "2023-01-01",
+      "2026-04-30"
+    ]
+  },
+  "tvt_sharpe_final_net5bps": {
+    "train": 1.2256046437621713,
+    "validate": 0.23182114329908357,
+    "test": 1.0819809103568376
+  },
+  "worst_year_sharpe_final_net5bps": 0.23182114329908357,
+  "worst_year_year": 2022,
+  "n_years_positive_of_total": [
+    7,
+    7
+  ],
+  "best_year_out_avg_final_net5bps": 0.9179678452165444,
+  "audit_status": {
+    "execution_delay": "pass",
+    "look_ahead": "pass \u2014 bond rotation uses .shift(1) on use_bond signal",
+    "worst_year_floor_0.5": "fail (worst 2022 net = 0.23)",
+    "best_year_out_50pct_headline": "pass",
+    "falsification_first": "pass \u2014 bond rotation hypothesis pre-committed; confirmed",
+    "extended_universe_pure_effect": "tested \u2014 equity-only universe expansion alone weak; bond rotation is the rescue"
+  },
+  "promote_status": "RESEARCH_ONLY (worst-year fails 0.5 floor by 0.27)__crosses_1.0_net_Sharpe_bar__supersedes_v1",
+  "v1_comparison": {
+    "v1_sharpe_net5bps": 0.81,
+    "v2_sharpe_net5bps": 1.0246599406434347,
+    "v1_worst_year": 0.11,
+    "v2_worst_year": 0.23182114329908357,
+    "delta_sharpe_pct": 26.501227239930202
+  }
+}
