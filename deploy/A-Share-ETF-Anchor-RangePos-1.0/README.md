@@ -1,41 +1,45 @@
-# A-Share ETF Anchor / Range-Position Strategy 1.0
+# A-Share ETF Anchor / Range-Position Strategy (v1.1)
 
 > **A 股 ETF 多窗口截面 range-position 因子** + 21-phase ensemble + 10% 年化 vol-target,
-> 长多 top-3 of 20-ETF core universe,5 bps/侧。
+> 长多 top-3 of 33-ETF Tushare universe,5 bps/侧。
 >
 > **Full sample (2020-01 → 2026-04, daily, 21-phase monthly rebal):**
-> Net excess Sharpe **1.007** · Test (23-26) **1.003** · Max DD **-13.5%** · 6/7 年正
+> Net excess Sharpe **1.221** · Test (23-26) **1.046** · Max DD **-14.8%** · **7/7 年正**
+>
+> v1.1 vs v1.0: +21% Sharpe; worst year (2024) 转正 -0.13 → +0.20。
+> 详见 [CHANGELOG.md](CHANGELOG.md)。
 
 ---
 
-## Headline performance (excess vs equal-weight 20-ETF benchmark, after 5 bps/side + vol target)
+## Headline performance v1.1 (excess vs equal-weight 33-ETF benchmark, after 5 bps/side + vol target)
 
-| 区间 | 年化超额 | Sharpe excess | Sharpe portfolio | Sharpe bench | Max DD |
-|---|---:|---:|---:|---:|---:|
-| Train (2020-2021) | — | **1.088** | — | — | — |
-| Validate (2022) | — | 0.844 | — | — | — |
-| **Test (2023-2026)** | — | **1.003** | — | — | -13.5% |
-| **Full** | ~9.4% | **1.007** | 1.007 | 0.667 | **-13.5%** |
+| 区间 | Sharpe excess | Sharpe portfolio | Sharpe bench |
+|---|---:|---:|---:|
+| Train (2020-2021) | ~1.83 | — | — |
+| Validate (2022) | 1.32 | — | — |
+| **Test (2023-2026)** | **1.046** | — | — |
+| **Full** | **1.221** | 1.221 | 0.640 |
 
-**6/7 年净超额为正**（唯一负年 2024 净超额 -1.4%）。
-Train 1.088 → Test 1.003 = **92% 稳定性**，无过拟合特征。
+**7/7 年净超额为正**（最弱年 2024 净超额 +2.1%, Sharpe +0.20）。
+Max DD (excess) -14.8%，2024 主题轮动期。
 
-## Per-year breakdown
+## Per-year breakdown v1.1
 
 | year | n days | Sharpe excess net | Excess return | Portfolio return | Bench return |
 |------|------:|------------------:|--------------:|-----------------:|-------------:|
-| 2020 |   243 |        **1.563**  |      +16.0 %  |          +53.3 % |       +37.3 % |
-| 2021 |   243 |          0.675   |       +7.9 %  |          +22.9 % |       +15.0 % |
-| 2022 |   242 |        **0.844** |       +8.7 %  |           −9.7 % |       −18.3 % |
-| 2023 |   242 |          1.053   |      +10.8 %  |           +8.1 % |        −2.7 % |
-| 2024 |   242 |         −0.125   |       −1.4 %  |          +12.8 % |       +14.1 % |
-| 2025 |   242 |        **1.535** |      +14.7 %  |          +39.9 % |       +25.2 % |
-| 2026* |    77 |          2.850   |      +10.5 %  |          +12.2 % |        +1.7 % |
+| 2020 |   243 |          1.985   |      +20.6 %  |          +55.0 % |       +34.4 % |
+| 2021 |   243 |          1.668   |      +18.6 %  |          +21.9 % |        +3.3 % |
+| 2022 |   242 |        **1.316** |    **+34.8 %**|          +18.0 % |       −16.8 % |
+| 2023 |   242 |          1.196   |      +13.1 %  |           +9.5 % |        −3.6 % |
+| 2024 |   242 |          0.198   |       +2.1 %  |          +14.4 % |       +12.3 % |
+| 2025 |   243 |          1.210   |      +12.3 %  |          +42.3 % |       +30.0 % |
+| 2026* |    77 |        **2.542** |       +9.7 %  |          +14.5 % |        +4.8 % |
 
 (*2026 is partial: 4 months Jan-Apr.)
 
-**2022 是签名年**：基准跌 18.3%（A 股熊市），策略超额 +8.7%。
-Anchor 信号在大熊市中机械地选出"在自己 1 年区间内仍处高位"的防御性标的。
+**2022 是签名年**：基准跌 16.8%（A 股熊市），策略超额 **+34.8%**（Sharpe **+1.32**）。
+v1.1 比 v1.0 在 2022 多赚 26 个百分点，主要因为银行 ETF (515290) 是 2022 最强 sector
+之一，且新加入的中证 1000 / 通信 ETF 补全了 v1.0 缺失的多样化。
 
 ---
 

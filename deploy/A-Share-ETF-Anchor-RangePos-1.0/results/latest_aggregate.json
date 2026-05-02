@@ -1,13 +1,13 @@
 {
   "latest_signal_date": "2026-04-30",
   "n_phases": 21,
-  "n_active_symbols_today": 6,
-  "total_active_weight": 0.9999999999999998,
+  "n_active_symbols_today": 9,
+  "total_active_weight": 1.0,
   "top_5_aggregate_weights": {
-    "159915.SZ": 0.3333,
-    "159949.SZ": 0.2698,
-    "510300.SS": 0.2381,
-    "510880.SS": 0.0794,
-    "512480.SS": 0.0635
+    "159915.SZ": 0.2222,
+    "159755.SZ": 0.1905,
+    "159949.SZ": 0.1746,
+    "515050.SS": 0.1746,
+    "159819.SZ": 0.0635
   }
 }

@@ -23,7 +23,7 @@ HERE = Path(__file__).resolve().parent.parent
 CACHE = HERE / "data_cache"
 
 WINDOWS = (60, 120, 252, 500)
-CORE_MIN_DAYS = 1500
+CORE_MIN_DAYS = 500    # = matches longest signal window (range_pos_500); naturally all ETFs that can compute the full signal
 DROP_FULL = {"512800.SS", "515170.SS"}
 
 

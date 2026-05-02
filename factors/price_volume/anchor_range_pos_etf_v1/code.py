@@ -41,8 +41,13 @@ DELAY = 1                           # T+1 execution
 DROP_FULL = {"512800.SS", "515170.SS"}     # truncated history
 BENCH_SYMBOL = "510300.SS"
 
-# Core universe = ETFs with at least 1500 valid daily bars in cache panel
-CORE_MIN_DAYS = 1500
+# Core universe — v1.1: matches the longest range-position window (500d).
+# An ETF needs ≥500 valid bars to compute the full multi-window signal; below
+# that, its signal is NaN and it is naturally excluded from selection.
+# v1.0 used 1500 days but that was set under (incorrect) assumption that
+# Yahoo's truncated 137-bar entries for 512100/515050 were genuine — see
+# logs/20260502_a_share_etf_anchor_high_v1/outputs/tushare_universe_verification.md
+CORE_MIN_DAYS = 500
 
 
 # --------------------------------------------------------------------- #

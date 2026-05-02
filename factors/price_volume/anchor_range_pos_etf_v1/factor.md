@@ -1,10 +1,12 @@
 # Factor Spec — `anchor_range_pos_etf_v1`
 
 **Family:** `price_volume.anchoring`
-**Status:** ADMITTED-CANDIDATE (4 rounds of worldquant 5-agent
-workflow, net excess Sharpe 1.007, 6/7 positive years, missing
-formal worst-year-Sharpe ≥ 0.5 floor)
-**Origin session:** `logs/20260502_a_share_etf_anchor_high_v1/`
+**Status:** ADMITTED-CANDIDATE (5 rounds of worldquant 5-agent workflow;
+**v1.1** net excess Sharpe **1.221**, **7/7 positive years**, worst-year
+cum excess +2.1%; missing only the strict worst-year-Sharpe ≥ 0.5 floor)
+**Origin session:** `logs/20260502_a_share_etf_anchor_high_v1/` (R1-R5)
+**Universe revision (v1.1):** 33-ETF Tushare panel (was 20-ETF Yahoo in v1.0;
+Yahoo was silently truncating 4 ETFs and missing the banking sector entirely)
 
 ## 1. Definition
 
@@ -29,15 +31,24 @@ signal(t, i) = (1/4) · Σ_w  rank_xs( rp_w(·, t) )_i
 
 `rp_w` is bounded in [0, 1]; signal is bounded in [0, 1].
 
-### 1.2 Universe
+### 1.2 Universe (v1.1)
 
-A-share ETF panel cached at
-`logs/_shared_cache/etf_daily.parquet`. From 34 symbols, drop:
-- `512800.SS`, `515170.SS` — only 137 daily bars (truncated history)
-- 12 additional ETFs with < 1500 valid days (late-listed thematics)
+A-share ETF panel built from Tushare `pro_bar(asset='FD', adj='qfq')` for
+33 symbols. Drop: `512800.SS`, `515170.SS` (truncated). Core threshold
+`CORE_MIN_DAYS = 500` matches the longest signal window — ETFs without
+500 days of history can't compute the multi-window signal anyway and are
+naturally excluded by NaN.
 
-→ **20 ETFs** in the core universe (broad index + sector + commodity
-+ defensive). Equal-weight benchmark uses the same 20.
+**Universe v1.0 → v1.1 changes (see `tushare_universe_verification.md`):**
+- 4 ETFs that Yahoo silently truncated to 137 bars are now full-history:
+  `512100.SS` (中证 1000), `515050.SS` (通信), `515030.SS` (新能源车),
+  `159992.SZ` (创新药)
+- Added `515290.SS` (银行 ETF 天弘) — A-share 银行 sector entirely missing from v1.0
+- Threshold lowered 1500 → 500 to admit shorter-history ETFs naturally; signal
+  NaN handles the 500-day requirement implicitly
+
+→ **33 ETFs** total in the universe (broad index + 10 sectors + commodity
++ defensive). Equal-weight benchmark uses the same 33.
 
 ### 1.3 Selection & execution
 
@@ -70,22 +81,33 @@ final_port(t)  = final_excess(t) + bench(t)
 `shift(1)` ensures the scaling factor uses only past data, so the
 overlay is causal.
 
-## 2. Headline metrics
+## 2. Headline metrics (v1.1)
 
-(Eval window 2020-01 → 2026-04, skipping 2019 warmup.)
+(Eval window 2020-01 → 2026-04, skipping 2019 warmup. Tushare 33-ETF universe.)
 
 ```
-sharpe_excess_net5bps   = 1.007
-sharpe_train (20-21)    = 1.088
-sharpe_validate (22)    = 0.844
-sharpe_test (23+)       = 1.003
-ann_ret_excess_net5bps  = ~9.4 %
-ann_ret_portfolio_net5bps = ~22 %
-max_drawdown_excess     = -13.5 %  (peaked Apr 2024)
-n_positive_years        = 6 / 7
-worst_year_sharpe       = -0.13   (2024, cum excess -1.4 %)
-best_year_dropped_pct   = 91 %    (drop 2023, residual Sharpe 0.91)
+sharpe_excess_net5bps   = 1.221     (v1.0 was 1.007 on Yahoo 21-ETF universe)
+sharpe_train (20-21)    = ~1.83
+sharpe_validate (22)    = 1.32
+sharpe_test (23+)       = 1.046
+ann_ret_excess_net5bps  = ~13.0 %
+ann_ret_portfolio_net5bps = ~25 %
+max_drawdown_excess     = -14.8 %
+n_positive_years        = 7 / 7
+worst_year_sharpe       = +0.198  (2024, cum excess +2.1 %)
+best_year_dropped_pct   = ~85 %   (drop 2020 best year, residual Sharpe ~1.04)
 ```
+
+### v1.0 → v1.1 comparison
+
+| metric | v1.0 (Yahoo, 21-ETF) | v1.1 (Tushare, 33-ETF) | Δ |
+|--------|---------------------:|-----------------------:|--:|
+| Sharpe excess | 1.007 | **1.221** | **+21 %** |
+| Worst year Sharpe | -0.13 (2024) | **+0.198 (2024)** | **+0.33 → 转正** |
+| Worst year cum excess | -1.4 % | **+2.1 %** | **+3.5 pp → 转正** |
+| Positive years | 6 / 7 | **7 / 7** | **+1 → 满分** |
+| 2022 cum excess | +8.7 % | **+34.8 %** | **+26.1 pp** |
+| Test (23-26) | 1.003 | 1.046 | +0.04 |
 
 ## 3. Mechanism
 
@@ -152,17 +174,17 @@ the worst-year floor; consistent with `inv_ivol_voltarget_bondrotate_etf_v2`
 admitted at +0.23 worst-year. The cumulative-excess form of the
 floor (which actually maps to economic damage) passes.
 
-## 5. Year-by-year
+## 5. Year-by-year (v1.1)
 
 | year | n days | Sharpe excess net | Sharpe portfolio | Sharpe bench | excess return | portfolio return | bench return |
 |------|------:|------------------:|-----------------:|-------------:|--------------:|-----------------:|-------------:|
-| 2020 |   243 |             1.563 |            2.165 |        1.629 |       +16.0 % |          +53.3 % |       +37.3 % |
-| 2021 |   243 |             0.675 |            1.136 |        0.833 |        +7.9 % |          +22.9 % |       +15.0 % |
-| 2022 |   242 |             0.844 |           −0.560 |       −0.984 |        +8.7 % |           −9.7 % |       −18.3 % |
-| 2023 |   242 |             1.053 |            0.579 |       −0.223 |       +10.8 % |           +8.1 % |        −2.7 % |
-| 2024 |   242 |            −0.125 |            0.699 |        0.579 |        −1.4 % |          +12.8 % |       +14.1 % |
-| 2025 |   242 |             1.535 |            1.963 |        1.504 |       +14.7 % |          +39.9 % |       +25.2 % |
-| 2026* |    77 |             2.850 |            1.621 |        0.290 |       +10.5 % |          +12.2 % |        +1.7 % |
+| 2020 |   243 |             1.985 |            2.160 |        1.440 |       +20.6 % |          +55.0 % |       +34.4 % |
+| 2021 |   243 |             1.668 |            1.101 |        0.202 |       +18.6 % |          +21.9 % |        +3.3 % |
+| 2022 |   242 |             1.316 |            0.508 |       −0.815 |       +34.8 % |          +18.0 % |       −16.8 % |
+| 2023 |   242 |             1.196 |            0.577 |       −0.265 |       +13.1 % |           +9.5 % |        −3.6 % |
+| 2024 |   242 |             0.198 |            0.742 |        0.469 |        +2.1 % |          +14.4 % |       +12.3 % |
+| 2025 |   243 |             1.210 |            2.083 |        1.604 |       +12.3 % |          +42.3 % |       +30.0 % |
+| 2026* |    77 |             2.542 |            1.672 |        0.773 |        +9.7 % |          +14.5 % |        +4.8 % |
 
 (*2026 is partial: 4 months Jan-Apr.)
 

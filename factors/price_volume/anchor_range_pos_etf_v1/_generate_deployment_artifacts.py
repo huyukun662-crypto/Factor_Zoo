@@ -1,5 +1,5 @@
 """Regenerate annual.csv, rebalances.csv, metrics.json from the cached
-ETF panel. Runs the full K5 pipeline end-to-end (R4 winner)."""
+ETF panel. v1.1 Tushare panel preferred; v1.0 Yahoo panel as fallback."""
 from __future__ import annotations
 import json
 from pathlib import Path
@@ -9,7 +9,9 @@ import pandas as pd
 import code as factor_code
 
 HERE = Path(__file__).parent
-PANEL = Path("/home/user/Factor_Zoo/logs/_shared_cache/etf_daily.parquet")
+PANEL_V11 = Path("/home/user/Factor_Zoo/deploy/A-Share-ETF-Anchor-RangePos-1.0/data_cache/etf_daily.parquet")
+PANEL_V10 = Path("/home/user/Factor_Zoo/logs/_shared_cache/etf_daily.parquet")
+PANEL = PANEL_V11 if PANEL_V11.exists() else PANEL_V10
 
 TRAIN_END = pd.Timestamp("2021-12-31")
 VAL_END = pd.Timestamp("2022-12-30")

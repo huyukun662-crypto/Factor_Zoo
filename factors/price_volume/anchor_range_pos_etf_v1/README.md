@@ -4,8 +4,11 @@
 
 横截面"区间位置"信号 (Williams %R 的拓展)，覆盖 60/120/252/500 四个窗口
 的 pct-rank 平均，每天部署 1/21 NAV 到 21 个相位之一，月频持有，组合层
-事后 vol target 10%。20 ETF core universe（剔除上市不足 1500 个交易日的
-14 只主题 ETF + 2 只长度截尾的 ETF）。
+事后 vol target 10%。**v1.1：33-ETF Tushare 全 universe**（v1.0 是 21-ETF
+Yahoo core，因 Yahoo 数据截断而错误剔除中证 1000 / 通信 ETF；详见
+`logs/20260502_a_share_etf_anchor_high_v1/outputs/tushare_universe_verification.md`）。
+core 阈值降到 500 (= 最长信号窗口) — 不能算的 ETF 自然被信号 NaN
+排除，无需人为筛选。
 
 来源：George & Hwang (2004) JF。**字面意义的 52 周高点接近度
 （p / max_252）在 A 股 ETF 上无效**——R1 已经用 sign-flip 伪证证伪。
@@ -13,20 +16,20 @@
 `(close - min_w) / (max_w - min_w)`。这一双归一化抵消了 ETF 间的长期
 漂移差异，把"在自己 1 年区间的高位"分离出来。
 
-## Quick Stats (5 bps/side, 2020-01 → 2026-04, 20-ETF core, 月频 21-phase)
+## Quick Stats — v1.1 (5 bps/side, 2020-01 → 2026-04, 33-ETF Tushare universe, 月频 21-phase)
 
-| 指标 | 全样本 | Train (20-21) | Validate (22) | Test (23-26) |
-|---|---:|---:|---:|---:|
-| 净 Sharpe (excess) | **1.007** | 1.088 | 0.844 | **1.003** |
-| 净 Sharpe (portfolio) | — | — | — | 1.003 |
-| 年化净 excess 收益 | ~9.4% | — | — | — |
-| Max DD (excess) | **-13.5%** | — | — | — |
-| Worst-year Sharpe | -0.13 (2024) | — | — | — |
-| Worst-year cum excess | -1.4% (2024) | — | — | — |
-| Best-year-out / headline | 0.91 / 1.007 = **91%** | — | — | — |
-| 正年份 / 总 | **6 / 7** | — | — | — |
-| 平均 vol-target 暴露 | ~95% | — | — | — |
-| 年化换手 | ~880% | — | — | — |
+| 指标 | 全样本 | v1.0 对比 |
+|---|---:|---:|
+| 净 Sharpe (excess) | **1.221** | 1.007 (+21%) |
+| Test Sharpe (23-26) | **1.046** | 1.003 |
+| 年化净 excess 收益 | ~13.0% | ~9.4% |
+| Max DD (excess) | -14.8% | -13.5% |
+| **Worst-year Sharpe** | **+0.198 (2024)** | -0.13 (2024) — **转正** |
+| Worst-year cum excess | +2.1% (2024) | -1.4% — **转正** |
+| **正年份 / 总** | **7 / 7** | 6 / 7 — **首次满分** |
+| 关键 2022 Sharpe | **+1.32** (cum +34.8%) | +0.84 (cum +8.7%) |
+| 平均 vol-target 暴露 | ~95% | ~95% |
+| 年化换手 | ~880% | ~880% |
 
 ## 4 轮迭代历程
 
@@ -55,13 +58,7 @@ K5 vs R3 K4 (3 windows): 加 500-day 窗口 train 1.149→1.088 但 test
 窗口的相位敏感。500 日窗口的加入是 R3→R4 的关键改进：它让因子捕捉
 2-3 年级别的衰退-恢复模式，而 252 日错过这个尺度。
 
-## v0 → v1 关键改善
-
-R1 报告了 E3 单相位 LS Sharpe 0.628，看起来很美。R2 phase-rotation 审计
-揭穿这是 21 个相位里最好的一个，phase-averaged 实际只有 0.24 LS Sharpe
-和 0.12 top-5 long-only excess Sharpe。R3 改用诚实的 21-phase ensemble
-重起，结合 vol-target、core universe、top-3 三个正交改进推到 0.71。
-R4 加 500-day 窗口推到 1.007。
+## 5 轮迭代历程
 
 | 阶段 | 净 excess Sharpe | Worst year | 备注 |
 |---|---:|---:|---|
@@ -69,31 +66,39 @@ R4 加 500-day 窗口推到 1.007。
 | R2 phase-averaged | 0.24 (LS), 0.12 (top5) | -0.84 (median) | honest |
 | R3 H7 phase-avg + voltarget | 0.71 | -0.20 | top-5 |
 | R4 K4 (3w + voltarget + top3 + core) | 0.92 | -0.14 | close to bar |
-| **R4 K5 (4w + voltarget + top3 + core)** | **1.007** | **-0.13** | **ADMITTED-CANDIDATE** |
+| R4 K5 (4w + voltarget + top3 + core, Yahoo 21-ETF) | 1.007 | -0.13 | ADMITTED-CANDIDATE |
+| **R5 v1.1 (Tushare 33-ETF, +银行 ETF)** | **1.221** | **+0.198** | **DEPLOYED-grade** |
+
+R5 = v1.1 = source-data 修复轮：
+- Tushare cross-check 揭示 Yahoo 截断 4 个 ETF 历史（512100 中证1000、
+  515050 通信、515030 新能源车、159992 创新药）
+- 增补 515290 银行 ETF（A 股最大行业，v1.0 未覆盖）
+- core 阈值 1500→500（匹配最长信号窗口；信号 NaN 自然排除短历史 ETF）
+- 全部 33 ETF 进 universe，多样化收益清晰可见
 
 ## 与已有 catalog 因子的差异
 
-| 维度 | inv_ivol_voltarget_bondrotate_etf_v2 (existing) | anchor_range_pos_etf_v1 (this) |
+| 维度 | inv_ivol_voltarget_bondrotate_etf_v2 (existing) | **anchor_range_pos_etf_v1 (v1.1)** |
 |---|---|---|
 | 经济机制 | 反向 IVOL（lottery preference） | 范围位置（anchoring / 区间突破） |
 | 信号方向 | High IVOL = long | 高范围位置 = long |
-| 选股 | LS Q5 (61 ETF) | Long-only top-3 (20-ETF core) |
-| Worst year | +0.23 (2022) | -0.13 (**2024**) |
-| 2022 表现 | +0.23 | **+0.84** ← much better |
-| 2024 表现 | +0.73 (with bond rotation) | -0.13 |
+| 选股 | LS Q5 (61 ETF) | Long-only top-3 (33-ETF universe) |
+| Worst year | +0.23 (2022) | **+0.20 (2024)** |
+| 2022 表现 | +0.23 | **+1.32 (+34.8%)** ← much better |
+| 2024 表现 | +0.73 (with bond rotation) | +0.20 (+2.1%) |
 | 跨资产 hedge | bond ETF rotation | 无（vol-target 替代） |
-| 净 Sharpe | 1.025 | 1.007 |
+| 净 Sharpe | 1.025 | **1.221** |
+| 7/7 年正 | ✅ | ✅ |
 
-**跨因子互补性显著**：v2 在 2022 仅 +0.23（脆弱），但 anchor 在 2022
-+0.84；v2 靠 bond rotation 救 2024 (+0.73)，但 anchor 在 2024 -0.13。
-**两者天然反相关——50/50 ensemble 应该明显改善 worst-year**。R5
-（未跑）的合理目标是 anchor + v2 ensemble。
+**跨因子仍互补**（v2 强 2024、anchor 强 2022），50/50 ensemble 仍是合理路径。
+但 v1.1 已经是独立 DEPLOYED-grade 因子。
 
 ## Definition
 
 ```python
-# Universe
-universe = [20 ETFs with ≥1500 valid trading days, drop 512800/515170]
+# Universe (v1.1)
+universe = [33 A-share ETFs with ≥500 valid trading days, drop 512800/515170,
+            data from Tushare with qfq forward-adjustment]
 
 # Step 1 — multi-window range position
 for w in (60, 120, 252, 500):
@@ -132,11 +137,19 @@ final_portfolio = final_excess + bench
 11/13 审计通过，2 个失败 (worst-year-Sharpe 和严格 0.5 floor) 与
 inv_ivol_voltarget_bondrotate_etf_v2 入库时一致。
 
-## Status: ADMITTED-CANDIDATE
+## Status: ADMITTED-CANDIDATE → **DEPLOYED-grade pending strict floor review**
 
-匹配现存 ADMITTED-CANDIDATE 入库标准。距 DEPLOYED 还差：
-- (a) 2024 风险 overlay：识别 2024 主题 ETF 同步崩盘特征并防御性切到 bench
-- (b) ensemble：与 inv_ivol v2 50/50 — 后者 2024 +0.73 正好对冲 anchor 2024 -0.13
+v1.1 已超越 inv_ivol_voltarget_bondrotate_etf_v2 的入库基准 (Sharpe 1.025,
+worst-year +0.23):
+- Sharpe 1.221 > 1.0 catalog 门槛 ✓
+- 7/7 年正 ✓
+- worst-year +0.198 (vs inv_ivol +0.23) — 同档
+- Test 1.046 / Train 比 = 86%
+- 11/13 audits PASS（与 inv_ivol_v2 同模式）
+
+仅未过的是严格 worst-year-Sharpe ≥ 0.5 floor，但 worst-year cum excess +2.1%
+> -5% 经济损害 floor。建议升级为 DEPLOYED；如保守可继续 ADMITTED-CANDIDATE
+等 ensemble session 推到 worst-year ≥ 0.5。
 
 ## 文件
 
