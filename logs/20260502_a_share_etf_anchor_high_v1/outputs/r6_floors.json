@@ -1,0 +1,13 @@
+{
+  "blend_sharpe_full": 1.9091507521304716,
+  "blend_worst_year_sharpe": -1.0793719007520624,
+  "blend_worst_year_cum_excess_pct": -1.4571941415684233,
+  "blend_n_pos_years": "6/7",
+  "blend_max_dd_excess": -0.06429103183163276,
+  "daily_correlation_anchor_ivol": 0.0010828061066980087,
+  "PROMOTE_sharpe_geq_1.0": true,
+  "PROMOTE_worst_year_geq_0.5": false,
+  "PROMOTE_all_years_positive": false,
+  "PROMOTE_max_dd_lt_15pct": true,
+  "DEPLOYED_status": false
+}

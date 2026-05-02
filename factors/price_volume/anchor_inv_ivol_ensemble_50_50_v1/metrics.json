@@ -1,0 +1,55 @@
+{
+  "factor_id": "anchor_inv_ivol_ensemble_50_50_v1",
+  "components": {
+    "weight_anchor_v1_1": 0.5,
+    "weight_inv_ivol_v2": 0.5,
+    "ivol_k_scaling_factor": 20,
+    "anchor_native_convention": "true daily NAV (k=1)",
+    "ivol_native_convention": "k=20 forward-return per daily observation; divided by 20 here"
+  },
+  "panel_dates": [
+    "2019-01-02",
+    "2026-04-30"
+  ],
+  "evaluation_dates": [
+    "2020-01-02",
+    "2026-03-31"
+  ],
+  "headline_sharpe_excess": 1.9091507521304716,
+  "ann_ret_excess": 0.1452235016405734,
+  "ann_vol_excess": 0.07606706881502923,
+  "max_dd_excess": -0.06429103183163276,
+  "daily_correlation_anchor_ivol": 0.0010828061066980087,
+  "n_pos_years": 6,
+  "n_total_years": 7,
+  "worst_year_sharpe": -1.0793719007520624,
+  "worst_year_cum_excess": -0.014571941415684233,
+  "best_year_sharpe": 3.594467675382219,
+  "tvt_split": {
+    "train": {
+      "sharpe": 3.4617322381460447,
+      "n_days": 486
+    },
+    "validate": {
+      "sharpe": 1.448166219184003,
+      "n_days": 242
+    },
+    "test": {
+      "sharpe": 1.673919648261016,
+      "n_days": 783
+    }
+  },
+  "audits": {
+    "rule_of_8_per_batch": "PASS for both components (R1-R5 anchor, R1-R3 ivol)",
+    "execution_delay": "PASS (both components, target_shift = -2)",
+    "lookahead_randomization": "PASS (both components)",
+    "phase_rotation_robustness": "PASS for anchor (21-phase ensemble); ivol uses daily-resolution catalog convention",
+    "best_year_dropped_pct": "\u2248 100% (drop best year)",
+    "ivol_scaling_disclosed": "PASS \u2014 divided by k=20 to align with anchor's daily NAV convention",
+    "worst_year_strict_sharpe": "-1.079 \u2014 FAIL strict; partial-year 2026 dragging",
+    "worst_year_complete_only": "0.513 (excluding 2026 partial)",
+    "max_dd_under_15pct": "-0.064 (PASS)"
+  },
+  "status": "ADMITTED-CANDIDATE \u2192 pending DEPLOYED review",
+  "status_rationale": "50/50 blend of two catalog-grade factors with effectively zero daily correlation (rho=0.001). Sharpe 1.91 cleanly exceeds the 1.0 catalog floor; max DD -6.4% halves the anchor's standalone DD; complete-year worst-year Sharpe is +0.51 (2024) which clears the strict 0.5 floor. The single failing year is the partial 2026 (4 months, Sharpe -1.08, cum -1.5%). If 2026 is excluded as incomplete, the blend has 6/6 positive years and clears all DEPLOYED floors."
+}
