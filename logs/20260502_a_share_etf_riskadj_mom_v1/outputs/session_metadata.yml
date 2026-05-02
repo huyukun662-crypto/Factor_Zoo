@@ -1,0 +1,97 @@
+session_id: 20260502_a_share_etf_riskadj_mom_v1
+created_at: 2026-05-02
+branch: claude/ashare-etf-factor-worldquant-dDDJ2
+authors: [agent_2_hypothesis_architect]
+
+mechanism:
+  family: cross_sectional_momentum
+  flavor: risk_adjusted_sharpe_style
+  one_dominant: true
+  thesis: |
+    Cross-sectional ranking of A-share thematic ETFs by Sharpe-style
+    risk-adjusted momentum (k-day total return divided by k-day realized
+    volatility) produces a more stable forward signal than plain k-day
+    return, because vol-deflation suppresses single-day spikes (limit
+    moves, IPO turbulence, single-name news shocks) that contaminate
+    raw return at this universe size.
+
+universe:
+  type: a_share_etf_panel
+  source: /home/user/Factor_Zoo/logs/_shared_cache/etf_daily.parquet
+  ticker_count_target: 30
+  min_history_bars: 1000
+  date_min: 2019-01-02
+  date_max: 2026-04-30
+
+primary_horizon_days: 21
+signal_lookback_days: 60
+rebalance_freq: monthly
+selection_topN: 5
+
+target_definition:
+  rule: log(close[t+22]) - log(close[t+1])
+  delay: 1   # signal at close[t]; trade at close[t+1]; invariant target_shift = -(1+delay) = -2
+  rationale: respects 1-day execution delay required by audit gate 1
+
+cost_model:
+  per_side_bps: 5
+  round_trip_bps: 10
+  applied_at: rebalance_dates_only
+  formula: cost_t = 5e-4 * sum_abs(w_new - w_old) / 2
+
+evaluation_targets:
+  primary:
+    - long_only_top5_sharpe_gross_>=_1.0
+    - long_only_top5_sharpe_net_>=_0.7
+    - excess_vs_EW_sharpe_>=_0.6
+    - worst_year_sharpe_>=_0.5
+    - best_year_out_sharpe_>=_50pct_headline
+    - annual_turnover_<=_800pct
+  secondary:
+    - IC_mean_at_horizon_21
+    - IC_t_stat
+    - top5_min_size_on_95pct_days
+    - per_year_sharpe_distribution
+
+regime_gate:
+  candidate: MA50_of_510300
+  active_when: close_510300 > MA50_510300
+  inactive_action: hold_cash_long_only
+  applied_to: m5_only
+
+mandatory_audits:
+  - name: execution_delay
+    invariant: target_shift == -(1 + delay)  # = -2
+    check: future_perturbation_invariance_on_past_factor_values
+  - name: lookahead
+    method: randomize_future_bars_then_recompute_factor_should_be_bit_identical
+  - name: worst_year_floor
+    threshold: 0.5
+    metric: yearly_sharpe_min
+  - name: best_year_out
+    threshold: 0.5
+    metric: sharpe_excluding_best_year_div_full_sharpe
+  - name: falsification_first
+    method: list_top_3_disconfirming_explanations_and_test_one
+
+failure_conditions:
+  promote_blocked_if:
+    - any_mandatory_audit_fails
+    - worst_year_sharpe_<_0.5
+    - net_sharpe_<_0.7
+    - annual_turnover_>_800pct
+  research_only_if:
+    - sharpe_>=_0.5_but_one_or_more_floors_fail
+    - no_negative_year
+  stop_if:
+    - all_8_expressions_have_net_sharpe_<_0.5
+
+deployment_assumption:
+  side: long_only
+  rationale: A-share has structurally costly shorting; LS used only for signal validation
+
+handoff_files_planned:
+  - working/handoff_1_to_2.json   # written
+  - working/handoff_2_to_3.json   # in this commit
+  - working/handoff_3_to_4.json
+  - working/handoff_4_to_5.json

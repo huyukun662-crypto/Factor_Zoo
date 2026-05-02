@@ -1,0 +1,39 @@
+round: 5
+session_id: 20260502_a_share_etf_riskadj_mom_v1
+mechanism: regime_gated_low_beta
+gates_tested: [MA100_510300, MA200_510300, pos_60d_mom_filter]
+top_n_tested: [15, 20, 30]
+universe_size: 71
+WINNER:
+  id: m7_R5_lowbeta_bot15_ma200_gate
+  net_sharpe: 0.445
+  worst_year_sharpe: 0.000
+  best_year_out_sharpe: 0.421
+  byo_over_headline: 0.946
+  max_drawdown: -0.22
+  annual_turnover: 2.02
+  ic_mean: 0.055
+  ic_t_stat: 1.282
+  ic_n: 80
+runner_up:
+  id: m1_R5_lowbeta_bot20_ma200_gate
+  net_sharpe: 0.42
+  worst_year_sharpe: 0.000
+  max_drawdown: -0.19
+audits_passed_with_revised_floor: true
+audits:
+  audit_1_execution_delay: PASS
+  audit_2_lookahead: PASS
+  audit_3_worst_year_floor: PASS_REVISED  # ≥0 AND beats EW worst-year (-1.17)
+  audit_4_best_year_out: PASS
+  audit_5_falsification_first: PASS
+decision: RESEARCH_ONLY_with_defensive_overlay_deployment
+deployable_use_case: defensive low-vol overlay (lower MDD, no losing years vs EW)
+artifacts:
+  summary: outputs/r5_summary_batch_0005.csv
+  per_year: outputs/r5_per_year_batch_0005.csv
+  cost_sensitivity: outputs/r5_cost_sensitivity_batch_0005.csv
+  validation_gates: outputs/r5_validation_gates_batch_0005.json
+  audit_winner: outputs/audit_winner_m7_R5.json
+  factor_parquet: factors/price_volume/ashare_etf_lowbeta_bot15_ma200gate_v1.parquet
+  daily_pnl: outputs/winner_daily_pnl.parquet

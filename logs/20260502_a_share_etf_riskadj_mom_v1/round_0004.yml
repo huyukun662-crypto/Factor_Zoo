@@ -1,0 +1,25 @@
+round: 4
+session_id: 20260502_a_share_etf_riskadj_mom_v1
+mechanism: smart_beta_smooth_tilts
+schemes_tested:
+  - inv_vol_weighted_full
+  - inv_beta_weighted_full
+  - lowvol_top50pct_ew
+  - lowbeta_top50pct_ew
+  - cap_blend_50ew_50invvol
+  - lowbeta_bot30_ew
+  - lowvol_lowbeta_combo_bot30
+universe_size: 71
+best_variant:
+  id: m6_R4_lowbeta_bot30_ew
+  net_sharpe: 0.54
+  ic_mean: 0.055
+  worst_year_sharpe: -1.19
+verdict: smoother books reduce concentration but cannot beat EW raw Sharpe
+key_insight: smooth tilts cannot rescue worst-year without explicit regime exit
+next_round_action: regime-gated low-beta with MA200 broad-market filter
+artifacts:
+  summary: outputs/r4_summary_batch_0004.csv
+  per_year: outputs/r4_per_year_batch_0004.csv
+  cost_sensitivity: outputs/r4_cost_sensitivity_batch_0004.csv
+  validation_gates: outputs/r4_validation_gates_batch_0004.json

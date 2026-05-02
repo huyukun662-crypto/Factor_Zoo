@@ -1,0 +1,38 @@
+[uni] 335 candidate ETFs
+[  1/335] 159801.SZ    芯片ETF广发              1505 bars  1.49s  KEEP
+[ 11/335] 159905.SZ    红利ETF工银              1776 bars  0.73s  KEEP
+[ 21/335] 159918.SZ    中创400ETF嘉实           1745 bars  0.65s  KEEP
+[ 31/335] 159933.SZ    金融地产ETF国投瑞银          1726 bars  1.29s  KEEP
+[ 41/335] 159948.SZ    创业板ETF南方             1774 bars  0.69s  KEEP
+[ 51/335] 159964.SZ    创业板ETF平安             1705 bars  0.82s  KEEP
+[ 61/335] 159976.SZ    湾创ETF工银              1517 bars  0.69s  KEEP
+[ 71/335] 159998.SZ    计算机ETF               1467 bars  1.01s  KEEP
+[ 81/335] 160716.SZ    基本面50LOF             1776 bars  0.71s  KEEP
+[ 91/335] 161036.SZ    娱乐增强LOF              1654 bars  0.74s  KEEP
+[101/335] 161217.SZ    国投资源LOF              1656 bars  0.81s  KEEP
+[111/335] 162711.SZ    中证500LOF             1742 bars  0.89s  KEEP
+[121/335] 167302.SZ    大湾区LOF               1224 bars  1.02s  KEEP
+[131/335] 501016.SH    券商基金LOF              1776 bars  0.78s  KEEP
+[141/335] 501043.SH    沪深300LOF             1776 bars  0.91s  KEEP
+[151/335] 501089.SH    消费红利增强LOF            1533 bars  0.76s  KEEP
+[161/335] 502000.SH    500增强LOF             1639 bars  0.78s  KEEP
+[171/335] 502056.SH    医疗基金LOF              1758 bars  1.27s  KEEP
+[181/335] 510150.SH    消费ETF招商              1775 bars  0.80s  KEEP
+[191/335] 510300.SH    沪深300ETF华泰柏瑞         1776 bars  0.85s  KEEP
+[201/335] 510530.SH    中证500ETF工银           1531 bars  0.86s  KEEP
+[211/335] 510710.SH    上证50ETF博时            1776 bars  0.70s  KEEP
+[221/335] 512090.SH    MSCIA股ETF易方达         1776 bars  0.74s  KEEP
+[231/335] 512260.SH    中证500低波动ETF华安        1769 bars  0.63s  KEEP
+[241/335] 512520.SH    MSCI中国ETF华泰柏瑞        1776 bars  0.63s  KEEP
+[251/335] 512670.SH    国防ETF鹏华              1634 bars  0.68s  KEEP
+[261/335] 512800.SH    银行ETF华宝              1776 bars  1.01s  KEEP
+[271/335] 512960.SH    央企结构调整ETF博时          1764 bars  0.88s  KEEP
+[281/335] 513500.SH    标普500ETF博时           1775 bars  0.70s  KEEP
+[291/335] 515030.SH    新能源车ETF华夏            1494 bars  0.68s  KEEP
+[301/335] 515180.SH    红利ETF易方达             1540 bars  0.69s  KEEP
+[311/335] 515380.SH    沪深300ETF泰康           1481 bars  0.64s  KEEP
+[321/335] 515680.SH    央企创新ETF嘉实            1540 bars  0.76s  KEEP
+[331/335] 515900.SH    央企创新ETF博时            1542 bars  0.73s  KEEP
+
+TOTAL rows=552195 symbols=330 date_min=2019-01-02 date_max=2026-04-30 elapsed=351.3s
+Saved: /home/user/Factor_Zoo/logs/_shared_cache/etf_daily_tushare.parquet

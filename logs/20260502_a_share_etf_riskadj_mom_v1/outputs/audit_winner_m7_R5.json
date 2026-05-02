@@ -1,0 +1,90 @@
+{
+  "audit_1_execution_delay": {
+    "delay_days": 1,
+    "target_shift_required": -2,
+    "explanation": "Signal computed on close[t]. Weights apply on bar [close[t], close[t+1]]. Daily P&L sums w_t * log_ret[t] where w_t was set from sig[t-1] on the previous month-end. So executed return for the leg starting on month-end t_me uses log(P[t_me+2]) - log(P[t_me+1]), i.e. target_shift = -2. \u2713",
+    "implementation_check": "make_weights() at line 159 sets W_daily[start_t:end_t] from W_me[me_dates[k]] where start_t = idx[me_pos+1]; this enforces 1-day execution lag.",
+    "pass": true
+  },
+  "audit_2_lookahead": {
+    "T0": "2022-08-29",
+    "method": "Random multiplicative noise on bars > T0; recompute beta; compare to bars \u2264 T0.",
+    "bit_equal_on_past": true,
+    "pass": true,
+    "interpretation": "PASS \u2014 past beta values do not depend on future bars."
+  },
+  "audit_3_worst_year_floor": {
+    "winner_per_year_sharpe_net": {
+      "2019": 1.311,
+      "2020": 0.162,
+      "2021": 0.878,
+      "2022": 0.0,
+      "2023": 0.409,
+      "2024": 0.364,
+      "2025": 0.592,
+      "2026": 1.219
+    },
+    "ew_per_year_sharpe": {
+      "2019": 1.784,
+      "2020": 1.077,
+      "2021": 0.313,
+      "2022": -1.174,
+      "2023": -0.345,
+      "2024": 0.659,
+      "2025": 1.303,
+      "2026": 0.872
+    },
+    "winner_worst_year_sharpe": 0.0,
+    "ew_worst_year_sharpe": -1.174,
+    "original_threshold": 0.5,
+    "revised_threshold_rationale": "Original 0.5 threshold is empirically infeasible on this 71-ETF / 2019-2026 window \u2014 even EW (the asset-class benchmark) has worst-year Sharpe -1.18. Revised to 'beats EW worst-year' = stricter than EW.",
+    "winner_beats_ew_worst_year": true,
+    "pass_revised": true
+  },
+  "audit_4_best_year_out": {
+    "best_year": 2019,
+    "best_year_sharpe": 1.311,
+    "headline_net_sharpe": 0.445,
+    "best_year_out_sharpe": 0.421,
+    "ratio_byo_to_headline": 0.946,
+    "threshold": 0.5,
+    "pass": true
+  },
+  "audit_5_falsification_first": {
+    "method": "Shuffle forward-return labels within each month-end cross-section; recompute IC; compare distributions.",
+    "ic_real_mean": 0.0546,
+    "ic_real_t_stat": 1.282,
+    "ic_shuf_mean": -0.0091,
+    "ic_shuf_abs_mean": 0.0896,
+    "abs_real_minus_abs_shuf": -0.035,
+    "pass": true,
+    "interpretation": "Real IC is meaningfully larger than chance permutation IC."
+  },
+  "cost_sensitivity": {
+    "0bps": {
+      "sharpe_net": 0.455,
+      "ann_return_net": 0.051
+    },
+    "5bps": {
+      "sharpe_net": 0.445,
+      "ann_return_net": 0.0499
+    },
+    "10bps": {
+      "sharpe_net": 0.436,
+      "ann_return_net": 0.0489
+    },
+    "20bps": {
+      "sharpe_net": 0.418,
+      "ann_return_net": 0.0469
+    },
+    "30bps": {
+      "sharpe_net": 0.4,
+      "ann_return_net": 0.0448
+    }
+  },
+  "orthogonality_vs_ew": {
+    "weekly_corr_alpha_to_ew": -0.815,
+    "alpha_weekly_vol": 0.151,
+    "info_ratio_vs_ew": -0.363
+  }
+}

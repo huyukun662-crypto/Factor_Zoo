@@ -1,0 +1,50 @@
+{
+  "m1_R5_lowbeta_bot20_ma200_gate": {
+    "name": "m1_R5_lowbeta_bot20_ma200_gate",
+    "G2_runs_e2e": true,
+    "G3_pass": true,
+    "G4_pass": true
+  },
+  "m2_R5_lowbeta_bot20_ma100_gate": {
+    "name": "m2_R5_lowbeta_bot20_ma100_gate",
+    "G2_runs_e2e": true,
+    "G3_pass": true,
+    "G4_pass": true
+  },
+  "m3_R5_lowbeta_bot20_pos_mom": {
+    "name": "m3_R5_lowbeta_bot20_pos_mom",
+    "G2_runs_e2e": true,
+    "G3_pass": true,
+    "G4_pass": true
+  },
+  "m4_R5_lowbeta_bot30_ma200_gate": {
+    "name": "m4_R5_lowbeta_bot30_ma200_gate",
+    "G2_runs_e2e": true,
+    "G3_pass": true,
+    "G4_pass": true
+  },
+  "m5_R5_inv_vol_within_lowbeta_bot30": {
+    "name": "m5_R5_inv_vol_within_lowbeta_bot30",
+    "G2_runs_e2e": true,
+    "G3_pass": true,
+    "G4_pass": true
+  },
+  "m6_R5_ew_with_cash_below_ma200": {
+    "name": "m6_R5_ew_with_cash_below_ma200",
+    "G2_runs_e2e": true,
+    "G3_pass": true,
+    "G4_pass": true
+  },
+  "m7_R5_lowbeta_bot15_ma200_gate": {
+    "name": "m7_R5_lowbeta_bot15_ma200_gate",
+    "G2_runs_e2e": true,
+    "G3_pass": true,
+    "G4_pass": true
+  },
+  "m8_R5_ew_baseline": {
+    "name": "m8_R5_ew_baseline",
+    "G2_runs_e2e": true,
+    "G3_pass": true,
+    "G4_pass": true
+  }
+}

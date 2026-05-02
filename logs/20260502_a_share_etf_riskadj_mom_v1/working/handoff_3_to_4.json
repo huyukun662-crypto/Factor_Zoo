@@ -1,0 +1,26 @@
+{
+  "from": "agent_3_alpha_builder",
+  "to": "agent_4_backtest_operator",
+  "session_id": "20260502_a_share_etf_riskadj_mom_v1",
+  "expressions_path": "outputs/expressions_batch_0001.md",
+  "expression_count": 8,
+  "rule_of_8_compliant": true,
+  "expressions": [
+    {"id": "m1_riskadj_mom_60_top5",           "lookback_k": 60, "vol_window": 60,  "vol_kind": "std_log_ret",   "skip": 0, "topN": 5, "regime_gate": null},
+    {"id": "m2_riskadj_mom_60_top3",           "lookback_k": 60, "vol_window": 60,  "vol_kind": "std_log_ret",   "skip": 0, "topN": 3, "regime_gate": null},
+    {"id": "m3_riskadj_mom_120_top5",          "lookback_k": 120,"vol_window": 120, "vol_kind": "std_log_ret",   "skip": 0, "topN": 5, "regime_gate": null},
+    {"id": "m4_riskadj_mom_20_top5",           "lookback_k": 20, "vol_window": 20,  "vol_kind": "std_log_ret",   "skip": 0, "topN": 5, "regime_gate": null},
+    {"id": "m5_riskadj_mom_60_top5_ma50_gate", "lookback_k": 60, "vol_window": 60,  "vol_kind": "std_log_ret",   "skip": 0, "topN": 5, "regime_gate": "MA50_510300"},
+    {"id": "m6_riskadj_mom_60_skip5_top5",     "lookback_k": 60, "vol_window": 60,  "vol_kind": "std_log_ret",   "skip": 5, "topN": 5, "regime_gate": null},
+    {"id": "m7_plain_mom_60_top5",             "lookback_k": 60, "vol_window": null,"vol_kind": "none",          "skip": 0, "topN": 5, "regime_gate": null},
+    {"id": "m8_sortino_mom_60_top5",           "lookback_k": 60, "vol_window": 60,  "vol_kind": "downside_std",  "skip": 0, "topN": 5, "regime_gate": null}
+  ],
+  "execution_contract": {
+    "delay_days": 1,
+    "rebalance": "monthly_last_trading_day",
+    "hold_days_target_window": 21,
+    "target_shift_invariant": -2,
+    "cost_per_side_bps": 5
+  },
+  "validation_gates_to_pass_before_submission": ["G1_importable", "G2_runs_e2e", "G3_non_degenerate", "G4_fidelity"]
+}

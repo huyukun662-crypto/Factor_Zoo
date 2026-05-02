@@ -1,0 +1,6 @@
+{
+  "delay": 1,
+  "target_shift_invariant_required": -2,
+  "explanation": "forward 21d return uses logp.shift(-(1+delay)) - logp.shift(-1), so target_shift on the held leg is -(1+delay) = -2 \u2713",
+  "pass": true
+}
