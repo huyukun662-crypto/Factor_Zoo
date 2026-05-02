@@ -1,0 +1,20 @@
+round: 2
+session_id: 20260502_a_share_etf_riskadj_mom_v1
+mechanism: long_window_momentum_wider_topN
+lookbacks_tested: [120, 180, 252]
+top_n_tested: [20]
+universe_size: 71
+liquidity_filter_amount_cny_per_day: 50_000_000
+best_variant:
+  id: m5_R2_plain_mom_252_top20
+  net_sharpe: 0.38
+  ic_mean: 0.032
+  worst_year_sharpe: -1.70
+verdict: IC sign correct (positive at long windows) but cannot beat EW (0.57)
+key_insight: A-share ETF cross-section has weak momentum signal; common factor dominates
+next_round_action: pivot mechanism to low-vol / low-beta (best-documented A-share anomaly)
+artifacts:
+  summary: outputs/r2_summary_batch_0002.csv
+  per_year: outputs/r2_per_year_batch_0002.csv
+  cost_sensitivity: outputs/r2_cost_sensitivity_batch_0002.csv
+  validation_gates: outputs/r2_validation_gates_batch_0002.json

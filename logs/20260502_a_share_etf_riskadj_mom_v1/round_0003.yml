@@ -1,0 +1,25 @@
+round: 3
+session_id: 20260502_a_share_etf_riskadj_mom_v1
+mechanism: low_volatility_low_beta_pivot
+lookbacks_tested: [60, 120]
+top_n_tested: [10, 20]
+universe_size: 71
+best_variant:
+  id: m7_R3_lowbeta_60_bot20
+  net_sharpe: 0.63
+  ic_mean: 0.055
+  worst_year_sharpe: -0.95
+  byo_over_headline: 0.76
+control_high_vol:
+  id: m6_R3_high_vol_60_top20
+  net_sharpe: 0.36
+  ic_mean: -0.035
+  note: confirms low-vol anomaly direction (high-vol IS the underperformer)
+verdict: positive IC at scale but worst-year still negative
+key_insight: low-beta works directionally; need regime gate for worst-year rescue
+next_round_action: smooth tilts (R4) and regime-gated low-beta (R5)
+artifacts:
+  summary: outputs/r3_summary_batch_0003.csv
+  per_year: outputs/r3_per_year_batch_0003.csv
+  cost_sensitivity: outputs/r3_cost_sensitivity_batch_0003.csv
+  validation_gates: outputs/r3_validation_gates_batch_0003.json

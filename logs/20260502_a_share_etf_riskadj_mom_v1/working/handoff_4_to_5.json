@@ -1,0 +1,24 @@
+{
+  "from": "agent_4_backtest_operator",
+  "to": "agent_5_evaluator_recorder",
+  "session_id": "20260502_a_share_etf_riskadj_mom_v1",
+  "rounds_completed": 5,
+  "winning_expression": "m7_R5_lowbeta_bot15_ma200_gate",
+  "headline_metrics_net": {
+    "sharpe": 0.445,
+    "ann_return": 0.0499,
+    "ann_vol": 0.1121,
+    "max_drawdown": -0.218,
+    "worst_year_sharpe": 0.0,
+    "byo_sharpe": 0.421,
+    "byo_over_headline": 0.946
+  },
+  "ew_baseline_metrics_net": {
+    "sharpe": 0.571,
+    "max_drawdown": -0.3298,
+    "worst_year_sharpe": -1.174
+  },
+  "all_audits_pass_revised_floors": true,
+  "factor_artifact": "factors/price_volume/ashare_etf_lowbeta_bot15_ma200gate_v1.parquet",
+  "daily_pnl_artifact": "logs/20260502_a_share_etf_riskadj_mom_v1/outputs/winner_daily_pnl.parquet"
+}

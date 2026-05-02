@@ -1,0 +1,37 @@
+{
+  "session_id": "20260502_a_share_etf_riskadj_mom_v1",
+  "started_at": "2026-05-02",
+  "branch": "claude/ashare-etf-factor-worldquant-dDDJ2",
+  "rounds_completed": 5,
+  "current_state": "DONE",
+  "decision": "RESEARCH_ONLY_with_defensive_overlay_deployment",
+  "winner": "m7_R5_lowbeta_bot15_ma200_gate",
+  "data_source": "logs/_shared_cache/etf_daily_tushare.parquet",
+  "data_provider": "tushare_pro_api",
+  "universe_after_filter": 71,
+  "window": "2019-01-02 to 2026-04-30",
+  "agents": {
+    "agent_1_research_librarian": "completed",
+    "agent_2_hypothesis_architect": "completed",
+    "agent_3_alpha_builder": "completed",
+    "agent_4_backtest_operator": "completed_5_rounds",
+    "agent_5_evaluator_recorder": "completed"
+  },
+  "artifacts": {
+    "research_brief": "outputs/research_brief.md",
+    "session_metadata": "outputs/session_metadata.yml",
+    "expressions_batch_0001": "outputs/expressions_batch_0001.md",
+    "backtest_results": [
+      "outputs/backtest_results_batch_0001.md",
+      "outputs/backtest_results_batch_0002.md",
+      "outputs/backtest_results_batch_0003.md",
+      "outputs/backtest_results_batch_0004.md",
+      "outputs/backtest_results_batch_0005.md"
+    ],
+    "alpha_ranking": "outputs/alpha_ranking.md",
+    "final_summary": "outputs/final_summary.md",
+    "audit_winner": "outputs/audit_winner_m7_R5.json",
+    "factor_parquet": "factors/price_volume/ashare_etf_lowbeta_bot15_ma200gate_v1.parquet",
+    "daily_pnl_parquet": "outputs/winner_daily_pnl.parquet"
+  }
+}

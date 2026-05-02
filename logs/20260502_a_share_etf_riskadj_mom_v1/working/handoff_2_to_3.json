@@ -1,0 +1,32 @@
+{
+  "from": "agent_2_hypothesis_architect",
+  "to": "agent_3_alpha_builder",
+  "session_id": "20260502_a_share_etf_riskadj_mom_v1",
+  "session_metadata_path": "outputs/session_metadata.yml",
+  "primary_mechanism": "risk_adjusted_momentum_sharpe_style",
+  "expression_count_required": 8,
+  "rule_of_8_acknowledged": true,
+  "must_share_one_dominant_mechanism": true,
+  "expression_skeleton": [
+    {"id": "m1_riskadj_mom_60_top5",          "lookback_k": 60, "vol_window": 60, "vol_kind": "std_log_ret",     "skip": 0, "topN": 5, "regime_gate": null},
+    {"id": "m2_riskadj_mom_60_top3",          "lookback_k": 60, "vol_window": 60, "vol_kind": "std_log_ret",     "skip": 0, "topN": 3, "regime_gate": null},
+    {"id": "m3_riskadj_mom_120_top5",         "lookback_k": 120,"vol_window": 120,"vol_kind": "std_log_ret",     "skip": 0, "topN": 5, "regime_gate": null},
+    {"id": "m4_riskadj_mom_20_top5",          "lookback_k": 20, "vol_window": 20, "vol_kind": "std_log_ret",     "skip": 0, "topN": 5, "regime_gate": null},
+    {"id": "m5_riskadj_mom_60_top5_ma50_gate","lookback_k": 60, "vol_window": 60, "vol_kind": "std_log_ret",     "skip": 0, "topN": 5, "regime_gate": "MA50_510300"},
+    {"id": "m6_riskadj_mom_60_skip5_top5",    "lookback_k": 60, "vol_window": 60, "vol_kind": "std_log_ret",     "skip": 5, "topN": 5, "regime_gate": null},
+    {"id": "m7_plain_mom_60_top5",            "lookback_k": 60, "vol_window": null,"vol_kind": "none",           "skip": 0, "topN": 5, "regime_gate": null},
+    {"id": "m8_sortino_mom_60_top5",          "lookback_k": 60, "vol_window": 60, "vol_kind": "downside_std",    "skip": 0, "topN": 5, "regime_gate": null}
+  ],
+  "delay": 1,
+  "target_shift_invariant": -2,
+  "rebalance_freq": "monthly",
+  "cost_per_side_bps": 5,
+  "evaluation_floors": {
+    "long_only_sharpe_gross": 1.0,
+    "long_only_sharpe_net":   0.7,
+    "excess_vs_ew_sharpe":    0.6,
+    "worst_year_sharpe":      0.5,
+    "best_year_out_ratio":    0.5,
+    "annual_turnover_max":    8.0
+  }
+}

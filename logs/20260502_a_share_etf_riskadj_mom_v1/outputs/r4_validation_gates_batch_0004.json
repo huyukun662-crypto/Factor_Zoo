@@ -1,0 +1,58 @@
+{
+  "m1_R4_inv_vol_weighted_full": {
+    "name": "m1_R4_inv_vol_weighted_full",
+    "G2_runs_e2e": true,
+    "G3_pass": true,
+    "G4_pass": true,
+    "overall_pass": true
+  },
+  "m2_R4_inv_beta_weighted_full": {
+    "name": "m2_R4_inv_beta_weighted_full",
+    "G2_runs_e2e": true,
+    "G3_pass": true,
+    "G4_pass": true,
+    "overall_pass": true
+  },
+  "m3_R4_lowvol_top50pct_ew": {
+    "name": "m3_R4_lowvol_top50pct_ew",
+    "G2_runs_e2e": true,
+    "G3_pass": true,
+    "G4_pass": true,
+    "overall_pass": true
+  },
+  "m4_R4_lowbeta_top50pct_ew": {
+    "name": "m4_R4_lowbeta_top50pct_ew",
+    "G2_runs_e2e": true,
+    "G3_pass": true,
+    "G4_pass": true,
+    "overall_pass": true
+  },
+  "m5_R4_cap_blend_ew_invvol": {
+    "name": "m5_R4_cap_blend_ew_invvol",
+    "G2_runs_e2e": true,
+    "G3_pass": true,
+    "G4_pass": true,
+    "overall_pass": true
+  },
+  "m6_R4_lowbeta_bot30_ew": {
+    "name": "m6_R4_lowbeta_bot30_ew",
+    "G2_runs_e2e": true,
+    "G3_pass": true,
+    "G4_pass": true,
+    "overall_pass": true
+  },
+  "m7_R4_lowvol_lowbeta_combo_bot30": {
+    "name": "m7_R4_lowvol_lowbeta_combo_bot30",
+    "G2_runs_e2e": true,
+    "G3_pass": true,
+    "G4_pass": true,
+    "overall_pass": true
+  },
+  "m8_R4_ew_baseline_all": {
+    "name": "m8_R4_ew_baseline_all",
+    "G2_runs_e2e": true,
+    "G3_pass": true,
+    "G4_pass": true,
+    "overall_pass": true
+  }
+}

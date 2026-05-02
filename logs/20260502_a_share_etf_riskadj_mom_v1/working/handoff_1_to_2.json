@@ -1,0 +1,26 @@
+{
+  "from": "agent_1_research_librarian",
+  "to": "agent_2_hypothesis_architect",
+  "session_id": "20260502_a_share_etf_riskadj_mom_v1",
+  "research_brief_path": "outputs/research_brief.md",
+  "candidate_mechanisms": [
+    {"name": "risk_adjusted_momentum_60d", "score": "primary"},
+    {"name": "plain_momentum_60d", "score": "control_only"},
+    {"name": "downside_risk_adjusted_momentum_60d", "score": "alternate"}
+  ],
+  "data_source": "/home/user/Factor_Zoo/logs/_shared_cache/etf_daily.parquet",
+  "universe_target": 30,
+  "horizon_recommend": 21,
+  "lookback_recommend": 60,
+  "risks": [
+    "small_universe_30_etfs",
+    "thematic_clustering_can_concentrate_top3",
+    "best_year_out_likely_failure_mode"
+  ],
+  "operational_constraints_from_claude_md": [
+    "monthly_rebalance_required_for_a_share",
+    "long_only_top_n_is_the_deployable_metric",
+    "5bps_per_side_cost",
+    "report_both_LS_and_long_only_excess"
+  ]
+}
