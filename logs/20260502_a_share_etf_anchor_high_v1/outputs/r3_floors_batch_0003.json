@@ -1,0 +1,82 @@
+{
+  "H1": {
+    "sharpe_excess_net": 0.5464392540227648,
+    "promote_sharpe_geq_1.0": false,
+    "candidate_sharpe_geq_0.5": true,
+    "worst_year_geq_0": false,
+    "worst_year_geq_0.5": false,
+    "test_geq_50pct_full": true,
+    "frac_pos_years_geq_70pct": true,
+    "verdict": "RESEARCH_ONLY"
+  },
+  "H2": {
+    "sharpe_excess_net": 0.47812610986882326,
+    "promote_sharpe_geq_1.0": false,
+    "candidate_sharpe_geq_0.5": false,
+    "worst_year_geq_0": false,
+    "worst_year_geq_0.5": false,
+    "test_geq_50pct_full": true,
+    "frac_pos_years_geq_70pct": true,
+    "verdict": "REJECT"
+  },
+  "H3": {
+    "sharpe_excess_net": 0.5397135991454016,
+    "promote_sharpe_geq_1.0": false,
+    "candidate_sharpe_geq_0.5": true,
+    "worst_year_geq_0": false,
+    "worst_year_geq_0.5": false,
+    "test_geq_50pct_full": true,
+    "frac_pos_years_geq_70pct": true,
+    "verdict": "RESEARCH_ONLY"
+  },
+  "H4": {
+    "sharpe_excess_net": 0.3154893246612576,
+    "promote_sharpe_geq_1.0": false,
+    "candidate_sharpe_geq_0.5": false,
+    "worst_year_geq_0": false,
+    "worst_year_geq_0.5": false,
+    "test_geq_50pct_full": true,
+    "frac_pos_years_geq_70pct": true,
+    "verdict": "REJECT"
+  },
+  "H5": {
+    "sharpe_excess_net": 0.5247656368163283,
+    "promote_sharpe_geq_1.0": false,
+    "candidate_sharpe_geq_0.5": true,
+    "worst_year_geq_0": true,
+    "worst_year_geq_0.5": false,
+    "test_geq_50pct_full": true,
+    "frac_pos_years_geq_70pct": true,
+    "verdict": "RESEARCH_ONLY"
+  },
+  "H6": {
+    "sharpe_excess_net": 0.634277867060729,
+    "promote_sharpe_geq_1.0": false,
+    "candidate_sharpe_geq_0.5": true,
+    "worst_year_geq_0": false,
+    "worst_year_geq_0.5": false,
+    "test_geq_50pct_full": true,
+    "frac_pos_years_geq_70pct": true,
+    "verdict": "RESEARCH_ONLY"
+  },
+  "H7": {
+    "sharpe_excess_net": 0.7068526314694911,
+    "promote_sharpe_geq_1.0": false,
+    "candidate_sharpe_geq_0.5": true,
+    "worst_year_geq_0": false,
+    "worst_year_geq_0.5": false,
+    "test_geq_50pct_full": true,
+    "frac_pos_years_geq_70pct": true,
+    "verdict": "RESEARCH_ONLY"
+  },
+  "H8": {
+    "sharpe_excess_net": 0.34656527673680065,
+    "promote_sharpe_geq_1.0": false,
+    "candidate_sharpe_geq_0.5": false,
+    "worst_year_geq_0": false,
+    "worst_year_geq_0.5": false,
+    "test_geq_50pct_full": true,
+    "frac_pos_years_geq_70pct": false,
+    "verdict": "REJECT"
+  }
+}
