@@ -1,0 +1,8 @@
+{
+  "pair": "E1_vs_E8_sign_flip",
+  "E1_sharpe_ls": -0.03435234252393267,
+  "E8_sharpe_ls": -0.07630722549572296,
+  "expected": "E1 > E8 by at least 1.0 if mechanism is correct",
+  "pass": false,
+  "E1_vs_252d_momentum_xs_rank_corr_mean": 0.3769090810335977
+}

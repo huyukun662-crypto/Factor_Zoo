@@ -1,0 +1,32 @@
+{
+  "session": "20260502_a_share_etf_anchor_high_v1",
+  "started_at": "2026-05-02",
+  "model": "claude-opus-4-7",
+  "stage": "agent_5_complete",
+  "rounds_completed": 1,
+  "current_decision": "RESEARCH_ONLY",
+  "lead_factor": "E3_range_pos_252",
+  "artifacts": {
+    "research_brief": "outputs/research_brief.md",
+    "session_metadata": "outputs/session_metadata.yml",
+    "expressions": "outputs/expressions_batch_0001.md",
+    "backtest_md": "outputs/backtest_results_batch_0001.md",
+    "summary_csv": "outputs/summary_batch_0001.csv",
+    "per_year_csv": "outputs/per_year_batch_0001.csv",
+    "cost_sensitivity_csv": "outputs/cost_sensitivity_batch_0001.csv",
+    "audit_delay": "outputs/audit_execution_delay.json",
+    "audit_lookahead": "outputs/audit_lookahead_batch_0001.json",
+    "audit_floors": "outputs/audit_floors_batch_0001.json",
+    "audit_falsification": "outputs/audit_falsification_batch_0001.json",
+    "validation_gates": "outputs/validation_gates_batch_0001.json",
+    "alpha_ranking": "outputs/alpha_ranking.md",
+    "final_summary": "outputs/final_summary.md",
+    "round_yaml": "round_0001.yml"
+  },
+  "handoffs": {
+    "1_to_2": "working/handoff_1_to_2.json",
+    "2_to_3": "working/handoff_2_to_3.json",
+    "3_to_4": "working/handoff_3_to_4.json",
+    "4_to_5": "working/handoff_4_to_5.json"
+  }
+}

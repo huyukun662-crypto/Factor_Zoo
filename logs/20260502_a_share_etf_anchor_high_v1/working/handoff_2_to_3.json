@@ -1,0 +1,28 @@
+{
+  "from_agent": "hypothesis_architect",
+  "to_agent": "alpha_builder",
+  "session": "20260502_a_share_etf_anchor_high_v1",
+  "primary_mechanism": "anchor_proximity_to_long_window_high",
+  "windows": [60, 120, 252],
+  "forward_horizons": [5, 10, 20],
+  "primary_forward_horizon": 20,
+  "delay": 1,
+  "rebalance_days": 21,
+  "cost_bps_side": 5,
+  "universe_size": 32,
+  "benchmark": "510300.SS",
+  "expression_count_required": 8,
+  "must_include": [
+    "p_over_max_252 raw",
+    "p_over_max_60 short anchor",
+    "range_position_252",
+    "drawdown_distance_60",
+    "regime_gated_p_over_max_252",
+    "multi_horizon_composite",
+    "lagged_p_over_max_252 (decayed signal)",
+    "sign_flip_falsification (-p_over_max_252)"
+  ],
+  "selection_modes_to_evaluate": ["LS Q5", "long-only top-3 excess vs EW", "long-only top-5 excess vs EW"],
+  "neutralization": "none (ETF universe is heterogeneous; no industry parent)",
+  "next_action": "agent_3_emit_8_expressions"
+}

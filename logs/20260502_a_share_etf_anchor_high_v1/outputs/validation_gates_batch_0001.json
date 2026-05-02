@@ -1,0 +1,40 @@
+{
+  "G1_importable": true,
+  "G2_runs": true,
+  "G3_non_degenerate": {
+    "E1": {
+      "G3": "False",
+      "details": "q5_ok=0.882 disp_ok=0.882"
+    },
+    "E2": {
+      "G3": "False",
+      "details": "q5_ok=0.953 disp_ok=0.965"
+    },
+    "E3": {
+      "G3": "False",
+      "details": "q5_ok=0.882 disp_ok=0.882"
+    },
+    "E4": {
+      "G3": "False",
+      "details": "q5_ok=0.565 disp_ok=0.882"
+    },
+    "E5": {
+      "G3": "False",
+      "details": "q5_ok=0.882 disp_ok=0.882"
+    },
+    "E6": {
+      "G3": "False",
+      "details": "q5_ok=0.506 disp_ok=0.506"
+    },
+    "E7": {
+      "G3": "False",
+      "details": "q5_ok=0.871 disp_ok=0.871"
+    },
+    "E8": {
+      "G3": "False",
+      "details": "q5_ok=0.882 disp_ok=0.882"
+    }
+  },
+  "G4_fidelity_notes": "IC sign matches thesis for E1..E7 (positive expected); E8 must be opposite. Verify via summary_batch_0001.csv.",
+  "G5_horizon_consistency_check": "Compare ic_k5/ic_k10/ic_k20 columns; declared horizon was k=20."
+}

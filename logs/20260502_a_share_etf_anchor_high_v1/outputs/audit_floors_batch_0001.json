@@ -1,0 +1,74 @@
+{
+  "E1": {
+    "worst_year_ls": -0.6054796232077461,
+    "worst_year_floor_pass": false,
+    "best_year_out_sharpe": -0.3029199285589275,
+    "best_year_out_pct_of_headline": 8.818028300337556,
+    "best_year_out_pass": false,
+    "net_sharpe_5bps_top3": 0.09495345802507119,
+    "net_sharpe_5bps_top5": 0.054458288379439126
+  },
+  "E2": {
+    "worst_year_ls": -1.0052084102450716,
+    "worst_year_floor_pass": false,
+    "best_year_out_sharpe": -0.1262375779108474,
+    "best_year_out_pct_of_headline": -0.6692291453558195,
+    "best_year_out_pass": false,
+    "net_sharpe_5bps_top3": -0.004723716197740075,
+    "net_sharpe_5bps_top5": 0.02189810094771153
+  },
+  "E3": {
+    "worst_year_ls": -0.18057406582740826,
+    "worst_year_floor_pass": false,
+    "best_year_out_sharpe": 0.40771912021981455,
+    "best_year_out_pct_of_headline": 0.6497291215146828,
+    "best_year_out_pass": true,
+    "net_sharpe_5bps_top3": 0.3127476136265031,
+    "net_sharpe_5bps_top5": 0.4863475995067286
+  },
+  "E4": {
+    "worst_year_ls": -0.4586544150759509,
+    "worst_year_floor_pass": false,
+    "best_year_out_sharpe": -0.3185096324934918,
+    "best_year_out_pct_of_headline": 2.8899424112770307,
+    "best_year_out_pass": false,
+    "net_sharpe_5bps_top3": 0.29592634979491383,
+    "net_sharpe_5bps_top5": 0.33075397877770046
+  },
+  "E5": {
+    "worst_year_ls": -0.8169274239802593,
+    "worst_year_floor_pass": false,
+    "best_year_out_sharpe": -0.4931218547097842,
+    "best_year_out_pct_of_headline": 4.262010775299082,
+    "best_year_out_pass": false,
+    "net_sharpe_5bps_top3": 0.2396662557280974,
+    "net_sharpe_5bps_top5": 0.15156466268382843
+  },
+  "E6": {
+    "worst_year_ls": 0.23965450755436188,
+    "worst_year_floor_pass": false,
+    "best_year_out_sharpe": -0.284823260463675,
+    "best_year_out_pct_of_headline": 3.0378834964830532,
+    "best_year_out_pass": false,
+    "net_sharpe_5bps_top3": 0.004738782845376956,
+    "net_sharpe_5bps_top5": -0.006183944927004331
+  },
+  "E7": {
+    "worst_year_ls": -1.719567795161563,
+    "worst_year_floor_pass": false,
+    "best_year_out_sharpe": -0.7546362543412767,
+    "best_year_out_pct_of_headline": 1.5254868909766586,
+    "best_year_out_pass": false,
+    "net_sharpe_5bps_top3": -0.5842437775596891,
+    "net_sharpe_5bps_top5": -0.4896304102559967
+  },
+  "E8": {
+    "worst_year_ls": -0.6353199090141523,
+    "worst_year_floor_pass": false,
+    "best_year_out_sharpe": -0.16800738667488255,
+    "best_year_out_pct_of_headline": 2.2017231734404943,
+    "best_year_out_pass": false,
+    "net_sharpe_5bps_top3": 0.31199154858466005,
+    "net_sharpe_5bps_top5": -0.07338087253028407
+  }
+}
