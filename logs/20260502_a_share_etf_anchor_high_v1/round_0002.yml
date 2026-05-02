@@ -1,0 +1,54 @@
+round: 2
+session: 20260502_a_share_etf_anchor_high_v1
+batch: 0002
+focus: rescue_E3_worst_year_via_variants_AND_phase_rotation_audit
+expressions_count: 8
+audit_added: rebalance_phase_rotation
+
+key_finding: |
+  Phase-rotation audit (21 offsets) reveals R1's E3 LS Sharpe of 0.628
+  was the single-best phase. Honest phase-averaged LS Sharpe is 0.239
+  ± 0.245 (range -0.23 to 0.64). Top-5 long-only excess phase-averaged
+  Sharpe is 0.121 (range -0.37 to 0.60). Worst-year never positive
+  across any phase (median -0.84, min -2.05).
+
+phase_rotation:
+  factor: range_pos_252_LS_Q5
+  k: 20
+  rebal: 21
+  n_phases: 21
+  ls:
+    mean: 0.239
+    std: 0.245
+    min: -0.230
+    max: 0.637
+    median: 0.230
+    phase_averaged_portfolio: 0.239
+  top5:
+    mean: 0.121
+    min: -0.373
+    max: 0.602
+    phase_averaged_portfolio: 0.121
+  per_year_phase_averaged:
+    2020: 1.12
+    2021: -0.16
+    2022: -0.62
+    2023: 1.34
+    2024: 0.19
+    2025: 0.56
+
+variants_phase_0_only:
+  - {id: F1, label: range_pos_252_baseline,    ls_net5: 0.228, top5_net5: 0.410, worst_year: -0.64, verdict: research_only}
+  - {id: F2, label: range_pos_120,             ls_net5: 0.406, top5_net5: 0.416, worst_year: -1.57, verdict: rejected_worst_year}
+  - {id: F3, label: range_pos_60,              ls_net5: 0.415, top5_net5: 0.091, worst_year: -0.68, verdict: rejected_worst_year}
+  - {id: F4, label: multi_window_rank,         ls_net5: 0.312, top5_net5: 0.654, worst_year: -1.17, verdict: research_grade_top5_only}
+  - {id: F5, label: range_pos_div_vol60,       ls_net5: 0.033, top5_net5: -0.071, worst_year: -0.92, verdict: rejected}
+  - {id: F6, label: range_pos_MA200_gate,      ls_net5: 0.255, top5_net5: 0.103, worst_year: -0.19, verdict: rejected_test_negative}
+  - {id: F7, label: range_pos_resid_mom_252,   ls_net5: 0.110, top5_net5: -0.241, worst_year: -1.61, verdict: rejected_residual_too_weak}
+  - {id: F8, label: range_pos_rebal_42d,       ls_net5: -0.110, top5_net5: 0.043, worst_year: nan,   verdict: rejected_zero_info}
+
+decision: RESEARCH_ONLY_REAFFIRMED
+honest_lead: F4_multi_window_top5_long_only_excess
+honest_lead_caveat: "single-phase Sharpe 0.65; needs phase-rotation re-test before any further promotion"
+worst_year_floor_breached_by_all: true
+new_repo_pitfall_candidate: rebalance_phase_rotation_sensitivity

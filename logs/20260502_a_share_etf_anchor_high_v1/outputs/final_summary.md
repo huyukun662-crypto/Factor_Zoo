@@ -1,110 +1,119 @@
-# Final Summary — A-share ETF Anchor / 52W-High Proximity v1
+# Final Summary — A-share ETF Anchor / 52W-High Proximity v1 (post-R2)
 
-**Decision:** RESEARCH-ONLY.
-**Lead candidate:** E3 = `range_pos_252` (top-5 long-only excess sleeve).
-**Promotable:** No — fails the ≥ 0.5 worst-year LS Sharpe floor.
+**Decision:** RESEARCH-ONLY (confirmed and tightened in Round 2).
+**Honest lead candidate:** F4 = multi-window range-position rank,
+top-5 long-only excess (single-phase Sharpe 0.65 — pending
+phase-rotation re-test).
+**Promotable:** No — fails worst-year LS Sharpe ≥ 0.5 floor under
+*any* phase, fails phase-rotation robustness floor on the original
+R1 lead.
 
-## What was tested
+## Two-round arc
 
-8 expressions exploring the 52-week-high anchoring effect (George &
-Hwang 2004) on a 32-ETF A-share universe (2019-01 to 2026-04).
-Cross-sectional ranking, monthly rebalance, 5 bps/side cost,
-delay=1, primary horizon k=20.
+### Round 1 (initial 8 expressions)
+- Falsified the literal G&H 52w-high proximity (E1 LS ≈ 0; E8 sign
+  flip only 0.04 worse).
+- Identified E3 = `range_pos_252` = `(p-min_252)/(max_252-min_252)`
+  as the working factor with single-phase LS Sharpe 0.628 net.
+- Worst-year LS -0.18 failed the 0.5 floor → RESEARCH-ONLY.
 
-## Headline result
+### Round 2 (8 E3-centric variants + phase-rotation audit)
+- **Critical finding**: the R1 number 0.628 is the single-best
+  phase out of 21 possible rebalance offsets. Phase-averaged LS
+  Sharpe collapses to **0.239 ± 0.245** (top-5 long-only excess
+  to 0.12).
+- F2 (window=120) and F3 (window=60) gave higher single-phase LS
+  Sharpe (0.41) but with even worse worst-year (-1.57, -0.68).
+- F4 (multi-window rank average) gave the cleanest top-5 long-only
+  number at 0.65 net but is also single-phase.
+- F6 (MA200 risk-on gate) materially improved worst-year (-0.19)
+  but its test-window Sharpe is -0.08 → rejected.
+- F7 (residualization vs 252d momentum) retains 48% of F1's signal
+  → factor is half momentum-clone, half genuine range-position
+  effect.
 
-| metric                 | E3 (range_pos_252) |
-|------------------------|--------------------|
-| LS Sharpe (gross)      | 0.628              |
-| LS Sharpe (net 5 bps)  | 0.625              |
-| top-5 long excess net  | **0.486**          |
-| top-3 long excess net  | 0.313              |
-| Train Sharpe (LS)      | 0.671              |
-| Validate Sharpe (LS)   | -0.112             |
-| Test Sharpe (LS)       | **0.745**          |
-| Worst-year LS Sharpe   | -0.181 (2024)      |
-| Best-year-out LS       | 0.408 (= 65% of headline) ✓ |
-| Annualized turnover    | ~9 (top-5)         |
-| Cost-net break-even    | passes at 20 bps/side |
+## Honest E3 numbers (phase-averaged across 21 offsets)
 
-Per-year LS Sharpe: 2020 +1.09 / 2021 +0.92 / 2022 -0.11 / 2023 +1.46
-/ 2024 -0.18 / 2025 +1.09. Test (2023-2026) > Train (2019-2021), no
-sign of overfitting; 2022 and 2024 are the soft years.
+| metric                           | value         |
+|----------------------------------|---------------|
+| LS Sharpe (gross, phase-avg)     | 0.239         |
+| LS Sharpe std across phases      | 0.245         |
+| LS Sharpe min phase / max phase  | -0.23 / 0.64  |
+| top-5 long-only excess (phase-avg)| 0.121        |
+| top-5 phase min / max            | -0.37 / 0.60  |
+| Median worst-year LS across phases| -0.84        |
+| Best phase-averaged year (LS)    | 2023 (+1.34)  |
+| Worst phase-averaged year (LS)   | 2022 (-0.62)  |
+| Best phase-averaged year (top-5) | 2023 (+1.34)  |
+| Worst phase-averaged year (top-5)| 2022 (-0.63)  |
 
-## Why "RESEARCH-ONLY", not "PROMOTE"
+## Five mandatory audits — final disposition
 
-The five mandatory pre-promote audits resolved as:
+| audit                              | R1     | R2 (after phase rotation) |
+|------------------------------------|--------|---------------------------|
+| Execution-delay                    | PASS   | PASS                      |
+| Look-ahead randomization           | PASS   | PASS                      |
+| Worst-year LS Sharpe ≥ 0.5         | FAIL   | FAIL (worse: median -0.84)|
+| Best-year-out ≥ 50 % of headline   | PASS   | PASS only on phase-0      |
+| Falsification-first (E1 vs E8)     | PASS   | PASS                      |
+| **Phase-rotation robustness (new)**| —      | FAIL                      |
 
-1. Execution-delay audit — **PASS** (`target_shift = -(1+delay) = -2`).
-2. Look-ahead randomization — **PASS** (zero diff for E1, E3, E5).
-3. Worst-year LS Sharpe ≥ 0.5 — **FAIL** (E3 worst is -0.18; floor
-   wants ≥ 0.5, even if mild). Per `references/tvt-split-template.md`
-   this single failure precludes PROMOTE regardless of headline
-   strength.
-4. Best-year-out ≥ 50 % of headline — **PASS** for E3 (65 %).
-5. Falsification-first — **PASS at the batch level**: the canonical
-   anchor (E1, p/max_252) was falsified — its sign-flip (E8) only
-   underperforms by 0.04 LS Sharpe, confirming E1 carries no signal.
-   The mechanism that *does* work (E3) survives this same scrutiny:
-   it is a min-max range position, not a literal high anchor, and
-   its xs-rank correlation with 252d momentum is materially lower
-   than E1's 0.38 — i.e. E3 is not a momentum clone.
+## Why phase rotation matters
 
-## What is the actual mechanism
+In a daily-data world, a strategy with `rebal=21` has 21 possible
+starting offsets. Live deployment can pick exactly one (or rotate
+across all 21 with 1/21 capital each, "phase averaging"). The
+single-phase Sharpe is a sample of size 1 from a distribution
+whose realized std is 0.25 — a 95 % CI on the single-phase
+estimator is roughly ±0.5 Sharpe units, larger than the headline
+itself. Picking phase 0 because it is "the natural starting
+offset" introduces selection bias relative to an investor who
+deploys at an arbitrary calendar moment.
 
-The literal "near-52-week-high" effect from George & Hwang (2004) on
-US single-stocks does NOT cleanly transfer to this 32-ETF A-share
-universe. ETFs differ in long-run drift (gold +90% since 2019;
-some niche thematics -50%), and ranking p/max_252 cross-sectionally
-collapses into a noisy momentum proxy.
+This pitfall is **not currently in
+`worldquant-5-agent-workflow/references/common-pitfalls.md`**.
+Recommend appending it as a new pitfall in any future iteration of
+the skill package.
 
-What does transfer is **range position** —
-`(close - min_252) / (max_252 - min_252)`. This double-normalization
-cancels long-run drift and isolates "where in its own 1-year band is
-this ETF today". Going long the top-5 (high in own band) and avoiding
-the bottom yields a 0.49 net-of-cost long-only excess Sharpe with
-robust train→test behavior.
+## What is genuine here
 
-## Distinct from prior 6 ETF sessions
+1. The cross-sectional range-position effect is positive on
+   average — 16 of 21 phases produce LS Sharpe > 0.
+2. The mechanism is half momentum (residualization shows 48 %
+   retention) and half something else, plausibly the anchoring
+   component this study set out to test, but with weaker effect
+   size than G&H reported on US single-stocks.
+3. F4 (multi-window long-only top-5) compresses phase noise
+   in the long leg and is the most defensible R3 candidate.
+4. 2023 was the dominant tailwind year (LS +1.34 even after phase
+   averaging); 2022 was the floor (-0.62).
 
-- 20260423_etf_reversal — short-term reversal
-- 20260423_etf_weekly_tqpb — weekly turnover-quality momentum
-- 20260424_etf_daily_flow_accum — flow accumulation
-- 20260501_etf_ivol_momentum — IVOL momentum
-- 20260501_etf_ivol_reversal — IVOL reversal
-- 20260501_etf_leadlag — lead-lag
+## What is NOT supported by the data
 
-This session adds **range position / anchor proximity** — none of
-the prior sessions tests min-max range. Correlation with prior
-factors should be checked in any subsequent ensemble work; not
-done in this round because the result is not promotable in
-isolation.
+- A "0.63 LS Sharpe" headline for E3, full stop. That number is
+  conditioned on phase-0 rebalancing and should not be reported
+  without the phase-rotation distribution alongside.
+- The R1 alpha_ranking.md's "0.49 net top-5 long-only excess
+  Sharpe" claim — phase-averaged is 0.12.
 
-## Recommended next step
+## Recommended sleeve disposition
 
-If the reader wants a deployable A-share ETF sleeve from this
-session, the cleanest interpretation is:
+> Reject E3 phase-0 as a standalone sleeve.
+> If the reader still wants exposure: hold the **phase-averaged
+> top-5 long-only basket** with 1/21 capital deployed every
+> trading day (1-month rolling holding, full universe coverage).
+> Expected long-only excess return ~0.12 Sharpe; expected
+> annualized turnover ~9; expected worst-year drawdown -3 %.
+> Treat as a **research sleeve at single-digit % capital max**.
 
-> Hold an equal-weight basket of the **top-5 ETFs by range_pos_252**,
-> rebalanced monthly. Treat this as a **research sleeve only** —
-> historical worst-year underperformance (2024) is -3 % relative to
-> equal-weight benchmark, which is within tolerance for many sleeve
-> mandates but does not clear the formal worst-year LS Sharpe ≥ 0.5
-> bar required for PROMOTE.
+## R3 backlog (not run in this session)
 
-If batch_0002 is run, the highest-leverage hypothesis to test is
-combining E3 with E4 (`max60/max252`) — their per-year patterns are
-weakly anti-correlated in 2024-2025 and the combination may rescue
-the worst-year floor.
-
-## Caveats / open questions
-
-- 32-ETF universe is small; the LS leg has ~6 names per quintile.
-  Statistical power is limited; bootstrap CI not computed.
-- 2026 is partial (4 months). Test-window Sharpes use 2023 + 2024 +
-  2025 fully and 2026-Jan-Apr.
-- No explicit residualization of E3 against 252d momentum was done;
-  qualitative argument only. Recommended for batch_0002 if pursued.
-- Cost model is a flat 5 bps/side; A-share ETF microstructure for
-  smaller thematic ETFs may impose 10-15 bps in practice — raise
-  cost to 10-20 bps to stress-test.
+1. Phase-rotation re-test of F4 multi-window top-5.
+2. F4 + F6 combined (multi-window + risk-on gate) — F6 was the
+   only variant with a meaningful worst-year improvement.
+3. Lengthen the universe to include Hong Kong-listed China ETFs
+   for cross-validation.
+4. Bootstrap confidence intervals on the phase-averaged Sharpe to
+   distinguish 0.12 ± noise from 0.12 ± 0.04.
+5. Add phase-rotation as a **G6 validation gate** in the skill
+   package and a Pitfall #13 in `common-pitfalls.md`.

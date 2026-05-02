@@ -1,0 +1,29 @@
+{
+  "from_agent": "alpha_builder",
+  "to_agent": "backtest_operator",
+  "session": "20260502_a_share_etf_anchor_high_v1",
+  "batch": "0002",
+  "round": 2,
+  "rationale": "R1 found E3 (range_pos_252) is the only positive-Sharpe factor but failed worst-year 0.5 floor. R2 explores 8 variants — different windows, multi-window aggregation, vol-target, regime gate, momentum residualization, slower rebalance — to attempt to rescue worst-year without breaking the headline.",
+  "expression_count": 8,
+  "expressions": [
+    {"id": "F1", "form": "range_pos_252 baseline (= E3 rerun)", "modifier": "none", "window": 252},
+    {"id": "F2", "form": "range_pos_120", "modifier": "none", "window": 120},
+    {"id": "F3", "form": "range_pos_60", "modifier": "none", "window": 60},
+    {"id": "F4", "form": "(rank(F1)+rank(F2)+rank(F3))/3", "modifier": "multi-window-equal-rank", "windows": [60, 120, 252]},
+    {"id": "F5", "form": "F1 / vol_60", "modifier": "vol-target-divide", "vol_window": 60},
+    {"id": "F6", "form": "F1 * gate(bench_510300 > MA200)", "modifier": "regime-gate", "bench": "510300.SS", "ma_window": 200},
+    {"id": "F7", "form": "F1 - beta*mom_252 (xs residualization)", "modifier": "momentum-residualized", "mom_window": 252},
+    {"id": "F8", "form": "F1 with rebal_days=42", "modifier": "rebal-42d"}
+  ],
+  "primary_metric": "LS_net5_sharpe AND worst_year_LS_sharpe",
+  "promote_floor": {
+    "ls_net5_sharpe": 0.5,
+    "worst_year_sharpe": 0.5,
+    "best_year_out_pct": 50,
+    "train_sharpe_min": 0.4,
+    "test_sharpe_min": 0.4,
+    "ls_net_at_10bps": 0.0
+  },
+  "next_action": "agent_4_run_batch_0002"
+}
