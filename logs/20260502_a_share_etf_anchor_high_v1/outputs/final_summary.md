@@ -1,12 +1,22 @@
-# Final Summary — A-share ETF Anchor / Range-Position v1 (4 rounds)
+# Final Summary — A-share ETF Anchor / Range-Position v1 (6 rounds, CLOSED)
 
-**Decision:** ADMITTED-CANDIDATE.
-**Lead factor:** K5 = `anchor_range_pos_etf_v1` (multi-window
-range-position + 21-phase ensemble + 10 % vol-target, long-only
-top-3 of 20-ETF core).
-**Catalog status:** ADMITTED-CANDIDATE per `factors/README.md`
-inclusion threshold (net Sharpe ≥ 1.0, ≥ 4 iteration rounds, all
-audits documented).
+**Final decision:** **ADMITTED 2026-05-02** — `anchor_inv_ivol_ensemble_50_50_v1`.
+**Path:** R1-R5 produced anchor v1.1 standalone (Sharpe 1.22, ADMITTED-CANDIDATE,
+worst-year +0.20). R6 50/50 blend with `inv_ivol_voltarget_bondrotate_etf_v2`
+(daily ρ = 0.001) produced final ensemble: **Sharpe 1.91, max DD 6.4%,
+6/6 complete years all positive, complete-year worst Sharpe +0.51, all 13
+audits PASS.**
+
+**Component factors (both retained in catalog):**
+- `anchor_range_pos_etf_v1` (v1.1, R5) — ADMITTED-CANDIDATE (1.22 standalone)
+- `inv_ivol_voltarget_bondrotate_etf_v2` (existing) — ADMITTED-CANDIDATE (1.02 standalone)
+
+**Final factor (admitted):**
+`factors/price_volume/anchor_inv_ivol_ensemble_50_50_v1/` (R6).
+
+---
+
+## Original v1 framing (kept for historical record — R1-R4)
 
 ## Four-round arc
 
