@@ -1,0 +1,58 @@
+{
+  "r3_vt_LS_70": {
+    "worst_year": -1.0140342389868466,
+    "byo_avg": 0.2995111160614929,
+    "headline_sharpe": 0.39358438883124813,
+    "wy_pass_0p5": false,
+    "byo_pass_50pct": true
+  },
+  "r3_vt_LS_eq_only": {
+    "worst_year": -1.134694342323999,
+    "byo_avg": 0.5363703819877407,
+    "headline_sharpe": 0.6352297380098676,
+    "wy_pass_0p5": false,
+    "byo_pass_50pct": true
+  },
+  "r3_vt_LS_70_q1_no_bonds": {
+    "worst_year": -0.8941639126039069,
+    "byo_avg": 0.4594169559981722,
+    "headline_sharpe": 0.5727657096854051,
+    "wy_pass_0p5": false,
+    "byo_pass_50pct": true
+  },
+  "r3_top5_lo_70": {
+    "worst_year": -0.21984453279118438,
+    "byo_avg": 0.5566618580960658,
+    "headline_sharpe": 0.6517401109891133,
+    "wy_pass_0p5": false,
+    "byo_pass_50pct": true
+  },
+  "r3_top5_lo_bond_rotate": {
+    "worst_year": 0.09279792941373932,
+    "byo_avg": 0.7728820434307451,
+    "headline_sharpe": 0.931674058353855,
+    "wy_pass_0p5": false,
+    "byo_pass_50pct": true
+  },
+  "r3_top5_5050_bond_ballast": {
+    "worst_year": -0.0761423620844702,
+    "byo_avg": 0.7307103125182802,
+    "headline_sharpe": 0.7777986363535848,
+    "wy_pass_0p5": false,
+    "byo_pass_50pct": true
+  },
+  "r3_vt_LS_70_beta90": {
+    "worst_year": -1.0011903713942398,
+    "byo_avg": 0.2822694897196463,
+    "headline_sharpe": 0.3258848640375467,
+    "wy_pass_0p5": false,
+    "byo_pass_50pct": true
+  },
+  "r3_kitchen_sink": {
+    "worst_year": 0.30599784619079956,
+    "byo_avg": 0.9899996071595667,
+    "headline_sharpe": 1.081125333378729,
+    "wy_pass_0p5": false,
+    "byo_pass_50pct": true
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "r2_topN_no_gate": {
+    "worst_year": -0.2536141173903196,
+    "byo_avg": 0.7236420990977549,
+    "headline_sharpe": 0.7638487201429474,
+    "wy_pass_0p5": false,
+    "byo_pass_50pct_headline": true
+  },
+  "r2_topN_RS_gate": {
+    "worst_year": -0.2412141618581807,
+    "byo_avg": 0.5164529893671973,
+    "headline_sharpe": 0.6280721913697976,
+    "wy_pass_0p5": false,
+    "byo_pass_50pct_headline": true
+  },
+  "r2_topN_disp_gate": {
+    "worst_year": -0.9967242104793104,
+    "byo_avg": 0.10857310075536282,
+    "headline_sharpe": 0.2679175938627041,
+    "wy_pass_0p5": false,
+    "byo_pass_50pct_headline": false
+  },
+  "r2_topN_persist": {
+    "worst_year": -0.3535911008632397,
+    "byo_avg": 0.6247207961974498,
+    "headline_sharpe": 0.6949571880288301,
+    "wy_pass_0p5": false,
+    "byo_pass_50pct_headline": true
+  },
+  "r2_topN_RS_persist": {
+    "worst_year": -0.4454377228677118,
+    "byo_avg": 0.392822006162816,
+    "headline_sharpe": 0.5368667586693213,
+    "wy_pass_0p5": false,
+    "byo_pass_50pct_headline": true
+  },
+  "r2_LS_voltarget_10": {
+    "worst_year": 0.15740239033741682,
+    "byo_avg": 0.7969875613952021,
+    "headline_sharpe": 0.8466078591774069,
+    "wy_pass_0p5": false,
+    "byo_pass_50pct_headline": true
+  },
+  "r2_topN_RS_voltarget": {
+    "worst_year": -0.5055960544221456,
+    "byo_avg": 0.5349428577980929,
+    "headline_sharpe": 0.5936839027056732,
+    "wy_pass_0p5": false,
+    "byo_pass_50pct_headline": true
+  },
+  "r2_kitchen_sink": {
+    "worst_year": -0.4612549188065586,
+    "byo_avg": 0.4046755530648422,
+    "headline_sharpe": 0.4543720281377421,
+    "wy_pass_0p5": false,
+    "byo_pass_50pct_headline": true
+  }
+}

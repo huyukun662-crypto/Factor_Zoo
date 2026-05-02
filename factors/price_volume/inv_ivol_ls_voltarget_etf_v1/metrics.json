@@ -1,0 +1,54 @@
+{
+  "factor_id": "inv_ivol_ls_voltarget_etf_v1",
+  "label": "Inverted-IVOL on A-share ETFs, vol-target 10% ann, monthly LS",
+  "session_origin": "logs/20260501_a_share_etf_ivol_momentum_v1",
+  "universe_size": 30,
+  "rebalance_days": 21,
+  "primary_k": 20,
+  "delay_days": 1,
+  "cost_bps_per_side": 5.0,
+  "vol_target_ann": 0.1,
+  "max_leverage": 2.0,
+  "ivol_window_days": 20,
+  "beta_window_days": 60,
+  "headline_sharpe_voltarget_LS_net5bps": 0.8112214225361805,
+  "headline_sharpe_voltarget_LS_gross": 0.8466078591774069,
+  "headline_sharpe_raw_LS_no_voltarget": 0.6598369030759412,
+  "ann_ret_voltarget_LS_net5bps": 0.10948665234226995,
+  "max_dd_voltarget_LS_net5bps": -0.1367276874236243,
+  "avg_exposure": 0.6992349009392013,
+  "tvt_split": {
+    "train": [
+      "2019-01-02",
+      "2021-12-31"
+    ],
+    "validate": [
+      "2022-01-01",
+      "2022-12-31"
+    ],
+    "test": [
+      "2023-01-01",
+      "2026-04-30"
+    ]
+  },
+  "tvt_sharpe_voltarget_LS_net5bps": {
+    "train": 0.9619306133053702,
+    "validate": 0.10837102658505504,
+    "test": 0.903618585853048
+  },
+  "worst_year_sharpe_voltarget_net5bps": 0.10837102658505504,
+  "worst_year_year": 2022,
+  "n_years_positive_of_total": [
+    7,
+    7
+  ],
+  "best_year_out_avg_voltarget_net5bps": 0.759696159452541,
+  "audit_status": {
+    "execution_delay": "pass",
+    "look_ahead": "pass_max_diff_0.0_for_signal_and_voltarget_exposure",
+    "worst_year_floor_0.5": "fail (worst 2022 = 0.11)",
+    "best_year_out_50pct_headline": "pass",
+    "falsification_first": "pass"
+  },
+  "promote_status": "RESEARCH_ONLY_standalone__PROMOTE_CANDIDATE_as_5050_overlay_with_v25_or_v7_gold"
+}
