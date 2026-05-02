@@ -1,0 +1,51 @@
+{
+  "from_agent": "backtest_operator",
+  "to_agent": "evaluator_recorder",
+  "session": "20260502_a_share_etf_anchor_high_v1",
+  "batch": "0002",
+  "round": 2,
+  "primary_finding": "PHASE_ROTATION_SENSITIVITY",
+  "key_numbers": {
+    "F1_LS_phase_0_R1_value": 0.628,
+    "F1_LS_phase_1_value": 0.230,
+    "F1_LS_phase_averaged_21_phases": 0.239,
+    "F1_LS_phase_std": 0.245,
+    "F1_LS_phase_min": -0.230,
+    "F1_LS_phase_max": 0.637,
+    "F1_top5_phase_averaged": 0.121,
+    "F1_top5_phase_min": -0.373,
+    "F1_top5_phase_max": 0.602,
+    "worst_year_min_across_phases": -2.052,
+    "worst_year_median_across_phases": -0.838
+  },
+  "phase_averaged_per_year_ls": {
+    "2019": -3.42, "2020": 1.12, "2021": -0.16, "2022": -0.62,
+    "2023": 1.34, "2024": 0.19, "2025": 0.56, "2026": -1.51
+  },
+  "phase_averaged_per_year_top5_excess": {
+    "2019": -6.36, "2020": 1.19, "2021": -0.15, "2022": -0.63,
+    "2023": 1.34, "2024": -0.23, "2025": -0.54, "2026": 0.89
+  },
+  "interpretation": "R1 headline of LS=0.63 was single-best-phase out of 21; honest mean-across-phases is 0.24. Mechanism is real (phase-averaged Sharpe is positive at all 3 selection modes) but signal-to-noise is much lower than R1 implied. Worst-year never recovers above -0.11 across any phase.",
+  "r2_variants_summary": {
+    "F1_baseline_phase0": {"ls_net5": 0.228, "worst": -0.64},
+    "F2_120w": {"ls_net5": 0.406, "worst": -1.57},
+    "F3_60w": {"ls_net5": 0.415, "worst": -0.68},
+    "F4_multi_window_rank": {"ls_net5": 0.312, "worst": -1.17},
+    "F5_div_vol60": {"ls_net5": 0.033, "worst": -0.92},
+    "F6_MA200_gate": {"ls_net5": 0.255, "worst": -0.19},
+    "F7_resid_mom_252": {"ls_net5": 0.110, "worst": -1.61},
+    "F8_rebal_42d": {"ls_net5": -0.110, "worst": "NaN"}
+  },
+  "audits_r2": {
+    "phase_rotation_audit": "FAIL — single-phase number unrepresentative",
+    "F7_residualized_vs_F1": {
+      "F1_LS_net5": 0.228,
+      "F7_LS_net5": 0.110,
+      "F7_pct_of_F1": 0.48,
+      "interpretation": "After stripping 252d momentum, ~48% of F1's signal remains; the factor is partially but not entirely a momentum clone. Still meaningful residual but worst-year deteriorates further."
+    }
+  },
+  "decision_recommendation": "Continue RESEARCH-ONLY. Reject the previously-implied 'lead candidate' framing of E3@phase0. The honest production candidate is the phase-averaged top-5 long-only ensemble with Sharpe 0.12 net — too weak to PROMOTE in isolation but a viable component for a multi-factor sleeve.",
+  "next_action": "agent_5_finalize_with_phase_rotation_disclosure"
+}

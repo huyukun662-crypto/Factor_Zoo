@@ -1,0 +1,30 @@
+{
+  "from_agent": "research_librarian",
+  "to_agent": "hypothesis_architect",
+  "session": "20260502_a_share_etf_anchor_high_v1",
+  "primary_mechanism": "anchor_proximity_to_52w_high",
+  "secondary_mechanism": "range_position_williams",
+  "primary_reference": "George & Hwang (2004) JF",
+  "universe": "34 A-share ETFs (drop 512800.SS, 515170.SS for short history)",
+  "cache": "/home/user/Factor_Zoo/logs/_shared_cache/etf_daily.parquet",
+  "operators": [
+    "p / max_w(p)",
+    "(p - min_w(p)) / (max_w(p) - min_w(p))",
+    "(p - max_w(p)) / max_w(p)",
+    "rank-composite over horizons {60, 252}",
+    "regime_gate(bench>MA200)",
+    "sign_flip(-x) for falsification"
+  ],
+  "horizons_to_test": [60, 120, 252],
+  "forward_horizons": [5, 10, 20],
+  "primary_forward_horizon": 20,
+  "delay": 1,
+  "cost_bps_side": 5,
+  "tvt": {"train_end": "2021-12-31", "val_end": "2022-12-31"},
+  "risk_flags": [
+    "momentum_correlation",
+    "bull_market_LS_short_leg_destruction",
+    "limited_universe_size_34"
+  ],
+  "next_action": "agent_2_define_hypothesis_and_metadata"
+}

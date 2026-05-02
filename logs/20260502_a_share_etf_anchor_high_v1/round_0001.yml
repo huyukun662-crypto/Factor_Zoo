@@ -1,0 +1,55 @@
+round: 1
+session: 20260502_a_share_etf_anchor_high_v1
+batch: 0001
+topic: anchor_52w_high_proximity_a_share_etf
+expressions_count: 8
+
+generation:
+  primary_mechanism: anchoring_to_long_window_high
+  windows_tested: [60, 120, 252]
+  selection_modes: [LS_Q5, top3_long_excess, top5_long_excess]
+
+backtest:
+  delay: 1
+  primary_horizon_k: 20
+  rebalance_days: 21
+  cost_bps_side: 5
+  universe_size: 32
+  benchmark: 510300.SS
+  data_source: /home/user/Factor_Zoo/logs/_shared_cache/etf_daily.parquet
+  panel_start: 2019-01-02
+  panel_end: 2026-04-30
+
+validation_gates:
+  G1_importable: pass
+  G2_runs_end_to_end: pass
+  G3_non_degenerate: pass_for_all_8
+  G4_fidelity:
+    e1_e8_sign_flip_consistency: pass_at_IC_level
+    e1_252d_momentum_xs_rank_corr: 0.38
+  G5_horizon_consistency: pass
+
+audits:
+  execution_delay: pass
+  lookahead_randomization: pass
+  worst_year_floor_0.5: fail_for_all
+  best_year_out_50pct_of_headline: pass_for_E3_only
+  falsification_first: e1_canonical_proximity_falsified
+
+ranking:
+  - {id: E3, label: range_pos_252,    ls_net5: 0.62, top5_net5: 0.49, worst_year: -0.18, verdict: RESEARCH_ONLY_LEAD}
+  - {id: E4, label: max60_over_max252, ls_net5: -0.11, top5_net5: 0.33, worst_year: -0.46, verdict: research_only}
+  - {id: E2, label: p_over_max_60,    ls_net5: 0.19, top5_net5: 0.02,  worst_year: -1.01, verdict: reject_TVT_break}
+  - {id: E5, label: composite_z,      ls_net5: -0.12, top5_net5: 0.15, worst_year: -0.82, verdict: reject}
+  - {id: E1, label: p_over_max_252,   ls_net5: -0.04, top5_net5: 0.05, worst_year: -0.61, verdict: reject_zero_signal}
+  - {id: E6, label: regime_gate,      ls_net5: -0.09, top5_net5: -0.006, worst_year: 0.24, verdict: reject}
+  - {id: E8, label: neg_e1_falsifier, ls_net5: -0.08, top5_net5: -0.07, worst_year: -0.64, verdict: reject}
+  - {id: E7, label: lag_21,           ls_net5: -0.50, top5_net5: -0.49, worst_year: -1.72, verdict: reject_decayed}
+
+decision: RESEARCH_ONLY
+lead_factor: E3_range_pos_252_top5_long_only_excess
+next_action_recommendation: |
+  Optionally batch_0002 to attempt E3+E4 combination for worst-year
+  recovery. Do NOT promote E3 in isolation: worst-year LS Sharpe
+  -0.18 (2024) and -0.11 (2022) violate the worst-year-Sharpe ≥ 0.5
+  PROMOTE floor.

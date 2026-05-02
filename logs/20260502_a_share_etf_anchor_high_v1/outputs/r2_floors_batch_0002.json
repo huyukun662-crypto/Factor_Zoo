@@ -1,0 +1,98 @@
+{
+  "F1": {
+    "ls_net5_sharpe": 0.2277700702938648,
+    "ls_net5_pass": false,
+    "worst_year": -0.6403301662429958,
+    "worst_year_pass": false,
+    "best_year_out": 0.06087327283440569,
+    "best_year_out_pct": 0.26447769922804326,
+    "best_year_out_pass": false,
+    "train_pass": true,
+    "test_pass": false,
+    "all_promote_floors_pass": false
+  },
+  "F2": {
+    "ls_net5_sharpe": 0.4059475461404845,
+    "ls_net5_pass": false,
+    "worst_year": -1.5698275740032712,
+    "worst_year_pass": false,
+    "best_year_out": 0.10916468712829877,
+    "best_year_out_pct": 0.2672630412758855,
+    "best_year_out_pass": false,
+    "train_pass": true,
+    "test_pass": false,
+    "all_promote_floors_pass": false
+  },
+  "F3": {
+    "ls_net5_sharpe": 0.4145732543355885,
+    "ls_net5_pass": false,
+    "worst_year": -0.675360023482051,
+    "worst_year_pass": false,
+    "best_year_out": 0.12178154428903391,
+    "best_year_out_pct": 0.29343960019539156,
+    "best_year_out_pass": false,
+    "train_pass": true,
+    "test_pass": false,
+    "all_promote_floors_pass": false
+  },
+  "F4": {
+    "ls_net5_sharpe": 0.31214926067587445,
+    "ls_net5_pass": false,
+    "worst_year": -1.17133725522649,
+    "worst_year_pass": false,
+    "best_year_out": 0.08532647275339682,
+    "best_year_out_pct": 0.2712773115067475,
+    "best_year_out_pass": false,
+    "train_pass": true,
+    "test_pass": false,
+    "all_promote_floors_pass": false
+  },
+  "F5": {
+    "ls_net5_sharpe": 0.03298310124964514,
+    "ls_net5_pass": false,
+    "worst_year": -0.9207578955070224,
+    "worst_year_pass": false,
+    "best_year_out": -0.19466505022118044,
+    "best_year_out_pct": -5.689766078635413,
+    "best_year_out_pass": false,
+    "train_pass": false,
+    "test_pass": false,
+    "all_promote_floors_pass": false
+  },
+  "F6": {
+    "ls_net5_sharpe": 0.25537921602855723,
+    "ls_net5_pass": false,
+    "worst_year": -0.18594524383429814,
+    "worst_year_pass": false,
+    "best_year_out": -0.0782858506209388,
+    "best_year_out_pct": -0.30538915434085545,
+    "best_year_out_pass": false,
+    "train_pass": true,
+    "test_pass": false,
+    "all_promote_floors_pass": false
+  },
+  "F7": {
+    "ls_net5_sharpe": 0.110060638625499,
+    "ls_net5_pass": false,
+    "worst_year": -1.6098710182106557,
+    "worst_year_pass": false,
+    "best_year_out": -0.1406396342537828,
+    "best_year_out_pct": -1.255877863046604,
+    "best_year_out_pass": false,
+    "train_pass": false,
+    "test_pass": true,
+    "all_promote_floors_pass": false
+  },
+  "F8": {
+    "ls_net5_sharpe": -0.11045247736285299,
+    "ls_net5_pass": false,
+    "worst_year": NaN,
+    "worst_year_pass": false,
+    "best_year_out": NaN,
+    "best_year_out_pct": NaN,
+    "best_year_out_pass": false,
+    "train_pass": false,
+    "test_pass": false,
+    "all_promote_floors_pass": false
+  }
+}

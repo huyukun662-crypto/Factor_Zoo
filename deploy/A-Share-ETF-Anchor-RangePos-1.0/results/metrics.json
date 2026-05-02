@@ -1,0 +1,53 @@
+{
+  "factor_id": "anchor_range_pos_etf_v1",
+  "deploy_version": "1.0",
+  "panel_dates": [
+    "2019-01-02",
+    "2026-04-30"
+  ],
+  "evaluation_dates": [
+    "2020-01-02",
+    "2026-04-30"
+  ],
+  "universe_size": 33,
+  "config": {
+    "rebal_days": 21,
+    "n_top": 3,
+    "cost_bps_per_side": 5.0,
+    "target_vol_ann": 0.1,
+    "vol_lookback": 60,
+    "leverage_cap": 2.0,
+    "delay": 1
+  },
+  "headline": {
+    "sharpe_excess_net5bps": 1.2210170505224678,
+    "sharpe_portfolio_net5bps": 1.1652509239641486,
+    "sharpe_bench": 0.5015624261461297,
+    "ann_ret_excess_net5bps": 0.18292651584603914,
+    "ann_ret_portfolio_net5bps": 0.2888383291833256,
+    "ann_ret_bench": 0.10591181333728653,
+    "max_dd_excess": -0.14846561515983403,
+    "max_dd_date": "2025-03-14",
+    "n_pos_years": 7,
+    "n_total_years": 7,
+    "frac_pos_years": 1.0,
+    "worst_year_sharpe": 0.19849351059122894
+  },
+  "tvt_split": {
+    "train": {
+      "start": "2020-01-02",
+      "end": "2021-12-31",
+      "sharpe_excess": 1.820775533204035
+    },
+    "validate": {
+      "start": "2022-01-04",
+      "end": "2022-12-30",
+      "sharpe_excess": 1.3159102069843152
+    },
+    "test": {
+      "start": "2023-01-03",
+      "end": "2026-04-30",
+      "sharpe_excess": 1.045894185018311
+    }
+  }
+}

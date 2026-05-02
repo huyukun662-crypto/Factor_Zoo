@@ -1,0 +1,82 @@
+{
+  "K1": {
+    "sharpe_excess_net": 0.5948359265669297,
+    "promote_sharpe_geq_1.0": false,
+    "candidate_sharpe_geq_0.5": true,
+    "worst_year_geq_0": false,
+    "max_dd_excess": -0.17058140004447597,
+    "test_geq_50pct_full": true,
+    "frac_pos_years_geq_70pct": true,
+    "verdict": "RESEARCH_ONLY"
+  },
+  "K2": {
+    "sharpe_excess_net": 0.7403115326665692,
+    "promote_sharpe_geq_1.0": false,
+    "candidate_sharpe_geq_0.5": true,
+    "worst_year_geq_0": true,
+    "max_dd_excess": -0.13046874529676977,
+    "test_geq_50pct_full": true,
+    "frac_pos_years_geq_70pct": true,
+    "verdict": "RESEARCH_ONLY"
+  },
+  "K3": {
+    "sharpe_excess_net": 0.8666949304008428,
+    "promote_sharpe_geq_1.0": false,
+    "candidate_sharpe_geq_0.5": true,
+    "worst_year_geq_0": false,
+    "max_dd_excess": -0.17713401582412758,
+    "test_geq_50pct_full": true,
+    "frac_pos_years_geq_70pct": true,
+    "verdict": "RESEARCH_ONLY"
+  },
+  "K4": {
+    "sharpe_excess_net": 0.9223407287555311,
+    "promote_sharpe_geq_1.0": false,
+    "candidate_sharpe_geq_0.5": true,
+    "worst_year_geq_0": false,
+    "max_dd_excess": -0.1420688816654807,
+    "test_geq_50pct_full": true,
+    "frac_pos_years_geq_70pct": true,
+    "verdict": "RESEARCH_ONLY"
+  },
+  "K5": {
+    "sharpe_excess_net": 1.006941156271833,
+    "promote_sharpe_geq_1.0": true,
+    "candidate_sharpe_geq_0.5": true,
+    "worst_year_geq_0": false,
+    "max_dd_excess": -0.1351148295953758,
+    "test_geq_50pct_full": true,
+    "frac_pos_years_geq_70pct": true,
+    "verdict": "ADMITTED_CANDIDATE"
+  },
+  "K6": {
+    "sharpe_excess_net": 0.9432948965451965,
+    "promote_sharpe_geq_1.0": false,
+    "candidate_sharpe_geq_0.5": true,
+    "worst_year_geq_0": false,
+    "max_dd_excess": -0.07962169154596876,
+    "test_geq_50pct_full": true,
+    "frac_pos_years_geq_70pct": true,
+    "verdict": "RESEARCH_ONLY"
+  },
+  "K7": {
+    "sharpe_excess_net": 0.8926641361786177,
+    "promote_sharpe_geq_1.0": false,
+    "candidate_sharpe_geq_0.5": true,
+    "worst_year_geq_0": false,
+    "max_dd_excess": -0.20805052154402204,
+    "test_geq_50pct_full": true,
+    "frac_pos_years_geq_70pct": true,
+    "verdict": "RESEARCH_ONLY"
+  },
+  "K8": {
+    "sharpe_excess_net": 0.9223407287555309,
+    "promote_sharpe_geq_1.0": false,
+    "candidate_sharpe_geq_0.5": true,
+    "worst_year_geq_0": false,
+    "max_dd_excess": -0.11473026316568213,
+    "test_geq_50pct_full": true,
+    "frac_pos_years_geq_70pct": true,
+    "verdict": "RESEARCH_ONLY"
+  }
+}

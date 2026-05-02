@@ -1,0 +1,58 @@
+session: 20260502_a_share_etf_anchor_high_v1
+topic: anchor_52w_high_proximity_a_share_etf
+model: claude-opus-4-7
+started_at: 2026-05-02
+analyst: 5-agent-workflow
+
+primary_mechanism: anchoring_to_52w_high
+secondary_mechanism: range_position_williams_pct_r
+hypothesis: |
+  Cross-sectionally, A-share ETFs whose price is closer to a long-window
+  trailing high have higher expected forward k=20 returns than ETFs
+  closer to a long-window trailing low, because anchoring / disposition
+  causes underreaction at breakout. Effect should survive (a) on
+  baskets, (b) after subtracting 252-day momentum, and (c) under a
+  regime gate that requires the broad-market benchmark to be above its
+  MA200.
+
+falsifiers:
+  - sign_flip variant must underperform (negative Sharpe gap)
+  - residual factor (after regressing on 252d momentum) must retain
+    > 50% of headline LS Sharpe
+  - worst-year LS Sharpe >= 0.5 on full 2019-2026 period (with 2022
+    inside the test window, this is hard)
+  - Q5 long-only excess vs equal-weight benchmark must be > 0 in 4 of
+    the last 5 calendar years
+
+universe:
+  source: /home/user/Factor_Zoo/logs/_shared_cache/etf_daily.parquet
+  drop: ["512800.SS", "515170.SS"]
+  benchmark: 510300.SS
+  size_after_drop: 32
+
+windows_to_test: [60, 120, 252]
+forward_horizons: [5, 10, 20]
+primary_forward_horizon: 20
+
+execution:
+  delay: 1
+  rebalance_days: 21
+  cost_bps_side: 5
+
+tvt_split:
+  train: ["2019-01-02", "2021-12-31"]
+  validate: ["2022-01-03", "2022-12-30"]
+  test: ["2023-01-03", "2026-04-30"]
+
+selection_rule: |
+  Promote candidates that pass: G1 syntax, G2 runs, G3 non-degenerate
+  with net-cost Sharpe > -0.5, G4 fidelity (IC sign + monotonicity +
+  not a momentum clone), G5 horizon-consistency. Then 5 mandatory
+  audits: execution-delay, look-ahead randomization, worst-year
+  floor 0.5, best-year-out >= 50%, falsification-first.
+
+mandatory_floors_for_promote:
+  worst_year_lcs_sharpe: 0.5
+  best_year_out_lcs_sharpe_pct_of_headline: 50
+  net_sharpe_at_5bps: 0.5
+  q5_long_only_excess_positive_years: 4

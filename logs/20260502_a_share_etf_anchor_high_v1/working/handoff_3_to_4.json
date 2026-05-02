@@ -1,0 +1,25 @@
+{
+  "from_agent": "alpha_builder",
+  "to_agent": "backtest_operator",
+  "session": "20260502_a_share_etf_anchor_high_v1",
+  "batch": "0001",
+  "expression_count": 8,
+  "expressions": [
+    {"id": "E1", "form": "close / rolling_max(close, 252)", "expected_sign": "+", "window": 252},
+    {"id": "E2", "form": "close / rolling_max(close, 60)", "expected_sign": "+", "window": 60},
+    {"id": "E3", "form": "(close - rolling_min(close,252)) / (rolling_max(close,252) - rolling_min(close,252))", "expected_sign": "+", "window": 252},
+    {"id": "E4", "form": "rolling_max(close,60) / rolling_max(close,252)", "expected_sign": "+", "windows": [60, 252], "note": "replaced after self-check; original (p-max60)/max60 was rank-equivalent to E2"},
+    {"id": "E5", "form": "0.5*zscore_xs(close/rolling_max(close,252)) + 0.5*zscore_xs(close/rolling_max(close,60))", "expected_sign": "+", "windows": [60, 252]},
+    {"id": "E6", "form": "(close/rolling_max(close,252)) * gate(bench>MA200(bench))", "expected_sign": "+", "window": 252},
+    {"id": "E7", "form": "(close/rolling_max(close,252)).shift(21)", "expected_sign": "+", "window": 252, "lag": 21},
+    {"id": "E8", "form": "-(close/rolling_max(close,252))", "expected_sign": "-", "window": 252}
+  ],
+  "selection_modes": ["LS_Q5", "long_only_top3_excess_vs_EW", "long_only_top5_excess_vs_EW"],
+  "delay": 1,
+  "primary_horizon_k": 20,
+  "rebalance_days": 21,
+  "cost_bps_side": 5,
+  "tvt": {"train_end": "2021-12-31", "val_end": "2022-12-30"},
+  "audits_required": ["execution_delay", "lookahead_randomization", "worst_year_floor", "best_year_out", "falsification_first"],
+  "next_action": "agent_4_validate_then_run"
+}

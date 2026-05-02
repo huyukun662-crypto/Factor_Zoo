@@ -1,0 +1,23 @@
+round: 3
+session: 20260502_a_share_etf_anchor_high_v1
+batch: 0003
+focus: production_grade_phase_averaged_with_risk_overlays
+expressions_count: 8
+all_use_21_phase_ensemble: true
+
+results:
+  - {id: H1, label: phase_avg_baseline,        sharpe_excess: 0.546, worst_year: -0.13, verdict: research_only}
+  - {id: H2, label: phase_avg_MA200_gate,      sharpe_excess: 0.478, worst_year: -0.27, verdict: reject}
+  - {id: H3, label: phase_avg_inv_vol,         sharpe_excess: 0.540, worst_year: -0.11, verdict: research_only}
+  - {id: H4, label: H2_plus_H3,                sharpe_excess: 0.315, worst_year: -0.43, verdict: reject}
+  - {id: H5, label: phase_avg_core_universe,   sharpe_excess: 0.525, worst_year:  0.09, verdict: research_only_only_positive_worst_year}
+  - {id: H6, label: phase_avg_top3,            sharpe_excess: 0.634, worst_year: -0.04, verdict: research_only}
+  - {id: H7, label: phase_avg_voltarget_10,    sharpe_excess: 0.707, worst_year: -0.20, verdict: research_only_highest_sharpe}
+  - {id: H8, label: H4_plus_voltarget,         sharpe_excess: 0.347, worst_year: -0.40, verdict: reject}
+
+decision: NONE_REACH_1.0_FLOOR_PROCEED_TO_R4
+key_finding: |
+  Phase-averaging closes the gap from R2 phase-averaged 0.12 to
+  R3 best-variant 0.71. Three orthogonal improvements each contribute:
+  top-3 (+0.08), core universe (+0.21 worst-year), vol-target (+0.16).
+  R4 should combine them.

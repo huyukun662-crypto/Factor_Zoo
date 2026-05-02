@@ -1,0 +1,45 @@
+{
+  "from_agent": "backtest_operator",
+  "to_agent": "evaluator_recorder",
+  "session": "20260502_a_share_etf_anchor_high_v1",
+  "batch": "0001",
+  "expressions_evaluated": 8,
+  "validation_gates": {
+    "G1_importable": true,
+    "G2_runs": true,
+    "G3_non_degenerate": "all 8 pass (q5_size>=3 on 100% of rebal days, dispersion>0 on 100%)",
+    "G4_fidelity": {
+      "E1_E8_sign_flip_consistent": true,
+      "E1_negated_in_E8_IC": true,
+      "E1_252d_momentum_xs_rank_corr_mean": 0.377,
+      "note": "E1 is heavily loaded on 252d momentum; range-position E3 should be checked similarly."
+    },
+    "G5_horizon_consistency": "IC peaks at k=5..10 for E3; declared k=20 still positive (0.029); acceptable"
+  },
+  "audits": {
+    "execution_delay": "PASS (target_shift=-(1+delay)=-2 verified)",
+    "lookahead_randomization": "PASS (0.0 diff for E1, E3, E5)",
+    "worst_year_ls_floor_0.5": {
+      "E1": -0.61, "E2": -1.01, "E3": -0.18, "E4": -0.46, "E5": -0.82,
+      "E6": 0.24, "E7": -1.72, "E8": -0.64,
+      "verdict": "NO factor passes the 0.5 floor"
+    },
+    "best_year_out_pct_of_headline": {
+      "E3_pass": true, "others_pass": false
+    },
+    "falsification": "E1 vs E8 sign-flip difference only 0.04 — confirms canonical p/max_252 is essentially noise on this universe; the working mechanism is range_pos (E3), not raw 52w-high"
+  },
+  "headline_per_factor": {
+    "E1": {"ls_net5": -0.04, "top3_net5": 0.09, "top5_net5": 0.05},
+    "E2": {"ls_net5": 0.19, "top3_net5": -0.005, "top5_net5": 0.02},
+    "E3": {"ls_net5": 0.62, "top3_net5": 0.31, "top5_net5": 0.49},
+    "E4": {"ls_net5": -0.11, "top3_net5": 0.30, "top5_net5": 0.33},
+    "E5": {"ls_net5": -0.12, "top3_net5": 0.24, "top5_net5": 0.15},
+    "E6": {"ls_net5": -0.09, "top3_net5": 0.005, "top5_net5": -0.006},
+    "E7": {"ls_net5": -0.50, "top3_net5": -0.58, "top5_net5": -0.49},
+    "E8": {"ls_net5": -0.08, "top3_net5": 0.31, "top5_net5": -0.07}
+  },
+  "ranking_recommendation": ["E3", "E4", "E2", "E5", "E1", "E6", "E8", "E7"],
+  "decision_recommendation": "RESEARCH-ONLY for E3 top-5 long-only excess sleeve; worst-year floor failure prevents PROMOTE",
+  "next_action": "agent_5_rank_and_decide"
+}

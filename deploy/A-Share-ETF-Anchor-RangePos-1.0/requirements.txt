@@ -1,0 +1,6 @@
+pandas>=2.0
+numpy>=1.24
+pyarrow>=12.0
+# v1.1: optional. Used by 01_fetch_data.py if TUSHARE_TOKEN env var is set;
+# otherwise the Yahoo fallback path is used.
+tushare>=1.4.0; python_version>='3.8'
