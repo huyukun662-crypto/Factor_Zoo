@@ -1,0 +1,15 @@
+{
+  "rsrs_N": 18,
+  "rsrs_M": 600,
+  "mom_L": 120,
+  "lambda_s": 0.0,
+  "lambda_k": 0.2,
+  "w_rsrs": 0.4,
+  "top_k": 5,
+  "theta_off": -0.7,
+  "theta_on": 0.7,
+  "rebal_threshold": 0.4,
+  "rsrs_form": "rsrs_skew",
+  "trend_ma_window": 200,
+  "exclude_buckets": []
+}

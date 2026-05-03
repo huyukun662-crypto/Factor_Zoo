@@ -1,0 +1,6 @@
+symbol,name,bucket,is_qdii,is_bond_or_money,is_defensive,available_from,n_bars,median_amount_60d,passes_liq,exclude_reason
+159779,消费电子,科技,False,False,False,2021-11-26,1072,7278995.15,False,liq<50000000
+159890,云计算,科技,False,False,False,2021-04-02,1230,42499493.400000006,False,liq<50000000
+561120,家电,大消费,False,False,False,2022-02-15,1021,9368244.0,False,liq<50000000
+516750,建材,地产链,False,False,False,2021-11-05,1087,14206052.5,False,liq<50000000
+159867,畜牧,农业,False,False,False,2021-03-05,1250,29400720.0,False,liq<50000000
