@@ -13,27 +13,29 @@ import pandas as pd
 
 CATEGORIES: dict[str, dict] = {
     "长债": {
-        "constituents": ["511010", "511260"],     # 10Y国债, 10Y国开
+        "constituents": ["511010", "511260"],     # 10Y国债 (2013), 10Y国开 (2017-08)
         "weight": "equal",
         "intuition": "衰退/通缩/利率下行受益",
     },
     "货币": {
-        "constituents": ["511880"],                # 银华日利
+        "constituents": ["511880"],                # 银华日利 (2013-04)
         "weight": "equal",
         "intuition": "不确定环境/短期避险/默认",
     },
     "黄金": {
-        "constituents": ["518880"],                # 黄金
+        "constituents": ["518880"],                # 黄金 (2013-07)
         "weight": "equal",
         "intuition": "通胀对冲/全球风险事件/USD 走弱",
     },
     "红利低波": {
-        "constituents": ["515080"],                # 红利低波 (上市 2019-12)
+        # FIX 2018: add 510880 红利 as fallback before 515080 listing
+        "constituents": ["510880", "515080"],     # 红利 (2013), 红利低波 (2019-12)
         "weight": "equal",
-        "intuition": "低波价值/中通胀+增长温和",
+        "intuition": "低波/分红/价值；510880 提供 2019 前的覆盖",
     },
     "商品": {
-        "constituents": ["518880", "162411", "515220"],  # 黄金+油气+煤炭 (能源/资源)
+        # FIX 2018: 162411 油气 2013-01 提供早期覆盖；515220 煤炭 2020-03 上市
+        "constituents": ["518880", "162411", "515220", "159980"],  # 黄金+油气+煤炭+有色
         "weight": "equal",
         "intuition": "高通胀/顺周期/USD 弱势",
     },

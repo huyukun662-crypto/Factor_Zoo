@@ -23,6 +23,117 @@ def _normalize_long_only(w: np.ndarray) -> np.ndarray:
     return w / s if s > 1e-12 else w
 
 
+def _available_mask(close: pd.DataFrame, constituents: list[str]) -> pd.DataFrame:
+    """Per-day per-symbol True iff close has a non-NaN value (i.e. listed/traded)."""
+    sub = close[[c for c in constituents if c in close.columns]]
+    return sub.notna()
+
+
+def intra_category_topk_aware(score: pd.DataFrame, close: pd.DataFrame,
+                                category: str, k: int = 1,
+                                all_symbols: list[str] | None = None
+                                ) -> pd.DataFrame:
+    """Top-K within category, INCEPTION-AWARE.
+
+    On each row, only consider constituents with non-NaN close. If fewer than
+    k are available, equal-weight all that ARE available. If none, all-zero.
+    """
+    if category not in CATEGORIES:
+        raise ValueError(f"unknown category {category}")
+    constituents = [c for c in CATEGORIES[category]["constituents"] if c in score.columns]
+    cols_all = all_symbols if all_symbols is not None else list(score.columns)
+    out = pd.DataFrame(0.0, index=score.index, columns=cols_all)
+    if not constituents:
+        return out
+    avail = _available_mask(close, constituents).reindex(index=score.index).fillna(False)
+    masked_score = score[constituents].where(avail, other=-np.inf)
+
+    # rank per row, but only among available
+    rank = masked_score.rank(axis=1, method="first", ascending=False)
+    chosen = (rank <= k) & masked_score.gt(-np.inf)
+    counts = chosen.sum(axis=1).replace(0, np.nan)
+    weights = chosen.astype(float).div(counts, axis=0).fillna(0.0)
+    for c in constituents:
+        out[c] = weights[c].values
+    return out
+
+
+def intra_category_vol_parity(close: pd.DataFrame, category: str,
+                                vol_lookback: int = 60,
+                                top_k: int | None = None,
+                                score: pd.DataFrame | None = None,
+                                all_symbols: list[str] | None = None,
+                                ) -> pd.DataFrame:
+    """Vol-parity weighting within category. If top_k is set + score provided,
+    first restrict to top_k by score then apply vol parity within selection.
+
+    Returns DataFrame indexed by close.index with columns = all_symbols.
+    """
+    constituents = [c for c in CATEGORIES[category]["constituents"] if c in close.columns]
+    cols_all = all_symbols if all_symbols is not None else list(close.columns)
+    out = pd.DataFrame(0.0, index=close.index, columns=cols_all)
+    if not constituents:
+        return out
+    daily_ret = close[constituents].pct_change()
+    sigma = daily_ret.rolling(vol_lookback, min_periods=20).std()
+    inv_vol = (1.0 / sigma.replace(0, np.nan)).fillna(0)
+    avail = _available_mask(close, constituents).fillna(False)
+
+    if top_k is not None and score is not None:
+        # Restrict to top-k by score among available constituents
+        masked_score = score[constituents].where(avail, other=-np.inf)
+        rank = masked_score.rank(axis=1, method="first", ascending=False)
+        chosen = (rank <= top_k) & masked_score.gt(-np.inf)
+        inv_vol = inv_vol.where(chosen, 0.0)
+
+    # zero out unavailable
+    inv_vol = inv_vol.where(avail, 0.0)
+    s = inv_vol.sum(axis=1).replace(0, np.nan)
+    w = inv_vol.div(s, axis=0).fillna(0.0)
+    for c in constituents:
+        out[c] = w[c].values
+    return out
+
+
+def intra_category_sharpe_weighted(close: pd.DataFrame, category: str,
+                                       lookback: int = 60,
+                                       top_k: int | None = None,
+                                       all_symbols: list[str] | None = None,
+                                       ) -> pd.DataFrame:
+    """Sharpe-weighted top-K within category.
+
+    Computes recent Sharpe (mean / std * sqrt(252)) per constituent over `lookback`
+    days. Picks top-k by Sharpe (only among available), weight = max(0, Sharpe)
+    normalized.
+    """
+    constituents = [c for c in CATEGORIES[category]["constituents"] if c in close.columns]
+    cols_all = all_symbols if all_symbols is not None else list(close.columns)
+    out = pd.DataFrame(0.0, index=close.index, columns=cols_all)
+    if not constituents:
+        return out
+    daily_ret = close[constituents].pct_change()
+    mu = daily_ret.rolling(lookback, min_periods=20).mean()
+    sd = daily_ret.rolling(lookback, min_periods=20).std().replace(0, np.nan)
+    sharpe = (mu / sd) * np.sqrt(252)  # daily Sharpe annualized
+
+    avail = _available_mask(close, constituents).fillna(False)
+    masked = sharpe.where(avail, other=-np.inf)
+
+    if top_k is not None:
+        rank = masked.rank(axis=1, method="first", ascending=False)
+        chosen = (rank <= top_k) & masked.gt(-np.inf)
+        score = sharpe.where(chosen, 0.0)
+    else:
+        score = sharpe.where(avail, 0.0)
+
+    score = score.clip(lower=0).fillna(0)
+    s = score.sum(axis=1).replace(0, np.nan)
+    w = score.div(s, axis=0).fillna(0.0)
+    for c in constituents:
+        out[c] = w[c].values
+    return out
+
+
 def intra_category_topk(score: pd.DataFrame, category: str,
                           k: int = 1, all_symbols: list[str] | None = None
                           ) -> pd.DataFrame:

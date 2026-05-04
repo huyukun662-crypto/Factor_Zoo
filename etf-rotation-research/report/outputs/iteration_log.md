@@ -1016,3 +1016,117 @@ artifacts:
 - `report/outputs/all_candidates_v11.csv` — 所有 v11 候选
 
 仍未触碰 OOS (>2023-12-31)。
+
+---
+
+## R65-R71：(A) 修复 2018 痛点（inception-aware categories）+ (B) 类内 weighting variants
+
+### CATEGORIES 修复（解决 2018 NaN 防御失效）
+
+| 大类 | 旧构成 | 新构成（添加 inception 早的成员） |
+|---|---|---|
+| 红利低波 | [515080] (2019-12 上市) | **[510880, 515080]** (510880 from 2013) |
+| 商品 | [518880, 162411, 515220] | **[518880, 162411, 515220, 159980]** (+有色 2019) |
+
+之前 2018 IS 期 M6 路由到「红利低波」时，唯一构成 515080 全部 NaN → 防御失效 → -0.20 Sharpe。
+
+### IS 结果（R65-R69）
+
+| Round | 设置 | IS Sharpe | 2018 Sharpe |
+|---|---|---|---|
+| 旧基线（M6 + top-2 旧 cats） | (参考) | 1.389 | -0.20 |
+| **R65** | **M6 + top-2 (new cats, inception-aware)** | **1.239** | **+1.82** ✅ |
+| R66 (a) | M6 + vol-parity top-2 vlb=60 | 1.221 | +1.57 |
+| R66 (b) | M6 + vol-parity top-2 vlb=90 | 1.223 | +1.70 |
+| R67 | M6 + sharpe-weighted top-2 | 1.167 | +1.58 |
+| R68 | M6 + vol-parity top-3 | 1.221 | +1.57 |
+| R69 (a) | + slow-bear → 长债+货币 | 1.158 | +1.82 |
+| R69 (b) | + slow-bear → 黄金+货币 | 1.210 | +1.82 |
+
+**R65 头部 IS Sharpe 1.239 < 1.389（旧 cats）**，因为新 cats 改变了矩阵 sharpe_min_vol 排名。但 2018 完全救活（-0.20 → +1.82）。
+
+### M6 mapping 变化对比（旧 vs 新 cats）
+
+| Cell | 旧 cats 选 | 新 cats 选 |
+|---|---|---|
+| (cpi_vel ↓, pmi_vel ↑) | 红利低波 | 商品 |
+| (cpi_vel ~, pmi_vel ↓) | 商品 | 长债 |
+| (cpi_vel ~, pmi_vel ~) | 红利低波 | 长债 |
+| (cpi_vel ~, pmi_vel ↑) | 海外股 | 海外股 (同) |
+
+新 cats 下，「红利低波」的整体 Sharpe 受 510880 拉低（510880 波动比 515080 大），所以矩阵更倾向选「长债」— 这恰好让 2018 (利率下行) 选对答案。
+
+### WFA 决战（27 windows, 新 cats）
+
+| 策略 | 旧 cats WFA | **新 cats WFA** | Δ |
+|---|---|---|---|
+| R30 baseline | 0.775 | 0.775 | 0 |
+| M6 + top-2 | **1.149** | **0.980** | **-0.169** |
+| **M6 + vol-parity top-2** | — | **1.075** ⭐ | 新最优 |
+| M6 + sharpe-weighted top-2 | — | 0.625 ❌ | 大幅下降 |
+
+### 重要诚实发现：旧 M6 + top-2 = 1.149 的 WFA 数字部分是虚假优势！
+
+**IS R65 with new cats: 2018 Sharpe = +1.82**
+**WFA M6+top2 with new cats: 2018 Sharpe = -0.44**
+
+巨大反差揭露：
+1. **IS 全样本 sharpe_min_vol 知道未来**：在 2018-style cells 选长债（事后最优）
+2. **WFA 训练窗 (2015-2017) 不知道未来**：sharpe_min_vol 在那段时间没选长债
+3. **旧 cats WFA 1.149 部分来自 NaN 防御失效**：当 M6 路由到不可用的大类时，组合实质 0 仓位（"假裸"），在某些 2018 后段意外避险，看起来像 alpha
+
+### 真实 Pareto 前沿（诚实修复后）
+
+| 策略 | IS Sharpe | WFA Sharpe | Max DD | 评价 |
+|---|---|---|---|---|
+| R30 | 1.457 | 0.775 | -25% | IS 过拟合 |
+| R42 (DP override) | 1.454 | 0.919 | -25% | 头对头稳健 |
+| M3 ew | 1.034 | 0.975 | **-17%** | DD 最低 |
+| M6 + top-2 旧 cats | 1.389 | 1.149 | -24% | **数字虚假** |
+| M6 + top-2 新 cats | 1.239 | 0.980 | -24% | 诚实 |
+| **M6 + vol-parity top-2** | **1.221** | **1.075** | **-24%** | **真实最优** |
+
+### 类内 weighting 方法对比
+
+| 方法 | IS | WFA | 评价 |
+|---|---|---|---|
+| equal-weight (ew) | 1.324 | 0.954 | 简单基线 |
+| top-K by score | 1.389 | 0.980 | IS 略优 WFA 略差 |
+| **vol-parity top-K** | 1.221 | **1.075** | **WFA 最稳定** |
+| sharpe-weighted top-K | 1.167 | 0.625 | ❌ 追涨杀跌 |
+| EPO | 0.73 | (未测) | 类内池太小 |
+
+**vol-parity 在 WFA 上击败 top-K by score** — 因为是结构化规则，不依赖样本估计。
+
+### 当前最优 (诚实版) = M6 vol-parity top-2 + 新 categories
+
+```python
+# 主策略 — 不变
+信号: RSRS_skew + 加阶矩双动量 (top-7)
+风控 gate: off={0,1,3} full={2}
+参数: rsrs_N=30, mom_L=180, w_rsrs=0.2, top_k=7, rebal=0.4
+
+# 防御态
+矩阵: M6 (CPI velocity × PMI velocity)
+大类构成（修复 inception 问题）:
+  长债     [511010, 511260]
+  货币     [511880]
+  黄金     [518880]
+  红利低波  [510880, 515080]    ← 新增 510880 解决 2018 NaN
+  商品     [518880, 162411, 515220, 159980]    ← 新增 159980
+  海外股   [513100, 513500, 513050, 159920]
+类内: vol-parity top-2 (vlb=60)
+默认 (axis NaN): 红利低波
+
+# IS Sharpe 1.221 / WFA Sharpe 1.075 / Max DD -24%
+```
+
+artifacts:
+- `analysis/iterate_is_v12.py` — R65-R71 IS
+- `analysis/wfa_v12.py` — WFA on new-cats variants
+- `strategy/intra_category.py` — 添加 vol-parity, sharpe-weighted, inception-aware top-K
+- `strategy/categories.py` — 修复 红利低波 / 商品 构成
+- `report/outputs/all_candidates_v12.csv`
+- `report/outputs/wfa_v12_summary.csv` / `wfa_v12_per_year.csv`
+
+仍未触碰 OOS (>2023-12-31)。
