@@ -25,7 +25,7 @@ from strategy.universe import SYMBOLS  # noqa: E402
 
 @pytest.fixture(scope="module")
 def panels():
-    pd_dict = load_panel(SYMBOLS, start="2013-01-01", end="2019-12-31")
+    pd_dict = load_panel(SYMBOLS, start="2013-01-01", end="2023-12-31")
     if not pd_dict:
         pytest.skip("no cached data — run scripts_fetch_all.py first")
     close, open_, high, low, volume, amount = build_close_open_panels(pd_dict)

@@ -1,7 +1,10 @@
-"""IS (in-sample) only evaluator — locked to 2013-01-01 to 2019-12-31.
+"""IS (in-sample) only evaluator — locked to 2013-01-01 to 2023-12-31.
 
-# [GUARDRAIL] This module raises if asked to evaluate any date past 2019-12-31.
-# Do NOT remove the guardrail until the user explicitly approves OOS evaluation.
+The window was expanded from 2019-12-31 to 2023-12-31 per user instruction.
+Only 2024+ remains as untouched OOS / Hold-out.
+
+# [GUARDRAIL] This module raises if asked to evaluate any date past IS_END.
+# Do NOT relax the guardrail until the user explicitly approves OOS evaluation.
 
 Public API:
     IS_START, IS_END  : the locked window
@@ -41,7 +44,7 @@ from strategy.universe import (
 )  # noqa: E402
 
 IS_START = pd.Timestamp("2013-01-01")
-IS_END = pd.Timestamp("2019-12-31")
+IS_END = pd.Timestamp("2023-12-31")  # expanded per user instruction (was 2019-12-31)
 
 
 def _assert_is_window(close: pd.DataFrame) -> None:
@@ -53,7 +56,7 @@ def _assert_is_window(close: pd.DataFrame) -> None:
 
 
 def load_is_panels() -> dict[str, pd.DataFrame]:
-    panel_dict = load_panel(SYMBOLS, start="2013-01-01", end="2019-12-31")
+    panel_dict = load_panel(SYMBOLS, start="2013-01-01", end="2023-12-31")
     if not panel_dict:
         raise RuntimeError("No cached parquets — run scripts_fetch_all.py first.")
     close, open_, high, low, volume, amount = build_close_open_panels(panel_dict)
