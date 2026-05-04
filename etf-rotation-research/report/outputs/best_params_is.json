@@ -1,0 +1,42 @@
+{
+  "rsrs_N": 30,
+  "rsrs_M": 250,
+  "mom_L": 180,
+  "lambda_s": 0.2,
+  "lambda_k": 0.0,
+  "w_rsrs": 0.2,
+  "top_k": 7,
+  "theta_off": -0.7,
+  "theta_on": 0.7,
+  "rebal_threshold": 0.4,
+  "rsrs_form": "rsrs_skew",
+  "v5_label": "R30 regime×CPI sharpe_min_vol + gate off={0,1,3} full={2}",
+  "v5_off_set": [
+    0,
+    1,
+    3
+  ],
+  "v5_full_set": [
+    2
+  ],
+  "v5_defensive_mapping": {
+    "regime0_cpi_high": "515080",
+    "regime0_cpi_low": "518880",
+    "regime0_cpi_mid": "518880",
+    "regime1_cpi_high": "511010",
+    "regime1_cpi_mid": "511260",
+    "regime2_cpi_high": "518880",
+    "regime2_cpi_low": "511260",
+    "regime2_cpi_mid": "515080",
+    "regime3_cpi_mid": "511010"
+  },
+  "v5_metric": "sharpe_min_vol (excludes ann_vol < 2%)",
+  "v5_defensive_pool": [
+    "511010",
+    "511260",
+    "511880",
+    "518880",
+    "515080",
+    "515220"
+  ]
+}
