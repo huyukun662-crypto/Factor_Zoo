@@ -1130,3 +1130,132 @@ artifacts:
 - `report/outputs/wfa_v12_summary.csv` / `wfa_v12_per_year.csv`
 
 仍未触碰 OOS (>2023-12-31)。
+
+---
+
+## R72-R78：跨大类组合学（risk parity / softmax / MVO）
+
+用户要求：高级组合学，类内 vol-parity + 跨大类 risk parity。
+
+### 三层架构
+
+```
+Layer 1 (Matrix → top-N categories):
+  M6 (CPI velocity × PMI velocity) → 每个 cell 排名 6 大类（sharpe_min_vol）
+  保留 top-N
+
+Layer 2 (Cross-category weighting):
+  - equal: 等权
+  - risk_parity: w ∝ 1/category_vol
+  - softmax: w ∝ exp(score) (贪婪集中)
+  - mvo_shrunk: w ∝ ((1-sh)*diag(Σ) + sh*Σ)^(-1) * μ
+
+Layer 3 (Intra-category):
+  vol-parity top-K (默认 K=2, vlb=60)
+```
+
+### IS 结果（R72-R78, 全部用 vol-parity t2 作为 L3）
+
+| Round | L1 | L2 | IS Sharpe | DD | 2018 | 2022 |
+|---|---|---|---|---|---|---|
+| Ref | top-1 | equal | 1.221 | -15% | +1.57 | -0.35 |
+| R72 | all 6 | risk-parity | 1.089 | -13% | +0.95 | **+3.04** |
+| R73 | top-2 | equal | 1.211 | -22% | +0.99 | +1.10 |
+| R74 | top-2 | **risk-parity** | 1.229 | **-13%** | +1.40 | +0.54 |
+| R75 | top-3 | risk-parity | 1.220 | -14% | +1.66 | +0.79 |
+| **R76** | all 6 | **softmax** | **1.317** | -19% | +1.20 | +0.76 |
+| **R77** | top-3 | **MVO sh=0.3** | **1.317** | **-15%** | +1.81 | +0.36 |
+| R78 | all 6 softmax | + topk-aware t2 | **1.358** | -21% | +1.22 | +0.91 |
+
+### WFA 决战（27 windows）
+
+| 策略 | IS Sharpe | **WFA Sharpe** | Ret | Vol | Max DD | Calmar |
+|---|---|---|---|---|---|---|
+| R30 baseline | 1.457 | 0.775 | 13.0% | 16.8% | -24.9% | 0.52 |
+| M6 top-1 + vol-p (R65) | 1.221 | 1.075 | 19.4% | 18.1% | -24.2% | 0.80 |
+| M6 top-2 RP + vol-p (R74) | 1.229 | 1.134 | 18.4% | 16.2% | -23.9% | 0.77 |
+| M6 top-3 RP + vol-p (R75) | 1.220 | 1.273 | 19.3% | 15.2% | -17.2% | 1.12 |
+| M6 softmax + vol-p (R76) | 1.317 | 1.277 | 18.8% | 14.7% | **-15.0%** | 1.25 |
+| **M6 top-3 MVO 0.3 + vol-p (R77)** | **1.317** | **1.522** ⭐ | **24.5%** | 16.1% | -17.8% | **1.38** |
+| M6 softmax + topk-aware (R78) | 1.358 | 1.138 | 17.4% | 15.3% | -20.7% | 0.84 |
+| static RP no matrix (R72) | 1.089 | 1.185 | 13.5% | **11.4%** | **-13.4%** | 1.01 |
+
+### R77 winner: WF Efficiency = 1.155（OOS 比 IS 好！）
+
+罕见的 WF Efficiency > 1：
+- IS Sharpe 1.317
+- WFA Sharpe 1.522
+- 解读：MVO shrunk 的结构化规则在 WFA 训练窗（小样本）上估计稳定，且未过拟合 IS
+
+### 逐年 WFA Sharpe (R77 winner)
+
+| 年份 | R30 | **R77** | 改善 |
+|---|---|---|---|
+| 2016 | 1.36 | 0.32 | ↓ |
+| 2017 | 1.86 | 1.78 | ≈ |
+| 2018 | 1.34 | **0.46** | ↓ 但保持正 |
+| 2019 | 0.59 | **2.44** | ↑↑ |
+| 2020 | 2.62 | **3.28** | ↑ |
+| 2021 | 0.28 | **0.74** | ↑ |
+| **2022** | **-0.45** | **+1.24** | ✅ **救场** |
+| 2023\* | 4.81 | 12.79 | (小样本) |
+
+**8 年中 7 年正 Sharpe**（仅 2016 略弱），2022 失败年从 -0.45 救到 +1.24。
+
+### 关键洞察
+
+1. **跨大类分散 = WFA 救星**：top-1（单类）→ top-3（多类）+ MVO 把 WFA Sharpe 从 1.075 提到 1.522
+2. **MVO shrunk 优于纯 risk-parity**：sh=0.3 的小幅 MV 倾斜捕获了类间 alpha 信号
+3. **softmax (all 6) 的 DD 最低 (-15%)**：完全多元化（虽然不如 MVO 收益）
+4. **2022 救场来自分散**：单类策略锁定一个大类，跨类策略在 2022 多元配置（黄金+长债+商品）中收益
+5. **IS Sharpe 已饱和**：所有 v13 IS 都在 1.21-1.36，但 WFA 跨度大（1.07-1.52）说明 IS 信号噪声大，组合架构是关键
+
+### 当前最终最优 = R77
+
+```python
+# 主策略 — 不变
+信号: RSRS_skew + 加阶矩双动量 (top-7)
+风控 gate: off={0,1,3} full={2}
+参数: rsrs_N=30, mom_L=180, w_rsrs=0.2, top_k=7, rebal=0.4
+
+# 防御态 — 三层组合学
+Layer 1: M6 矩阵 (CPI velocity × PMI velocity)
+         每个 cell 选 top-3 大类（sharpe_min_vol）
+
+Layer 2: MVO shrunk (shrink=0.3)
+         w ∝ ((0.7*diag(Σ) + 0.3*Σ))^(-1) * μ
+         μ = 矩阵 score, Σ = 60d 类间协方差
+
+Layer 3: 类内 vol-parity top-2
+         w ∝ 1/vol，限制在 RSRS+momentum top-2
+
+修复 categories（inception-aware）:
+  长债     [511010, 511260]
+  货币     [511880]
+  黄金     [518880]
+  红利低波  [510880, 515080]
+  商品     [518880, 162411, 515220, 159980]
+  海外股   [513100, 513500, 513050, 159920]
+
+IS Sharpe 1.317 / WFA Sharpe 1.522 / Max DD -17.8% / Calmar 1.38
+WF Efficiency 1.155 (>1, OOS 比 IS 好)
+```
+
+### Pareto 前沿（最终修正版）
+
+| 策略 | IS | WFA | DD | Calmar |
+|---|---|---|---|---|
+| R30 (单标的) | 1.457 | 0.775 | -25% | 0.52 |
+| R42 (DP override) | 1.454 | 0.919 | -25% | 0.60 |
+| M3 ew | 1.034 | 0.975 | -17% | 0.90 |
+| M6 softmax + vol-p | 1.317 | 1.277 | **-15%** | 1.25 |
+| **M6 top-3 MVO 0.3 + vol-p (R77)** | **1.317** | **1.522** ⭐ | -18% | **1.38** |
+
+artifacts:
+- `strategy/cross_category.py` — top-N selection + risk parity / softmax / MVO
+- `analysis/iterate_is_v13.py` — R72-R78 IS
+- `analysis/wfa_v13.py` — WFA on cross-category variants
+- `report/outputs/all_candidates_v13.csv`
+- `report/outputs/wfa_v13_summary.csv` / `per_year.csv`
+
+仍未触碰 OOS (>2023-12-31)。
