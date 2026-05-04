@@ -919,3 +919,100 @@ artifacts:
 - `report/outputs/wfa_v10_summary.csv` / `per_year.csv` / `windows.csv`
 
 仍未触碰 OOS (>2023-12-31)。
+
+---
+
+## R58-R64：更多 axes 探索 + M6 top-2 + DP 优化
+
+### (A) 新矩阵 axes 探索 (R58-R62, 全部 top-2)
+
+| Matrix | Axes | IS Sharpe |
+|---|---|---|
+| **M6 base** | **CPI vel × PMI vel** | **1.389** |
+| M10 | spread (cn_10y-2y) × CPI | 0.892 |
+| M11 | us_cn_10y_spread × CPI | 0.834 |
+| M12 | USD/CNY mom × CPI vel | 0.907 |
+| **M13** | **cn_10y vel × CPI vel** | **0.551** ❌ DD -50% |
+| M14 | m2_vel × CPI vel | 1.033 |
+
+**没有新 axis 超越 M6**。
+
+### M13 (利率 velocity × CPI velocity) 灾难性失败
+
+`cn_10y vel × CPI vel` 矩阵：rising × rising 选了黄金 (380天)，但黄金在该 cell 实际表现不佳，DD 拉大到 -50%。说明利率 velocity 是噪声型 axis。
+
+### M14 (m2 velocity × CPI velocity) 流动性矩阵
+
+最大 cell 主要选**长债**（M2 平稳期）和**红利低波**（M2 收紧期）。映射单一，IS Sharpe 仅 1.033。
+
+### (B) M6 + top-2 + DP 优化 (R63)
+
+| 变体 | IS Sharpe | 与 base 比 |
+|---|---|---|
+| **M6 top-2 base (无 DP)** | **1.389** | — |
+| + 全局 DP pool={国开+油气} dxy>0.06 | 1.341 | -0.048 |
+| + 全局 DP pool={国开+货币+油气} dxy>0.06 | 1.334 | -0.055 |
+| + 选择性 DP {国开+货币} 仅 gold-cells dxy>0.04 | 1.388 | -0.001 |
+| + 选择性 DP {国开} 仅 gold-cells dxy>0.04 | 1.385 | -0.004 |
+
+**全部 DP 变体 ≤ base**。Matrix 已在 IS 内吸收所有 alpha；额外 DP 都是减分。
+
+### 选择性 DP（仅 gold-cells）vs 全局 DP
+
+- **全局 DP**：对 M6 选定的所有大类天数应用 override，会破坏 M6 的多元化分配
+- **选择性 DP**：仅在 M6 选黄金的天数（267 天）上应用 override，最多 ~50 天会被改
+- 选择性 DP 更接近 base（-0.001 ~ -0.004），但仍未改善
+
+### 关键洞察 — IS 阶段已触顶
+
+迭代到 R64 (~64 个核心 round + 数百个 sub-variant)：
+
+```
+IS Sharpe 进化轨迹:
+  R1   baseline (单标的)                    1.035
+  R6   单标的局部最优                       1.335 (IS=2013-2019)
+  R6   扩展 IS (2013-2023)                  0.878
+  R23  单标的 + 4-cell regime              1.170
+  R30  单标的 + (regime × CN_CPI) routing  1.457  ← 单标的天花板
+  R37  + 黄金 overlay                       1.423
+  R42  + DP override                        1.454
+  R47  矩阵 PMI×CPI 大类等权                1.017
+  R53  矩阵 CPI vel × PMI vel 等权         1.324
+  R57  M6 矩阵 + 类内 top-2                1.389
+  R62  velocity 矩阵新组合                  ≤ 1.033
+  R63  M6 top-2 + DP 各变体                 ≤ 1.388
+
+WFA Sharpe (真实泛化能力) 进化轨迹:
+  R30                                       0.775
+  R37 (黄金 overlay)                        0.766 (无效)
+  R42 (DP override)                         0.919 (+18.6%)
+  M3 ew (us_real × CPI)                     0.975 (+25.8%)
+  M1 ew (PMI × CPI)                         0.824 (+6.3%)
+  M6 ew (CPI vel × PMI vel)                 0.954 (+23.1%)
+  M6 + top-2                                1.149 (+48.3%)  ← 当前最优
+```
+
+### 当前最优 = M6 (CPI vel × PMI vel) + 类内 top-2
+
+```python
+# 主策略
+信号: RSRS_skew + 加阶矩双动量 (top-7 from full universe)
+风控 gate: off={0,1,3} full={2}  (regime: trend × vol)
+参数: rsrs_N=30, mom_L=180, w_rsrs=0.2, top_k=7, rebal=0.4
+
+# 防御态：M6 矩阵 (velocity-driven Merrill clock)
+轴1: CPI velocity (3m) bucket: falling/flat/rising  (threshold 0.3)
+轴2: PMI velocity (3m) bucket: falling/flat/rising  (threshold 0.5)
+每窗口重新派生: per-cell sharpe_min_vol best 大类
+大类: {长债, 货币, 黄金, 红利低波, 商品, 海外股}
+类内: 用当期 RSRS+momentum 选 top-2 (等权)
+默认 (axis NaN): 红利低波
+
+# 不叠加 DP override (会减分)
+```
+
+artifacts:
+- `analysis/iterate_is_v11.py` — R58-R64 IS rounds
+- `report/outputs/all_candidates_v11.csv` — 所有 v11 候选
+
+仍未触碰 OOS (>2023-12-31)。

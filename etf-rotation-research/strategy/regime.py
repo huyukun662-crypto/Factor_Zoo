@@ -119,6 +119,12 @@ def build_regime_panel(close_benchmark: pd.Series,
         out["pmi_velocity_6m"] = out["pmi"] - out["pmi"].shift(126)
     if "m2_yoy" in out.columns:
         out["m2_velocity_3m"] = out["m2_yoy"] - out["m2_yoy"].shift(63)
+    # CN 10y rate velocity (rate cycle indicator)
+    if "cn_10y" in out.columns:
+        out["cn_10y_velocity_3m"] = out["cn_10y"] - out["cn_10y"].shift(63)
+        out["cn_10y_velocity_6m"] = out["cn_10y"] - out["cn_10y"].shift(126)
+    if "us_10y" in out.columns:
+        out["us_10y_velocity_3m"] = out["us_10y"] - out["us_10y"].shift(63)
 
     # ---- 8-cell state (trend × vol × growth) ----
     def _safe_int(s):
