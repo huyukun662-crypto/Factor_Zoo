@@ -110,6 +110,16 @@ def build_regime_panel(close_benchmark: pd.Series,
             out["usdcny"] = usdcny_daily["usdcny"]
             out["usdcny_mom_60"] = out["usdcny"].pct_change(60)
 
+    # ---- Macro velocities (rate of change) ----
+    if "cpi_yoy" in out.columns:
+        out["cpi_velocity_3m"] = out["cpi_yoy"] - out["cpi_yoy"].shift(63)  # ~3m
+        out["cpi_velocity_6m"] = out["cpi_yoy"] - out["cpi_yoy"].shift(126)
+    if "pmi" in out.columns:
+        out["pmi_velocity_3m"] = out["pmi"] - out["pmi"].shift(63)
+        out["pmi_velocity_6m"] = out["pmi"] - out["pmi"].shift(126)
+    if "m2_yoy" in out.columns:
+        out["m2_velocity_3m"] = out["m2_yoy"] - out["m2_yoy"].shift(63)
+
     # ---- 8-cell state (trend × vol × growth) ----
     def _safe_int(s):
         return s.fillna(0).astype(int)

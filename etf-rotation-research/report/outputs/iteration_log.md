@@ -822,10 +822,100 @@ artifacts:
 - `strategy/categories.py` — 6 大类定义
 - `analysis/iterate_is_v9.py` — IS rounds R45-R49
 - `analysis/wfa_macro_matrix.py` — WFA on multiple matrices
-- `report/outputs/macro_matrix_*.csv` — per-axis cell × category 评分表
-- `report/outputs/wfa_matrix_summary.csv` — WFA 头部对比
-- `report/outputs/wfa_matrix_per_year.csv` — 逐年 WFA Sharpe 对比
-- `report/outputs/wfa_matrix_windows.csv` — 27 窗口 detailed
-- `report/outputs/macro_matrix_M3_mapping.json` — M3 IS 完整映射
+
+仍未触碰 OOS (>2023-12-31)。
+
+---
+
+## R50-R57 + WFA：(A) 类内动态 + EPO + (B) 速度型矩阵
+
+### (A) 类内动态选择 (R50-R52, 在 M1 base 上)
+
+| Round | 设置 | IS Sharpe |
+|---|---|---|
+| M1 ew (ref) | 大类内等权 | 1.049 |
+| R50 M1 + top-1 | 类内 RSRS+mom 选 top-1 | 0.959 ⬇ |
+| R51 M1 + top-2 | top-2 | 1.007 ⬇ |
+| R52 M1 + EPO | shrink ∈ {0.3, 0.5, 0.7} | 0.73 ⬇⬇ |
+
+**EPO 表现差**：类内构成仅 1-4 个 ETF，协方差估计噪声大。
+
+### (B) 新矩阵 axes (R53-R56)
+
+| Matrix | Axes | IS Sharpe |
+|---|---|---|
+| **R53 M6** | **CPI velocity × PMI velocity (3m)** | **1.324** ⭐ |
+| R54 M7 | CPI level × M2 YoY | 1.044 |
+| R55 M8 | PMI level × CPI velocity | 1.081 |
+| R56 M9 | PMI velocity × CPI level | 1.114 |
+
+### M6 数据驱动映射（IS-discovered, **velocity** 版美林时钟）
+
+| | PMI vel ↓ | PMI vel ~ | PMI vel ↑ |
+|---|---|---|---|
+| **CPI vel ↓** | 海外股 | 长债 | 红利低波 |
+| **CPI vel ~** | 商品 | 红利低波 | 海外股 |
+| **CPI vel ↑** | 长债 | 长债 | **黄金** |
+
+经济直觉：**变化方向**比**绝对水平**对资产选择更有信息量。
+- CPI 升 + PMI 升 (经典扩张顶部) → **黄金**
+- CPI 升 + PMI 降 (滞胀) → 长债
+- CPI 降 + PMI 降 (双降，USD 强) → 海外股
+- CPI 平 + PMI 降 (Goldilocks 破裂) → 商品
+
+### R57: M6 矩阵 + 类内 top-2
+
+IS Sharpe **1.389**（vs M6 ew 1.324, +0.065）
+
+### WFA 决战 (27 窗口, per-window matrix re-derivation)
+
+| 策略 | WFA Sharpe | Ret | Vol | Max DD | Calmar | vs R30 |
+|---|---|---|---|---|---|---|
+| R30 baseline | 0.775 | 13.0% | 16.8% | -24.9% | 0.52 | — |
+| R42 (DP override) | 0.919 | 15.0% | 16.3% | -24.9% | 0.60 | +18.6% |
+| M1 ew (PMI×CPI level) | 0.824 | 14.8% | 18.0% | -26.6% | 0.56 | +6.3% |
+| M3 ew (us_real×CPI) | 0.975 | 15.4% | 15.8% | -17.2% | 0.90 | +25.8% |
+| M6 ew (CPI vel × PMI vel) | 0.954 | 14.8% | 15.5% | -24.1% | 0.61 | +23.1% |
+| **M6 + top-2** | **1.149** ✅ | **18.9%** | 16.4% | -23.9% | **0.79** | **+48.3%** |
+| M6 ew + DP | 1.009 | 15.8% | 15.7% | -24.1% | 0.66 | +30.2% |
+
+### 逐年 WFA Sharpe (M6 + top-2 vs 主要策略)
+
+| 年份 | R30 | R42 | M1_ew | **M6+top2** |
+|---|---|---|---|---|
+| 2016 | 1.36 | 1.39 | 0.53 | 0.91 |
+| 2017 | 1.86 | 1.85 | 1.80 | 1.54 |
+| **2018** | **1.34** | 1.53 | -0.44 | -0.20 (M6 痛点) |
+| 2019 | 0.59 | 0.59 | 2.03 | 1.25 |
+| 2020 | 2.62 | 2.62 | 1.57 | 2.06 |
+| **2021** | 0.28 | 0.28 | 0.51 | **1.30** ✅ |
+| **2022** | **-0.45** | -0.09 | 0.47 | **+0.59** ✅ |
+| 2023\* | 4.81 | 4.81 | 6.60 | 13.09\* |
+
+\*2023 仅 27 天样本（WFA 截止 2023-02-15），统计意义弱
+
+### 关键洞察
+
+1. **CPI velocity / PMI velocity 是 game-changer**：M6 用变化率 vs M1 用绝对水平，WFA Sharpe +0.13。
+2. **类内 top-2 加值 20%**：M6 ew (0.95) → M6 top-2 (1.15)。大类已选对了，类内再用 RSRS+mom 精选效果显著。
+3. **EPO 不适合小池子**：6 个大类多数只有 1-4 个 ETF，协方差矩阵估计太粗糙。
+4. **2018 是所有矩阵法的痛点**：缓慢熊市 + 低波动环境下，矩阵驱动的防御切换误判较多。R30 在此环境下反而最好。
+5. **head-to-head ≠ concat**：M6+top2 单窗口仅 8/27 胜 R30，但拼接 Sharpe 高出 48%。说明 alpha 来自少数高 magnitude 窗口（2022/2023），非常态优势。需要警惕 outlier-driven。
+
+### 当前 Pareto 前沿（IS Sharpe vs WFA Sharpe）
+
+| 策略 | IS | WFA | DD | 特点 |
+|---|---|---|---|---|
+| R30 | 1.457 | 0.775 | -25% | 高 IS 低 WFA（过拟合） |
+| R42 | 1.454 | 0.919 | -25% | 头对头最稳健 |
+| M3 ew | 1.034 | 0.975 | **-17%** | 防御 DD 最低 |
+| **M6 + top-2** | **1.389** | **1.149** | -24% | 最高 WFA |
+
+artifacts:
+- `strategy/intra_category.py` — top-K + EPO 类内选择
+- `analysis/iterate_is_v10.py` — R50-R57 IS
+- `analysis/wfa_v10.py` — WFA 多矩阵对比
+- `report/outputs/all_candidates_v10.csv`
+- `report/outputs/wfa_v10_summary.csv` / `per_year.csv` / `windows.csv`
 
 仍未触碰 OOS (>2023-12-31)。
