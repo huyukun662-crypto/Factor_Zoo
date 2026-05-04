@@ -712,3 +712,120 @@ artifacts:
 - `double_pressure_asset_stats.csv` / `double_pressure_2022.csv`
 
 仍未触碰 OOS (>2023-12-31)。
+
+---
+
+## R45-R49：宏观矩阵 → 大类映射（用户要求"自动"探索每个 cell 历史最佳大类）
+
+### 设计
+
+- 防御态从"单标的 IS-best 选择"升级为"宏观矩阵 → 大类映射"
+- 矩阵 axes：通胀 × 增长（或 × 利率）= 6-9 个 cell
+- 每个 cell 历史最佳**大类**（不是单标的）由 IS sharpe_min_vol 自动选出
+- 大类内部等权（构成集合）
+
+### 防御大类（6 类）
+
+| 大类 | 构成 | 经济直觉 |
+|---|---|---|
+| 长债 | 511010 国债 + 511260 国开 | 衰退/通缩/利率下行受益 |
+| 货币 | 511880 银华日利 | 不确定/默认 |
+| 黄金 | 518880 | 通胀对冲/USD 走弱/风险事件 |
+| 红利低波 | 515080 | 低波价值/中通胀+稳增长 |
+| 商品 | 518880 + 162411 + 515220 (黄金+油气+煤炭) | 高通胀/USD 弱势/顺周期 |
+| 海外股 | 513100 + 513500 + 513050 + 159920 (纳指+标普+中概互联+恒生) | RMB 贬值受益/A 股弱势对冲 |
+
+### 矩阵变体探索
+
+| Matrix | Axes | IS Sharpe | WFA Sharpe |
+|---|---|---|---|
+| R45 M3 | us_real_rate × CPI | 1.034 | **0.975** |
+| R46 M5 | PMI × DXY | 1.026 | 0.610 |
+| R47 M1 | PMI × CPI（美林时钟） | 1.017 | **1.055** ✅ |
+
+### M1 数据驱动映射（IS-discovered）
+
+| | CPI low (<1) | CPI mid (1-3) | CPI high (≥3) |
+|---|---|---|---|
+| **PMI contract (<49)** | 商品 | 红利低波 | (n<30 无效) |
+| **PMI neutral (49-51)** | 商品 | 红利低波 | 长债 |
+| **PMI expand (>51)** | 红利低波 | 红利低波 | 海外股 |
+
+经济解读：
+- **滞胀 (PMI 萎缩 + CPI 高)** → 长债（衰退预期 → 利率下行）
+- **复苏顶 (PMI 扩张 + CPI 高)** → 海外股（RMB 贬值 + 美元资产）
+- **衰退底 (PMI 萎缩 + CPI 低)** → 商品（流动性宽松预期）
+- **稳态 (PMI 中性 + CPI 中)** → 红利低波（占 2/3 IS 天数）
+
+### WFA 关键结果（27 窗口，每窗口重新派生矩阵映射）
+
+| 策略 | WFA Sharpe | Ret | Vol | Max DD | Calmar |
+|---|---|---|---|---|---|
+| R30 (baseline) | 0.775 | 13.0% | 16.8% | -24.9% | 0.52 |
+| R42 (R30 + DP override) | 0.919 | 15.0% | 16.3% | -24.9% | 0.60 |
+| **M1 (PMI × CPI 美林时钟)** | **1.055** ✅ | **16.8%** | 15.9% | -21.2% | 0.79 |
+| M3 (us_real × CPI) | 0.975 | 15.4% | 15.8% | -17.2% | **0.90** |
+| M3 + DP | 0.940 | 14.7% | 15.7% | -17.2% | 0.86 |
+| M5 (PMI × DXY) | 0.610 | 9.2% | 15.0% | -21.9% | 0.42 |
+
+### 逐年 WFA Sharpe（M1 vs R30/R42）
+
+| 年份 | R30 | R42 | **M1** | M3 |
+|---|---|---|---|---|
+| 2016 | 1.36 | 1.39 | 0.55 ↓ | 0.49 ↓ |
+| 2017 | 1.86 | 1.85 | 1.79 ≈ | 1.78 ≈ |
+| 2018 | 1.34 | 1.53 | -0.44 ↓ | 0.75 |
+| 2019 | 0.59 | 0.59 | **2.05** ✅ | 0.65 |
+| 2020 | 2.62 | 2.62 | 2.24 ≈ | 1.56 |
+| 2021 | 0.28 | 0.28 | **1.10** ✅ | 1.19 |
+| **2022** | **-0.45** | -0.09 | **+0.60** ✅ | +0.47 |
+| 2023 | 4.81 | 4.81 | **6.60** ✅ | 6.60 |
+
+**M1 在 2019/2021/2022/2023 显著优于 R30**，仅在 2016/2018 次于 R30。
+
+### Head-to-head vs R30 (27 窗口)
+
+| 策略 | better | worse | tied |
+|---|---|---|---|
+| R42 (DP override) | 12 | 6 | 9 |
+| **M1** | **14** | 13 | 0 |
+| M3 | 14 | 13 | 0 |
+| M3+DP | 15 | 12 | 0 |
+| M5 | 8 | 19 | 0 |
+
+### 核心洞察
+
+1. **大类粒度 + 数据驱动矩阵 = WFA 胜利**：IS Sharpe 从 1.45 (R30) 降到 1.02 (M1)，但 WFA Sharpe 从 0.78 升到 1.06 (+36%)。这是经典 **bias-variance tradeoff**。
+2. **PMI × CPI 优于 PMI × DXY**：CPI 比 DXY 更稳定。M5 表现差证明加错的 axis 反而更糟。
+3. **DP override 与矩阵冲突**：M3+DP (0.94) < M3 (0.97)。矩阵已经做了风险路由，叠加 DP 反而抑制多样化。
+4. **M3 max DD 最低 (-17.2%)**：M3 防御更稳健，但 alpha 略弱于 M1。
+5. **M1 把策略变成『美林时钟驱动的多元化防御』**：复苏初买商品，复苏顶买海外股，滞胀买长债，稳态买红利低波。每个 cell 都有经济解释。
+
+### 最新最优 = M1 (Merrill Lynch Clock)
+
+```python
+# 主策略
+信号: RSRS_skew + 加阶矩双动量
+参数: rsrs_N=30, mom_L=180, w_rsrs=0.2, top_k=7, rebal=0.4
+风控 gate: off={1,3,0} full={2}  (regime: trend×vol)
+
+# 防御态（NEW: 矩阵驱动）
+矩阵: PMI × CPI (Merrill Lynch Clock)
+每窗口/期重新派生:
+  per cell -> sharpe_min_vol best 大类
+大类内部: 等权
+默认 (axis NaN): 红利低波
+```
+
+artifacts:
+- `analysis/macro_matrix.py` — 矩阵 builder + IS-best discovery
+- `strategy/categories.py` — 6 大类定义
+- `analysis/iterate_is_v9.py` — IS rounds R45-R49
+- `analysis/wfa_macro_matrix.py` — WFA on multiple matrices
+- `report/outputs/macro_matrix_*.csv` — per-axis cell × category 评分表
+- `report/outputs/wfa_matrix_summary.csv` — WFA 头部对比
+- `report/outputs/wfa_matrix_per_year.csv` — 逐年 WFA Sharpe 对比
+- `report/outputs/wfa_matrix_windows.csv` — 27 窗口 detailed
+- `report/outputs/macro_matrix_M3_mapping.json` — M3 IS 完整映射
+
+仍未触碰 OOS (>2023-12-31)。
