@@ -1,0 +1,8 @@
+,0
+base_sharpe,1.3165187994926897
+max_drop_param,rebal_threshold
+max_drop_value,0.20299415157953637
+heatmap_1_plateau_pct,0.25
+heatmap_2_plateau_pct,1.0
+n_perturb_evals,56
+n_heatmap_cells,78
