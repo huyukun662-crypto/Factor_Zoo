@@ -80,6 +80,68 @@ def fetch_ppi(refresh: bool = False) -> pd.DataFrame:
     return df
 
 
+def fetch_us_cpi_yoy(refresh: bool = False) -> pd.DataFrame:
+    """US CPI YoY (akshare macro_usa_cpi_yoy)."""
+    fp = CACHE_DIR / "_macro_us_cpi.parquet"
+    if fp.exists() and not refresh:
+        return pd.read_parquet(fp)
+    import akshare as ak
+    raw = ak.macro_usa_cpi_yoy()
+    out = raw.rename(columns={"时间": "ref_date", "发布日期": "pub_date", "现值": "value"})
+    out = out[["pub_date", "ref_date", "value"]].copy()
+    out["pub_date"] = pd.to_datetime(out["pub_date"]).dt.normalize()
+    out["value"] = pd.to_numeric(out["value"], errors="coerce")
+    out = out.dropna(subset=["pub_date", "value"]).sort_values("pub_date").drop_duplicates("pub_date")
+    out = out[["pub_date", "value"]]
+    out.to_parquet(fp, index=False)
+    return out
+
+
+def fetch_dxy(refresh: bool = False, start: str = "2013-01-01", end: str | None = None
+               ) -> pd.DataFrame:
+    """US Dollar Index (DXY) daily close via Yahoo Finance.
+
+    Returns columns: pub_date (date), value (DXY close).
+    """
+    fp = CACHE_DIR / "_macro_dxy.parquet"
+    if fp.exists() and not refresh:
+        df = pd.read_parquet(fp)
+        if df["pub_date"].max() >= pd.Timestamp("2024-12-01"):
+            return df
+    import requests
+    end_ts = int(pd.Timestamp(end or pd.Timestamp.today()).timestamp())
+    start_ts = int(pd.Timestamp(start).timestamp())
+    url = (f"https://query1.finance.yahoo.com/v8/finance/chart/DX-Y.NYB"
+           f"?period1={start_ts}&period2={end_ts}&interval=1d")
+    r = requests.get(url, headers={"User-Agent": "Mozilla/5.0"}, timeout=20)
+    r.raise_for_status()
+    data = r.json()["chart"]["result"][0]
+    ts = data["timestamp"]
+    close = data["indicators"]["quote"][0]["close"]
+    df = pd.DataFrame({
+        "pub_date": pd.to_datetime(ts, unit="s", utc=True).tz_convert("UTC").tz_localize(None).normalize(),
+        "value": close,
+    }).dropna()
+    df.to_parquet(fp, index=False)
+    return df
+
+
+def fetch_usd_cny(refresh: bool = False) -> pd.DataFrame:
+    """USD/CNY mid rate from BOC SAFE data. Returns pub_date, value (USD/CNY)."""
+    fp = CACHE_DIR / "_macro_usdcny.parquet"
+    if fp.exists() and not refresh:
+        return pd.read_parquet(fp)
+    import akshare as ak
+    raw = ak.currency_boc_safe()
+    out = raw[["日期", "美元"]].copy()
+    out.columns = ["pub_date", "value"]
+    out["pub_date"] = pd.to_datetime(out["pub_date"]).dt.normalize()
+    out["value"] = pd.to_numeric(out["value"], errors="coerce") / 100.0  # 100 USD per CNY -> USD/CNY
+    out = out.dropna().sort_values("pub_date").drop_duplicates("pub_date")
+    out.to_parquet(fp, index=False)
+    return out
+
+
 def fetch_yield_curve(refresh: bool = False) -> pd.DataFrame:
     """Returns DataFrame with columns: pub_date, cn_2y, cn_5y, cn_10y, cn_10_2_spread,
                                           us_2y, us_10y, us_10_2_spread.
@@ -144,6 +206,12 @@ def fetch_all_macro(refresh: bool = False) -> dict[str, pd.DataFrame]:
     out["ppi"] = fetch_ppi(refresh=refresh); print(f"{len(out['ppi'])} rows")
     print("[macro] fetching yield curve...", end=" ", flush=True)
     out["yield"] = fetch_yield_curve(refresh=refresh); print(f"{len(out['yield'])} rows")
+    print("[macro] fetching US CPI...", end=" ", flush=True)
+    out["us_cpi"] = fetch_us_cpi_yoy(refresh=refresh); print(f"{len(out['us_cpi'])} rows")
+    print("[macro] fetching DXY...", end=" ", flush=True)
+    out["dxy"] = fetch_dxy(refresh=refresh); print(f"{len(out['dxy'])} rows")
+    print("[macro] fetching USD/CNY...", end=" ", flush=True)
+    out["usdcny"] = fetch_usd_cny(refresh=refresh); print(f"{len(out['usdcny'])} rows")
     return out
 
 

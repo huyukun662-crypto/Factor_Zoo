@@ -83,6 +83,33 @@ def build_regime_panel(close_benchmark: pd.Series,
     if "us_10y" in yld.columns and "cn_10y" in yld.columns:
         out["us_cn_10y_spread"] = yld["us_10y"] - yld["cn_10y"]
 
+    # ---- US CPI YoY (lagged, ffill) ----
+    if "us_cpi" in macro:
+        out["us_cpi_yoy"] = align_to_daily(macro["us_cpi"], idx, pub_lag_days=15)
+        # US real rate = US 10Y - US CPI YoY
+        if "us_10y" in out.columns:
+            out["us_real_rate"] = out["us_10y"] - out["us_cpi_yoy"]
+
+    # ---- DXY (USD index) — daily, only 1-day lag ----
+    if "dxy" in macro:
+        dxy_daily = align_yield_to_daily(macro["dxy"].rename(columns={"value": "dxy"}),
+                                           idx, pub_lag_days=1)
+        if "dxy" in dxy_daily.columns:
+            out["dxy"] = dxy_daily["dxy"]
+            # DXY momentum: 60-day return
+            out["dxy_mom_60"] = out["dxy"].pct_change(60)
+            # DXY vs 200-day MA: > 1 = strong USD trend
+            ma200 = out["dxy"].rolling(200, min_periods=60).mean()
+            out["dxy_strong"] = (out["dxy"] > ma200).astype("Int64")
+
+    # ---- USD/CNY (daily) ----
+    if "usdcny" in macro:
+        usdcny_daily = align_yield_to_daily(macro["usdcny"].rename(columns={"value": "usdcny"}),
+                                              idx, pub_lag_days=1)
+        if "usdcny" in usdcny_daily.columns:
+            out["usdcny"] = usdcny_daily["usdcny"]
+            out["usdcny_mom_60"] = out["usdcny"].pct_change(60)
+
     # ---- 8-cell state (trend × vol × growth) ----
     def _safe_int(s):
         return s.fillna(0).astype(int)

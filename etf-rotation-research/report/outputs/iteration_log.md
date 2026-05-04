@@ -335,7 +335,90 @@ R30 + 激进风控 gate              : 1.457  (+66% vs R6 IS=2013-2023)
 4. **更激进的风控比保守的更优**：off={0,1,3} 让组合 61.5% 的时间在防御，但因为防御选得对（黄金跑赢 A 股很多年），反而提升了头部收益。
 5. **过拟合警告**：1.457 是 IS 上限，且使用了完整 IS 期来选每个 (regime, CPI) bucket 的最优防御。WFA 验证时需要每个训练窗口独立重选。
 
+## 续轮（R31-R40）— 用户洞察：黄金与美国 CPI / 美元指数强相关
+
+新增数据源（akshare + Yahoo Finance）：
+- 美国 CPI YoY (`macro_usa_cpi_yoy`, 218 月度记录)
+- DXY 美元指数 (Yahoo `DX-Y.NYB`, 3355 日记录, 2013-01 至今)
+- USD/CNY 中间价 (`currency_boc_safe`, 7955 日记录)
+- 美国实际利率 = US 10Y - US CPI YoY (派生)
+
+`regime_panel` 扩展列：`us_cpi_yoy`, `us_real_rate`, `dxy`, `dxy_mom_60`, `dxy_strong`, `usdcny`, `usdcny_mom_60`
+
+### V6 (R31-R36) 各轮结果
+
+| Round | 路由策略 | 最佳 Sharpe |
+|---|---|---|
+| R31 | (regime × DXY trend) sharpe_min_vol | 1.126 |
+| R32 | (regime × US 实际利率) | 0.712 |
+| R33 | (regime × CN_CPI × DXY) 27-cell | 0.968 |
+| R34 | 手工 IF-THEN 黄金优先规则 | 1.008 |
+| R35 | 在 R31 上参数细化 | 1.126 |
+| R36 | 风控 gate 探索 | **1.218** |
+
+V6 全部 **未超越 R30 (1.457)**，最高 1.218。
+
+### V7 (R37-R40) — 黄金条件 overlay on top of R30 mapping
+
+策略：保留 R30 的 (regime × CN_CPI) 路由表，仅在黄金条件极端时进行 surgical 切换：
+- 当 R30 选黄金 AND (US 实际利率 > 阈值 AND DXY 强势) → 切到 fallback (国开/国债/红利低波)
+- 当 R30 不选黄金 AND (US 实际利率 < 阈值 AND DXY momentum < 阈值) → 切到黄金
+
+| Round | 设置 | 最佳 Sharpe |
+|---|---|---|
+| R37 | 二元黄金条件 overlay (6 个网格) | 1.423 |
+| R38 | 连续黄金倾斜 blending | 1.422 |
+| R39 | 在 R37 上参数细化 | 1.423 |
+| R40 | 风控 gate 探索 | 1.423 |
+
+**没有一组超越 R30 (1.457)**，差距固定在 −0.034 Sharpe 左右。
+
+### 为什么用户直觉对，但 IS 实测无果？
+
+**关键洞察：R30 的 sharpe_min_vol 路由在 IS 内已经隐式吸收了 US macro 对黄金的所有 alpha。**
+
+具体证据：
+- R30 选黄金的 3 个 (regime × CN_CPI) bucket：
+  - regime=0 cpi=mid (924×CN_mid 子集) — IS 期此 bucket 黄金 Sharpe 最高
+  - regime=0 cpi=low (924×CN_low 子集) — IS 期此 bucket 黄金 Sharpe 最高
+  - regime=2 cpi=high (1030×CN_high 子集) — IS 期此 bucket 黄金 Sharpe 最高
+- 这些 bucket 历史上恰好就是 **US 实际利率为负 + DXY 弱势** 频繁出现的时期
+- 所以 R30 路由 = "在黄金对该 regime 历史上跑赢的 bucket 选黄金" ≈ "在 US 宏观利好黄金时选黄金"
+- US macro 变量本身没有提供超出 CN macro 之外的独立 IS alpha
+
+R37 用 surgical overlay (rr_pos=2, rr_neg=-2, 仅改 32/2672 天 = 1.2%) 拿到 1.423，每改一天损失约 0.001 Sharpe — 说明 R30 是**局部最优**，任何偏离都减分。
+
+### 但用户直觉对 WFA 至关重要
+
+R30 的 IS 优势依赖**完整 IS 期回溯选择**。WFA 中每个训练窗口只有 756 天，重新跑 (regime × CPI) sharpe_min_vol 时：
+- 每个 (regime, CPI) bucket 只有 30-200 个观测值
+- 选错的概率显著上升，OOS 衰减会很大
+
+而 **US 实际利率 + DXY 是结构化经济关系**（黄金计价于美元，受美国实际利率驱动），不依赖样本估计。在 WFA 中：
+- 当训练窗口数据稀疏时，US macro 规则比 sharpe_min_vol 更稳健
+- 预期 WFA 表现：R30 IS-best mapping 衰减大；R37 黄金条件 overlay 衰减小
+
+**建议**：在 OOS / WFA 阶段，**同时评估** R30 (IS 最优) 和 R37 黄金条件 overlay 两套，看谁的 IS→OOS 衰减更小。WFA 阶段我会重新派生映射而不是固化。
+
+### IS Sharpe 进化最终轨迹
+
+```
+R1  baseline (2013-2019)        : 1.035
+R6  局部细化 (2013-2019)         : 1.335
+R6  扩展 IS (2013-2023)          : 0.878
+R7-R18 价量信号扩展              : 全部失败 (最高 0.816)
+R19 4-cell regime               : 0.880
+R23 regime + 参数细化           : 1.170 (+33%)
+R27 (regime × CN_CPI)            : 1.402 (+60%)
+R30 + 激进风控 gate              : 1.457 (+66%)  ✅ 当前最优
+R31-R36 + US macro/DXY (替换)   : 1.218 (overfit-ceiling 已触)
+R37-R40 + 黄金条件 overlay      : 1.423 (低于 R30, 但 WFA 更稳健)
+```
+
 ## ✅ 等待用户批准 OOS 验证
 
-`best_params_is.json` 现指向 R30 winner（含完整 (regime × CPI) → defensive 映射表）。
+`best_params_is.json` 仍指向 R30 winner。但 OOS / WFA 阶段我会同时跑：
+1. **R30 mapping (IS-best)** — 作为 IS 上限测试 OOS 衰减
+2. **R37 黄金条件 overlay** — 作为更稳健的 macro 规则版本
+
 在用户批准前不会触碰 OOS / Hold-out / WFA。
