@@ -31,14 +31,25 @@ def main():
     font = _setup_chinese_font()
     print(f"Using font: {font}")
 
-    eq = pd.read_csv(OUT_DIR / "round6_equity.csv", index_col=0, parse_dates=True)["equity"]
-    py = pd.read_csv(OUT_DIR / "round6_per_year.csv")
+    # Prefer v4 winner artifacts if present, else fall back to R6
+    v4_eq = OUT_DIR / "v4_winner_equity.csv"
+    v4_py = OUT_DIR / "v4_winner_per_year.csv"
+    if v4_eq.exists() and v4_py.exists():
+        eq = pd.read_csv(v4_eq, index_col=0, parse_dates=True)["equity"]
+        py = pd.read_csv(v4_py)
+        title_suffix = "Round 23 (regime-gated)"
+        out_name = "is_equity_and_yearly_v4.png"
+    else:
+        eq = pd.read_csv(OUT_DIR / "round6_equity.csv", index_col=0, parse_dates=True)["equity"]
+        py = pd.read_csv(OUT_DIR / "round6_per_year.csv")
+        title_suffix = "Round 6 (RSRS + 加阶矩双动量)"
+        out_name = "is_equity_and_yearly.png"
 
     fig, axes = plt.subplots(2, 1, figsize=(11, 7), gridspec_kw={"height_ratios": [2, 1]})
 
     ax = axes[0]
-    ax.plot(eq.index, eq.values, lw=1.5, label="R6 strategy (net)")
-    ax.set_title("IS 2013-2019 — Round 6 净值曲线 (RSRS + 加阶矩双动量)")
+    ax.plot(eq.index, eq.values, lw=1.5, label="strategy (net)")
+    ax.set_title(f"IS 2013-2023 净值曲线 — {title_suffix}")
     ax.set_ylabel("equity (start=1)")
     ax.grid(alpha=0.3)
     ax.legend(loc="upper left")
@@ -48,13 +59,13 @@ def main():
     ax.bar(py["year"].astype(int).astype(str), py["sharpe"], color=colors)
     ax.axhline(0, color="black", lw=0.8)
     ax.axhline(0.5, color="gray", ls="--", lw=0.6, label="audit floor 0.5")
-    ax.set_title("逐年 Sharpe (注意 2014-2015 牛市贡献过高)")
+    ax.set_title("逐年 Sharpe")
     ax.set_ylabel("Sharpe")
     ax.legend(loc="upper right", fontsize=8)
     ax.grid(alpha=0.3, axis="y")
 
     fig.tight_layout()
-    out_fp = OUT_DIR / "is_equity_and_yearly.png"
+    out_fp = OUT_DIR / out_name
     fig.savefig(out_fp, dpi=140)
     print(f"saved {out_fp}")
 
