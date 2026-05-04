@@ -10,19 +10,33 @@
   "theta_on": 0.7,
   "rebal_threshold": 0.4,
   "rsrs_form": "rsrs_skew",
-  "v4_label": "refine L=180 wr=0.2 k=7 rb=0.4",
-  "v4_off_set": [
+  "v5_label": "R30 regime×CPI sharpe_min_vol + gate off={0,1,3} full={2}",
+  "v5_off_set": [
+    0,
     1,
     3
   ],
-  "v4_full_set": [
+  "v5_full_set": [
     2
   ],
-  "v4_defensive_map": {
-    "0": "511880",
-    "1": "511880",
-    "2": "511880",
-    "3": "511880"
+  "v5_defensive_mapping": {
+    "regime0_cpi_high": "515080",
+    "regime0_cpi_low": "518880",
+    "regime0_cpi_mid": "518880",
+    "regime1_cpi_high": "511010",
+    "regime1_cpi_mid": "511260",
+    "regime2_cpi_high": "518880",
+    "regime2_cpi_low": "511260",
+    "regime2_cpi_mid": "515080",
+    "regime3_cpi_mid": "511010"
   },
-  "v4_regime_state": "regime_state_2 (4-cell trend × vol)"
+  "v5_metric": "sharpe_min_vol (excludes ann_vol < 2%)",
+  "v5_defensive_pool": [
+    "511010",
+    "511260",
+    "511880",
+    "518880",
+    "515080",
+    "515220"
+  ]
 }

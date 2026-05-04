@@ -31,10 +31,17 @@ def main():
     font = _setup_chinese_font()
     print(f"Using font: {font}")
 
-    # Prefer v4 winner artifacts if present, else fall back to R6
+    # Prefer v5 winner, else v4, else R6
+    v5_eq = OUT_DIR / "v5_winner_equity.csv"
+    v5_py = OUT_DIR / "v5_winner_per_year.csv"
     v4_eq = OUT_DIR / "v4_winner_equity.csv"
     v4_py = OUT_DIR / "v4_winner_per_year.csv"
-    if v4_eq.exists() and v4_py.exists():
+    if v5_eq.exists() and v5_py.exists():
+        eq = pd.read_csv(v5_eq, index_col=0, parse_dates=True)["equity"]
+        py = pd.read_csv(v5_py)
+        title_suffix = "Round 30 (regime × CPI defensive routing)"
+        out_name = "is_equity_and_yearly_v5.png"
+    elif v4_eq.exists() and v4_py.exists():
         eq = pd.read_csv(v4_eq, index_col=0, parse_dates=True)["equity"]
         py = pd.read_csv(v4_py)
         title_suffix = "Round 23 (regime-gated)"
