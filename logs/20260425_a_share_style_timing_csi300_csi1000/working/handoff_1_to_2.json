@@ -1,0 +1,46 @@
+{
+  "objective": "Mine a daily timing factor for CSI300 vs CSI1000 style spread on A-share broad-base ETFs, with TVT discipline 2018-2022 / 2022-2023 / 2024-now and 5 mandatory audits.",
+  "mechanism_candidates": [
+    {
+      "name": "M1_volatility_regime",
+      "why": "Realized vol spike on small-cap relative to large-cap → risk-off → CSI300 outperforms over ~5d. A-share retail-driven small-caps amplify panic-vol asymmetry.",
+      "supporting_evidence": ["A-share volatility cluster regimes 2018Q4, 2020Q1, 2024Q1 — historical pattern", "vol-targeting / risk-parity literature on rebalance-driven equity rotation"],
+      "datasets": ["index_daily.close", "rolling std/var operators"],
+      "operators": ["rolling std", "rolling z-score", "log/ratio", "downside semivariance"],
+      "caveats": ["vol-spread can become collinear with 20d momentum during trending regimes", "vol regimes cluster in time → audit 4 best-year-out exposure"]
+    },
+    {
+      "name": "M2_turnover_divergence",
+      "why": "Small-cap turnover spike vs large-cap → retail euphoria → ~5d mean-reversion → favour 300.",
+      "supporting_evidence": ["A-share retail turnover share consistently above developed markets"],
+      "datasets": ["index_daily.amount", "index_daily.vol"],
+      "operators": ["rolling mean", "ratio", "z-score"],
+      "caveats": ["correlated with M1 vol-spread; may be a noisier proxy"]
+    },
+    {
+      "name": "M3_dispersion_proxy",
+      "why": "High small-cap basket dispersion → idiosyncratic noise dominates ETF return → favour broad-index 300 until dispersion contracts.",
+      "supporting_evidence": ["cross-sectional dispersion as stock-picking premium proxy"],
+      "datasets": ["index_daily high/low/close"],
+      "operators": ["high-low range / close", "rolling smoothing"],
+      "caveats": ["index high-low only weakly proxies true cross-sectional dispersion without constituent data"]
+    },
+    {
+      "name": "M4_spread_momentum_reversal",
+      "why": "Style-rotation regimes mean-revert at 5-10d horizon.",
+      "supporting_evidence": ["short-term reversal in style spreads documented in cross-asset literature"],
+      "datasets": ["index_daily.close"],
+      "operators": ["pct_change", "rolling sum", "negation"],
+      "caveats": ["high classic-factor-clone risk per G4 |corr|<0.85"]
+    },
+    {
+      "name": "M5_market_regime_defensive",
+      "why": "Bear → favour 300, bull → favour 1000 via 60-120d trailing return signal.",
+      "supporting_evidence": ["A-share bear-market large-cap defense pattern"],
+      "datasets": ["index_daily.close (300)"],
+      "operators": ["rolling sum", "ema", "sign"],
+      "caveats": ["pure trend-follow → overfits to specific bear/bull episodes; likely fails worst-year audit"]
+    }
+  ],
+  "recommended_focus": "M1_volatility_regime"
+}

@@ -1,0 +1,221 @@
+{
+  "batch_id": "batch_0002",
+  "validation_passed": false,
+  "submission_made": true,
+  "results": [
+    {
+      "expression_idx": 1,
+      "alpha_id": "r2_e1_log_amount_ratio_20d",
+      "sharpe": 0.15628234047928546,
+      "fitness": null,
+      "turnover": 8.037037037037036,
+      "ic": 0.005844449202010957,
+      "status": "completed",
+      "error": null,
+      "val_sharpe": 1.6862592323365029,
+      "horizon": 5,
+      "thesis_sign": 1
+    },
+    {
+      "expression_idx": 2,
+      "alpha_id": "r2_e2_log_amount_ratio_5d",
+      "sharpe": 0.3025987534016351,
+      "fitness": null,
+      "turnover": 23.074074074074073,
+      "ic": 0.024007734947607925,
+      "status": "failed",
+      "error": "failed gates: ['G3_non_degenerate', 'G4_behavioral_fidelity']",
+      "val_sharpe": 0.39583989036917755,
+      "horizon": 5,
+      "thesis_sign": 1
+    },
+    {
+      "expression_idx": 3,
+      "alpha_id": "r2_e3_abnormal_amount_1000",
+      "sharpe": -1.355913211389216,
+      "fitness": null,
+      "turnover": 19.703703703703706,
+      "ic": -0.19551600999402133,
+      "status": "failed",
+      "error": "failed gates: ['G3_non_degenerate', 'G4_behavioral_fidelity']",
+      "val_sharpe": -0.8165524456426612,
+      "horizon": 5,
+      "thesis_sign": 1
+    },
+    {
+      "expression_idx": 4,
+      "alpha_id": "r2_e4_abnormal_amount_spread",
+      "sharpe": -0.24288119711221381,
+      "fitness": null,
+      "turnover": 27.48148148148148,
+      "ic": 0.003024369655152913,
+      "status": "failed",
+      "error": "failed gates: ['G3_non_degenerate', 'G4_behavioral_fidelity']",
+      "val_sharpe": -0.6029706972126907,
+      "horizon": 5,
+      "thesis_sign": 1
+    },
+    {
+      "expression_idx": 5,
+      "alpha_id": "r2_e5_log_amount_ratio_z504",
+      "sharpe": 0.31253813315790935,
+      "fitness": null,
+      "turnover": 4.407407407407407,
+      "ic": 0.02283779355917543,
+      "status": "failed",
+      "error": "failed gates: ['G4_behavioral_fidelity']",
+      "val_sharpe": 0.9242047707747604,
+      "horizon": 5,
+      "thesis_sign": 1
+    },
+    {
+      "expression_idx": 6,
+      "alpha_id": "r2_e6_amount_resid_vs_vol_spread",
+      "sharpe": -0.9846881463543997,
+      "fitness": null,
+      "turnover": 9.074074074074074,
+      "ic": -0.12338547299144723,
+      "status": "failed",
+      "error": "failed gates: ['G3_non_degenerate', 'G4_behavioral_fidelity']",
+      "val_sharpe": 0.46263807412187596,
+      "horizon": 5,
+      "thesis_sign": 1
+    },
+    {
+      "expression_idx": 7,
+      "alpha_id": "r2_e7_log_amount_accel_spread",
+      "sharpe": -0.1132348470275958,
+      "fitness": null,
+      "turnover": 39.66666666666667,
+      "ic": 0.031330806988465604,
+      "status": "failed",
+      "error": "failed gates: ['G3_non_degenerate', 'G4_behavioral_fidelity']",
+      "val_sharpe": -0.740171526576634,
+      "horizon": 5,
+      "thesis_sign": 1
+    },
+    {
+      "expression_idx": 8,
+      "alpha_id": "r2_e8_amount_share_1000",
+      "sharpe": 0.20024617570175537,
+      "fitness": null,
+      "turnover": 7.518518518518518,
+      "ic": 0.006368495654128295,
+      "status": "completed",
+      "error": null,
+      "val_sharpe": 1.6988583155970207,
+      "horizon": 5,
+      "thesis_sign": 1
+    }
+  ],
+  "expressions": [
+    {
+      "id": "r2_e1_log_amount_ratio_20d",
+      "gates": {
+        "G1_importable": "pass",
+        "G2_runs_e2e": "pass",
+        "G3_non_degenerate": "pass",
+        "G4_behavioral_fidelity": "pass"
+      },
+      "retry_count": 0,
+      "notes": ""
+    },
+    {
+      "id": "r2_e2_log_amount_ratio_5d",
+      "gates": {
+        "G1_importable": "pass",
+        "G2_runs_e2e": "pass",
+        "G3_non_degenerate": "fail",
+        "G4_behavioral_fidelity": "fail"
+      },
+      "retry_count": 0,
+      "notes": ""
+    },
+    {
+      "id": "r2_e3_abnormal_amount_1000",
+      "gates": {
+        "G1_importable": "pass",
+        "G2_runs_e2e": "pass",
+        "G3_non_degenerate": "fail",
+        "G4_behavioral_fidelity": "fail"
+      },
+      "retry_count": 0,
+      "notes": ""
+    },
+    {
+      "id": "r2_e4_abnormal_amount_spread",
+      "gates": {
+        "G1_importable": "pass",
+        "G2_runs_e2e": "pass",
+        "G3_non_degenerate": "fail",
+        "G4_behavioral_fidelity": "fail"
+      },
+      "retry_count": 0,
+      "notes": ""
+    },
+    {
+      "id": "r2_e5_log_amount_ratio_z504",
+      "gates": {
+        "G1_importable": "pass",
+        "G2_runs_e2e": "pass",
+        "G3_non_degenerate": "pass",
+        "G4_behavioral_fidelity": "fail"
+      },
+      "retry_count": 0,
+      "notes": ""
+    },
+    {
+      "id": "r2_e6_amount_resid_vs_vol_spread",
+      "gates": {
+        "G1_importable": "pass",
+        "G2_runs_e2e": "pass",
+        "G3_non_degenerate": "fail",
+        "G4_behavioral_fidelity": "fail"
+      },
+      "retry_count": 0,
+      "notes": ""
+    },
+    {
+      "id": "r2_e7_log_amount_accel_spread",
+      "gates": {
+        "G1_importable": "pass",
+        "G2_runs_e2e": "pass",
+        "G3_non_degenerate": "fail",
+        "G4_behavioral_fidelity": "fail"
+      },
+      "retry_count": 0,
+      "notes": ""
+    },
+    {
+      "id": "r2_e8_amount_share_1000",
+      "gates": {
+        "G1_importable": "pass",
+        "G2_runs_e2e": "pass",
+        "G3_non_degenerate": "pass",
+        "G4_behavioral_fidelity": "pass"
+      },
+      "retry_count": 0,
+      "notes": ""
+    }
+  ],
+  "g5": {
+    "passed": false,
+    "detail": {
+      "survivors": 2,
+      "peak_horizons": [
+        5,
+        5
+      ],
+      "n_at_declared": 2,
+      "declared": 5
+    }
+  },
+  "anomalies": [
+    "r2_e2_log_amount_ratio_5d",
+    "r2_e3_abnormal_amount_1000",
+    "r2_e4_abnormal_amount_spread",
+    "r2_e5_log_amount_ratio_z504",
+    "r2_e6_amount_resid_vs_vol_spread",
+    "r2_e7_log_amount_accel_spread"
+  ]
+}

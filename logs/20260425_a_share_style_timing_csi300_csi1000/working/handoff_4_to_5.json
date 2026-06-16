@@ -1,0 +1,220 @@
+{
+  "batch_id": "batch_0001",
+  "validation_passed": false,
+  "submission_made": true,
+  "results": [
+    {
+      "expression_idx": 1,
+      "alpha_id": "r1_e1_volspread_20d",
+      "sharpe": 0.140841092753568,
+      "fitness": null,
+      "turnover": 26.444444444444443,
+      "ic": 0.06423831104563389,
+      "status": "failed",
+      "error": "failed gates: ['G3_non_degenerate']",
+      "val_sharpe": 1.0561355917844377,
+      "horizon": 5,
+      "thesis_sign": 1
+    },
+    {
+      "expression_idx": 2,
+      "alpha_id": "r1_e2_volratio_20d",
+      "sharpe": -0.27250998909015395,
+      "fitness": null,
+      "turnover": 23.85185185185185,
+      "ic": 0.0072836260875101255,
+      "status": "failed",
+      "error": "failed gates: ['G3_non_degenerate', 'G4_behavioral_fidelity']",
+      "val_sharpe": 1.45114063001237,
+      "horizon": 5,
+      "thesis_sign": 1
+    },
+    {
+      "expression_idx": 3,
+      "alpha_id": "r1_e3_logvolratio_20d",
+      "sharpe": -0.11954147788445008,
+      "fitness": null,
+      "turnover": 26.444444444444443,
+      "ic": 0.017113611984195636,
+      "status": "failed",
+      "error": "failed gates: ['G3_non_degenerate', 'G4_behavioral_fidelity']",
+      "val_sharpe": 1.5380508695126767,
+      "horizon": 5,
+      "thesis_sign": 1
+    },
+    {
+      "expression_idx": 4,
+      "alpha_id": "r1_e4_volspread_10d",
+      "sharpe": 0.31689333595227887,
+      "fitness": null,
+      "turnover": 46.148148148148145,
+      "ic": 0.06946445215408625,
+      "status": "failed",
+      "error": "failed gates: ['G3_non_degenerate', 'G4_behavioral_fidelity']",
+      "val_sharpe": 0.6896024063266492,
+      "horizon": 5,
+      "thesis_sign": 1
+    },
+    {
+      "expression_idx": 5,
+      "alpha_id": "r1_e5_volspread_20d_z504",
+      "sharpe": -0.4735847298138188,
+      "fitness": null,
+      "turnover": 26.444444444444443,
+      "ic": 0.005367480576448195,
+      "status": "failed",
+      "error": "failed gates: ['G3_non_degenerate', 'G4_behavioral_fidelity']",
+      "val_sharpe": 0.7581739816875736,
+      "horizon": 5,
+      "thesis_sign": 1
+    },
+    {
+      "expression_idx": 6,
+      "alpha_id": "r1_e6_downvolspread_20d",
+      "sharpe": -0.24600751771487867,
+      "fitness": null,
+      "turnover": 23.592592592592595,
+      "ic": 0.008850703894125775,
+      "status": "failed",
+      "error": "failed gates: ['G3_non_degenerate', 'G4_behavioral_fidelity']",
+      "val_sharpe": -0.2707646939954992,
+      "horizon": 5,
+      "thesis_sign": 1
+    },
+    {
+      "expression_idx": 7,
+      "alpha_id": "r1_e7_vol_accel_spread",
+      "sharpe": -1.304354904449428,
+      "fitness": null,
+      "turnover": 87.1111111111111,
+      "ic": 0.05952055033585866,
+      "status": "failed",
+      "error": "failed gates: ['G3_non_degenerate', 'G4_behavioral_fidelity']",
+      "val_sharpe": -0.9586666153042086,
+      "horizon": 5,
+      "thesis_sign": 1
+    },
+    {
+      "expression_idx": 8,
+      "alpha_id": "r1_e8_volspread_longbaseline",
+      "sharpe": -0.006652959118133765,
+      "fitness": null,
+      "turnover": 27.48148148148148,
+      "ic": 0.037174145507851,
+      "status": "failed",
+      "error": "failed gates: ['G3_non_degenerate', 'G4_behavioral_fidelity']",
+      "val_sharpe": 0.5454578697993503,
+      "horizon": 5,
+      "thesis_sign": 1
+    }
+  ],
+  "expressions": [
+    {
+      "id": "r1_e1_volspread_20d",
+      "gates": {
+        "G1_importable": "pass",
+        "G2_runs_e2e": "pass",
+        "G3_non_degenerate": "fail",
+        "G4_behavioral_fidelity": "pass"
+      },
+      "retry_count": 0,
+      "notes": ""
+    },
+    {
+      "id": "r1_e2_volratio_20d",
+      "gates": {
+        "G1_importable": "pass",
+        "G2_runs_e2e": "pass",
+        "G3_non_degenerate": "fail",
+        "G4_behavioral_fidelity": "fail"
+      },
+      "retry_count": 0,
+      "notes": ""
+    },
+    {
+      "id": "r1_e3_logvolratio_20d",
+      "gates": {
+        "G1_importable": "pass",
+        "G2_runs_e2e": "pass",
+        "G3_non_degenerate": "fail",
+        "G4_behavioral_fidelity": "fail"
+      },
+      "retry_count": 0,
+      "notes": ""
+    },
+    {
+      "id": "r1_e4_volspread_10d",
+      "gates": {
+        "G1_importable": "pass",
+        "G2_runs_e2e": "pass",
+        "G3_non_degenerate": "fail",
+        "G4_behavioral_fidelity": "fail"
+      },
+      "retry_count": 0,
+      "notes": ""
+    },
+    {
+      "id": "r1_e5_volspread_20d_z504",
+      "gates": {
+        "G1_importable": "pass",
+        "G2_runs_e2e": "pass",
+        "G3_non_degenerate": "fail",
+        "G4_behavioral_fidelity": "fail"
+      },
+      "retry_count": 0,
+      "notes": ""
+    },
+    {
+      "id": "r1_e6_downvolspread_20d",
+      "gates": {
+        "G1_importable": "pass",
+        "G2_runs_e2e": "pass",
+        "G3_non_degenerate": "fail",
+        "G4_behavioral_fidelity": "fail"
+      },
+      "retry_count": 0,
+      "notes": ""
+    },
+    {
+      "id": "r1_e7_vol_accel_spread",
+      "gates": {
+        "G1_importable": "pass",
+        "G2_runs_e2e": "pass",
+        "G3_non_degenerate": "fail",
+        "G4_behavioral_fidelity": "fail"
+      },
+      "retry_count": 0,
+      "notes": ""
+    },
+    {
+      "id": "r1_e8_volspread_longbaseline",
+      "gates": {
+        "G1_importable": "pass",
+        "G2_runs_e2e": "pass",
+        "G3_non_degenerate": "fail",
+        "G4_behavioral_fidelity": "fail"
+      },
+      "retry_count": 0,
+      "notes": ""
+    }
+  ],
+  "g5": {
+    "passed": false,
+    "detail": {
+      "survivors": 0,
+      "peak_horizons": [],
+      "n_at_declared": 0,
+      "declared": 5
+    }
+  },
+  "anomalies": [
+    "r1_e1_volspread_20d",
+    "r1_e2_volratio_20d",
+    "r1_e3_logvolratio_20d",
+    "r1_e4_volspread_10d",
+    "r1_e5_volspread_20d_z504",
+    "r1_e6_downvolspread_20d",
+    "r1_e7_vol_accel_spread",
+    "r1_e8_volspread_longbaseline"
+  ]
+}

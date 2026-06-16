@@ -1,0 +1,63 @@
+round: 1
+session_id: 20260425_a_share_style_timing_csi300_csi1000
+mechanism_family: M1_volatility_regime
+mechanism_v2_after_g4_failure: M1_volatility_regime_contrarian
+
+agents:
+  agent_1_research_librarian:
+    artifact: outputs/research_brief.md
+    handoff: working/handoff_1_to_2.json
+    decision: enumerated 5 mechanism candidates; recommended M1
+  agent_2_hypothesis_architect:
+    artifact: outputs/session_metadata.yml
+    handoff: working/handoff_2_to_3.json
+    decision: selected M1 with horizon=5, thesis_sign=+1
+    revision_after_stage_4_v1: |
+      All 8 expressions failed G4 with IC opposite to thesis →
+      revised to M1' (contrarian) with negation at source per
+      validation-gates.md:140. Same constructions, opposite direction.
+  agent_3_alpha_builder:
+    artifact: outputs/expressions_batch_0001.md
+    handoff: working/handoff_3_to_4.json
+    expressions:
+      - r1_e1_volspread_20d
+      - r1_e2_volratio_20d
+      - r1_e3_logvolratio_20d
+      - r1_e4_volspread_10d
+      - r1_e5_volspread_20d_z504
+      - r1_e6_downvolspread_20d
+      - r1_e7_vol_accel_spread
+      - r1_e8_volspread_longbaseline
+    rule_of_8_compliance: true
+  agent_4_backtest_operator:
+    v1_artifact: outputs/backtest_results_batch_0001_v1_falsified.md
+    v1_handoff: working/handoff_4_to_5_v1_falsified.json
+    v1_outcome: 8/8 G4 IC sign FAIL → escalate to Agent 2
+    v2_artifact: outputs/backtest_results_batch_0001.md
+    v2_handoff: working/handoff_4_to_5.json
+    v2_outcome: 1/8 G4 PASS (E1); G5 FAIL (1 survivor < 4); 0/8 TVT-eligible
+    audits:
+      audit_1_execution_delay: PASS
+      audit_2_lookahead: PASS
+  agent_5_evaluator:
+    artifact: outputs/alpha_ranking.md
+    final_summary: outputs/final_summary.md
+    decision: RESEARCH-ONLY
+    audits:
+      audit_3_worst_year_sharpe_ge_0_5: FAIL (worst = 2026 partial, -1.15)
+      audit_4_best_year_out_ge_half_headline: FAIL
+      audit_5_falsification_completed: true
+    promote_blocked_by:
+      - test_sharpe_below_1
+      - worst_year_sharpe_below_0_5
+      - best_year_out_below_half
+      - calmar_below_1_5
+      - ic_t_stat_below_3
+      - no_tvt_eligible_candidate
+
+decision: RESEARCH-ONLY
+continue_research: false   # this round's mechanism is dead; R2 should pivot
+notable_findings:
+  - "M1 thesis (vol-spread → flight-to-quality, favour 300) is FALSIFIED on 2018-2022 train"
+  - "M1' thesis (vol-spread → small-cap mean-reversion, favour 1000) shows directionally correct but weak signal (max IC t=1.93)"
+  - "E4 (faster 10d window) shows uniquely STABLE per-year test Sharpes (+0.10, +0.27, +0.25) despite failing G4 monotonicity — worth investigating as R2 lead"

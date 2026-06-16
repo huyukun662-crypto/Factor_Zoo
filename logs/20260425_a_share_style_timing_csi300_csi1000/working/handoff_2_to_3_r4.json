@@ -1,0 +1,40 @@
+{
+  "round": 4,
+  "selected_mechanism": "M3_regime_conditioned",
+  "pivot_from": "M3_turnover_acceleration_momentum (R3 RESEARCH-ONLY, near-PROMOTE)",
+  "tvt_compliance": "R4 design uses ONLY R3 TRAIN+VAL IC patterns + R3 audit-3 worst-year diagnostic (single regime-flip year hypothesis). Test still untouched for R4-specific gating logic.",
+  "honesty_caveat": "FOURTH round on the same test window. Tighter PROMOTE bar pre-registered: test IC t-stat >= 4.0, worst-year Sharpe >= 0.7, R4 test Sharpe must exceed R3 E4 +0.58.",
+  "causal_chain": [
+    "small-cap turnover acceleration is bullish for small-cap continuation in HIGH-vol regimes",
+    "in LOW-vol regimes the same signal weakens or inverts",
+    "smooth regime gate weights the M3 signal by current regime state",
+    "regime-conditioned score should pass audit-3 worst-year"
+  ],
+  "time_horizon": "20 trading days",
+  "regime_gates_under_test": [
+    "tanh(R1 vol-spread z / temperature) — temperature in {1.0, 2.0}",
+    "one-sided max(0, tanh(vol-spread z))",
+    "R2 turnover-level z as gate",
+    "composite avg(vol_z, turnover_z) tanh",
+    "trailing 60d market return sign",
+    "20d signal discretization (rebalance frequency variant)"
+  ],
+  "thesis_sign": 1,
+  "primary_horizon_days": 20,
+  "constraints": {
+    "dataset_id": "tushare_index_daily_amount_vol_close_300_500_1000",
+    "region": "CN-A",
+    "universe": "broad_base_etf_300_vs_1000",
+    "delay": 1,
+    "turnover_range": [0.10, 20.0],
+    "sharpe_target_test": 1.0,
+    "sharpe_target_test_must_exceed_r3_winner": 0.58,
+    "fitness_target": null,
+    "prod_corr_max_vs_r1": 0.85,
+    "prod_corr_max_vs_r2": 0.85,
+    "prod_corr_max_vs_r3": "relaxed (regime-conditioned variants of R3 E4 by design)",
+    "cost_bps_per_side_per_leg": 5
+  },
+  "neutralization_candidates": [],
+  "build_directive_for_agent_3": "Produce 8 R4 expressions: 6 regime-conditioned variants of R3 E4/E2 (smooth tanh gates with various regime indicators) + 1 rebalance-frequency variant (20d signal discretization). Each must demonstrate regime-state-dependent behaviour vs the base R3 signal — a constant scaling is not acceptable. All thesis_sign=+1, declared_horizon=20."
+}

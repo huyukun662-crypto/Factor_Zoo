@@ -1,0 +1,72 @@
+round: 2
+session_id: 20260425_a_share_style_timing_csi300_csi1000
+mechanism_family: M2_turnover_divergence
+pivot_from: M1_volatility_regime (R1 RESEARCH-ONLY)
+
+agents:
+  agent_2_hypothesis_architect:
+    artifact_block: outputs/session_metadata.yml#round_0002
+    handoff: working/handoff_2_to_3_r2.json
+    decision: |
+      Pivot to M2 (Agent-1 R1 candidate #2) per R1 alpha_ranking R3#1
+      recommendation. Same TVT split, same audit thresholds. Build
+      directive included anti-clone vs R1 vol-spread (|corr| < 0.85)
+      to ensure M2 is not M1 in disguise.
+  agent_3_alpha_builder:
+    artifact: outputs/expressions_batch_0002.md
+    handoff: working/handoff_3_to_4_r2.json
+    expressions:
+      - r2_e1_log_amount_ratio_20d
+      - r2_e2_log_amount_ratio_5d
+      - r2_e3_abnormal_amount_1000
+      - r2_e4_abnormal_amount_spread
+      - r2_e5_log_amount_ratio_z504
+      - r2_e6_amount_resid_vs_vol_spread
+      - r2_e7_log_amount_accel_spread
+      - r2_e8_amount_share_1000
+    rule_of_8_compliance: true
+    anti_clone_vs_r1_max_corr: 0.48
+    note: "E1 ≈ E8 by response (TRAIN corr 1.00 on z-score) — construction-distinct, response-equivalent. Effective batch is 7 distinct probes."
+  agent_4_backtest_operator:
+    artifact: outputs/backtest_results_batch_0002.md
+    handoff: working/handoff_4_to_5_r2.json
+    outcome: 2/8 G4 PASS (E1, E8); G5 FAIL (2 < 4); 0/8 TVT-eligible
+    audits:
+      audit_1_execution_delay: PASS
+      audit_2_lookahead: PASS
+    notable_observation: |
+      E3 (small-cap amount acceleration) has TRAIN IC = -0.196 with t = -5.93
+      (anti-thesis). Strongest single-IC signal in the entire session,
+      pointing to a momentum (not mean-reversion) sub-mechanism.
+      Inverted, this would have IC ≈ +0.20.
+  agent_5_evaluator:
+    artifact: outputs/alpha_ranking_r2.md
+    decision: RESEARCH-ONLY
+    audits:
+      audit_3_worst_year_sharpe_ge_0_5: FAIL (E1 worst = 2025 -0.85)
+      audit_4_best_year_out_ge_half_headline: FAIL (E1 headline -0.36 carried by 2026 partial +4.34)
+      audit_5_falsification_completed: true
+    promote_blocked_by:
+      - test_sharpe_negative
+      - worst_year_sharpe_below_0_5
+      - best_year_out_fails_regime_concentration
+      - calmar_negative
+      - ic_t_stat_below_3
+      - no_tvt_eligible_candidate
+
+decision: RESEARCH-ONLY
+continue_research: true   # R3 has a clear lead (E3 inverted as momentum signal)
+notable_findings:
+  - "M2 level thesis (E1/E8/E5 cluster): val-favorable (Sh +1.7) but TEST FAILS (-0.36); val-period was regime-specific 2022-2023"
+  - "M2 acceleration sub-cluster (E3, E6) shows ANTI-THESIS IC with high significance (E3: IC=-0.196, t=-5.93); turnover acceleration is MOMENTUM on small-cap, not mean-reversion"
+  - "E6 (residualized) is the only R2 expression with positive test Sharpe (+0.19), driven by 2025 (+0.19) and 2026 partial (+2.17)"
+  - "G4 pass rate improved 1/8 → 2/8 from R1 to R2; M2 produces better-behaved expressions than M1 even though no winner emerges"
+
+r3_recommendation_top: |
+  Pivot to "small-cap turnover acceleration as momentum signal" by negating
+  E3-class expressions at source. Pre-test IC magnitude is the strongest
+  observed across both rounds (|IC|=0.196, t≈6). Rule-of-8 R3 batch should
+  cover acceleration-momentum variants on (a) different MA windows
+  {5/20, 5/60, 10/60, 5/120}, (b) acceleration spread vs single-leg,
+  (c) volume-derived vs amount-derived, (d) regime-conditioning by R1
+  vol-spread state.

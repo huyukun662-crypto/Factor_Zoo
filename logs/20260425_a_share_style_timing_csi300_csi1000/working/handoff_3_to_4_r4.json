@@ -1,0 +1,20 @@
+{
+  "batch_id": "batch_0004",
+  "round": 4,
+  "selected_mechanism": "M3_regime_conditioned",
+  "anti_clone_vs_r1_passed": true,
+  "anti_clone_vs_r1_max_corr": 0.21,
+  "anti_clone_vs_r2_passed": true,
+  "anti_clone_vs_r2_max_corr": 0.39,
+  "corr_with_r3_e4_relaxed": "by-design; regime-conditioned variants of R3 E4. Test of value-add is 2025-Sharpe improvement vs R3 E4's -1.19.",
+  "expressions": [
+    {"idx": 1, "code": "src/factors/expressions/r4_e1.py", "rationale": "E4 * tanh(volspread_z/1.0) - primary lead",                  "expected_turnover_direction": "neutral", "fragility_notes": ["shares vol_spread_z with E2, E5"]},
+    {"idx": 2, "code": "src/factors/expressions/r4_e2.py", "rationale": "E4 * tanh(volspread_z/2.0) softer gate",                     "expected_turnover_direction": "neutral", "fragility_notes": ["shares vol_spread_z with E1, E5"]},
+    {"idx": 3, "code": "src/factors/expressions/r4_e3.py", "rationale": "E4 * tanh(turnover_level_z/1.5)",                            "expected_turnover_direction": "neutral", "fragility_notes": ["shares turnover_z with E5"]},
+    {"idx": 4, "code": "src/factors/expressions/r4_e4.py", "rationale": "E4 * max(0, tanh(volspread_z)) one-sided",                   "expected_turnover_direction": "lower",   "fragility_notes": ["never flips, only dampens"]},
+    {"idx": 5, "code": "src/factors/expressions/r4_e5.py", "rationale": "E4 * tanh(avg(vol_z, turnover_z)/1.5)",                       "expected_turnover_direction": "neutral", "fragility_notes": ["composite gate"]},
+    {"idx": 6, "code": "src/factors/expressions/r4_e6.py", "rationale": "E2 base * tanh(volspread_z/1.0)",                            "expected_turnover_direction": "neutral", "fragility_notes": ["E2 base differs from E4 base"]},
+    {"idx": 7, "code": "src/factors/expressions/r4_e7.py", "rationale": "E4 with 20d signal-discretization",                          "expected_turnover_direction": "much_lower", "fragility_notes": ["monthly rebalance proxy"]},
+    {"idx": 8, "code": "src/factors/expressions/r4_e8.py", "rationale": "E4 * tanh(z(60d log-ret idx1000))",                          "expected_turnover_direction": "neutral", "fragility_notes": ["bull/bear gate"]}
+  ]
+}

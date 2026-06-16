@@ -1,0 +1,31 @@
+{
+  "round": 3,
+  "selected_mechanism": "M3_turnover_acceleration_momentum",
+  "pivot_from": "M2_turnover_divergence (R2 RESEARCH-ONLY)",
+  "tvt_compliance": "R3 design uses ONLY R2 TRAIN+VAL information (E3 TRAIN IC=-0.196, t=-5.93 was the trigger). No R2 test result informs R3 mechanism choice. Same TVT split as R1/R2.",
+  "honesty_caveat": "This is the THIRD round on the same test window. Multiple-comparisons risk is real. R3 PROMOTE bar is pre-registered higher than R1/R2 (test IC t-stat >= 3.5, worst-year Sharpe >= 0.7).",
+  "causal_chain": [
+    "small-cap turnover MA5/MA60 ratio rises sharply (acceleration)",
+    "marginal retail buyers continue piling in for several days",
+    "small-cap continues to outperform large-cap over t+1..t+5",
+    "negated signal: high score = low acceleration = small-cap weakness expected = favour 300"
+  ],
+  "time_horizon": "5 trading days",
+  "market_regime": "applies in vol-elevated micro-cap-surge regimes; expected to fail in regime-flips and in defensive-rotation periods (where M1-vol-flight-to-quality dominates)",
+  "risk_premium_sources": ["retail attention persistence", "limits-of-arbitrage prevent rapid reversal of small-cap rallies"],
+  "constraints": {
+    "dataset_id": "tushare_index_daily_amount_vol_300_500_1000",
+    "region": "CN-A",
+    "universe": "broad_base_etf_300_vs_1000",
+    "delay": 1,
+    "turnover_range": [0.10, 20.0],
+    "sharpe_target": 1.0,
+    "fitness_target": null,
+    "prod_corr_max": 0.85,
+    "cost_bps_per_side_per_leg": 5
+  },
+  "thesis_sign": 1,
+  "primary_horizon_days": 5,
+  "neutralization_candidates": [],
+  "build_directive_for_agent_3": "Produce 8 expressions, all variants of 'turnover acceleration as momentum' with negation at source. Vary (a) MA windows {5/20, 5/60, 10/60, 5/120}, (b) single-leg vs spread, (c) amount-derived vs volume-derived, (d) regime-conditioning by R1 vol-spread state. Anti-clone vs R1 vol-spread AND R2 E1 (level cluster) on TRAIN, |corr| < 0.85 each. All thesis_sign=+1, declared_horizon=5."
+}
