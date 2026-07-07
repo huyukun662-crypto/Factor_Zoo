@@ -1,0 +1,27 @@
+{
+  "from_agent": "1_research_librarian",
+  "to_agent": "2_hypothesis_architect",
+  "session_id": "20260429_a_share_alt_dtl_inst_flow_opus47",
+  "timestamp_utc": "2026-04-29T00:00:00Z",
+  "research_brief_path": "outputs/research_brief.md",
+  "candidate_mechanisms": [
+    {"id": "M1", "name": "inst_seat_directional", "horizon_days": [5, 20], "sign": "+", "rank": 2},
+    {"id": "M2", "name": "hot_money_only_reversal", "horizon_days": [3, 10], "sign": "-", "rank": 3},
+    {"id": "M3", "name": "inst_net_buy_ratio_norm", "horizon_days": [5, 20], "sign": "+", "rank": 1},
+    {"id": "M4", "name": "inst_net_buy_20d_persistence", "horizon_days": [10, 20], "sign": "+", "rank": 2}
+  ],
+  "datasets": ["tushare.top_list", "tushare.top_inst", "tushare.pro_bar(adj=qfq)", "tushare.stock_basic.industry"],
+  "operators_required": ["panel_industry_demean", "rolling_sum", "rolling_mean", "winsorize_mad", "rank_normalize", "lag", "panel_groupby_date_zscore"],
+  "primary_risks": [
+    "zero_inflated_cross_section_q5_size_floor",
+    "limit_day_co_occurrence_pitfall_6",
+    "hot_money_seat_list_forward_bias",
+    "cost_unviable_at_daily_rebalance_pitfall_10",
+    "lookahead_via_delay_0_pitfall_1"
+  ],
+  "recommendation": {
+    "primary_mechanism": "M3",
+    "secondary_mechanisms": ["M4", "M2"],
+    "budget_split_8": {"M3_variants": 4, "M4_variants": 2, "M2_variants": 2}
+  }
+}

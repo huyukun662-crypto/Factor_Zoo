@@ -1,0 +1,144 @@
+{
+  "worst_year_floor": {
+    "alpha_09": {
+      "worst_year_ls": 0.6978954001288269,
+      "worst_year_q5e": -1.4933080600810118,
+      "n_years_pos_ls": 3,
+      "n_years": 3
+    },
+    "alpha_10": {
+      "worst_year_ls": -0.2680238146127831,
+      "worst_year_q5e": -2.5126000916833475,
+      "n_years_pos_ls": 2,
+      "n_years": 3
+    },
+    "alpha_11": {
+      "worst_year_ls": 0.5391224681057877,
+      "worst_year_q5e": -0.577918428031967,
+      "n_years_pos_ls": 3,
+      "n_years": 3
+    },
+    "alpha_12": {
+      "worst_year_ls": -2.0335021107660074,
+      "worst_year_q5e": -2.6238012718843606,
+      "n_years_pos_ls": 1,
+      "n_years": 3
+    },
+    "alpha_13": {
+      "worst_year_ls": -0.9111666862276715,
+      "worst_year_q5e": -3.488379882079986,
+      "n_years_pos_ls": 0,
+      "n_years": 3
+    },
+    "alpha_14": {
+      "worst_year_ls": -1.6560860788594982,
+      "worst_year_q5e": -3.538352930686118,
+      "n_years_pos_ls": 0,
+      "n_years": 3
+    },
+    "alpha_15": {
+      "worst_year_ls": -2.082450380413892,
+      "worst_year_q5e": -1.3234965602325341,
+      "n_years_pos_ls": 2,
+      "n_years": 3
+    },
+    "alpha_16": {
+      "worst_year_ls": 0.8455361140005418,
+      "worst_year_q5e": -0.8780658830088561,
+      "n_years_pos_ls": 3,
+      "n_years": 3
+    }
+  },
+  "best_year_out": {
+    "alpha_09": {
+      "headline_sr": 1.3519029750705236,
+      "worst_year_dropped": 2023,
+      "best_year_out_sr": 1.097194276073264,
+      "ratio": 0.8115924709878145
+    },
+    "alpha_10": {
+      "headline_sr": 1.7485216144541513,
+      "worst_year_dropped": 2023,
+      "best_year_out_sr": -0.1315411580254716,
+      "ratio": -0.07522992963775042
+    },
+    "alpha_11": {
+      "headline_sr": 0.9586827012139597,
+      "worst_year_dropped": 2023,
+      "best_year_out_sr": 0.6733590880467785,
+      "ratio": 0.7023795122141226
+    },
+    "alpha_12": {
+      "headline_sr": -1.2311245378089486,
+      "worst_year_dropped": 2024,
+      "best_year_out_sr": -1.8995761624411487,
+      "ratio": 1.5429601994789688
+    },
+    "alpha_13": {
+      "headline_sr": -0.6305263665845494,
+      "worst_year_dropped": 2024,
+      "best_year_out_sr": -0.7763777527997144,
+      "ratio": 1.231316871021931
+    },
+    "alpha_14": {
+      "headline_sr": -1.0005093921234185,
+      "worst_year_dropped": 2024,
+      "best_year_out_sr": -1.1985165266630615,
+      "ratio": 1.197906322617727
+    },
+    "alpha_15": {
+      "headline_sr": -0.06776181767160908,
+      "worst_year_dropped": 2024,
+      "best_year_out_sr": -0.990548056664342,
+      "ratio": 14.6180856815971
+    },
+    "alpha_16": {
+      "headline_sr": 1.1917814198820824,
+      "worst_year_dropped": 2023,
+      "best_year_out_sr": 1.1192052162906574,
+      "ratio": 0.9391027562767291
+    }
+  },
+  "residualization": {
+    "alpha_09": {
+      "raw_ls_sr": 1.0493058629555163,
+      "resid_ls_sr": 0.6346683461965572,
+      "ratio_resid_to_raw": 0.6048458972762483
+    },
+    "alpha_10": {
+      "raw_ls_sr": 1.0634831052718878,
+      "resid_ls_sr": 0.2788238269307769,
+      "ratio_resid_to_raw": 0.26217983675395895
+    },
+    "alpha_11": {
+      "raw_ls_sr": 0.6726056147796611,
+      "resid_ls_sr": -0.016796705911622082,
+      "ratio_resid_to_raw": -0.02497259247103448
+    },
+    "alpha_12": {
+      "raw_ls_sr": -1.2392464441457576,
+      "resid_ls_sr": -1.8086042228919796,
+      "ratio_resid_to_raw": 1.4594387027986948
+    },
+    "alpha_13": {
+      "raw_ls_sr": -0.8693550553746519,
+      "resid_ls_sr": -0.8281407636852278,
+      "ratio_resid_to_raw": 0.9525921067179364
+    },
+    "alpha_14": {
+      "raw_ls_sr": -1.2114515133062567,
+      "resid_ls_sr": -0.9571013442440917,
+      "ratio_resid_to_raw": 0.790045110127437
+    },
+    "alpha_15": {
+      "raw_ls_sr": -0.9645994067170324,
+      "resid_ls_sr": -0.8848497398299413,
+      "ratio_resid_to_raw": 0.9173235372821602
+    },
+    "alpha_16": {
+      "raw_ls_sr": 0.9057380571916841,
+      "resid_ls_sr": 0.30254463448235647,
+      "ratio_resid_to_raw": 0.334031050235894
+    }
+  }
+}

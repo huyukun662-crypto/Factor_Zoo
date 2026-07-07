@@ -1,0 +1,34 @@
+{
+  "from_agent": "3_alpha_builder",
+  "to_agent": "4_backtest_operator",
+  "session_id": "20260429_a_share_alt_dtl_inst_flow_opus47",
+  "expressions_path": "outputs/expressions_batch_0001.md",
+  "n_expressions": 8,
+  "execution_delay_days": 1,
+  "primary_horizon_days": 10,
+  "horizon_grid": [1, 5, 10, 20],
+  "rebalance_grid": ["daily", "weekly", "monthly"],
+  "rebalance_default_for_decision": "monthly",
+  "neutralization": ["industry_demean", "cap_residualize"],
+  "cost_bp_round_trip": 30,
+  "universe": "csi_all_share_ex_st_ex_ipo_lt_250d",
+  "windows": {
+    "train": ["2018-01-01", "2019-12-31"],
+    "validate": ["2020-01-01", "2020-12-31"],
+    "test":  ["2021-01-01", "2025-12-31"]
+  },
+  "must_pass_gates": ["G1_importable", "G2_runs_e2e", "G3_non_degenerate", "G4_fidelity"],
+  "validation_invariants": [
+    "target_shift == -(1+delay) for delay=1 means ret_fwd index uses shift(-(1+h))",
+    "factor uses lag(disclosed_input, 1) only",
+    "mask_safe in alpha_04 uses past-only inputs",
+    "hot_money_seat_set is fixed (inputs/hot_money_seats.csv), not regenerated",
+    "cross_section z and rank are date-grouped"
+  ],
+  "submission_status": "AWAITING_BACKTEST_EXECUTION",
+  "blocked_on": [
+    "tushare_pro_token_not_in_env",
+    "pandas_numpy_not_installed_in_current_python_env"
+  ],
+  "next_step_when_unblocked": "run scripts/00_fetch_data.py through scripts/04_audits.py in order"
+}

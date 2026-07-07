@@ -1,0 +1,57 @@
+session_id: 20260429_a_share_alt_dtl_inst_flow_opus47
+agent2_hypothesis_architect:
+  primary_mechanism: |
+    Institutional-dedicated seats (機構專用) appearing on the net-buy side of
+    the Dragon-Tiger List reveal a forced disclosure of an in-progress
+    multi-day institutional accumulation. The 5–20d cross-section return
+    of those stocks is positive in expectation, *after* controlling for
+    industry and the limit-up co-occurrence regime.
+  testable_hypothesis: |
+    H1 (primary): Cross-section rank of `inst_net_buy_ratio_5d` predicts
+      industry-neutral 10-trading-day forward return with positive IC,
+      stable across years, with worst-year IC ≥ 0.01 in test window.
+    H1a: Q5−Q1 long-short spread Sharpe ≥ 1.0 raw, ≥ 0.5 worst-year, after
+      excluding upper-limit days from the formation date.
+    H1b: Q5 long-only excess vs. CSI All-Share equal-weight Sharpe ≥ 0.8
+      raw, ≥ 0.4 worst-year, monthly rebalance, 30bp round-trip cost.
+  failure_conditions:
+    - worst_year_LS_sharpe_lt_0_5 AND worst_year_Q5_excess_sharpe_lt_0_4
+    - residualized_LS_sharpe_lt_0_5_of_raw_against_size_mom_rev_max
+    - q5_size_lt_30_on_more_than_5pct_of_days
+    - net_sharpe_at_30bp_lt_minus_0_5  # G3 cost-viability
+    - ic_t_stat_gt_3_but_LS_sharpe_lt_0_5_after_3_window_tunes  # switch mechanism, not tune
+  market_regime: A-share, CSI All-Share ex-ST ex-IPO<250d
+  horizon_days_primary: 10
+  horizon_grid: [1, 5, 10, 20]
+  rebalance_grid: [daily, weekly, monthly]
+  rebalance_default_for_decision: monthly
+  execution_delay_days: 1
+  delay_invariant: target_shift == -(1 + delay)  # so for h=10, delay=1: shift = -11
+  cost_bp_round_trip: 30
+  neutralization:
+    - industry_demean   # Tushare stock_basic.industry, ~110 groups
+    - cap_residualize   # log_market_cap, computed from pro_bar close * total_share
+  evaluation_targets:
+    primary: [Q5_excess_long_only_monthly_rebalance, LS_industry_neutral_daily]
+    secondary: [IC_mean, IC_t_stat, IR, max_drawdown, turnover_pct]
+  windows:
+    train: ["2018-01-01", "2019-12-31"]
+    validate: ["2020-01-01", "2020-12-31"]
+    test: ["2021-01-01", "2025-12-31"]
+  audit_floors:
+    worst_year_LS_sharpe_min: 0.5
+    worst_year_Q5_excess_sharpe_min: 0.4
+    best_year_out_LS_sharpe_pct_of_headline_min: 0.50
+    residualization_LS_sharpe_pct_of_raw_min: 0.50
+    q5_size_min_pct_days: 0.95
+agent2_handoff_to_agent3:
+  budget_8_split: {M3: 4, M4: 2, M2: 2}
+  forbidden_constructions:
+    - "any factor whose definition references future data of the form ret.shift(-k) outside the labelling pipeline"
+    - "any z-score that is not date-grouped (cross-section z, not time-series global z)"
+    - "any expression that uses delay=0 implicitly (no same-day published-and-traded)"
+  required_per_expression:
+    - "explicit lag(1) on the disclosed-input pipeline"
+    - "industry demean step"
+    - "winsorize_mad(3.5) before rank"
+    - "one-paragraph economic explanation"
